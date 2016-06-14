@@ -12,4 +12,12 @@ export class HomePage {
   goToFactsPage(){
     this._navController.push(ScientificFactsPage);
   }
+
+  doRefresh(refresher) {
+    console.log('refresh');
+    setTimeout(() => {
+        console.log('time out');
+        refresher.complete();
+    }, 2000);
+  }
 }
