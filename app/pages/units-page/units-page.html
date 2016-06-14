@@ -6,5 +6,11 @@
 </ion-navbar>
 
 <ion-content padding>
-  Units page
+  <ion-list>
+    <ion-list-header>Select an Unit</ion-list-header>
+    <button ion-item text-wrap *ngFor="let unit of units"  (click)="selectUnit(unit)">
+      <strong>Unit {{unit.id}}</strong>
+      <i>{{unit.title}}</i>
+    </button>
+  </ion-list>
 </ion-content>
