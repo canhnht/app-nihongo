@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {LIST_UNIT} from '../../data/list-unit.data';
+import {LessonsPage} from '../lessons-page/lessons-page';
 
 @Component({
   templateUrl: 'build/pages/units-page/units-page.html'
@@ -13,6 +14,6 @@ export class UnitsPage {
   }
 
   selectUnit(unit) {
-    console.log('select unit', unit);
+    this.navController.push(LessonsPage, {selectedUnit: unit});
   }
 }

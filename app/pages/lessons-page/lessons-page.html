@@ -1,10 +1,17 @@
 
 <ion-navbar *navbar>
   <ion-title>
-    Lessons
+    {{unit.title}}
   </ion-title>
 </ion-navbar>
 
 <ion-content padding>
-  Lessons page
+  <ion-list>
+    <ion-list-header>Select a Lesson</ion-list-header>
+    <button ion-item text-wrap *ngFor="let lesson of unit.lessons">
+      <strong>Lesson {{lesson.id}}:</strong>
+      <i>{{lesson.title}}</i>
+      <p>{{lesson.description}}</p>
+    </button>
+  </ion-list>
 </ion-content>
