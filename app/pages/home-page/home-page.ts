@@ -3,6 +3,7 @@ import {NavController} from 'ionic-angular';
 import {LIST_COURSE} from '../../providers/list-course.data';
 import {Course} from '../../providers/course.interface';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
+import {UnitsPage} from '../units-page/units-page';
 
 @Component({
   templateUrl: 'build/pages/home-page/home-page.html',
@@ -16,7 +17,7 @@ export class HomePage {
   }
 
   selectCourse(course) {
-    console.log(course);
+    this._navController.push(UnitsPage, {selectedCourse: course});
   }
 
   playCourse($event, course) {

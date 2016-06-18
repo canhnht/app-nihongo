@@ -4,7 +4,6 @@
 
 <ion-content padding>
   <ion-list [virtualScroll]="courses">
-    <ion-list-header>Select a course</ion-list-header>
     <button ion-item text-wrap *virtualItem="let course" (click)="selectCourse(course)">
       <ion-avatar item-left>
         <ion-img [src]="course.icon"></ion-img>

@@ -1,16 +1,25 @@
 
 <ion-navbar *navbar>
   <ion-title>
-    Units
+    {{course.title}}
   </ion-title>
+  <ion-buttons end *ngIf="selectedUnits.length > 0">
+    <button primary>Play</button>
+    <button danger (click)="uncheckAll()">Cancel</button>
+  </ion-buttons>
 </ion-navbar>
 
 <ion-content padding>
-  <ion-list>
-    <ion-list-header>Select an Unit</ion-list-header>
-    <button ion-item text-wrap *ngFor="let unit of units"  (click)="selectUnit(unit)">
-      <strong>Unit {{unit.id}}:</strong>
-      <i>{{unit.title}}</i>
+  <ion-list [virtualScroll]="units">
+    <button ion-item text-wrap *virtualItem="let unit" (click)="selectUnit(unit)">
+      <input type="checkbox" item-left (click)="checkUnit($event, unit)"
+        [checked]="selectedUnits.indexOf(unit.id) >= 0" />
+      <ion-badge class="unit-icon" item-left>U{{unit.id}}</ion-badge>
+      {{unit.title}}
+      <button outline round large item-right (click)="playUnit($event, unit)">
+        <ion-icon name="play"></ion-icon>
+      </button>
     </button>
   </ion-list>
 </ion-content>
+<bottom-audio-controller></bottom-audio-controller>
