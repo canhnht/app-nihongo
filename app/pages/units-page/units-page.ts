@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {LIST_UNIT} from '../../providers/list-unit.data';
-import {LessonsPage} from '../lessons-page/lessons-page';
+import {VocabulariesPage} from '../vocabularies-page/vocabularies-page';
 import {Course} from '../../providers/course.interface';
 import {Unit} from '../../providers/unit.interface';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
@@ -11,9 +11,9 @@ import {BottomAudioController} from '../../components/bottom-audio-controller/bo
   directives: [BottomAudioController],
 })
 export class UnitsPage {
-  public units: Unit[] = LIST_UNIT;
-  public course: Course;
-  public selectedUnits: Unit[] = [];
+  private units: Unit[] = LIST_UNIT;
+  private course: Course;
+  private selectedUnits: Unit[] = [];
 
   constructor(private _navController: NavController, private _navParams: NavParams) {
     this.course = _navParams.data.selectedCourse;
@@ -24,7 +24,7 @@ export class UnitsPage {
   }
 
   selectUnit(unit) {
-    this._navController.push(LessonsPage, {selectedUnit: unit});
+    this._navController.push(VocabulariesPage, {selectedUnit: unit});
   }
 
   playUnit($event, unit) {

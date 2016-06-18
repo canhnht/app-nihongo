@@ -1,0 +1,27 @@
+
+<ion-navbar *navbar>
+  <ion-title>
+    {{unit.title}}
+  </ion-title>
+  <ion-buttons end *ngIf="selectedVocabularies.length > 0">
+    <button primary>Play</button>
+    <button danger (click)="uncheckAll()">Cancel</button>
+  </ion-buttons>
+</ion-navbar>
+
+<ion-content padding>
+  <ion-list [virtualScroll]="vocabularies">
+    <ion-item text-wrap *virtualItem="let vocabulary">
+      <input type="checkbox" item-left (click)="checkVocabulary($event, vocabulary)"
+        [checked]="selectedVocabularies.indexOf(vocabulary.id) >= 0" />
+      {{vocabulary.content}}
+      <ion-icon item-right [name]="vocabulary.starred ? 'star' : 'star-outline'"
+        (click)="starVocabulary(vocabulary)">
+      </ion-icon>
+      <button outline round large item-right>
+        <ion-icon name="play"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<bottom-audio-controller></bottom-audio-controller>
