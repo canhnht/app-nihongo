@@ -49,5 +49,5 @@ export const
           description: 'This is lesson 3B'
         }
       ]
-    }
+    },
   ];

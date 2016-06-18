@@ -1,0 +1,51 @@
+.bottom-audio-controller {
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+
+  .audio-title {
+    font-size: 20px;
+  }
+
+  .audio-control-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .btn-play {
+      margin: 5px 20px;
+    }
+  }
+
+  .audio-info {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 15px 0;
+
+    .audio-bar {
+      position: relative;
+      width: 70%;
+      height: 5px;
+      background-color: #ccc;
+
+      .progress-bar {
+        position: absolute;
+        left: 0;
+        width: 50%;
+        height: 5px;
+        background-color: #387ef5;
+      }
+
+      .btn-time {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background-color: white;
+        position: absolute;
+        left: calc(50% - 12.5px);
+        top: -10px;
+        border: 1px solid #ccc;
+      }
+    }
+  }
+}

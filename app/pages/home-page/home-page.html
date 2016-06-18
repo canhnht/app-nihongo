@@ -1,17 +1,20 @@
 <ion-navbar *navbar>
-  <ion-title>Home</ion-title>
+  <ion-title>Mimi Kara Nihongo</ion-title>
 </ion-navbar>
 
-<ion-content padding class="page1">
-  <h2>Welcome to Ionic!</h2>
-  <p>
-  This starter project comes with simple tabs-based layout for apps
-  that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-  Take a look at the <code>app/</code> directory to add or change tabs,
-  update any existing page or create new pages.
-  </p>
-  <p>Want to learn some facts?  Click below.</p>
-  <button (click)="goToFactsPage()">Scientific Facts</button>
+<ion-content padding>
+  <ion-list [virtualScroll]="courses">
+    <ion-list-header>Select a course</ion-list-header>
+    <button ion-item text-wrap *virtualItem="let course" (click)="selectCourse(course)">
+      <ion-avatar item-left>
+        <ion-img [src]="course.icon"></ion-img>
+      </ion-avatar>
+      {{course.title}}
+      <button outline round large item-right (click)="playCourse($event, course)">
+        <ion-icon name="play"></ion-icon>
+      </button>
+    </button>
+  </ion-list>
 </ion-content>
+<bottom-audio-controller></bottom-audio-controller>
+
