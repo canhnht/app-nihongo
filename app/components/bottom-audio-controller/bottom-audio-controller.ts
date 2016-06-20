@@ -7,4 +7,5 @@ import {IONIC_DIRECTIVES} from 'ionic-angular';
   directives: [IONIC_DIRECTIVES],
 })
 export class BottomAudioController {
+  title: string = 'Please select a track to play';
 }

@@ -4,13 +4,23 @@
 
 <ion-content padding>
   <ion-list [virtualScroll]="courses">
-    <button ion-item text-wrap *virtualItem="let course" (click)="selectCourse(course)">
+    <button ion-item text-wrap *virtualItem="let course" (click)="selectCourse(course)"
+      [class.selected]="selectedCourseId == course.id">
       <ion-avatar item-left>
         <ion-img [src]="course.icon"></ion-img>
       </ion-avatar>
       {{course.title}}
-      <button outline round large item-right (click)="playCourse($event, course)">
-        <ion-icon name="play"></ion-icon>
+      <ion-spinner item-right name="bubbles" *ngIf="course.downloading"></ion-spinner>
+      <button outline round item-right (click)="downloadCourse($event, course)"
+        *ngIf="!course.downloading && course.percentDownloaded < 100">
+        <ion-icon name="cloud-download"></ion-icon>
+      </button>
+      <button danger outline round item-right (click)="deleteCourse($event, course)"
+        *ngIf="course.percentDownloaded == 100">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+      <button outline round large item-right (click)="goToCourse($event, course)">
+        <ion-icon name="arrow-forward"></ion-icon>
       </button>
     </button>
   </ion-list>

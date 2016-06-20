@@ -1,6 +1,7 @@
 
 export interface Course {
-    id: number,
-    title: string,
-    icon: string,
+    id: number;
+    title: string;
+    icon: string;
+    percentDownloaded: number;
 }

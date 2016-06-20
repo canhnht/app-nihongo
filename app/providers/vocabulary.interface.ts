@@ -1,5 +1,5 @@
 export interface Vocabulary {
-    id: number,
-    content: string,
-    starred: boolean,
+    id: number;
+    content: string;
+    starred: boolean;
 }

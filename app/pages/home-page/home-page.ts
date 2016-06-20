@@ -10,18 +10,32 @@ import {UnitsPage} from '../units-page/units-page';
   directives: [BottomAudioController],
 })
 export class HomePage {
-  private courses: Course[];
+  courses: Course[];
+  selectedCourseId: number = 0;
 
   constructor(private _navController: NavController) {
     this.courses = LIST_COURSE;
   }
 
   selectCourse(course) {
-    this._navController.push(UnitsPage, {selectedCourse: course});
+    console.log('play', course);
+    this.selectedCourseId = course.id;
   }
 
-  playCourse($event, course) {
-    console.log('play', course);
+  goToCourse($event, course) {
+    this._navController.push(UnitsPage, {selectedCourse: course});
+    $event.stopPropagation();
+  }
+
+  downloadCourse($event, course) {
+    console.log('download', course);
+    course.downloading = true;
+    $event.stopPropagation();
+  }
+
+  deleteCourse($event, course) {
+    console.log('delete', course);
+    course.percentDownloaded = 0;
     $event.stopPropagation();
   }
 }

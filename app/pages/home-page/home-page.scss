@@ -1,5 +1,5 @@
-.audio-bottom {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+[ion-item] {
+  &.selected {
+    background-color: #ccc;
+  }
 }

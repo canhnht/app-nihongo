@@ -13,7 +13,7 @@ import {BottomAudioController} from '../../components/bottom-audio-controller/bo
 export class UnitsPage {
   private units: Unit[] = LIST_UNIT;
   private course: Course;
-  private selectedUnits: Unit[] = [];
+  private selectedUnits: number[] = [];
 
   constructor(private _navController: NavController, private _navParams: NavParams) {
     this.course = _navParams.data.selectedCourse;
@@ -24,11 +24,24 @@ export class UnitsPage {
   }
 
   selectUnit(unit) {
-    this._navController.push(VocabulariesPage, {selectedUnit: unit});
+    console.log('play', unit);
+    unit.playing = true;
   }
 
-  playUnit($event, unit) {
-    console.log('play', unit);
+  goToUnit($event, unit) {
+    this._navController.push(VocabulariesPage, {selectedUnit: unit});
+    $event.stopPropagation();
+  }
+
+  downloadUnit($event, unit) {
+    console.log('download', unit);
+    unit.downloading = true;
+    $event.stopPropagation();
+  }
+
+  deleteUnit($event, unit) {
+    console.log('delete', unit);
+    unit.percentDownloaded = 0;
     $event.stopPropagation();
   }
 
@@ -42,6 +55,17 @@ export class UnitsPage {
   }
 
   uncheckAll() {
+    this.selectedUnits = [];
+  }
+
+  playSelectedList() {
+    this.selectedUnits.forEach(unitId => {
+      let index: number = this.units.findIndex(unit => unit.id == unitId);
+      if (index >= 0) {
+        let unit: any = this.units[index];
+        unit.playing = true;
+      }
+    })
     this.selectedUnits = [];
   }
 }
