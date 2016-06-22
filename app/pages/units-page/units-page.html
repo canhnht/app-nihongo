@@ -11,7 +11,7 @@
 
 <ion-content padding>
   <ion-list [virtualScroll]="units">
-    <button ion-item text-wrap *virtualItem="let unit" (click)="selectUnit(unit)"
+    <ion-item button-primary text-wrap *virtualItem="let unit" (click)="selectUnit(unit)"
       [class.selected]="unit.playing">
       <input type="checkbox" item-left (click)="checkUnit($event, unit)"
         [checked]="selectedUnits.indexOf(unit.id) >= 0" />
@@ -29,7 +29,7 @@
       <button outline round large item-right (click)="goToUnit($event, unit)">
         <ion-icon name="arrow-forward"></ion-icon>
       </button>
-    </button>
+    </ion-item>
   </ion-list>
 </ion-content>
 <bottom-audio-controller></bottom-audio-controller>

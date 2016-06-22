@@ -5,6 +5,7 @@ import {VocabulariesPage} from '../vocabularies-page/vocabularies-page';
 import {Course} from '../../providers/course.interface';
 import {Unit} from '../../providers/unit.interface';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
+import {AudioService} from '../../providers/audio.service';
 
 @Component({
   templateUrl: 'build/pages/units-page/units-page.html',
@@ -15,7 +16,8 @@ export class UnitsPage {
   private course: Course;
   private selectedUnits: number[] = [];
 
-  constructor(private _navController: NavController, private _navParams: NavParams) {
+  constructor(private _navController: NavController, private _navParams: NavParams,
+    private _audioService: AudioService) {
     this.course = _navParams.data.selectedCourse;
   }
 
@@ -24,13 +26,16 @@ export class UnitsPage {
   }
 
   selectUnit(unit) {
-    console.log('play', unit);
     unit.playing = !unit.playing;
     this.units.forEach(e => {
       if (e.id != unit.id) {
         (<any>e).playing = false;
       }
     })
+    console.log(this._audioService.data);
+    if (unit.playing) {
+      this._audioService.playUnit(unit);
+    }
   }
 
   goToUnit($event, unit) {

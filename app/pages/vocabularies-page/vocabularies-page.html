@@ -11,7 +11,8 @@
 
 <ion-content padding>
   <ion-list [virtualScroll]="vocabularies">
-    <ion-item text-wrap *virtualItem="let vocabulary">
+    <ion-item button-primary ion-item text-wrap *virtualItem="let vocabulary"
+      (click)="selectVocabulary(vocabulary)">
       <input type="checkbox" item-left (click)="checkVocabulary($event, vocabulary)"
         [checked]="selectedVocabularies.indexOf(vocabulary.id) >= 0" />
       {{vocabulary.content}}

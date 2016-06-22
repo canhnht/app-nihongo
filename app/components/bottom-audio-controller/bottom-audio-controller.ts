@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {IONIC_DIRECTIVES} from 'ionic-angular';
+import {AudioService} from '../../providers/audio.service';
 
 @Component({
   selector: 'bottom-audio-controller',
@@ -8,4 +9,9 @@ import {IONIC_DIRECTIVES} from 'ionic-angular';
 })
 export class BottomAudioController {
   title: string = 'Please select a track to play';
+  data: any;
+
+  constructor(private _audioService: AudioService) {
+    this.data = this._audioService.data;
+  }
 }

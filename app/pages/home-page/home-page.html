@@ -4,7 +4,7 @@
 
 <ion-content padding>
   <ion-list [virtualScroll]="courses">
-    <button ion-item text-wrap *virtualItem="let course" (click)="selectCourse(course)"
+    <ion-item button-primary text-wrap *virtualItem="let course" (click)="selectCourse(course)"
       [class.selected]="selectedCourseId == course.id">
       <ion-avatar item-left>
         <ion-img [src]="course.icon"></ion-img>
@@ -22,7 +22,7 @@
       <button outline round large item-right (click)="goToCourse($event, course)">
         <ion-icon name="arrow-forward"></ion-icon>
       </button>
-    </button>
+    </ion-item>
   </ion-list>
 </ion-content>
 <bottom-audio-controller></bottom-audio-controller>

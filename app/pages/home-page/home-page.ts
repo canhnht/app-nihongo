@@ -4,6 +4,7 @@ import {LIST_COURSE} from '../../providers/list-course.data';
 import {Course} from '../../providers/course.interface';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
 import {UnitsPage} from '../units-page/units-page';
+import {AudioService} from '../../providers/audio.service';
 
 @Component({
   templateUrl: 'build/pages/home-page/home-page.html',
@@ -13,16 +14,20 @@ export class HomePage {
   courses: Course[];
   selectedCourseId: number = 0;
 
-  constructor(private _navController: NavController) {
+  constructor(private _navController: NavController, private _audioService: AudioService) {
     this.courses = LIST_COURSE;
+    console.log(this._audioService);
   }
 
   selectCourse(course) {
-    console.log('play', course);
     if (this.selectedCourseId == course.id)
       this.selectedCourseId = 0;
     else
       this.selectedCourseId = course.id;
+
+    console.log(this._audioService.data);
+    if (this.selectedCourseId > 0)
+      this._audioService.playCourse(course);
   }
 
   goToCourse($event, course) {
