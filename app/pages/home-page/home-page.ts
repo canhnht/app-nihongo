@@ -19,7 +19,10 @@ export class HomePage {
 
   selectCourse(course) {
     console.log('play', course);
-    this.selectedCourseId = course.id;
+    if (this.selectedCourseId == course.id)
+      this.selectedCourseId = 0;
+    else
+      this.selectedCourseId = course.id;
   }
 
   goToCourse($event, course) {
@@ -31,6 +34,12 @@ export class HomePage {
     console.log('download', course);
     course.downloading = true;
     $event.stopPropagation();
+
+    // set timeout for completing download
+    setTimeout(() => {
+      course.downloading = false;
+      course.percentDownloaded = 100;
+    }, 2000);
   }
 
   deleteCourse($event, course) {

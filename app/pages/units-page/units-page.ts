@@ -25,7 +25,12 @@ export class UnitsPage {
 
   selectUnit(unit) {
     console.log('play', unit);
-    unit.playing = true;
+    unit.playing = !unit.playing;
+    this.units.forEach(e => {
+      if (e.id != unit.id) {
+        (<any>e).playing = false;
+      }
+    })
   }
 
   goToUnit($event, unit) {
@@ -37,6 +42,12 @@ export class UnitsPage {
     console.log('download', unit);
     unit.downloading = true;
     $event.stopPropagation();
+
+    // set timeout for completing download
+    setTimeout(() => {
+      unit.downloading = false;
+      unit.percentDownloaded = 100;
+    }, 2000);
   }
 
   deleteUnit($event, unit) {
