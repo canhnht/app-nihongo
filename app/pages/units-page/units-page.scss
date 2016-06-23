@@ -9,8 +9,7 @@
   align-items: center;
 }
 
-ion-item {
-  &.selected {
-    background-color: #d5d5d5;
-  }
+.btn-detail {
+  margin-right: -12px;
+  font-size: 22px;
 }

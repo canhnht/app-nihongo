@@ -11,8 +11,8 @@
 
 <ion-content padding>
   <ion-list [virtualScroll]="units">
-    <ion-item button-primary text-wrap *virtualItem="let unit" (click)="selectUnit(unit)"
-      [class.selected]="unit.playing">
+    <ion-item button-primary text-wrap *virtualItem="let unit"
+      (click)="selectUnit(unit)">
       <input type="checkbox" item-left (click)="checkUnit($event, unit)"
         [checked]="selectedUnits.indexOf(unit.id) >= 0" />
       <ion-badge class="unit-icon" item-left>U{{unit.id}}</ion-badge>
@@ -26,8 +26,8 @@
         *ngIf="unit.percentDownloaded == 100">
         <ion-icon name="trash"></ion-icon>
       </button>
-      <button outline round large item-right (click)="goToUnit($event, unit)">
-        <ion-icon name="arrow-forward"></ion-icon>
+      <button class="btn-detail" clear item-right (click)="goToUnit($event, unit)">
+        &#8226;&#8226;&#8226;
       </button>
     </ion-item>
   </ion-list>

@@ -4,8 +4,8 @@
 
 <ion-content padding>
   <ion-list [virtualScroll]="courses">
-    <ion-item button-primary text-wrap *virtualItem="let course" (click)="selectCourse(course)"
-      [class.selected]="selectedCourseId == course.id">
+    <ion-item button-primary text-wrap *virtualItem="let course"
+      (click)="selectCourse(course)">
       <ion-avatar item-left>
         <ion-img [src]="course.icon"></ion-img>
       </ion-avatar>
@@ -19,8 +19,8 @@
         *ngIf="course.percentDownloaded == 100">
         <ion-icon name="trash"></ion-icon>
       </button>
-      <button outline round large item-right (click)="goToCourse($event, course)">
-        <ion-icon name="arrow-forward"></ion-icon>
+      <button class="btn-detail" clear item-right (click)="goToCourse($event, course)">
+        &#8226;&#8226;&#8226;
       </button>
     </ion-item>
   </ion-list>
