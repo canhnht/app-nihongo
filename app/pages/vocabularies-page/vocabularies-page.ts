@@ -38,8 +38,9 @@ export class VocabulariesPage {
     $event.stopPropagation();
   }
 
-  starVocabulary(vocabulary) {
+  starVocabulary($event, vocabulary) {
     vocabulary.starred = !vocabulary.starred;
+    $event.stopPropagation();
   }
 
   uncheckAll() {

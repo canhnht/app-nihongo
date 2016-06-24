@@ -17,7 +17,7 @@
         [checked]="selectedVocabularies.indexOf(vocabulary.id) >= 0" />
       {{vocabulary.content}}
       <ion-icon item-right [name]="vocabulary.starred ? 'star' : 'star-outline'"
-        (click)="starVocabulary(vocabulary)">
+        (click)="starVocabulary($event, vocabulary)">
       </ion-icon>
     </ion-item>
   </ion-list>
