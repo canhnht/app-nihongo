@@ -6,8 +6,9 @@
     <button>
       <ion-icon name="skip-backward"></ion-icon>
     </button>
-    <button outline round large class="btn-play">
-      <ion-icon name="play"></ion-icon>
+    <button outline round large class="btn-play"
+      (click)="isPlaying ? pause() : play()">
+      <ion-icon [name]="isPlaying ? 'pause' : 'play'"></ion-icon>
     </button>
     <button>
       <ion-icon name="skip-forward"></ion-icon>
@@ -16,8 +17,8 @@
   <div class="audio-info">
     0:00
     <div class="audio-bar">
-      <div class="progress-bar"></div>
-      <div class="btn-time"></div>
+      <div class="progress-bar" style="width: 80%"></div>
+      <div class="btn-seek"></div>
     </div>
     0:30
   </div>

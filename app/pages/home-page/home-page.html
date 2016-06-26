@@ -4,12 +4,12 @@
 
 <ion-content padding>
   <ion-list [virtualScroll]="courses">
-    <ion-item button-primary text-wrap *virtualItem="let course"
+    <ion-item button-primary *virtualItem="let course"
       (click)="selectCourse(course)">
       <ion-avatar item-left>
         <ion-img [src]="course.icon"></ion-img>
       </ion-avatar>
-      {{course.title}}
+      <h2>{{course.title}}</h2>
       <ion-spinner item-right name="bubbles" *ngIf="course.downloading"></ion-spinner>
       <button outline round item-right (click)="downloadCourse($event, course)"
         *ngIf="!course.downloading && course.percentDownloaded < 100">

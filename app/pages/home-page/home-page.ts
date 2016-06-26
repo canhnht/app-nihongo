@@ -16,7 +16,6 @@ export class HomePage {
 
   constructor(private _navController: NavController, private _audioService: AudioService) {
     this.courses = LIST_COURSE;
-    console.log(this._audioService);
   }
 
   selectCourse(course) {

@@ -1,18 +1,18 @@
 .bottom-audio-controller {
+  position: relative;
   border-top: 1px solid #ccc;
   padding-top: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   background-color: white;
+  z-index: 10;
+  height: 150px;
 
   .audio-title {
     font-size: 17px;
   }
 
   .audio-control-group {
-    display: flex;
-    align-items: center;
+    width: 100%;
+    text-align: center;
 
     .btn-play {
       margin: 5px 20px;
@@ -20,33 +20,32 @@
   }
 
   .audio-info {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin: 15px 0;
-    width: 100%;
+    margin-top: 5px;
+    text-align: center;
 
     .audio-bar {
+      display: inline-block;
       position: relative;
       width: 70%;
       height: 5px;
       background-color: #ccc;
+      margin: 0 8px;
 
       .progress-bar {
         position: absolute;
         left: 0;
-        width: 50%;
+        // width: 20%;
         height: 5px;
         background-color: #387ef5;
       }
 
-      .btn-time {
+      .btn-seek {
         width: 25px;
         height: 25px;
         border-radius: 50%;
         background-color: white;
         position: absolute;
-        left: calc(50% - 12.5px);
+        left: 20%;
         top: -10px;
         border: 1px solid #ccc;
       }
