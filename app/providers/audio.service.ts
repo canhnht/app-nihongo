@@ -24,23 +24,25 @@ export class AudioService {
   playCourse(course) {
     console.log('zuizui:playCourse', course);
     this.currentTrack.title = 'Course 1 - Unit 1 - Word A';
-    this.currentTrack.playedPercent = 10;
+    this.track = new MediaPlugin('/android_asset/www/audio/audio1.mp3');
+    this.play();
   }
 
   playUnit(unit) {
     console.log('zuizui:playUnit', unit);
     this.currentTrack.title = 'Course 2 - Unit 3 - Word B';
-    this.currentTrack.playedPercent = 60;
+    this.track = new MediaPlugin('/android_asset/www/audio/audio1.mp3');
+    this.play();
   }
 
   playVocabulary(vocabulary) {
     console.log('zuizui:playVocabulary', vocabulary);
     this.currentTrack.title = 'Course 1 - Unit 2 - Word C';
-    this.currentTrack.playedPercent = 90;
+    this.track = new MediaPlugin('/android_asset/www/audio/audio1.mp3');
+    this.play();
   }
 
   play() {
-    this.track = new MediaPlugin('/android_asset/www/audio/audio1.mp3');
     this.currentTrack.isPlaying = true;
     this.track.play();
     this.startGetCurrentPositionInterval();
@@ -51,8 +53,11 @@ export class AudioService {
       let duration = this.track.getDuration();
       this.currentTrack.duration = this.convertText(Math.max(duration, 0));
       this.track.getCurrentPosition().then((position) => {
+        Toast.show(`start interval ${duration}, ${Math.round(position)}`, '500', 'center')
+          .subscribe(() => {});
         if (position >= 0 && duration >= 0) {
           this.currentTrack.playedPercent = Math.round(position / duration * 100);
+          if (this.currentTrack.playedPercent >= 99) this.stopGetCurrentPositionInterval();
           this.currentTrack.playedTime = this.convertText(Math.max(position, 0));
         }
       });
@@ -60,6 +65,8 @@ export class AudioService {
   }
 
   stopGetCurrentPositionInterval() {
+    Toast.show(`stop`, '500', 'center')
+      .subscribe(() => {});
     clearInterval(this.intervalGetCurrentPosition);
   }
 
