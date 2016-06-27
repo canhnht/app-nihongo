@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {IONIC_DIRECTIVES} from 'ionic-angular';
+import {Toast} from 'ionic-native';
 import {AudioService} from '../../providers/audio.service';
 
 @Component({
@@ -8,24 +9,32 @@ import {AudioService} from '../../providers/audio.service';
   directives: [IONIC_DIRECTIVES],
 })
 export class BottomAudioController {
-  title: string = 'Please select a track to play';
-  isPlaying: boolean = false;
+  currentTrack: any = {};
 
   constructor(private _audioService: AudioService) {
-    this._audioService.currentTrack.subscribe(data => {
-      this.title = data.title;
+    this._audioService.currentTrackSubject.subscribe(data => {
+
     });
+    this.currentTrack = this._audioService.currentTrack;
   }
 
   play() {
-    this.isPlaying = true;
-    console.log('shit:bottom:21 ' + this.isPlaying);
     this._audioService.play();
   }
 
   pause() {
-    this.isPlaying = false;
-    console.log('shit:bottom:27 ' + this.isPlaying);
     this._audioService.pause();
+  }
+
+  seek($event) {
+    console.log($event);
+    let x = $event.layerX;
+    let width = $event.srcElement.clientWidth;
+    this._audioService.seek(x / width * 100);
+
+    Toast.show(`Event: ${x}, ${$event.layerY}, ${width}`, '2000', 'center')
+      .subscribe(
+        toast => {}
+      )
   }
 }

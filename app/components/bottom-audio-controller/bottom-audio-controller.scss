@@ -26,15 +26,14 @@
     .audio-bar {
       display: inline-block;
       position: relative;
-      width: 70%;
+      width: 65%;
       height: 5px;
       background-color: #ccc;
-      margin: 0 8px;
+      margin: 0 10px;
 
       .progress-bar {
         position: absolute;
         left: 0;
-        // width: 20%;
         height: 5px;
         background-color: #387ef5;
       }
@@ -45,7 +44,7 @@
         border-radius: 50%;
         background-color: white;
         position: absolute;
-        left: 20%;
+        left: 0;
         top: -10px;
         border: 1px solid #ccc;
       }
