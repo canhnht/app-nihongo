@@ -32,7 +32,6 @@ export class UnitsPage {
         (<any>e).playing = false;
       }
     })
-    console.log(this._audioService.data);
     if (unit.playing) {
       this._audioService.playUnit(unit);
     }

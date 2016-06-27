@@ -1,6 +1,6 @@
 <div class="bottom-audio-controller">
   <marquee class="audio-title">
-    {{data.currentTrack || title}}
+    {{title}}
   </marquee>
   <div class="audio-control-group">
     <button>
@@ -17,7 +17,7 @@
   <div class="audio-info">
     0:00
     <div class="audio-bar">
-      <div class="progress-bar" style="width: 80%"></div>
+      <div class="progress-bar" [ngStyle]="width: 80%"></div>
       <div class="btn-seek"></div>
     </div>
     0:30

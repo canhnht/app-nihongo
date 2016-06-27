@@ -9,11 +9,12 @@ import {AudioService} from '../../providers/audio.service';
 })
 export class BottomAudioController {
   title: string = 'Please select a track to play';
-  data: any;
   isPlaying: boolean = false;
 
   constructor(private _audioService: AudioService) {
-    this.data = this._audioService.data;
+    this._audioService.currentTrack.subscribe(data => {
+      this.title = data.title;
+    });
   }
 
   play() {

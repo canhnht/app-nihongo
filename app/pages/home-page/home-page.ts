@@ -24,7 +24,6 @@ export class HomePage {
     else
       this.selectedCourseId = course.id;
 
-    console.log(this._audioService.data);
     if (this.selectedCourseId > 0)
       this._audioService.playCourse(course);
   }

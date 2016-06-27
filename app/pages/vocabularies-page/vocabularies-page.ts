@@ -25,7 +25,6 @@ export class VocabulariesPage {
   }
 
   selectVocabulary(vocabulary) {
-    console.log(this._audioService.data);
     this._audioService.playVocabulary(vocabulary);
   }
 
