@@ -19,11 +19,11 @@ export class BottomAudioController {
   }
 
   play() {
-    this._audioService.play();
+    this._audioService.playCurrentTrack();
   }
 
   pause() {
-    this._audioService.pause();
+    this._audioService.pauseCurrentTrack();
   }
 
   seek($event) {
