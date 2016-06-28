@@ -5,6 +5,7 @@ import {Course} from '../../providers/course.interface';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
 import {UnitsPage} from '../units-page/units-page';
 import {AudioService} from '../../providers/audio.service';
+import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
 
 @Component({
   templateUrl: 'build/pages/home-page/home-page.html',
@@ -12,20 +13,15 @@ import {AudioService} from '../../providers/audio.service';
 })
 export class HomePage {
   courses: Course[];
-  selectedCourseId: number = 0;
 
   constructor(private _navController: NavController, private _audioService: AudioService) {
     this.courses = LIST_COURSE;
   }
 
   selectCourse(course) {
-    if (this.selectedCourseId == course.id)
-      this.selectedCourseId = 0;
-    else
-      this.selectedCourseId = course.id;
-
-    if (this.selectedCourseId > 0)
-      this._audioService.playCourse(course);
+    this._audioService.playCourse(course);
+    this._navController.push(VocabularySlides,
+      {title: 'Course 1 - Unit 1'});
   }
 
   goToCourse($event, course) {

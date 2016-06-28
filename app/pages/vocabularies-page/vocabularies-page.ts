@@ -5,6 +5,7 @@ import {Unit} from '../../providers/unit.interface';
 import {LIST_VOCABULARY} from '../../providers/list-vocabulary.data';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
 import {AudioService} from '../../providers/audio.service';
+import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
 
 @Component({
   templateUrl: 'build/pages/vocabularies-page/vocabularies-page.html',
@@ -15,7 +16,7 @@ export class VocabulariesPage {
   private vocabularies: Vocabulary[] = LIST_VOCABULARY;
   private selectedVocabularies: Vocabulary[] = [];
 
-  constructor(private navController: NavController, private navParams: NavParams,
+  constructor(private _navController: NavController, private navParams: NavParams,
     private _audioService: AudioService) {
     this.unit = this.navParams.data.selectedUnit;
   }
@@ -26,6 +27,8 @@ export class VocabulariesPage {
 
   selectVocabulary(vocabulary) {
     this._audioService.playVocabulary(vocabulary);
+    this._navController.push(VocabularySlides,
+      {title: 'Course 1 - Unit 2'});
   }
 
   checkVocabulary($event, vocabulary) {

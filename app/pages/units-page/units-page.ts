@@ -6,6 +6,7 @@ import {Course} from '../../providers/course.interface';
 import {Unit} from '../../providers/unit.interface';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
 import {AudioService} from '../../providers/audio.service';
+import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
 
 @Component({
   templateUrl: 'build/pages/units-page/units-page.html',
@@ -26,15 +27,9 @@ export class UnitsPage {
   }
 
   selectUnit(unit) {
-    unit.playing = !unit.playing;
-    this.units.forEach(e => {
-      if (e.id != unit.id) {
-        (<any>e).playing = false;
-      }
-    })
-    if (unit.playing) {
-      this._audioService.playUnit(unit);
-    }
+    this._audioService.playUnit(unit);
+    this._navController.push(VocabularySlides,
+      {title: 'Course 2 - Unit 3'});
   }
 
   goToUnit($event, unit) {
