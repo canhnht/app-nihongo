@@ -4,10 +4,10 @@
   padding-top: 10px;
   background-color: white;
   z-index: 10;
-  height: 150px;
 
   .audio-title {
     font-size: 17px;
+    margin-bottom: 5px;
   }
 
   .audio-control-group {
@@ -15,7 +15,7 @@
     text-align: center;
 
     .btn-play {
-      margin: 5px 20px;
+      margin: 0px 20px;
     }
   }
 

@@ -11,7 +11,7 @@ export class AudioService {
   track: MediaPlugin = null;
 
   constructor(http: Http) {
-    this.currentTrack.playedTime = '00:00';
+    this.currentTrack.seekTime = '00:00';
     this.currentTrack.duration = '00:00';
   }
 
@@ -23,7 +23,6 @@ export class AudioService {
   }
 
   playCourse(course) {
-    console.log('zuizui:playCourse', course);
     this.stopCurrentTrack();
     this.currentTrack.title = 'Course 1 - Unit 1 - Word A';
     this.track = new MediaPlugin('/android_asset/www/audio/audio1.mp3');
@@ -31,7 +30,6 @@ export class AudioService {
   }
 
   playUnit(unit) {
-    console.log('zuizui:playUnit', unit);
     this.stopCurrentTrack();
     this.currentTrack.title = 'Course 2 - Unit 3 - Word B';
     this.track = new MediaPlugin('/android_asset/www/audio/audio1.mp3');
@@ -39,7 +37,6 @@ export class AudioService {
   }
 
   playVocabulary(vocabulary) {
-    console.log('zuizui:playVocabulary', vocabulary);
     this.stopCurrentTrack();
     this.currentTrack.title = 'Course 1 - Unit 2 - Word C';
     this.track = new MediaPlugin('/android_asset/www/audio/audio1.mp3');
@@ -59,12 +56,13 @@ export class AudioService {
   startGetCurrentPositionInterval() {
     this.intervalGetCurrentPosition = setInterval(() => {
       let duration = this.track.getDuration();
+      this.currentTrack.durationInSeconds = duration;
       this.currentTrack.duration = this.convertText(Math.max(duration, 0));
       this.track.getCurrentPosition().then((position) => {
         if (position >= 0 && duration >= 0) {
-          this.currentTrack.playedPercent = Math.round(position / duration * 100);
-          if (this.currentTrack.playedPercent >= 99) this.stopCurrentTrack();
-          this.currentTrack.playedTime = this.convertText(Math.max(position, 0));
+          this.currentTrack.playedPercent = Math.ceil(position / duration * 100);
+          if (this.currentTrack.playedPercent >= 99) this.pauseCurrentTrack();
+          this.currentTrack.seekTime = this.convertText(Math.max(position, 0));
         }
       });
     }, 1000);
@@ -73,32 +71,34 @@ export class AudioService {
   stopGetCurrentPositionInterval() {
     Toast.show(`stopCurrentTrack`, '500', 'center')
       .subscribe(() => {});
-    if (this.intervalGetCurrentPosition) {
-      clearInterval(this.intervalGetCurrentPosition);
-      this.intervalGetCurrentPosition = null;
-    }
+    clearInterval(this.intervalGetCurrentPosition);
+    this.intervalGetCurrentPosition = null;
   }
 
   pauseCurrentTrack() {
+    this.stopGetCurrentPositionInterval();
+    this.currentTrack.isPlaying = false;
     if (this.track) {
-      this.currentTrack.isPlaying = false;
       this.track.pause();
-      this.stopGetCurrentPositionInterval();
     }
   }
 
   stopCurrentTrack() {
+    this.pauseCurrentTrack();
     if (this.track) {
-      this.pauseCurrentTrack();
       this.track.release();
       this.track = null;
     }
   }
 
-  seek(percent) {
-    let seconds = Math.max(this.track.getDuration(), 0);
-    seconds = seconds * percent / 100;
-    this.track.seekTo(Math.round(seconds * 1000));
+  seekPercent(percent) {
+    this.currentTrack.playedPercent = percent;
+    if (this.track) {
+      let seconds = Math.max(this.track.getDuration(), 0);
+      seconds = seconds * percent / 100;
+      this.currentTrack.seekTime = this.convertText(Math.max(seconds, 0));
+      this.track.seekTo(Math.round(seconds * 1000));
+    }
   }
 }
 

@@ -14,12 +14,17 @@
       <ion-icon name="skip-forward"></ion-icon>
     </button>
   </div>
-  <div class="audio-info">
+  <ion-range [(ngModel)]="currentTrack.playedPercent"
+    (ionChange)="handleSeekAudio($event)">
+    <ion-label range-left>{{currentTrack.seekTime}}</ion-label>
+    <ion-label range-right>{{currentTrack.duration}}</ion-label>
+  </ion-range>
+  <!--<div class="audio-info">
     {{currentTrack.playedTime}}
     <div class="audio-bar" (click)="seek($event)">
       <div class="progress-bar" [style.width.%]="currentTrack.playedPercent"></div>
       <div class="btn-seek" [style.left.%]="currentTrack.playedPercent - 5"></div>
     </div>
     {{currentTrack.duration}}
-  </div>
+  </div>-->
 </div>
