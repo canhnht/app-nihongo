@@ -10,6 +10,7 @@
         <ion-img [src]="course.icon"></ion-img>
       </ion-avatar>
       <h2>{{course.title}}</h2>
+      <p>10 words</p>
       <ion-spinner item-right name="bubbles" *ngIf="course.downloading"></ion-spinner>
       <button outline round item-right (click)="downloadCourse($event, course)"
         *ngIf="!course.downloading && course.percentDownloaded < 100">

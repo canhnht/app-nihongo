@@ -16,7 +16,8 @@
       <input type="checkbox" item-left (click)="checkUnit($event, unit)"
         [checked]="selectedUnits.indexOf(unit.id) >= 0" />
       <ion-badge class="unit-icon" item-left>U{{unit.id}}</ion-badge>
-      {{unit.title}}
+      <h2>{{unit.title}}</h2>
+      <p>5 words</p>
       <ion-spinner item-right name="bubbles" *ngIf="unit.downloading"></ion-spinner>
       <button outline round item-right (click)="downloadUnit($event, unit)"
         *ngIf="!unit.downloading && unit.percentDownloaded < 100">
