@@ -19,7 +19,7 @@ export class HomePage {
   }
 
   selectCourse(course) {
-    this._audioService.playCourse(course);
+    // this._audioService.playCourse(course);
     this._navController.push(VocabularySlides,
       {title: 'Course 1 - Unit 1'});
   }

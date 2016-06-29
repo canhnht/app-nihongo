@@ -4,15 +4,20 @@
 </ion-navbar>
 
 <ion-content padding class="vocabulary-slides">
-  <ion-slides [options]="sliderOptions">
-    <ion-slide>
-      <h1>Slide 1</h1>
-    </ion-slide>
-    <ion-slide>
-      <h1>Slide 2</h1>
-    </ion-slide>
-    <ion-slide>
-      <h1>Slide 3</h1>
+  <ion-buttons class="slide-navigation">
+    <button start outline small (click)="previous()">
+      Previous
+    </button>
+    <button end outline small (click)="next()">
+      Next
+    </button>
+  </ion-buttons>
+  <ion-slides #vocabSlider (ionDidChange)="onSlideChanged($event)"
+    [options]="sliderOptions">
+    <ion-slide *ngFor="let slide of slides; let i = index">
+      <h1>{{slide.title}}</h1>
+      <h2>{{slide.nr}}</h2>
+      <h3>index {{i}} / length {{slides.length}}</h3>
     </ion-slide>
   </ion-slides>
 </ion-content>
