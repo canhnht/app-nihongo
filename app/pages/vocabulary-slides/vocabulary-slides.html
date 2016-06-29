@@ -14,10 +14,12 @@
   </ion-buttons>
   <ion-slides #vocabSlider (ionDidChange)="onSlideChanged($event)"
     [options]="sliderOptions">
-    <ion-slide *ngFor="let slide of slides; let i = index">
+    <ion-slide *ngFor="let slide of slides; let i = index"
+      [style.background-color]="slide.color">
       <h1>{{slide.title}}</h1>
       <h2>{{slide.nr}}</h2>
-      <h3>index {{i}} / length {{slides.length}}</h3>
+      <h3>{{slide.color}}</h3>
+      <p>index {{i}} / length {{slides.length}}</p>
     </ion-slide>
   </ion-slides>
 </ion-content>

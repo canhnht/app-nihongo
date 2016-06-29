@@ -27,19 +27,20 @@ export class VocabularySlides {
     this.title = this.navParams.data.title;
 
     var getColor = function ( nr ) {
+      console.log('getColor', nr);
       return nr % 2 === 0 ? '#8080c5' : '#80b280';
     };
 
     this.default_slides = [
       this.makeSlide( this.default_slides_indexes[ 0 ], {
-        title : 'default slide', get color () { return getColor( this.nr ) }
-      }),
+        title : 'default slide', color:  getColor( this.default_slides_indexes[ 0 ] ) }
+      ),
       this.makeSlide( this.default_slides_indexes[ 1 ], {
-        title : 'default slide', get color () { return getColor( this.nr ) }
-      }),
+        title : 'default slide', color:  getColor( this.default_slides_indexes[ 1 ] ) }
+      ),
       this.makeSlide( this.default_slides_indexes[ 2 ], {
-        title : 'default slide', get color () { return getColor( this.nr ) }
-      }),
+        title : 'default slide', color:  getColor( this.default_slides_indexes[ 2 ] ) }
+      ),
     ];
 
     this.slides = [...this.default_slides];
@@ -96,11 +97,12 @@ export class VocabularySlides {
       return this.default_slides[this.default_slides_indexes.indexOf(nr)];
     }
     var getColor = function ( nr ) {
+      console.log('getColor', nr);
       return nr % 2 === 0 ? '#8080c5' : '#80b280';
     };
     return this.makeSlide( nr, {
-      title : 'generated slide', get color () { return getColor( this.nr ) }
-    });
+      title : 'generated slide', color:  getColor( nr ) }
+    );
   }
 
   // onSlideChanged($event) {
