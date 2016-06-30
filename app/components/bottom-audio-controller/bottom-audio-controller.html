@@ -3,15 +3,15 @@
     {{currentTrack.title || 'Please select a track to play'}}
   </marquee>
   <div class="audio-control-group">
-    <button>
-      <ion-icon name="skip-backward"></ion-icon>
+    <button [class.disabled]="!isRepeat" (click)="toggleRepeat()">
+      <ion-icon name="repeat"></ion-icon>
     </button>
     <button outline round large class="btn-play"
       (click)="(currentTrack.isPlaying && currentTrack.playedPercent < 99) ? pause() : play()">
       <ion-icon [name]="(currentTrack.isPlaying && currentTrack.playedPercent < 99) ? 'pause' : 'play'"></ion-icon>
     </button>
-    <button>
-      <ion-icon name="skip-forward"></ion-icon>
+    <button [class.disabled]="!isShuffle" (click)="toggleShuffle()">
+      <ion-icon name="shuffle"></ion-icon>
     </button>
   </div>
   <ion-range [(ngModel)]="currentTrack.playedPercent"

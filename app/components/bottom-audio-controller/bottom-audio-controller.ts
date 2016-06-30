@@ -10,6 +10,8 @@ import {AudioService} from '../../providers/audio.service';
 })
 export class BottomAudioController {
   currentTrack: any = {};
+  isRepeat: boolean = false;
+  isShuffle: boolean = false;
 
   constructor(private _audioService: AudioService) {
     this.currentTrack = this._audioService.currentTrack;
@@ -19,6 +21,14 @@ export class BottomAudioController {
     Toast.show(`max ${$event.value}`, '500', 'top')
       .subscribe(() => {});
     this._audioService.seekPercent($event.value);
+  }
+
+  toggleRepeat() {
+    this.isRepeat = !this.isRepeat;
+  }
+
+  toggleShuffle() {
+    this.isShuffle = !this.isShuffle;
   }
 
   play() {
