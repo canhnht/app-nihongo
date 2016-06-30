@@ -1,3 +1,27 @@
-ion-slide {
-  background-color: rgba(0,0,0,0.7);
+ion-content {
+
+  .btn-prev, .btn-next {
+    position: absolute;
+    display: none;
+    font-size: 66px;
+    height: 100%;
+    top: calc(50% - 33px);
+    opacity: 0.5;
+    z-index: 10;
+  }
+
+  .btn-prev {
+    left: 10px;
+  }
+
+  .btn-next {
+    right: 10px;
+  }
+
+  &:hover {
+    .btn-prev, .btn-next {
+      display: block;
+    }
+  }
+
 }

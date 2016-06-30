@@ -3,7 +3,7 @@ import {Platform, ionicBootstrap} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {HomePage} from './pages/home-page/home-page';
 import {AudioService} from './providers/audio.service';
-import {BottomAudioController} from './components/bottom-audio-controller/bottom-audio-controller';
+import {VocabularySlides} from './pages/vocabulary-slides/vocabulary-slides';
 
 declare var Media:any;
 
