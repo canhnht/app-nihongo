@@ -1,4 +1,11 @@
 ion-content {
+  .odd {
+    background-color: #51b147;
+  }
+
+  .even {
+    background-color: #59a8f2;
+  }
 
   .btn-prev, .btn-next {
     position: absolute;

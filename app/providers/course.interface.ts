@@ -3,5 +3,5 @@ export interface Course {
     id: number;
     title: string;
     icon: string;
-    percentDownloaded: number;
+    isFree: boolean;
 }

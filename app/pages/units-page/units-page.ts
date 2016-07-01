@@ -69,13 +69,9 @@ export class UnitsPage {
   }
 
   playSelectedList() {
-    this.selectedUnits.forEach(unitId => {
-      let index: number = this.units.findIndex(unit => unit.id == unitId);
-      if (index >= 0) {
-        let unit: any = this.units[index];
-        unit.playing = true;
-      }
-    })
+    // this._audioService.playUnit(null);
+    this._navController.push(VocabularySlides,
+      {title: 'Course 2 - Unit 3'});
     this.selectedUnits = [];
   }
 }

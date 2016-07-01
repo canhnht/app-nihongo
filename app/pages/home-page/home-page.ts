@@ -28,22 +28,4 @@ export class HomePage {
     this._navController.push(UnitsPage, {selectedCourse: course});
     $event.stopPropagation();
   }
-
-  downloadCourse($event, course) {
-    console.log('download', course);
-    course.downloading = true;
-    $event.stopPropagation();
-
-    // set timeout for completing download
-    setTimeout(() => {
-      course.downloading = false;
-      course.percentDownloaded = 100;
-    }, 2000);
-  }
-
-  deleteCourse($event, course) {
-    console.log('delete', course);
-    course.percentDownloaded = 0;
-    $event.stopPropagation();
-  }
 }

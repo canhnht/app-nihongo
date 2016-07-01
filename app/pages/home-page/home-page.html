@@ -1,26 +1,25 @@
-<ion-navbar *navbar>
+<ion-navbar *navbar primary>
   <ion-title>Mimi Kara Nihongo</ion-title>
+  <ion-buttons end>
+    <button>
+      <ion-icon name="more"></ion-icon>
+    </button>
+  </ion-buttons>
 </ion-navbar>
 
 <ion-content padding>
   <ion-list [virtualScroll]="courses">
     <ion-item button-primary *virtualItem="let course"
-      (click)="selectCourse(course)">
+      (click)="goToCourse($event, course)">
       <ion-avatar item-left>
         <ion-img [src]="course.icon"></ion-img>
       </ion-avatar>
       <h2>{{course.title}}</h2>
       <p>10 words</p>
-      <ion-spinner item-right name="bubbles" *ngIf="course.downloading"></ion-spinner>
-      <button outline round item-right (click)="downloadCourse($event, course)"
-        *ngIf="!course.downloading && course.percentDownloaded < 100">
-        <ion-icon name="cloud-download"></ion-icon>
-      </button>
-      <button danger outline round item-right (click)="deleteCourse($event, course)"
-        *ngIf="course.percentDownloaded == 100">
-        <ion-icon name="trash"></ion-icon>
-      </button>
-      <button class="btn-detail" clear item-right (click)="goToCourse($event, course)">
+      <ion-img item-right class="icon-paid" src="images/coin.png"
+        [class.hidden]="course.isFree">
+      </ion-img>
+      <button class="btn-detail" clear item-right>
         &#8226;&#8226;&#8226;
       </button>
     </ion-item>
