@@ -2,13 +2,15 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Subject, Observable} from 'rxjs';
 import {MediaPlugin, Toast} from 'ionic-native';
+import {LIST_VOCABULARY} from './list-vocabulary.data';
 
 @Injectable()
 export class AudioService {
-  currentTrackSubject: Subject<any> = new Subject<any>();
+  trackIndexSubject: Subject<number> = new Subject<number>();
   currentTrack: any = {};
   intervalGetCurrentPosition: any;
-  track: MediaPlugin = null;
+  listTrack: MediaPlugin[] = null;
+  isPlaying: boolean = false;
 
   constructor(http: Http) {
     this.currentTrack.seekTime = '00:00';
@@ -16,59 +18,95 @@ export class AudioService {
   }
 
   convertText(seconds) {
-    seconds = Math.round(seconds);
-    let minutes = Math.floor(seconds / 60);
-    seconds %= 60;
+    seconds = Math.floor(seconds);
+    let minutes = Math.floor(seconds / 60).toString();
+    while (minutes.length < 2) minutes = '0' + minutes;
+    seconds = (seconds % 60).toString();
+    while (seconds.length < 2) seconds = '0' + seconds;
     return `${minutes}:${seconds}`;
   }
 
-  playCourse(course) {
-    this.stopCurrentTrack();
-    this.currentTrack.title = 'Course 1 - Unit 1 - Word A';
-    this.track = new MediaPlugin('/android_asset/www/audio/audio1.mp3');
-    this.playCurrentTrack();
-  }
-
-  playUnit(unit) {
-    this.stopCurrentTrack();
-    this.currentTrack.title = 'Course 2 - Unit 3 - Word B';
-    this.track = new MediaPlugin('/android_asset/www/audio/audio1.mp3');
+  playListUnit(listUnit) {
+    this.isPlaying = true;
+    this.stopListTrack();
+    this.listTrack = [];
+    LIST_VOCABULARY.forEach(vocabulary => {
+      if (vocabulary.audioFile) {
+        this.listTrack.push(new MediaPlugin(`/android_asset/www/audio/${vocabulary.audioFile}`));
+        this.listTrack[this.listTrack.length - 1].play();
+        this.listTrack[this.listTrack.length - 1].stop();
+      }
+    });
+    this.currentTrack.index = 0;
+    this.currentTrack.title = 'Course 2 - Unit 3 - Word 0';
     this.playCurrentTrack();
   }
 
   playVocabulary(vocabulary) {
-    this.stopCurrentTrack();
+    this.stopListTrack();
     this.currentTrack.title = 'Course 1 - Unit 2 - Word C';
-    this.track = new MediaPlugin('/android_asset/www/audio/audio1.mp3');
     this.playCurrentTrack();
   }
 
   playCurrentTrack() {
-    Toast.show(`check track ${this.track}`, '500', 'center')
-      .subscribe(() => {});
-    if (this.track) {
-      this.currentTrack.isPlaying = true;
-      this.track.play();
-      this.startGetCurrentPositionInterval();
+    let track: MediaPlugin = this.listTrack[this.currentTrack.index];
+    this.currentTrack.isPlaying = true;
+    track.play();
+    this.startGetCurrentPositionInterval();
+  }
+
+  goToNextTrack() {
+    this.pauseCurrentTrack();
+    this.listTrack[this.currentTrack.index].seekTo(0);
+    this.currentTrack.index += 1;
+    if (this.currentTrack.index == this.listTrack.length) {
+      this.currentTrack.index = 0;
+      this.pauseCurrentTrack();
+     } else {
+      this.listTrack[this.currentTrack.index].stop();
+      this.playCurrentTrack();
     }
   }
 
-  startGetCurrentPositionInterval() {
+  private getTotalDuration() {
+    let totalDuration = this.listTrack.reduce((sum, track) => {
+      return sum + track.getDuration();
+    }, 0);
+    return totalDuration;
+  }
+
+  private getPlayedDurationUntil(trackIndex) {
+    let playedDuration = 0;
+    this.listTrack.forEach((track, index) => {
+      if (index < trackIndex) {
+        playedDuration += track.getDuration();
+      }
+    });
+    return playedDuration;
+  }
+
+  private startGetCurrentPositionInterval() {
     this.intervalGetCurrentPosition = setInterval(() => {
-      let duration = this.track.getDuration();
+      let track: MediaPlugin = this.listTrack[this.currentTrack.index];
+      let duration = this.getTotalDuration();
       this.currentTrack.durationInSeconds = duration;
       this.currentTrack.duration = this.convertText(Math.max(duration, 0));
-      this.track.getCurrentPosition().then((position) => {
-        if (position >= 0 && duration >= 0) {
+      let playedDuration = this.getPlayedDurationUntil(this.currentTrack.index);
+      track.getCurrentPosition().then(position => {
+        Toast.show(`currentPosition ${position}`, '500', 'center')
+            .subscribe(() => {});
+        if (position >= 0) {
+          position += playedDuration;
           this.currentTrack.playedPercent = Math.ceil(position / duration * 100);
-          if (this.currentTrack.playedPercent >= 99) this.pauseCurrentTrack();
-          this.currentTrack.seekTime = this.convertText(Math.max(position, 0));
+          this.currentTrack.seekTime = this.convertText(position);
+        } else {
+          this.goToNextTrack();
         }
       });
     }, 1000);
   }
 
-  stopGetCurrentPositionInterval() {
+  private stopGetCurrentPositionInterval() {
     Toast.show(`stopCurrentTrack`, '500', 'center')
       .subscribe(() => {});
     clearInterval(this.intervalGetCurrentPosition);
@@ -78,26 +116,76 @@ export class AudioService {
   pauseCurrentTrack() {
     this.stopGetCurrentPositionInterval();
     this.currentTrack.isPlaying = false;
-    if (this.track) {
-      this.track.pause();
+    if (this.listTrack) {
+      let track: MediaPlugin = this.listTrack[this.currentTrack.index];
+      track.pause();
     }
   }
 
-  stopCurrentTrack() {
+  private stopListTrack() {
     this.pauseCurrentTrack();
-    if (this.track) {
-      this.track.release();
-      this.track = null;
+    this.releaseListTrack();
+  }
+
+  private releaseListTrack() {
+    if (this.listTrack) {
+      this.listTrack.forEach(track => track.release());
     }
   }
 
   seekPercent(percent) {
     this.currentTrack.playedPercent = percent;
-    if (this.track) {
-      let seconds = Math.max(this.track.getDuration(), 0);
+    if (this.listTrack) {
+      let seconds = Math.max(this.getTotalDuration(), 0);
       seconds = seconds * percent / 100;
-      this.currentTrack.seekTime = this.convertText(Math.max(seconds, 0));
-      this.track.seekTo(Math.round(seconds * 1000));
+      let nextIndex: number = this.getNextTrackIndex(seconds);
+
+      if (nextIndex != this.currentTrack.index) {
+        this.pauseCurrentTrack();
+        this.listTrack[this.currentTrack.index].seekTo(0);
+        this.currentTrack.index = nextIndex;
+        this.playCurrentTrack();
+        this.currentTrack.seekTime = this.convertText(seconds);
+        let track: MediaPlugin = this.listTrack[this.currentTrack.index];
+        seconds -= this.getPlayedDurationUntil(this.currentTrack.index);
+        track.seekTo(Math.round(seconds * 1000));
+      } else {
+        this.currentTrack.seekTime = this.convertText(seconds);
+        let track: MediaPlugin = this.listTrack[this.currentTrack.index];
+        seconds -= this.getPlayedDurationUntil(this.currentTrack.index);
+        track.seekTo(Math.round(seconds * 1000));
+      }
+    }
+  }
+
+  getNextTrackIndex(seconds: number) {
+    let nextIndex: number = 0;
+    while (seconds > this.listTrack[nextIndex].getDuration()) {
+      nextIndex += 1;
+      seconds -= this.listTrack[nextIndex].getDuration();
+    }
+    return nextIndex;
+  }
+
+  seekToVocabulary(vocabIndex) {
+    Toast.show(`seekToVocabulary ${vocabIndex}`, '500', 'top')
+      .subscribe(() => {});
+    let nextIndex = vocabIndex;
+    let duration = this.getTotalDuration();
+    let position = this.getPlayedDurationUntil(nextIndex);
+    this.currentTrack.playedPercent = Math.ceil(position / duration * 100);;
+    if (nextIndex != this.currentTrack.index) {
+      this.pauseCurrentTrack();
+      this.listTrack[this.currentTrack.index].seekTo(0);
+      this.currentTrack.index = nextIndex;
+      this.playCurrentTrack();
+      this.currentTrack.seekTime = this.convertText(position);
+      let track: MediaPlugin = this.listTrack[this.currentTrack.index];
+      track.seekTo(0);
+    } else {
+      this.currentTrack.seekTime = this.convertText(position);
+      let track: MediaPlugin = this.listTrack[this.currentTrack.index];
+      track.seekTo(0);
     }
   }
 }

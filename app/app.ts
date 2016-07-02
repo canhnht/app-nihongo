@@ -3,6 +3,7 @@ import {Platform, ionicBootstrap} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {HomePage} from './pages/home-page/home-page';
 import {AudioService} from './providers/audio.service';
+import {SliderService} from './providers/slider.service';
 import {VocabularySlides} from './pages/vocabulary-slides/vocabulary-slides';
 
 declare var Media:any;
@@ -17,7 +18,7 @@ export class MyApp {
   private rootPage:any;
 
   constructor(private platform:Platform) {
-    this.rootPage = VocabularySlides;
+    this.rootPage = HomePage;
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -27,4 +28,4 @@ export class MyApp {
   }
 }
 
-ionicBootstrap(MyApp, [AudioService]);
+ionicBootstrap(MyApp, [AudioService, SliderService]);

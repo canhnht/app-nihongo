@@ -16,11 +16,14 @@
   </ion-buttons>
 </ion-navbar>
 
-<ion-content padding>
+<ion-content>
   <ion-list [virtualScroll]="units">
     <ion-list-header class="cover">
-      <ion-img [src]="course.icon"></ion-img>
-      <h1>{{course.title}}</h1>
+      <img [src]="course.icon" class="course-icon" />
+      <div class="course-info">
+        <h1 class="course-title">{{course.title}}</h1>
+        <p class="no-units">3 units</p>
+      </div>
     </ion-list-header>
     <ion-item button-primary text-wrap *virtualItem="let unit"
       (click)="goToUnit($event, unit)">
@@ -43,4 +46,5 @@
     </ion-item>
   </ion-list>
 </ion-content>
-<bottom-audio-controller></bottom-audio-controller>
+<bottom-audio-controller (onAudioClick)="goToSlides()">
+</bottom-audio-controller>

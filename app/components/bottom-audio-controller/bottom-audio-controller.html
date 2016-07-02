@@ -1,16 +1,16 @@
-<div class="bottom-audio-controller">
+<div class="bottom-audio-controller" (click)="goToSlides()">
   <marquee class="audio-title">
     {{currentTrack.title || 'Please select a track to play'}}
   </marquee>
   <div class="audio-control-group">
-    <button [class.disabled]="!isRepeat" (click)="toggleRepeat()">
+    <button [class.disabled]="!isRepeat" (click)="toggleRepeat($event)">
       <ion-icon name="repeat"></ion-icon>
     </button>
     <button outline round large class="btn-play"
-      (click)="(currentTrack.isPlaying && currentTrack.playedPercent < 99) ? pause() : play()">
+      (click)="(currentTrack.isPlaying && currentTrack.playedPercent < 99) ? pause($event) : play($event)">
       <ion-icon [name]="(currentTrack.isPlaying && currentTrack.playedPercent < 99) ? 'pause' : 'play'"></ion-icon>
     </button>
-    <button [class.disabled]="!isShuffle" (click)="toggleShuffle()">
+    <button [class.disabled]="!isShuffle" (click)="toggleShuffle($event)">
       <ion-icon name="shuffle"></ion-icon>
     </button>
   </div>
@@ -19,12 +19,4 @@
     <ion-label range-left>{{currentTrack.seekTime}}</ion-label>
     <ion-label range-right>{{currentTrack.duration}}</ion-label>
   </ion-range>
-  <!--<div class="audio-info">
-    {{currentTrack.playedTime}}
-    <div class="audio-bar" (click)="seek($event)">
-      <div class="progress-bar" [style.width.%]="currentTrack.playedPercent"></div>
-      <div class="btn-seek" [style.left.%]="currentTrack.playedPercent - 5"></div>
-    </div>
-    {{currentTrack.duration}}
-  </div>-->
 </div>

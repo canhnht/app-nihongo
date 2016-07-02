@@ -2,6 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams, Slides} from 'ionic-angular';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
 import {AudioService} from '../../providers/audio.service';
+import {SliderService} from '../../providers/slider.service';
 import {LIST_VOCABULARY} from '../../providers/list-vocabulary.data';
 import {Vocabulary} from '../../providers/vocabulary.interface';
 
@@ -11,14 +12,19 @@ import {Vocabulary} from '../../providers/vocabulary.interface';
 })
 export class VocabularySlides {
   @ViewChild('vocabSlider') vocabSlider: Slides;
+
   sliderOptions: any = {
     loop: true,
   };
   title: String = 'Mimi Kara Nihongo';
   private vocabularies: Vocabulary[] = LIST_VOCABULARY;
 
-  constructor(private _navController: NavController, private navParams: NavParams) {
+  constructor(private _navController: NavController, private navParams: NavParams,
+    private audioService: AudioService, private sliderService: SliderService) {
     this.title = this.navParams.data.title;
+  }
+
+  ionViewLoaded() {
   }
 
   prev() {
@@ -26,6 +32,21 @@ export class VocabularySlides {
   }
 
   next() {
-    this.vocabSlider.slideNext();
+    this.vocabSlider.slideTo(3);
+    // this.vocabSlider.slideNext();
+  }
+
+  onSlideChanged($event) {
+    if (this.sliderService.firstTime) return this.sliderService.firstTime = false;
+    let vocabIndex: number = -1;
+    let activeIndex = $event.activeIndex;
+    if (activeIndex == 0 || activeIndex == this.vocabularies.length)
+      vocabIndex = this.vocabularies.length - 1;
+    else if (activeIndex == 1 || activeIndex == this.vocabularies.length + 1)
+      vocabIndex = 0;
+    else
+      vocabIndex = activeIndex - 1;
+    console.log(vocabIndex);
+    // this.audioService.seekToVocabulary(vocabIndex);
   }
 }

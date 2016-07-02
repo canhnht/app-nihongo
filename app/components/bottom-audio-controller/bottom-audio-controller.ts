@@ -1,7 +1,8 @@
-import {Component, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, EventEmitter, Output} from '@angular/core';
 import {IONIC_DIRECTIVES} from 'ionic-angular';
 import {Toast} from 'ionic-native';
 import {AudioService} from '../../providers/audio.service';
+import {VocabularySlides} from '../../pages/vocabulary-slides/vocabulary-slides';
 
 @Component({
   selector: 'bottom-audio-controller',
@@ -9,6 +10,7 @@ import {AudioService} from '../../providers/audio.service';
   directives: [IONIC_DIRECTIVES],
 })
 export class BottomAudioController {
+  @Output() onAudioClick = new EventEmitter();
   currentTrack: any = {};
   isRepeat: boolean = false;
   isShuffle: boolean = false;
@@ -18,34 +20,30 @@ export class BottomAudioController {
   }
 
   handleSeekAudio($event) {
-    Toast.show(`max ${$event.value}`, '500', 'top')
-      .subscribe(() => {});
     this._audioService.seekPercent($event.value);
   }
 
-  toggleRepeat() {
+  toggleRepeat($event) {
     this.isRepeat = !this.isRepeat;
+    $event.stopPropagation();
   }
 
-  toggleShuffle() {
+  toggleShuffle($event) {
     this.isShuffle = !this.isShuffle;
+    $event.stopPropagation();
   }
 
-  play() {
+  play($event) {
     this._audioService.playCurrentTrack();
+    $event.stopPropagation();
   }
 
-  pause() {
+  pause($event) {
     this._audioService.pauseCurrentTrack();
+    $event.stopPropagation();
   }
 
-  seek($event) {
-    console.log($event);
-    let x = $event.layerX;
-    let width = $event.srcElement.clientWidth;
-    this._audioService.seekPercent(x / width * 100);
-
-    Toast.show(`Event: ${x}, ${$event.layerY}, ${width}`, '2000', 'center')
-      .subscribe(() => {});
+  goToSlides() {
+    this.onAudioClick.emit({});
   }
 }

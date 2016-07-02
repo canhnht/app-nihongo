@@ -6,6 +6,7 @@ import {Course} from '../../providers/course.interface';
 import {Unit} from '../../providers/unit.interface';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
 import {AudioService} from '../../providers/audio.service';
+import {SliderService} from '../../providers/slider.service';
 import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
 
 @Component({
@@ -18,18 +19,12 @@ export class UnitsPage {
   private selectedUnits: number[] = [];
 
   constructor(private _navController: NavController, private _navParams: NavParams,
-    private _audioService: AudioService) {
+    private _audioService: AudioService, private sliderService: SliderService) {
     this.course = _navParams.data.selectedCourse;
   }
 
   ionViewWillEnter() {
     this.selectedUnits = [];
-  }
-
-  selectUnit(unit) {
-    this._audioService.playUnit(unit);
-    this._navController.push(VocabularySlides,
-      {title: 'Course 2 - Unit 3'});
   }
 
   goToUnit($event, unit) {
@@ -69,9 +64,17 @@ export class UnitsPage {
   }
 
   playSelectedList() {
-    // this._audioService.playUnit(null);
+    this._audioService.playListUnit(this.selectedUnits);
+    this.sliderService.resetSlider();
     this._navController.push(VocabularySlides,
       {title: 'Course 2 - Unit 3'});
     this.selectedUnits = [];
+  }
+
+  goToSlides() {
+    if (this._audioService.isPlaying) {
+      this._navController.push(VocabularySlides,
+        {title: 'Course 2 - Unit 3'});
+    }
   }
 }

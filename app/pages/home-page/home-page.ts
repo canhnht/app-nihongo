@@ -18,12 +18,6 @@ export class HomePage {
     this.courses = LIST_COURSE;
   }
 
-  selectCourse(course) {
-    this._audioService.playCourse(course);
-    this._navController.push(VocabularySlides,
-      {title: 'Course 1 - Unit 1'});
-  }
-
   goToCourse($event, course) {
     this._navController.push(UnitsPage, {selectedCourse: course});
     $event.stopPropagation();

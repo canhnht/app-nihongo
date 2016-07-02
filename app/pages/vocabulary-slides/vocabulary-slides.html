@@ -1,14 +1,15 @@
 
-<ion-navbar *navbar>
+<ion-navbar *navbar primary>
   <ion-title>{{title}}</ion-title>
 </ion-navbar>
 
-<ion-content no-padding class="vocabulary-slides">
+<ion-content no-padding scroll="false" class="vocabulary-slides">
   <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
   </ion-icon>
   <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
   </ion-icon>
-  <ion-slides #vocabSlider [options]="sliderOptions">
+  <ion-slides #vocabSlider [options]="sliderOptions"
+    (ionDidChange)="onSlideChanged($event)">
     <ion-slide *ngFor="let vocabulary of vocabularies; let i = index"
       [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
       <h2>{{vocabulary.content}}</h2>
