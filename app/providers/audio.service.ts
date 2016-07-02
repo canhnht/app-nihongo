@@ -62,7 +62,8 @@ export class AudioService {
     if (this.currentTrack.index == this.listTrack.length) {
       this.currentTrack.index = 0;
       this.pauseCurrentTrack();
-     } else {
+    } else {
+      this.trackIndexSubject.next(this.currentTrack.index);
       this.listTrack[this.currentTrack.index].stop();
       this.playCurrentTrack();
     }
@@ -141,6 +142,7 @@ export class AudioService {
       let nextIndex: number = this.getNextTrackIndex(seconds);
 
       if (nextIndex != this.currentTrack.index) {
+        this.trackIndexSubject.next(nextIndex);
         this.pauseCurrentTrack();
         this.listTrack[this.currentTrack.index].seekTo(0);
         this.currentTrack.index = nextIndex;
@@ -168,21 +170,15 @@ export class AudioService {
   }
 
   seekToVocabulary(vocabIndex) {
-    Toast.show(`seekToVocabulary ${vocabIndex}`, '500', 'top')
-      .subscribe(() => {});
     let nextIndex = vocabIndex;
     let duration = this.getTotalDuration();
     let position = this.getPlayedDurationUntil(nextIndex);
-    this.currentTrack.playedPercent = Math.ceil(position / duration * 100);;
     if (nextIndex != this.currentTrack.index) {
+      this.currentTrack.playedPercent = Math.ceil(position / duration * 100);
       this.pauseCurrentTrack();
       this.listTrack[this.currentTrack.index].seekTo(0);
       this.currentTrack.index = nextIndex;
       this.playCurrentTrack();
-      this.currentTrack.seekTime = this.convertText(position);
-      let track: MediaPlugin = this.listTrack[this.currentTrack.index];
-      track.seekTo(0);
-    } else {
       this.currentTrack.seekTime = this.convertText(position);
       let track: MediaPlugin = this.listTrack[this.currentTrack.index];
       track.seekTo(0);

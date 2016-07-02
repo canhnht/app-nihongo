@@ -24,18 +24,18 @@ export const
       id: 4,
       content: 'Word 4',
       starred: false,
-      audioFile: null,
+      audioFile: 'audio1.mp3',
     },
     {
       id: 5,
       content: 'Word 5',
       starred: false,
-      audioFile: null,
+      audioFile: 'audio2.mp3',
     },
     {
       id: 6,
       content: 'Word 6',
       starred: false,
-      audioFile: null,
+      audioFile: 'audio3.mp3',
     },
   ];

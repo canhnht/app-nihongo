@@ -72,6 +72,7 @@ export class UnitsPage {
   }
 
   goToSlides() {
+    this.sliderService.resetSlider();
     if (this._audioService.isPlaying) {
       this._navController.push(VocabularySlides,
         {title: 'Course 2 - Unit 3'});

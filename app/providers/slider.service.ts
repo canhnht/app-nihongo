@@ -5,6 +5,7 @@ import {Subject, Observable} from 'rxjs';
 @Injectable()
 export class SliderService {
   firstTime: boolean;
+  currentSlide: number = -1;
 
   constructor() {
 

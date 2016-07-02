@@ -5,6 +5,7 @@ import {Unit} from '../../providers/unit.interface';
 import {LIST_VOCABULARY} from '../../providers/list-vocabulary.data';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
 import {AudioService} from '../../providers/audio.service';
+import {SliderService} from '../../providers/slider.service';
 import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
 
 @Component({
@@ -17,7 +18,7 @@ export class VocabulariesPage {
   private selectedVocabularies: Vocabulary[] = [];
 
   constructor(private _navController: NavController, private navParams: NavParams,
-    private _audioService: AudioService) {
+    private _audioService: AudioService, private sliderService: SliderService) {
     this.unit = this.navParams.data.selectedUnit;
   }
 
@@ -47,5 +48,13 @@ export class VocabulariesPage {
 
   uncheckAll() {
     this.selectedVocabularies = [];
+  }
+
+  goToSlides() {
+    this.sliderService.resetSlider();
+    if (this._audioService.isPlaying) {
+      this._navController.push(VocabularySlides,
+        {title: 'Course 2 - Unit 3'});
+    }
   }
 }

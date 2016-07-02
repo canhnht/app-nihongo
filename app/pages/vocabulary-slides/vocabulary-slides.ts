@@ -5,6 +5,7 @@ import {AudioService} from '../../providers/audio.service';
 import {SliderService} from '../../providers/slider.service';
 import {LIST_VOCABULARY} from '../../providers/list-vocabulary.data';
 import {Vocabulary} from '../../providers/vocabulary.interface';
+import {Toast} from 'ionic-native';
 
 @Component({
   templateUrl: 'build/pages/vocabulary-slides/vocabulary-slides.html',
@@ -22,9 +23,11 @@ export class VocabularySlides {
   constructor(private _navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService) {
     this.title = this.navParams.data.title;
-  }
-
-  ionViewLoaded() {
+    if (this.sliderService.currentSlide >= 0)
+      this.sliderOptions.initialSlide = this.sliderService.currentSlide;
+    this.audioService.trackIndexSubject.subscribe(trackIndex => {
+      this.vocabSlider.slideTo(trackIndex + 1);
+    })
   }
 
   prev() {
@@ -32,12 +35,14 @@ export class VocabularySlides {
   }
 
   next() {
-    this.vocabSlider.slideTo(3);
-    // this.vocabSlider.slideNext();
+    this.vocabSlider.slideNext();
   }
 
   onSlideChanged($event) {
+    if (this.sliderService.currentSlide < 0 && this.sliderService.firstTime)
+      this.sliderService.currentSlide = $event.activeIndex;
     if (this.sliderService.firstTime) return this.sliderService.firstTime = false;
+    this.sliderService.currentSlide = $event.activeIndex;
     let vocabIndex: number = -1;
     let activeIndex = $event.activeIndex;
     if (activeIndex == 0 || activeIndex == this.vocabularies.length)
@@ -47,6 +52,6 @@ export class VocabularySlides {
     else
       vocabIndex = activeIndex - 1;
     console.log(vocabIndex);
-    // this.audioService.seekToVocabulary(vocabIndex);
+    this.audioService.seekToVocabulary(vocabIndex);
   }
 }
