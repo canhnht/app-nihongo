@@ -1,9 +1,11 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams, Popover} from 'ionic-angular';
+import {Toast} from 'ionic-native';
 import {Vocabulary} from '../../providers/vocabulary.interface';
 import {Unit} from '../../providers/unit.interface';
 import {LIST_VOCABULARY} from '../../providers/list-vocabulary.data';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
+import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../providers/audio.service';
 import {SliderService} from '../../providers/slider.service';
 import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
@@ -27,7 +29,12 @@ export class VocabulariesPage {
   }
 
   selectVocabulary(vocabulary) {
-    this._audioService.playVocabulary(vocabulary);
+    let vocabIndex = this.vocabularies.findIndex(item => item.id == vocabulary.id);
+    this._audioService.playVocabulary(vocabIndex);
+    this.sliderService.resetSlider();
+    this.sliderService.currentSlide = vocabIndex;
+    Toast.show(`selectVocabulary ${this.sliderService.currentSlide}`, '500', 'top')
+      .subscribe(() => {});
     this._navController.push(VocabularySlides,
       {title: 'Course 1 - Unit 2'});
   }
@@ -56,5 +63,14 @@ export class VocabulariesPage {
       this._navController.push(VocabularySlides,
         {title: 'Course 2 - Unit 3'});
     }
+  }
+
+  presentPopover($event) {
+    let popover = Popover.create(PopoverMenu, {
+      menu: ['Select all', 'Play all', 'Setting']
+    });
+    this._navController.present(popover, {
+      ev: $event
+    });
   }
 }

@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, Popover} from 'ionic-angular';
 import {LIST_COURSE} from '../../providers/list-course.data';
 import {Course} from '../../providers/course.interface';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
+import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {UnitsPage} from '../units-page/units-page';
 import {AudioService} from '../../providers/audio.service';
 import {SliderService} from '../../providers/slider.service';
@@ -31,5 +32,14 @@ export class HomePage {
       this._navController.push(VocabularySlides,
         {title: 'Course 2 - Unit 3'});
     }
+  }
+
+  presentPopover($event) {
+    let popover = Popover.create(PopoverMenu, {
+      menu: ['Setting']
+    });
+    this._navController.present(popover, {
+      ev: $event
+    });
   }
 }

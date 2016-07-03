@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams, Popover} from 'ionic-angular';
 import {LIST_UNIT} from '../../providers/list-unit.data';
 import {VocabulariesPage} from '../vocabularies-page/vocabularies-page';
 import {Course} from '../../providers/course.interface';
 import {Unit} from '../../providers/unit.interface';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
+import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../providers/audio.service';
 import {SliderService} from '../../providers/slider.service';
 import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
@@ -77,5 +78,14 @@ export class UnitsPage {
       this._navController.push(VocabularySlides,
         {title: 'Course 2 - Unit 3'});
     }
+  }
+
+  presentPopover($event) {
+    let popover = Popover.create(PopoverMenu, {
+      menu: ['Select all', 'Play all', 'Download all', 'Delete all', 'Setting']
+    });
+    this._navController.present(popover, {
+      ev: $event
+    });
   }
 }

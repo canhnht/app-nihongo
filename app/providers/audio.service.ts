@@ -34,7 +34,7 @@ export class AudioService {
       if (vocabulary.audioFile) {
         this.listTrack.push(new MediaPlugin(`/android_asset/www/audio/${vocabulary.audioFile}`));
         this.listTrack[this.listTrack.length - 1].play();
-        this.listTrack[this.listTrack.length - 1].stop();
+        this.listTrack[this.listTrack.length - 1].pause();
       }
     });
     this.currentTrack.index = 0;
@@ -42,8 +42,17 @@ export class AudioService {
     this.playCurrentTrack();
   }
 
-  playVocabulary(vocabulary) {
+  playVocabulary(vocabIndex) {
     this.stopListTrack();
+    this.listTrack = [];
+    LIST_VOCABULARY.forEach(vocabulary => {
+      if (vocabulary.audioFile) {
+        this.listTrack.push(new MediaPlugin(`/android_asset/www/audio/${vocabulary.audioFile}`));
+        this.listTrack[this.listTrack.length - 1].play();
+        this.listTrack[this.listTrack.length - 1].pause();
+      }
+    });
+    this.currentTrack.index = vocabIndex;
     this.currentTrack.title = 'Course 1 - Unit 2 - Word C';
     this.playCurrentTrack();
   }
@@ -64,7 +73,6 @@ export class AudioService {
       this.pauseCurrentTrack();
     } else {
       this.trackIndexSubject.next(this.currentTrack.index);
-      this.listTrack[this.currentTrack.index].stop();
       this.playCurrentTrack();
     }
   }
@@ -94,8 +102,8 @@ export class AudioService {
       this.currentTrack.duration = this.convertText(Math.max(duration, 0));
       let playedDuration = this.getPlayedDurationUntil(this.currentTrack.index);
       track.getCurrentPosition().then(position => {
-        Toast.show(`currentPosition ${position}`, '500', 'center')
-            .subscribe(() => {});
+        // Toast.show(`currentPosition ${position}`, '500', 'center')
+        //     .subscribe(() => {});
         if (position >= 0) {
           position += playedDuration;
           this.currentTrack.playedPercent = Math.ceil(position / duration * 100);
@@ -140,15 +148,16 @@ export class AudioService {
       let seconds = Math.max(this.getTotalDuration(), 0);
       seconds = seconds * percent / 100;
       let nextIndex: number = this.getNextTrackIndex(seconds);
-
       if (nextIndex != this.currentTrack.index) {
         this.trackIndexSubject.next(nextIndex);
+        let continuePlaying = this.currentTrack.isPlaying;
         this.pauseCurrentTrack();
         this.listTrack[this.currentTrack.index].seekTo(0);
         this.currentTrack.index = nextIndex;
-        this.playCurrentTrack();
-        this.currentTrack.seekTime = this.convertText(seconds);
         let track: MediaPlugin = this.listTrack[this.currentTrack.index];
+        if (continuePlaying)
+          this.playCurrentTrack();
+        this.currentTrack.seekTime = this.convertText(seconds);
         seconds -= this.getPlayedDurationUntil(this.currentTrack.index);
         track.seekTo(Math.round(seconds * 1000));
       } else {
@@ -175,10 +184,12 @@ export class AudioService {
     let position = this.getPlayedDurationUntil(nextIndex);
     if (nextIndex != this.currentTrack.index) {
       this.currentTrack.playedPercent = Math.ceil(position / duration * 100);
+      let continuePlaying = this.currentTrack.isPlaying;
       this.pauseCurrentTrack();
       this.listTrack[this.currentTrack.index].seekTo(0);
       this.currentTrack.index = nextIndex;
-      this.playCurrentTrack();
+      if (continuePlaying)
+        this.playCurrentTrack();
       this.currentTrack.seekTime = this.convertText(position);
       let track: MediaPlugin = this.listTrack[this.currentTrack.index];
       track.seekTo(0);

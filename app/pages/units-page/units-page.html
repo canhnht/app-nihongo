@@ -10,7 +10,7 @@
     <button danger (click)="uncheckAll()" *ngIf="selectedUnits.length > 0">
       Cancel
     </button>
-    <button>
+    <button (click)="presentPopover($event)">
       <ion-icon name="more"></ion-icon>
     </button>
   </ion-buttons>

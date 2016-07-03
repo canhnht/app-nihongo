@@ -3,9 +3,16 @@
   <ion-title>
     {{unit.title}}
   </ion-title>
-  <ion-buttons end *ngIf="selectedVocabularies.length > 0">
-    <button primary>Play</button>
-    <button danger (click)="uncheckAll()">Cancel</button>
+  <ion-buttons end>
+    <button secondary *ngIf="selectedVocabularies.length > 0">
+      Play
+    </button>
+    <button danger (click)="uncheckAll()" *ngIf="selectedVocabularies.length > 0">
+      Cancel
+    </button>
+    <button (click)="presentPopover($event)">
+      <ion-icon name="more"></ion-icon>
+    </button>
   </ion-buttons>
 </ion-navbar>
 
