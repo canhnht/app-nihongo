@@ -18,7 +18,7 @@ export class MyApp {
   private rootPage:any;
 
   constructor(private platform:Platform) {
-    this.rootPage = VocabularySlides;
+    this.rootPage = HomePage;
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
