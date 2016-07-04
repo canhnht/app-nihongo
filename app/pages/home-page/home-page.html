@@ -10,7 +10,7 @@
 <ion-content padding>
   <ion-list [virtualScroll]="courses">
     <ion-item button-primary *virtualItem="let course"
-      (click)="goToCourse($event, course)">
+      (click)="course.isFree ? goToCourse($event, course) : buyCourse(course)">
       <ion-avatar item-left>
         <ion-img [src]="course.icon"></ion-img>
       </ion-avatar>
@@ -19,7 +19,7 @@
       <ion-img item-right class="icon-paid" src="images/coin.png"
         [class.hidden]="course.isFree">
       </ion-img>
-      <button class="btn-detail" clear item-right>
+      <button class="btn-detail" clear item-right [class.hidden]="!course.isFree">
         &#8226;&#8226;&#8226;
       </button>
     </ion-item>

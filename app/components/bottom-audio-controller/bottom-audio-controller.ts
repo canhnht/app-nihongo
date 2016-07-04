@@ -12,8 +12,6 @@ import {VocabularySlides} from '../../pages/vocabulary-slides/vocabulary-slides'
 export class BottomAudioController {
   @Output() onAudioClick = new EventEmitter();
   currentTrack: any = {};
-  isRepeat: boolean = false;
-  isShuffle: boolean = false;
 
   constructor(private _audioService: AudioService) {
     this.currentTrack = this._audioService.currentTrack;
@@ -23,13 +21,13 @@ export class BottomAudioController {
     this._audioService.seekPercent($event.value);
   }
 
-  toggleRepeat($event) {
-    this.isRepeat = !this.isRepeat;
+  toggleLoop($event) {
+    this._audioService.toggleLoop();
     $event.stopPropagation();
   }
 
   toggleShuffle($event) {
-    this.isShuffle = !this.isShuffle;
+    this._audioService.toggleShuffle();
     $event.stopPropagation();
   }
 

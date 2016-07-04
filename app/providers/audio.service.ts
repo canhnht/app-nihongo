@@ -11,10 +11,20 @@ export class AudioService {
   intervalGetCurrentPosition: any;
   listTrack: MediaPlugin[] = null;
   isPlaying: boolean = false;
+  isLoop: boolean;
+  isShuffle: boolean;
 
   constructor(http: Http) {
     this.currentTrack.seekTime = '00:00';
     this.currentTrack.duration = '00:00';
+  }
+
+  toggleLoop() {
+    this.isLoop = !this.isLoop;
+  }
+
+  toggleShuffle() {
+    this.isShuffle = !this.isShuffle;
   }
 
   convertText(seconds) {

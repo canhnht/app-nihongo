@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, Popover} from 'ionic-angular';
+import {NavController, Popover, Alert} from 'ionic-angular';
 import {LIST_COURSE} from '../../providers/list-course.data';
 import {Course} from '../../providers/course.interface';
 import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
@@ -41,5 +41,25 @@ export class HomePage {
     this._navController.present(popover, {
       ev: $event
     });
+  }
+
+  buyCourse(course) {
+    let confirm = Alert.create({
+      title: `Buy course ${course.title}?`,
+      message: 'Do you agree to buy this course? The transaction will be taken immediately.',
+      buttons: [
+        {
+          text: 'Disagree',
+          handler: () => {}
+        },
+        {
+          text: 'Agree',
+          handler: () => {
+            course.isFree = true;
+          }
+        }
+      ]
+    });
+    this._navController.present(confirm);
   }
 }
