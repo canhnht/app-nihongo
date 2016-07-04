@@ -14,6 +14,11 @@
       [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
       <h2>{{vocabulary.content}}</h2>
       <p>{{vocabulary.starred}}</p>
+      <button danger large round class="btn-repeat"
+        [class.disabled]="!audioService.currentTrack.isRepeat"
+        (click)="toggleRepeatCurrentVocabulary($event)">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
     </ion-slide>
   </ion-slides>
 </ion-content>

@@ -11,8 +11,8 @@ export class AudioService {
   intervalGetCurrentPosition: any;
   listTrack: MediaPlugin[] = null;
   isPlaying: boolean = false;
-  isLoop: boolean;
-  isShuffle: boolean;
+  isLoop: boolean = false;
+  isShuffle: boolean = false;
 
   constructor(http: Http) {
     this.currentTrack.seekTime = '00:00';
@@ -21,13 +21,27 @@ export class AudioService {
 
   toggleLoop() {
     this.isLoop = !this.isLoop;
+    if (this.isLoop) {
+      Toast.hide();
+      Toast.showShortBottom('Repeating all tracks').subscribe(() => {});
+    } else {
+      Toast.hide();
+      Toast.showShortBottom('Repeat is off').subscribe(() => {});
+    }
   }
 
   toggleShuffle() {
     this.isShuffle = !this.isShuffle;
+    if (this.isShuffle) {
+      Toast.hide();
+      Toast.showShortBottom('Shuffle is on').subscribe(() => {});
+    } else {
+      Toast.hide();
+      Toast.showShortBottom('Shuffle is off').subscribe(() => {});
+    }
   }
 
-  convertText(seconds) {
+  private convertText(seconds) {
     seconds = Math.floor(seconds);
     let minutes = Math.floor(seconds / 60).toString();
     while (minutes.length < 2) minutes = '0' + minutes;
@@ -48,6 +62,7 @@ export class AudioService {
       }
     });
     this.currentTrack.index = 0;
+    this.currentTrack.isRepeat = false;
     this.currentTrack.title = 'Course 2 - Unit 3 - Word 0';
     this.playCurrentTrack();
   }
@@ -63,6 +78,7 @@ export class AudioService {
       }
     });
     this.currentTrack.index = vocabIndex;
+    this.currentTrack.isRepeat = false;
     this.currentTrack.title = 'Course 1 - Unit 2 - Word C';
     this.playCurrentTrack();
   }
@@ -77,13 +93,20 @@ export class AudioService {
   goToNextTrack() {
     this.pauseCurrentTrack();
     this.listTrack[this.currentTrack.index].seekTo(0);
-    this.currentTrack.index += 1;
-    if (this.currentTrack.index == this.listTrack.length) {
-      this.currentTrack.index = 0;
-      this.pauseCurrentTrack();
-    } else {
-      this.trackIndexSubject.next(this.currentTrack.index);
+    if (this.currentTrack.isRepeat) {
       this.playCurrentTrack();
+    } else {
+      this.currentTrack.index += 1;
+      if (this.currentTrack.index == this.listTrack.length) {
+        this.currentTrack.index = 0;
+        if (this.isLoop) {
+          this.trackIndexSubject.next(this.currentTrack.index);
+          this.playCurrentTrack();
+        } else this.pauseCurrentTrack();
+      } else {
+        this.trackIndexSubject.next(this.currentTrack.index);
+        this.playCurrentTrack();
+      }
     }
   }
 
@@ -164,6 +187,7 @@ export class AudioService {
         this.pauseCurrentTrack();
         this.listTrack[this.currentTrack.index].seekTo(0);
         this.currentTrack.index = nextIndex;
+        this.currentTrack.isRepeat = false;
         let track: MediaPlugin = this.listTrack[this.currentTrack.index];
         if (continuePlaying)
           this.playCurrentTrack();
@@ -198,11 +222,23 @@ export class AudioService {
       this.pauseCurrentTrack();
       this.listTrack[this.currentTrack.index].seekTo(0);
       this.currentTrack.index = nextIndex;
+      this.currentTrack.isRepeat = false;
       if (continuePlaying)
         this.playCurrentTrack();
       this.currentTrack.seekTime = this.convertText(position);
       let track: MediaPlugin = this.listTrack[this.currentTrack.index];
       track.seekTo(0);
+    }
+  }
+
+  toggleRepeatCurrentTrack() {
+    this.currentTrack.isRepeat = !this.currentTrack.isRepeat;
+    if (this.currentTrack.isRepeat) {
+      Toast.hide();
+      Toast.showShortBottom('Repeating current vocabulary').subscribe(() => {});
+    } else {
+      Toast.hide();
+      Toast.showShortBottom('Repeat is off').subscribe(() => {});
     }
   }
 }

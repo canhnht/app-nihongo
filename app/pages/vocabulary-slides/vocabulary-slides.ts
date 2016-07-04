@@ -24,7 +24,7 @@ export class VocabularySlides {
     private audioService: AudioService, private sliderService: SliderService) {
     this.title = this.navParams.data.title;
     if (this.sliderService.currentSlide >= 0)
-      this.sliderOptions.initialSlide = this.sliderService.currentSlide;
+      this.sliderOptions.initialSlide = this.sliderService.currentSlide - 1;
     this.audioService.trackIndexSubject.subscribe(trackIndex => {
       this.vocabSlider.slideTo(trackIndex + 1);
     })
@@ -53,5 +53,10 @@ export class VocabularySlides {
       vocabIndex = activeIndex - 1;
     console.log(vocabIndex);
     this.audioService.seekToVocabulary(vocabIndex);
+  }
+
+  toggleRepeatCurrentVocabulary($event) {
+    this.audioService.toggleRepeatCurrentTrack();
+    $event.stopPropagation();
   }
 }

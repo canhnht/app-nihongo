@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {NavController, NavParams, Popover} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {NavController, NavParams, Popover, List} from 'ionic-angular';
 import {LIST_UNIT} from '../../providers/list-unit.data';
 import {VocabulariesPage} from '../vocabularies-page/vocabularies-page';
 import {Course} from '../../providers/course.interface';
@@ -15,6 +15,7 @@ import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
   directives: [BottomAudioController],
 })
 export class UnitsPage {
+  @ViewChild(List) list: List;
   private units: Unit[] = LIST_UNIT;
   private course: Course;
   private selectedUnits: number[] = [];
@@ -45,10 +46,10 @@ export class UnitsPage {
     }, 2000);
   }
 
-  deleteUnit($event, unit) {
+  deleteUnit(unit) {
     console.log('delete', unit);
     unit.percentDownloaded = 0;
-    $event.stopPropagation();
+    this.list.closeSlidingItems();
   }
 
   checkUnit($event, unit) {

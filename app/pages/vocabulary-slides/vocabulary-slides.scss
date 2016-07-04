@@ -30,4 +30,14 @@ ion-content {
     }
   }
 
+  .btn-repeat {
+    position: absolute;
+    bottom: 15px;
+    left: 42%;
+
+    &.disabled {
+      opacity: 0.5;
+    }
+  }
+
 }
