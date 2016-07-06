@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Platform, ionicBootstrap} from 'ionic-angular';
-import {StatusBar} from 'ionic-native';
+import {StatusBar, Splashscreen} from 'ionic-native';
 import {HomePage} from './pages/home-page/home-page';
 import {AudioService} from './providers/audio.service';
 import {SliderService} from './providers/slider.service';
@@ -24,6 +24,7 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
+      Splashscreen.hide();
     });
   }
 }

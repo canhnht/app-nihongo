@@ -1,7 +1,4 @@
 <div class="bottom-audio-controller" (click)="goToSlides()">
-  <marquee class="audio-title">
-    {{currentTrack.title || 'Please select a track to play'}}
-  </marquee>
   <div class="audio-control-group">
     <button [class.disabled]="!_audioService.isLoop" (click)="toggleLoop($event)">
       <ion-icon name="repeat"></ion-icon>

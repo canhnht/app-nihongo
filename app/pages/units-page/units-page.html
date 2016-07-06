@@ -4,12 +4,6 @@
     {{course.title}}
   </ion-title>
   <ion-buttons end>
-    <button secondary (click)="playSelectedList()" *ngIf="selectedUnits.length > 0">
-      Play
-    </button>
-    <button danger (click)="uncheckAll()" *ngIf="selectedUnits.length > 0">
-      Cancel
-    </button>
     <button (click)="presentPopover($event)">
       <ion-icon name="more"></ion-icon>
     </button>
@@ -40,9 +34,6 @@
         <ion-icon secondary name="checkmark-circle-outline"
           item-right *ngIf="unit.percentDownloaded == 100">
         </ion-icon>
-        <button class="btn-detail" clear item-right>
-          &#8226;&#8226;&#8226;
-        </button>
       </ion-item>
       <ion-item-options>
         <button danger (click)="deleteUnit(unit)">
