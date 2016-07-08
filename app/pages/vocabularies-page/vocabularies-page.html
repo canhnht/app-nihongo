@@ -10,7 +10,7 @@
   </ion-buttons>
 </ion-navbar>
 
-<ion-content padding>
+<ion-content>
   <ion-list [virtualScroll]="vocabularies">
     <ion-list-header class="btn-select-all">
       <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
@@ -33,4 +33,6 @@
     </ion-item>
   </ion-list>
 </ion-content>
-<audio-setting [isReady]="selectedVocabularies.length > 0"></audio-setting>
+<audio-setting [isReady]="selectedVocabularies.length > 0"
+  (onReady)="playSelectedList()">
+</audio-setting>

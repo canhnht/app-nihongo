@@ -15,4 +15,18 @@ export class AudioPlayer {
   constructor(private _audioService: AudioService) {
     this.currentTrack = this._audioService.currentTrack;
   }
+
+  handleSeekAudio($event) {
+    this._audioService.seekPercent($event.value);
+  }
+
+  play($event) {
+    this._audioService.playCurrentTrack();
+    $event.stopPropagation();
+  }
+
+  pause($event) {
+    this._audioService.pauseCurrentTrack();
+    $event.stopPropagation();
+  }
 }

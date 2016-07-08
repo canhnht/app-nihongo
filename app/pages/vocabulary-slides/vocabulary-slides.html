@@ -1,5 +1,6 @@
 <ion-content no-padding scroll="false" class="vocabulary-slides">
-  <button clear danger round large class="btn-close">
+  <button clear danger round large class="btn-close"
+    (click)="closeSlide()">
     <ion-icon name="close"></ion-icon>
   </button>
   <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
@@ -16,7 +17,7 @@
   </ion-slides>
   <div class="btn-group">
     <button secondary large round class="btn-repeat"
-      (click)="toggleRepeatCurrentVocabulary($event)">
+      (click)="repeatCurrentVocabulary($event)">
       <ion-icon name="volume-up"></ion-icon>
     </button>
     <button danger large round class="btn-bookmark"

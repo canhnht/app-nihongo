@@ -33,10 +33,7 @@ export class VocabulariesPage {
     this._audioService.playVocabulary(vocabIndex);
     this.sliderService.resetSlider();
     this.sliderService.currentSlide = vocabIndex;
-    Toast.show(`selectVocabulary ${this.sliderService.currentSlide}`, '500', 'top')
-      .subscribe(() => {});
-    this._navController.push(VocabularySlides,
-      {title: 'Course 1 - Unit 2'});
+    this._navController.push(VocabularySlides);
   }
 
   checkVocabulary($event, vocabulary) {
@@ -64,12 +61,11 @@ export class VocabulariesPage {
     }
   }
 
-  goToSlides() {
+  playSelectedList() {
+    this._audioService.playListUnit(this.selectedVocabularies);
     this.sliderService.resetSlider();
-    if (this._audioService.isPlaying) {
-      this._navController.push(VocabularySlides,
-        {title: 'Course 2 - Unit 3'});
-    }
+    this._navController.push(VocabularySlides);
+    this.selectedVocabularies = [];
   }
 
   presentPopover($event) {

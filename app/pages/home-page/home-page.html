@@ -7,7 +7,7 @@
   </ion-buttons>
 </ion-navbar>
 
-<ion-content padding>
+<ion-content>
   <ion-list [virtualScroll]="courses">
     <ion-item button-primary *virtualItem="let course"
       (click)="course.isFree ? goToCourse($event, course) : buyCourse(course)">

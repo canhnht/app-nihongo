@@ -75,8 +75,7 @@ export class UnitsPage {
   playSelectedList() {
     this._audioService.playListUnit(this.selectedUnits);
     this.sliderService.resetSlider();
-    this._navController.push(VocabularySlides,
-      {title: 'Course 2 - Unit 3'});
+    this._navController.push(VocabularySlides);
     this.selectedUnits = [];
   }
 

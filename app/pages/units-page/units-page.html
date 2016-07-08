@@ -52,4 +52,6 @@
     </ion-item-sliding>
   </ion-list>
 </ion-content>
-<audio-setting [isReady]="selectedUnits.length > 0"></audio-setting>
+<audio-setting [isReady]="selectedUnits.length > 0"
+  (onReady)="playSelectedList()">
+</audio-setting>

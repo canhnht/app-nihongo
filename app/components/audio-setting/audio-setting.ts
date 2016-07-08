@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {IONIC_DIRECTIVES} from 'ionic-angular';
 import {Toast} from 'ionic-native';
 import {AudioService} from '../../providers/audio.service';
@@ -11,20 +11,22 @@ import {VocabularySlides} from '../../pages/vocabulary-slides/vocabulary-slides'
 })
 export class AudioSetting {
   @Input() isReady: boolean;
+  @Output() onReady = new EventEmitter();
+
   currentTrack: any = {};
 
-  constructor(private _audioService: AudioService) {
-    this.currentTrack = this._audioService.currentTrack;
+  constructor(private audioService: AudioService) {
+    this.currentTrack = this.audioService.currentTrack;
   }
 
   toggleLoop($event) {
     console.log('toggleLoop');
-    this._audioService.toggleLoop();
+    this.audioService.toggleLoop();
     $event.stopPropagation();
   }
 
   toggleShuffle($event) {
-    this._audioService.toggleShuffle();
+    this.audioService.toggleShuffle();
     $event.stopPropagation();
   }
 }
