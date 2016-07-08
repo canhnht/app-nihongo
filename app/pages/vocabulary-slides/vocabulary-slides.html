@@ -1,9 +1,7 @@
-
-<ion-navbar *navbar primary>
-  <ion-title>{{title}}</ion-title>
-</ion-navbar>
-
 <ion-content no-padding scroll="false" class="vocabulary-slides">
+  <button clear danger round large class="btn-close">
+    <ion-icon name="close"></ion-icon>
+  </button>
   <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
   </ion-icon>
   <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
@@ -14,12 +12,18 @@
       [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
       <h2>{{vocabulary.content}}</h2>
       <p>{{vocabulary.starred}}</p>
-      <button danger large round class="btn-repeat"
-        [class.disabled]="!audioService.currentTrack.isRepeat"
-        (click)="toggleRepeatCurrentVocabulary($event)">
-        <ion-icon name="refresh"></ion-icon>
-      </button>
     </ion-slide>
   </ion-slides>
+  <div class="btn-group">
+    <button secondary large round class="btn-repeat"
+      (click)="toggleRepeatCurrentVocabulary($event)">
+      <ion-icon name="volume-up"></ion-icon>
+    </button>
+    <button danger large round class="btn-bookmark"
+      [class.disabled]="!vocabularies[currentIndex].starred"
+      (click)="toggleBookmark($event)">
+      <ion-icon name="star-outline"></ion-icon>
+    </button>
+  </div>
 </ion-content>
-<bottom-audio-controller></bottom-audio-controller>
+<audio-player></audio-player>

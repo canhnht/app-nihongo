@@ -1,0 +1,17 @@
+.audio-setting {
+  position: relative;
+  border-top: 1px solid #ccc;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+
+  .btn-play {
+    margin: 0 20px;
+  }
+
+  .disabled {
+    opacity: 0.5;
+  }
+}

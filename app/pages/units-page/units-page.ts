@@ -4,7 +4,7 @@ import {LIST_UNIT} from '../../providers/list-unit.data';
 import {VocabulariesPage} from '../vocabularies-page/vocabularies-page';
 import {Course} from '../../providers/course.interface';
 import {Unit} from '../../providers/unit.interface';
-import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
+import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../providers/audio.service';
 import {SliderService} from '../../providers/slider.service';
@@ -12,7 +12,7 @@ import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
 
 @Component({
   templateUrl: 'build/pages/units-page/units-page.html',
-  directives: [BottomAudioController],
+  directives: [AudioSetting],
 })
 export class UnitsPage {
   @ViewChild(List) list: List;
@@ -61,8 +61,15 @@ export class UnitsPage {
     $event.stopPropagation();
   }
 
-  uncheckAll() {
-    this.selectedUnits = [];
+  toggleSelectAll() {
+    if (this.selectedUnits.length == this.units.length) {
+      this.selectedUnits = [];
+    } else {
+      this.selectedUnits = [];
+      this.units.forEach(unit => {
+        this.selectedUnits.push(unit.id);
+      });
+    }
   }
 
   playSelectedList() {
@@ -83,7 +90,7 @@ export class UnitsPage {
 
   presentPopover($event) {
     let popover = Popover.create(PopoverMenu, {
-      menu: ['Select all', 'Play all', 'Download all', 'Delete all', 'Setting']
+      menu: ['Download all', 'Delete all', 'Setting']
     });
     this._navController.present(popover, {
       ev: $event

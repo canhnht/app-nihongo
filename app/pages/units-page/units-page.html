@@ -11,21 +11,30 @@
 </ion-navbar>
 
 <ion-content>
+  <div class="cover">
+    <img [src]="course.icon" class="course-icon" />
+    <div class="course-info">
+      <h1 class="course-title">{{course.title}}</h1>
+      <p class="no-units">3 units</p>
+    </div>
+  </div>
   <ion-list [virtualScroll]="units">
-    <ion-list-header class="cover">
-      <img [src]="course.icon" class="course-icon" />
-      <div class="course-info">
-        <h1 class="course-title">{{course.title}}</h1>
-        <p class="no-units">3 units</p>
-      </div>
+    <ion-list-header class="btn-select-all">
+      <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
+        [checked]="selectedUnits.length == units.length" />
+      <ion-label class="desc">
+        {{selectedUnits.length == units.length ? 'Deselect all' : 'Select all'}}
+      </ion-label>
     </ion-list-header>
     <ion-item-sliding *virtualItem="let unit">
       <ion-item button-primary text-wrap (click)="goToUnit($event, unit)">
-        <input type="checkbox" item-left (click)="checkUnit($event, unit)"
+        <input class="btn-select" type="checkbox" item-left (click)="checkUnit($event, unit)"
           [checked]="selectedUnits.indexOf(unit.id) >= 0" />
         <ion-badge class="unit-icon" item-left>U{{unit.id}}</ion-badge>
-        <h2>{{unit.title}}</h2>
-        <p>5 words</p>
+        <ion-label>
+          <h2>{{unit.title}}</h2>
+          <p>5 words</p>
+        </ion-label>
         <ion-spinner item-right name="bubbles" *ngIf="unit.downloading"></ion-spinner>
         <button outline round item-right (click)="downloadUnit($event, unit)"
           *ngIf="!unit.downloading && unit.percentDownloaded < 100">
@@ -43,5 +52,4 @@
     </ion-item-sliding>
   </ion-list>
 </ion-content>
-<bottom-audio-controller (onAudioClick)="goToSlides()">
-</bottom-audio-controller>
+<audio-setting [isReady]="selectedUnits.length > 0"></audio-setting>

@@ -32,22 +32,4 @@ export const
       icon: 'images/icon_course.png',
       isFree: false,
     },
-    {
-      id: 6,
-      title: 'Course 6',
-      icon: 'images/icon_course.png',
-      isFree: false,
-    },
-    {
-      id: 7,
-      title: 'Course 7',
-      icon: 'images/icon_course.png',
-      isFree: false,
-    },
-    {
-      id: 8,
-      title: 'Course 8',
-      icon: 'images/icon_course.png',
-      isFree: false,
-    },
   ];

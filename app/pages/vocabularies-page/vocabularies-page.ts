@@ -4,7 +4,7 @@ import {Toast} from 'ionic-native';
 import {Vocabulary} from '../../providers/vocabulary.interface';
 import {Unit} from '../../providers/unit.interface';
 import {LIST_VOCABULARY} from '../../providers/list-vocabulary.data';
-import {BottomAudioController} from '../../components/bottom-audio-controller/bottom-audio-controller';
+import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../providers/audio.service';
 import {SliderService} from '../../providers/slider.service';
@@ -12,12 +12,12 @@ import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
 
 @Component({
   templateUrl: 'build/pages/vocabularies-page/vocabularies-page.html',
-  directives: [BottomAudioController],
+  directives: [AudioSetting],
 })
 export class VocabulariesPage {
   private unit: Unit;
   private vocabularies: Vocabulary[] = LIST_VOCABULARY;
-  private selectedVocabularies: Vocabulary[] = [];
+  private selectedVocabularies: number[] = [];
 
   constructor(private _navController: NavController, private navParams: NavParams,
     private _audioService: AudioService, private sliderService: SliderService) {
@@ -48,13 +48,20 @@ export class VocabulariesPage {
     $event.stopPropagation();
   }
 
-  starVocabulary($event, vocabulary) {
+  toggleBookmark($event, vocabulary) {
     vocabulary.starred = !vocabulary.starred;
     $event.stopPropagation();
   }
 
-  uncheckAll() {
-    this.selectedVocabularies = [];
+  toggleSelectAll() {
+    if (this.selectedVocabularies.length == this.vocabularies.length) {
+      this.selectedVocabularies = [];
+    } else {
+      this.selectedVocabularies = [];
+      this.vocabularies.forEach(vocabulary => {
+        this.selectedVocabularies.push(vocabulary.id);
+      });
+    }
   }
 
   goToSlides() {

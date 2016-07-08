@@ -4,12 +4,6 @@
     {{unit.title}}
   </ion-title>
   <ion-buttons end>
-    <button secondary *ngIf="selectedVocabularies.length > 0">
-      Play
-    </button>
-    <button danger (click)="uncheckAll()" *ngIf="selectedVocabularies.length > 0">
-      Cancel
-    </button>
     <button (click)="presentPopover($event)">
       <ion-icon name="more"></ion-icon>
     </button>
@@ -18,16 +12,25 @@
 
 <ion-content padding>
   <ion-list [virtualScroll]="vocabularies">
+    <ion-list-header class="btn-select-all">
+      <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
+        [checked]="selectedVocabularies.length == vocabularies.length" />
+      <ion-label class="desc">
+        {{selectedVocabularies.length == vocabularies.length ? 'Deselect all' : 'Select all'}}
+      </ion-label>
+    </ion-list-header>
     <ion-item button-primary ion-item text-wrap *virtualItem="let vocabulary"
       (click)="selectVocabulary(vocabulary)">
-      <input type="checkbox" item-left (click)="checkVocabulary($event, vocabulary)"
+      <input type="checkbox" class="btn-select" item-left
+        (click)="checkVocabulary($event, vocabulary)"
         [checked]="selectedVocabularies.indexOf(vocabulary.id) >= 0" />
-      {{vocabulary.content}}
+      <ion-label>
+        <h2>{{vocabulary.content}}</h2>
+      </ion-label>
       <ion-icon item-right [name]="vocabulary.starred ? 'star' : 'star-outline'"
-        (click)="starVocabulary($event, vocabulary)">
+        (click)="toggleBookmark($event, vocabulary)">
       </ion-icon>
     </ion-item>
   </ion-list>
 </ion-content>
-<bottom-audio-controller (onAudioClick)="goToSlides()">
-</bottom-audio-controller>
+<audio-setting [isReady]="selectedVocabularies.length > 0"></audio-setting>

@@ -14,8 +14,10 @@
       <ion-avatar item-left>
         <ion-img [src]="course.icon"></ion-img>
       </ion-avatar>
-      <h2>{{course.title}}</h2>
-      <p>10 words</p>
+      <ion-label>
+        <h2>{{course.title}}</h2>
+        <p>10 words</p>
+      </ion-label>
       <ion-img item-right class="icon-paid" src="images/coin.png"
         [class.hidden]="course.isFree">
       </ion-img>

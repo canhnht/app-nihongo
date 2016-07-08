@@ -1,43 +1,53 @@
-ion-content {
-  .odd {
-    background-color: #51b147;
-  }
+.odd {
+  background-color: #51b147;
+}
 
-  .even {
-    background-color: #59a8f2;
-  }
+.even {
+  background-color: #59a8f2;
+}
 
+.btn-prev, .btn-next {
+  position: absolute;
+  display: none;
+  font-size: 66px;
+  top: calc(50% - 33px);
+  opacity: 0.5;
+  z-index: 5;
+}
+
+.btn-prev {
+  left: 10px;
+}
+
+.btn-next {
+  right: 10px;
+}
+
+&:hover, &:focus {
   .btn-prev, .btn-next {
-    position: absolute;
-    display: none;
-    font-size: 66px;
-    top: calc(50% - 33px);
+    display: block;
+  }
+}
+
+.btn-group {
+  position: absolute;
+  width: 100%;
+  bottom: 15px;
+  text-align: center;
+  z-index: 5;
+
+  .btn-repeat, .btn-bookmark {
+    margin: 0 10px;
+  }
+
+  .disabled {
     opacity: 0.5;
-    z-index: 10;
   }
+}
 
-  .btn-prev {
-    left: 10px;
-  }
-
-  .btn-next {
-    right: 10px;
-  }
-
-  &:hover, &:focus {
-    .btn-prev, .btn-next {
-      display: block;
-    }
-  }
-
-  .btn-repeat {
-    position: absolute;
-    bottom: 15px;
-    left: 42%;
-
-    &.disabled {
-      opacity: 0.5;
-    }
-  }
-
+.btn-close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 5;
 }
