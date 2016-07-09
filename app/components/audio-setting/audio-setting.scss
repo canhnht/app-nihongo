@@ -1,13 +1,13 @@
 .audio-setting {
-  position: relative;
-  border-top: 1px solid #ccc;
+  border-top: 2px solid #ccc;
   background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px 0;
 
-  .btn-play {
+  .btn-ready {
+    width: 120px;
     margin: 0 20px;
   }
 

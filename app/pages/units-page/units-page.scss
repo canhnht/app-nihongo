@@ -1,3 +1,4 @@
+
 .unit-icon {
   border-radius: 50%;
   color: white;
@@ -21,19 +22,19 @@
   justify-content: space-around;
 
   .course-icon {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
   }
 
   .course-info {
     .course-title {
-      font-size: 30px;
+      font-size: 25px;
       color: white;
     }
 
     .no-units {
-      font-size: 20px;
+      font-size: 15px;
       color: #387ef5;
     }
   }
@@ -48,9 +49,11 @@ ion-item-sliding {
   height: 20px;
 }
 
-.btn-select-all {
+.select-all {
+  background-color: #ddd;
   display: flex;
   align-items: center;
+  height: 50px;
 }
 
 .desc {

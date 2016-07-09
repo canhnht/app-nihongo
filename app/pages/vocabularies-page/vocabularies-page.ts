@@ -19,8 +19,8 @@ export class VocabulariesPage {
   private vocabularies: Vocabulary[] = LIST_VOCABULARY;
   private selectedVocabularies: number[] = [];
 
-  constructor(private _navController: NavController, private navParams: NavParams,
-    private _audioService: AudioService, private sliderService: SliderService) {
+  constructor(private navController: NavController, private navParams: NavParams,
+    private audioService: AudioService, private sliderService: SliderService) {
     this.unit = this.navParams.data.selectedUnit;
   }
 
@@ -30,10 +30,10 @@ export class VocabulariesPage {
 
   selectVocabulary(vocabulary) {
     let vocabIndex = this.vocabularies.findIndex(item => item.id == vocabulary.id);
-    this._audioService.playVocabulary(vocabIndex);
+    this.audioService.playVocabulary(vocabIndex);
     this.sliderService.resetSlider();
     this.sliderService.currentSlide = vocabIndex;
-    this._navController.push(VocabularySlides);
+    this.navController.push(VocabularySlides);
   }
 
   checkVocabulary($event, vocabulary) {
@@ -62,17 +62,22 @@ export class VocabulariesPage {
   }
 
   playSelectedList() {
-    this._audioService.playListUnit(this.selectedVocabularies);
+    this.audioService.playListUnit(this.selectedVocabularies);
     this.sliderService.resetSlider();
-    this._navController.push(VocabularySlides);
+    this.navController.push(VocabularySlides);
     this.selectedVocabularies = [];
+  }
+
+  continuePlaying() {
+    this.audioService.playCurrentTrack();
+    this.navController.push(VocabularySlides);
   }
 
   presentPopover($event) {
     let popover = Popover.create(PopoverMenu, {
-      menu: ['Select all', 'Play all', 'Setting']
+      menu: ['Setting']
     });
-    this._navController.present(popover, {
+    this.navController.present(popover, {
       ev: $event
     });
   }

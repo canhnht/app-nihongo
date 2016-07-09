@@ -5,6 +5,7 @@
 - Install [plugin EditorConfig](http://editorconfig.org/) to use ```.editorconfig``` files.
 - Install typescript and typings globally by ```npm install --global typescript typings```
 - ```npm install```
+- ```ionic state restore``` to install plugins for each platform
 - ```ionic serve```
 
 ## Helpful links:

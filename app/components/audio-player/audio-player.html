@@ -1,7 +1,7 @@
 <div class="audio-player">
   <button round large class="btn-play"
     (click)="(currentTrack.isPlaying && currentTrack.playedPercent < 99) ? pause($event) : play($event)">
-    <ion-icon [name]="(currentTrack.isPlaying && currentTrack.playedPercent < 99) ? 'pause' : 'play'"></ion-icon>
+    <ion-icon [name]="audioService.isPlaying && currentTrack.isPlaying ? 'pause' : 'play'"></ion-icon>
   </button>
   <ion-range [(ngModel)]="currentTrack.playedPercent"
     (ionChange)="handleSeekAudio($event)">

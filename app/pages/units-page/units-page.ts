@@ -20,8 +20,8 @@ export class UnitsPage {
   private course: Course;
   private selectedUnits: number[] = [];
 
-  constructor(private _navController: NavController, private _navParams: NavParams,
-    private _audioService: AudioService, private sliderService: SliderService) {
+  constructor(private navController: NavController, private _navParams: NavParams,
+    private audioService: AudioService, private sliderService: SliderService) {
     this.course = _navParams.data.selectedCourse;
   }
 
@@ -30,7 +30,7 @@ export class UnitsPage {
   }
 
   goToUnit($event, unit) {
-    this._navController.push(VocabulariesPage, {selectedUnit: unit});
+    this.navController.push(VocabulariesPage, {selectedUnit: unit});
     $event.stopPropagation();
   }
 
@@ -73,25 +73,22 @@ export class UnitsPage {
   }
 
   playSelectedList() {
-    this._audioService.playListUnit(this.selectedUnits);
+    this.audioService.playListUnit(this.selectedUnits);
     this.sliderService.resetSlider();
-    this._navController.push(VocabularySlides);
+    this.navController.push(VocabularySlides);
     this.selectedUnits = [];
   }
 
-  goToSlides() {
-    this.sliderService.resetSlider();
-    if (this._audioService.isPlaying) {
-      this._navController.push(VocabularySlides,
-        {title: 'Course 2 - Unit 3'});
-    }
+  continuePlaying() {
+    this.audioService.playCurrentTrack();
+    this.navController.push(VocabularySlides);
   }
 
   presentPopover($event) {
     let popover = Popover.create(PopoverMenu, {
       menu: ['Download all', 'Delete all', 'Setting']
     });
-    this._navController.present(popover, {
+    this.navController.present(popover, {
       ev: $event
     });
   }

@@ -80,6 +80,7 @@ export class AudioService {
   }
 
   playCurrentTrack() {
+    this.isPlaying = true;
     let track: MediaPlugin = this.listTrack[this.currentTrack.index];
     this.currentTrack.isPlaying = true;
     track.play();
@@ -95,7 +96,10 @@ export class AudioService {
       if (this.isLoop) {
         this.trackIndexSubject.next(this.currentTrack.index);
         this.playCurrentTrack();
-      } else this.pauseCurrentTrack();
+      } else {
+        this.isPlaying = false;
+        this.pauseCurrentTrack();
+      }
     } else {
       this.trackIndexSubject.next(this.currentTrack.index);
       this.playCurrentTrack();

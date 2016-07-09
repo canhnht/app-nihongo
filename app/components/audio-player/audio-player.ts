@@ -12,21 +12,21 @@ import {VocabularySlides} from '../../pages/vocabulary-slides/vocabulary-slides'
 export class AudioPlayer {
   currentTrack: any = {};
 
-  constructor(private _audioService: AudioService) {
-    this.currentTrack = this._audioService.currentTrack;
+  constructor(private audioService: AudioService) {
+    this.currentTrack = this.audioService.currentTrack;
   }
 
   handleSeekAudio($event) {
-    this._audioService.seekPercent($event.value);
+    this.audioService.seekPercent($event.value);
   }
 
   play($event) {
-    this._audioService.playCurrentTrack();
+    this.audioService.playCurrentTrack();
     $event.stopPropagation();
   }
 
   pause($event) {
-    this._audioService.pauseCurrentTrack();
+    this.audioService.pauseCurrentTrack();
     $event.stopPropagation();
   }
 }

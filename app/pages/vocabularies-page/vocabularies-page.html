@@ -10,15 +10,15 @@
   </ion-buttons>
 </ion-navbar>
 
+<div class="select-all" padding>
+  <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
+    [checked]="selectedVocabularies.length == vocabularies.length" />
+  <ion-label class="desc">
+    {{selectedVocabularies.length == vocabularies.length ? 'Deselect all' : 'Select all'}}
+  </ion-label>
+</div>
 <ion-content>
   <ion-list [virtualScroll]="vocabularies">
-    <ion-list-header class="btn-select-all">
-      <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
-        [checked]="selectedVocabularies.length == vocabularies.length" />
-      <ion-label class="desc">
-        {{selectedVocabularies.length == vocabularies.length ? 'Deselect all' : 'Select all'}}
-      </ion-label>
-    </ion-list-header>
     <ion-item button-primary ion-item text-wrap *virtualItem="let vocabulary"
       (click)="selectVocabulary(vocabulary)">
       <input type="checkbox" class="btn-select" item-left
@@ -34,5 +34,5 @@
   </ion-list>
 </ion-content>
 <audio-setting [isReady]="selectedVocabularies.length > 0"
-  (onReady)="playSelectedList()">
+  (onReady)="audioService.isPlaying ? continuePlaying() : playSelectedList()">
 </audio-setting>

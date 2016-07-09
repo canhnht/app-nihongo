@@ -10,22 +10,22 @@
   </ion-buttons>
 </ion-navbar>
 
-<ion-content>
-  <div class="cover">
-    <img [src]="course.icon" class="course-icon" />
-    <div class="course-info">
-      <h1 class="course-title">{{course.title}}</h1>
-      <p class="no-units">3 units</p>
-    </div>
+<div class="cover" padding>
+  <img [src]="course.icon" class="course-icon" />
+  <div class="course-info">
+    <h1 class="course-title">{{course.title}}</h1>
+    <p class="no-units">3 units</p>
   </div>
+</div>
+<div class="select-all" padding>
+  <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
+    [checked]="selectedUnits.length == units.length" />
+  <ion-label class="desc">
+    {{selectedUnits.length == units.length ? 'Deselect all' : 'Select all'}}
+  </ion-label>
+</div>
+<ion-content>
   <ion-list [virtualScroll]="units">
-    <ion-list-header class="btn-select-all">
-      <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
-        [checked]="selectedUnits.length == units.length" />
-      <ion-label class="desc">
-        {{selectedUnits.length == units.length ? 'Deselect all' : 'Select all'}}
-      </ion-label>
-    </ion-list-header>
     <ion-item-sliding *virtualItem="let unit">
       <ion-item button-primary text-wrap (click)="goToUnit($event, unit)">
         <input class="btn-select" type="checkbox" item-left (click)="checkUnit($event, unit)"
@@ -53,5 +53,5 @@
   </ion-list>
 </ion-content>
 <audio-setting [isReady]="selectedUnits.length > 0"
-  (onReady)="playSelectedList()">
+  (onReady)="audioService.isPlaying ? continuePlaying() : playSelectedList()">
 </audio-setting>
