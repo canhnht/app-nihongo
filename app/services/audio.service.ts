@@ -56,7 +56,7 @@ export class AudioService {
     this.listTrack = [];
     LIST_VOCABULARY.forEach(vocabulary => {
       if (vocabulary.audioFile) {
-        this.listTrack.push(new MediaPlugin(`/android_asset/www/audio/${vocabulary.audioFile}`));
+        this.listTrack.push(new MediaPlugin(`file:///android_asset/www/audio/${vocabulary.audioFile}`));
         this.listTrack[this.listTrack.length - 1].play();
         this.listTrack[this.listTrack.length - 1].pause();
       }

@@ -1,12 +1,15 @@
-import {Component} from '@angular/core';
-import {NavController, Popover, Alert} from 'ionic-angular';
+import {Component, NgZone} from '@angular/core';
+import {File} from 'ionic-native';
+import {NavController, Popover, Alert, Toast} from 'ionic-angular';
 import {LIST_COURSE} from '../../providers/list-course.data';
 import {Course} from '../../providers/course.interface';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {UnitsPage} from '../units-page/units-page';
 import {AudioService} from '../../providers/audio.service';
 import {SliderService} from '../../providers/slider.service';
+import {CourseService} from '../../services/course.service';
 import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
+import * as utils from '../../utils';
 
 @Component({
   templateUrl: 'build/pages/home-page/home-page.html',
@@ -14,20 +17,21 @@ import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
 export class HomePage {
   courses: Course[];
 
-  constructor(private _navController: NavController, private _audioService: AudioService,
-    private sliderService: SliderService) {
+  constructor(private navController: NavController, private audioService: AudioService,
+    private sliderService: SliderService, private courseService: CourseService,
+    private zone: NgZone) {
     this.courses = LIST_COURSE;
   }
 
   goToCourse($event, course) {
-    this._navController.push(UnitsPage, {selectedCourse: course});
+    this.navController.push(UnitsPage, {selectedCourse: course});
     $event.stopPropagation();
   }
 
   goToSlides() {
     this.sliderService.resetSlider();
-    if (this._audioService.isPlaying) {
-      this._navController.push(VocabularySlides,
+    if (this.audioService.isPlaying) {
+      this.navController.push(VocabularySlides,
         {title: 'Course 2 - Unit 3'});
     }
   }
@@ -36,28 +40,22 @@ export class HomePage {
     let popover = Popover.create(PopoverMenu, {
       menu: ['Setting']
     });
-    this._navController.present(popover, {
+    this.navController.present(popover, {
       ev: $event
     });
   }
 
   buyCourse(course) {
-    let confirm = Alert.create({
-      title: `Buy course ${course.title}?`,
-      message: 'Do you agree to buy this course? The transaction will be taken immediately.',
-      buttons: [
-        {
-          text: 'Disagree',
-          handler: () => {}
-        },
-        {
-          text: 'Agree',
-          handler: () => {
-            course.isFree = true;
-          }
-        }
-      ]
-    });
-    this._navController.present(confirm);
+    let success = result => {
+      let confirm = Alert.create({
+        title: 'abc',
+        message: `${JSON.stringify(result)}`
+      });
+      this.navController.present(confirm);
+    };
+
+    this.courseService.getListCourse()
+      .then(success)
+      .catch(utils.errorHandler('Error getting list course'));
   }
 }

@@ -4,9 +4,8 @@ import {StatusBar, Splashscreen} from 'ionic-native';
 import {HomePage} from './pages/home-page/home-page';
 import {AudioService} from './providers/audio.service';
 import {SliderService} from './providers/slider.service';
+import {CourseService} from './services/course.service';
 import {VocabularySlides} from './pages/vocabulary-slides/vocabulary-slides';
-
-declare var Media:any;
 
 @Component({
   template: `
@@ -17,16 +16,15 @@ export class MyApp {
 
   private rootPage:any;
 
-  constructor(private platform:Platform) {
+  constructor(private platform:Platform, private courseService: CourseService) {
     this.rootPage = HomePage;
 
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
+      courseService.initDB();
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
   }
 }
 
-ionicBootstrap(MyApp, [AudioService, SliderService]);
+ionicBootstrap(MyApp, [AudioService, SliderService, CourseService]);
