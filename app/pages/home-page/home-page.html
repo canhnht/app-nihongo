@@ -10,16 +10,16 @@
 <ion-content>
   <ion-list [virtualScroll]="courses">
     <ion-item button-primary *virtualItem="let course"
-      (click)="course.isFree ? goToCourse($event, course) : buyCourse(course)">
+      (click)="course.free ? goToCourse($event, course) : buyCourse(course)">
       <ion-avatar item-left>
-        <ion-img [src]="course.icon"></ion-img>
+        <ion-img [src]="course.imageUrl"></ion-img>
       </ion-avatar>
       <ion-label>
-        <h2>{{course.title}}</h2>
-        <p>10 words</p>
+        <h2>{{course.courseName}}</h2>
+        <p>{{course.noWords}} word{{course.noWords > 1 ? 's' : ''}}</p>
       </ion-label>
       <ion-img item-right class="icon-paid" src="images/coin.png"
-        [class.hidden]="course.isFree">
+        [class.hidden]="course.free">
       </ion-img>
     </ion-item>
   </ion-list>

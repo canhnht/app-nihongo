@@ -3,33 +3,12 @@ import {Course} from './course.interface';
 export const
   LIST_COURSE: Course[] = [
     {
-      id: 1,
-      title: 'Course 1',
-      icon: 'images/icon_course.png',
-      isFree: true,
-    },
-    {
-      id: 2,
-      title: 'Course 2',
-      icon: 'images/icon_course.png',
-      isFree: true,
-    },
-    {
-      id: 3,
-      title: 'Course 3',
-      icon: 'images/icon_course.png',
-      isFree: false,
-    },
-    {
-      id: 4,
-      title: 'Course 4',
-      icon: 'images/icon_course.png',
-      isFree: false,
-    },
-    {
-      id: 5,
-      title: 'Course 5',
-      icon: 'images/icon_course.png',
-      isFree: false,
+      _id: '1',
+      courseName: 'Course 1',
+      description: 'This is course 1',
+      noWords: 1,
+      imageUrl: 'icon_course.png',
+      free: true,
+      downloaded: true,
     },
   ];

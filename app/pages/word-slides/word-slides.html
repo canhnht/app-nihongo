@@ -10,10 +10,15 @@
   </ion-icon>
   <ion-slides #vocabSlider [options]="sliderOptions"
     (ionDidChange)="onSlideChanged($event)">
-    <ion-slide *ngFor="let vocabulary of vocabularies; let i = index"
+    <ion-slide *ngFor="let word of words; let i = index" class="word-slide"
       [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
-      <h2>{{vocabulary.content}}</h2>
-      <p>{{vocabulary.starred}}</p>
+      <strong class="kanji">{{word.kanji}}</strong>
+      <h2>{{word.hira_kata}}</h2>
+      <h3>{{word.kanjiMeaning}} - {{word.meaning}}</h3>
+      <p class="example">
+        <strong>{{word.example}}</strong><br/>
+        {{word.exampleMeaning}}
+      </p>
     </ion-slide>
   </ion-slides>
   <div class="btn-group">
@@ -22,7 +27,7 @@
       <ion-icon name="volume-up"></ion-icon>
     </button>
     <button danger round class="btn-bookmark"
-      [class.disabled]="!vocabularies[currentIndex].starred"
+      [class.disabled]="!words[currentIndex].starred"
       (click)="toggleBookmark($event)">
       <ion-icon name="star-outline"></ion-icon>
     </button>

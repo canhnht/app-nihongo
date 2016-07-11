@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Subject, Observable} from 'rxjs';
 import {MediaPlugin, Toast} from 'ionic-native';
-import {LIST_VOCABULARY} from './list-vocabulary.data';
+import {CourseService} from './course.service';
 
 @Injectable()
 export class AudioService {
@@ -10,11 +10,13 @@ export class AudioService {
   currentTrack: any = {};
   intervalGetCurrentPosition: any;
   listTrack: MediaPlugin[] = null;
+  listWord: any[];
   isPlaying: boolean = false;
   isLoop: boolean = false;
   isShuffle: boolean = false;
+  playSingleWord: boolean = false;
 
-  constructor(http: Http) {
+  constructor(private courseService: CourseService) {
     this.currentTrack.seekTime = '00:00';
     this.currentTrack.duration = '00:00';
   }
@@ -51,31 +53,63 @@ export class AudioService {
   }
 
   playListUnit(listUnit) {
-    this.isPlaying = true;
-    this.stopListTrack();
-    this.listTrack = [];
-    LIST_VOCABULARY.forEach(vocabulary => {
-      if (vocabulary.audioFile) {
-        this.listTrack.push(new MediaPlugin(`file:///android_asset/www/audio/${vocabulary.audioFile}`));
-        this.listTrack[this.listTrack.length - 1].play();
-        this.listTrack[this.listTrack.length - 1].pause();
+    this.playSingleWord = false;
+    let currentCourse = this.courseService.currentCourse;
+    this.listWord = [];
+    currentCourse.units.forEach(unit => {
+      if (listUnit.indexOf(unit.number) >= 0) {
+        this.listWord = this.listWord.concat(unit.words);
       }
     });
+    this.isPlaying = true;
+    this.stopListTrack();
+    this.generateListTrack();
     this.currentTrack.index = 0;
     this.playCurrentTrack();
   }
 
-  playVocabulary(vocabIndex) {
+  playListWord(listWord) {
+    this.playSingleWord = false;
+    let currentCourse = this.courseService.currentCourse;
+    this.listWord = [];
+    currentCourse.units.forEach(unit => {
+      unit.words.forEach(word => {
+        if (listWord.indexOf(word.number) >= 0)
+          this.listWord.push(word);
+      });
+    });
+    this.isPlaying = true;
     this.stopListTrack();
+    this.generateListTrack();
+    this.currentTrack.index = 0;
+    this.playCurrentTrack();
+  }
+
+  private generateListTrack() {
     this.listTrack = [];
-    LIST_VOCABULARY.forEach(vocabulary => {
-      if (vocabulary.audioFile) {
-        this.listTrack.push(new MediaPlugin(`/android_asset/www/audio/${vocabulary.audioFile}`));
-        this.listTrack[this.listTrack.length - 1].play();
-        this.listTrack[this.listTrack.length - 1].pause();
+    this.listWord.forEach((word, index) => {
+      this.listTrack.push(new MediaPlugin(`file:///android_asset/www/audio/audio${index % 3 + 1}.mp3`));
+      this.listTrack[index].play();
+      this.listTrack[index].pause();
+    });
+  }
+
+  playWord(unitNumber, wordIndex) {
+    this.playSingleWord = true;
+    let currentCourse = this.courseService.currentCourse;
+    this.listWord = [];
+    currentCourse.units.forEach(unit => {
+      if (unit.number === unitNumber) {
+        this.listWord = unit.words;
       }
     });
-    this.currentTrack.index = vocabIndex;
+    this.stopListTrack();
+    this.listTrack = [
+      new MediaPlugin(`file:///android_asset/www/audio/audio${wordIndex % 3 + 1}.mp3`)
+    ];
+    this.listTrack[0].play();
+    this.listTrack[0].pause();
+    this.currentTrack.index = 0;
     this.playCurrentTrack();
   }
 
@@ -207,8 +241,17 @@ export class AudioService {
     return nextIndex;
   }
 
-  seekToVocabulary(vocabIndex) {
-    let nextIndex = vocabIndex;
+  seekToWord(wordIndex) {
+    if (this.playSingleWord) {
+      let continuePlaying = this.currentTrack.isPlaying;
+      this.pauseCurrentTrack();
+      this.listTrack[0].release();
+      this.listTrack[0] = new MediaPlugin(`file:///android_asset/www/audio/audio${wordIndex % 3 + 1}.mp3`);
+      this.currentTrack.index = 0;
+      if (continuePlaying) this.playCurrentTrack();
+      return;
+    }
+    let nextIndex = wordIndex;
     let duration = this.getTotalDuration();
     let position = this.getPlayedDurationUntil(nextIndex);
     if (nextIndex != this.currentTrack.index) {

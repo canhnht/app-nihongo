@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import {Platform, ionicBootstrap} from 'ionic-angular';
-import {StatusBar, Splashscreen} from 'ionic-native';
+import {StatusBar, Splashscreen, Toast} from 'ionic-native';
 import {HomePage} from './pages/home-page/home-page';
-import {AudioService} from './providers/audio.service';
-import {SliderService} from './providers/slider.service';
+import {AudioService} from './services/audio.service';
+import {SliderService} from './services/slider.service';
 import {CourseService} from './services/course.service';
-import {VocabularySlides} from './pages/vocabulary-slides/vocabulary-slides';
+import {WordSlides} from './pages/word-slides/word-slides';
 
 @Component({
   template: `
@@ -16,14 +16,14 @@ export class MyApp {
 
   private rootPage:any;
 
-  constructor(private platform:Platform, private courseService: CourseService) {
+  constructor(private platform:Platform) {
     this.rootPage = HomePage;
 
-    platform.ready().then(() => {
-      courseService.initDB();
-      StatusBar.styleDefault();
-      Splashscreen.hide();
-    });
+    platform.ready()
+      .then(() => {
+        StatusBar.styleDefault();
+        Splashscreen.hide();
+      })
   }
 }
 

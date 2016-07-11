@@ -1,27 +1,26 @@
 import {Component, ViewChild} from '@angular/core';
 import {NavController, Slides} from 'ionic-angular';
 import {AudioPlayer} from '../../components/audio-player/audio-player';
-import {AudioService} from '../../providers/audio.service';
-import {SliderService} from '../../providers/slider.service';
-import {LIST_VOCABULARY} from '../../providers/list-vocabulary.data';
-import {Vocabulary} from '../../providers/vocabulary.interface';
+import {AudioService} from '../../services/audio.service';
+import {SliderService} from '../../services/slider.service';
 import {Toast} from 'ionic-native';
 
 @Component({
-  templateUrl: 'build/pages/vocabulary-slides/vocabulary-slides.html',
+  templateUrl: 'build/pages/word-slides/word-slides.html',
   directives: [AudioPlayer],
 })
-export class VocabularySlides {
+export class WordSlides {
   @ViewChild('vocabSlider') vocabSlider: Slides;
 
   sliderOptions: any = {
     loop: true,
   };
-  vocabularies: Vocabulary[] = LIST_VOCABULARY;
+  words: any[] = [];
   currentIndex: number = 0;
 
   constructor(private _navController: NavController, private audioService: AudioService,
     private sliderService: SliderService) {
+    this.words = this.audioService.listWord;
     if (this.sliderService.currentSlide >= 0)
       this.sliderOptions.initialSlide = this.sliderService.currentSlide - 1;
     this.audioService.trackIndexSubject.subscribe(trackIndex => {
@@ -37,27 +36,27 @@ export class VocabularySlides {
     this.vocabSlider.slideNext();
   }
 
-  private getVocabularyIndex(activeIndex: number) {
-    if (activeIndex == 1 || activeIndex == this.vocabularies.length + 1) return 0;
-    if (activeIndex == this.vocabularies.length || activeIndex == 0) return this.vocabularies.length - 1;
+  private getWordIndex(activeIndex: number) {
+    if (activeIndex == 1 || activeIndex == this.words.length + 1) return 0;
+    if (activeIndex == this.words.length || activeIndex == 0) return this.words.length - 1;
     return activeIndex - 1;
   }
 
   onSlideChanged($event) {
-    this.currentIndex = this.getVocabularyIndex($event.activeIndex);
+    this.currentIndex = this.getWordIndex($event.activeIndex);
     if (this.sliderService.currentSlide < 0 && this.sliderService.firstTime)
       this.sliderService.currentSlide = $event.activeIndex;
     if (this.sliderService.firstTime) return this.sliderService.firstTime = false;
     this.sliderService.currentSlide = $event.activeIndex;
-    let vocabIndex: number = -1;
+    let wordIndex: number = -1;
     let activeIndex = $event.activeIndex;
-    if (activeIndex == 0 || activeIndex == this.vocabularies.length)
-      vocabIndex = this.vocabularies.length - 1;
-    else if (activeIndex == 1 || activeIndex == this.vocabularies.length + 1)
-      vocabIndex = 0;
+    if (activeIndex == 0 || activeIndex == this.words.length)
+      wordIndex = this.words.length - 1;
+    else if (activeIndex == 1 || activeIndex == this.words.length + 1)
+      wordIndex = 0;
     else
-      vocabIndex = activeIndex - 1;
-    this.audioService.seekToVocabulary(vocabIndex);
+      wordIndex = activeIndex - 1;
+    this.audioService.seekToWord(wordIndex);
   }
 
   repeatCurrentVocabulary($event) {
@@ -66,8 +65,8 @@ export class VocabularySlides {
   }
 
   toggleBookmark($event) {
-    let vocabulary: Vocabulary = this.vocabularies[this.currentIndex];
-    vocabulary.starred = !vocabulary.starred;
+    let word = this.words[this.currentIndex];
+    word.starred = !word.starred;
     $event.stopPropagation();
   }
 

@@ -1,8 +1,7 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {IONIC_DIRECTIVES} from 'ionic-angular';
 import {Toast} from 'ionic-native';
-import {AudioService} from '../../providers/audio.service';
-import {VocabularySlides} from '../../pages/vocabulary-slides/vocabulary-slides';
+import {AudioService} from '../../services/audio.service';
 
 @Component({
   selector: 'audio-setting',

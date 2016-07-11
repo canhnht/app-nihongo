@@ -1,0 +1,39 @@
+
+<ion-navbar *navbar primary>
+  <ion-title>
+    {{course.courseName}} - {{unit.unitName}}
+  </ion-title>
+  <ion-buttons end>
+    <button (click)="presentPopover($event)">
+      <ion-icon name="more"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-navbar>
+
+<div class="select-all" padding>
+  <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
+    [checked]="selectedWords.length == words.length" />
+  <ion-label class="desc">
+    {{selectedWords.length == words.length ? 'Deselect all' : 'Select all'}}
+  </ion-label>
+</div>
+<ion-content>
+  <ion-list [virtualScroll]="words">
+    <ion-item button-primary ion-item text-wrap *virtualItem="let word"
+      (click)="selectWord(word)">
+      <input type="checkbox" class="btn-select" item-left
+        (click)="checkWord($event, word)"
+        [checked]="selectedWords.indexOf(word.number) >= 0" />
+      <ion-label>
+        <h2>{{word.kanji}}</h2>
+        <p>{{word.hira_kata}}</p>
+      </ion-label>
+      <ion-icon item-right [name]="word.starred ? 'star' : 'star-outline'"
+        (click)="toggleBookmark($event, word)">
+      </ion-icon>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<audio-setting [isReady]="selectedWords.length > 0"
+  (onReady)="audioService.isPlaying && selectedWords.length == 0 ? continuePlaying() : playSelectedList()">
+</audio-setting>

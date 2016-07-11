@@ -1,14 +1,13 @@
 import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams, Popover, List} from 'ionic-angular';
-import {LIST_UNIT} from '../../providers/list-unit.data';
-import {VocabulariesPage} from '../vocabularies-page/vocabularies-page';
-import {Course} from '../../providers/course.interface';
-import {Unit} from '../../providers/unit.interface';
+import {Toast} from 'ionic-native';
+import {WordsPage} from '../words-page/words-page';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
-import {AudioService} from '../../providers/audio.service';
-import {SliderService} from '../../providers/slider.service';
-import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
+import {AudioService} from '../../services/audio.service';
+import {SliderService} from '../../services/slider.service';
+import {CourseService} from '../../services/course.service';
+import {WordSlides} from '../word-slides/word-slides';
 
 @Component({
   templateUrl: 'build/pages/units-page/units-page.html',
@@ -16,13 +15,19 @@ import {VocabularySlides} from '../vocabulary-slides/vocabulary-slides';
 })
 export class UnitsPage {
   @ViewChild(List) list: List;
-  private units: Unit[] = LIST_UNIT;
-  private course: Course;
+  private units: any[] = [];
+  private course: any;
   private selectedUnits: number[] = [];
 
-  constructor(private navController: NavController, private _navParams: NavParams,
-    private audioService: AudioService, private sliderService: SliderService) {
-    this.course = _navParams.data.selectedCourse;
+  constructor(private navController: NavController, private navParams: NavParams,
+    private audioService: AudioService, private sliderService: SliderService,
+    private courseService: CourseService) {
+    this.course = this.navParams.data.selectedCourse;
+    this.courseService.getCourse(this.course._id)
+      .then(course => {
+        this.course = course;
+        this.units = this.course.units;
+      });
   }
 
   ionViewWillEnter() {
@@ -30,7 +35,7 @@ export class UnitsPage {
   }
 
   goToUnit($event, unit) {
-    this.navController.push(VocabulariesPage, {selectedUnit: unit});
+    this.navController.push(WordsPage, { selectedUnit: unit });
     $event.stopPropagation();
   }
 
@@ -42,22 +47,21 @@ export class UnitsPage {
     // set timeout for completing download
     setTimeout(() => {
       unit.downloading = false;
-      unit.percentDownloaded = 100;
+      unit.downloaded = true;
     }, 2000);
   }
 
   deleteUnit(unit) {
-    console.log('delete', unit);
-    unit.percentDownloaded = 0;
+    unit.downloaded = false;
     this.list.closeSlidingItems();
   }
 
   checkUnit($event, unit) {
-    let index: number = this.selectedUnits.indexOf(unit.id);
+    let index: number = this.selectedUnits.indexOf(unit.number);
     if (index >= 0)
       this.selectedUnits.splice(index, 1);
     else
-      this.selectedUnits.push(unit.id);
+      this.selectedUnits.push(unit.number);
     $event.stopPropagation();
   }
 
@@ -67,7 +71,7 @@ export class UnitsPage {
     } else {
       this.selectedUnits = [];
       this.units.forEach(unit => {
-        this.selectedUnits.push(unit.id);
+        this.selectedUnits.push(unit.number);
       });
     }
   }
@@ -75,13 +79,14 @@ export class UnitsPage {
   playSelectedList() {
     this.audioService.playListUnit(this.selectedUnits);
     this.sliderService.resetSlider();
-    this.navController.push(VocabularySlides);
+    this.sliderService.currentSlide = 1;
+    this.navController.push(WordSlides);
     this.selectedUnits = [];
   }
 
   continuePlaying() {
     this.audioService.playCurrentTrack();
-    this.navController.push(VocabularySlides);
+    this.navController.push(WordSlides);
   }
 
   presentPopover($event) {
