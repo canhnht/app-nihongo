@@ -15,10 +15,9 @@ export class HomePage {
   courses: Object[];
 
   constructor(private navController: NavController, private courseService: CourseService) {
-    this.courseService.getListCourse()
-      .then(listCourse => {
-        this.courses = listCourse;
-      })
+    this.courseService.listCourseSubject.subscribe(
+      listCourse => this.courses = listCourse
+    );
   }
 
   goToCourse($event, course) {

@@ -25,10 +25,10 @@ export class AudioService {
     this.isLoop = !this.isLoop;
     if (this.isLoop) {
       Toast.hide();
-      Toast.showShortBottom('Repeating all tracks').subscribe(() => {});
+      Toast.showShortCenter('Repeating all tracks').subscribe(() => {});
     } else {
       Toast.hide();
-      Toast.showShortBottom('Repeat is off').subscribe(() => {});
+      Toast.showShortCenter('Repeat is off').subscribe(() => {});
     }
   }
 
@@ -36,10 +36,10 @@ export class AudioService {
     this.isShuffle = !this.isShuffle;
     if (this.isShuffle) {
       Toast.hide();
-      Toast.showShortBottom('Shuffle is on').subscribe(() => {});
+      Toast.showShortCenter('Shuffle is on').subscribe(() => {});
     } else {
       Toast.hide();
-      Toast.showShortBottom('Shuffle is off').subscribe(() => {});
+      Toast.showShortCenter('Shuffle is off').subscribe(() => {});
     }
   }
 

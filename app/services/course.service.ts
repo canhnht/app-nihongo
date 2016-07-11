@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {File, Toast} from 'ionic-native';
 import * as utils from '../utils';
+import {Subject, Observable} from 'rxjs';
 
 declare var require: any;
 let PouchDB = require('pouchdb');
@@ -10,6 +11,7 @@ PouchDB.plugin(require('pouchdb-load'));
 export class CourseService {
   db: any;
   listCourse: any[] = null;
+  listCourseSubject: Subject<any[]> = new Subject<any[]>();
   currentCourse: any = null;
 
   constructor() {
@@ -19,13 +21,19 @@ export class CourseService {
     File.readAsText(dbDir, dbFile)
       .then(result => {
         return this.db.get('_local/preloaded').then(doc => {
-          Toast.showShortCenter('database preloaded').subscribe(() => {});
+          this.getListCourse()
+            .then(listCourse => {
+              this.listCourseSubject.next(listCourse);
+            });
         })
         .catch(err => {
           if (err.name !== 'not_found') throw err;
           return this.db.load(result)
             .then(() => {
-              Toast.showShortCenter('load database').subscribe(() => {});
+              this.getListCourse()
+                .then(listCourse => {
+                  this.listCourseSubject.next(listCourse);
+                })
               return this.db.put({_id: '_local/preloaded'});
             });
         });
