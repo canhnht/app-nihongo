@@ -3,7 +3,9 @@ import {NavController, Slides} from 'ionic-angular';
 import {AudioPlayer} from '../../components/audio-player/audio-player';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
+import {CourseService} from '../../services/course.service';
 import {Toast} from 'ionic-native';
+import {Subscription} from 'rxjs';
 
 @Component({
   templateUrl: 'build/pages/word-slides/word-slides.html',
@@ -16,16 +18,31 @@ export class WordSlides {
     loop: true,
   };
   words: any[] = [];
+  course: any;
   currentIndex: number = 0;
+  currentCourseSubscription: Subscription;
+  trackIndexSubscription: Subscription;
 
   constructor(private _navController: NavController, private audioService: AudioService,
-    private sliderService: SliderService) {
+    private sliderService: SliderService, private courseService: CourseService) {
     this.words = this.audioService.listWord;
     if (this.sliderService.currentSlide >= 0)
       this.sliderOptions.initialSlide = this.sliderService.currentSlide - 1;
-    this.audioService.trackIndexSubject.subscribe(trackIndex => {
-      this.vocabSlider.slideTo(trackIndex + 1);
-    })
+  }
+
+  ionViewWillEnter() {
+    this.course = this.courseService.currentCourse;
+    this.trackIndexSubscription = this.audioService.trackIndexSubject.subscribe(
+      trackIndex => this.vocabSlider.slideTo(trackIndex + 1)
+    );
+    this.currentCourseSubscription = this.courseService.currentCourseSubject.subscribe(
+      course => this.course = course
+    );
+  }
+
+  ionViewWillLeave() {
+    this.currentCourseSubscription.unsubscribe();
+    this.trackIndexSubscription.unsubscribe();
   }
 
   prev() {
@@ -67,6 +84,13 @@ export class WordSlides {
   toggleBookmark($event) {
     let word = this.words[this.currentIndex];
     word.starred = !word.starred;
+    this.course.units.forEach(unit => {
+      unit.words.forEach(item => {
+        if (item.number == word.number)
+          item.starred = word.starred;
+      });
+    });
+    this.courseService.updateCourse(this.course);
     $event.stopPropagation();
   }
 

@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, Popover} from 'ionic-angular';
+import {Subscription} from 'rxjs';
 import {Toast} from 'ionic-native';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
@@ -13,10 +14,11 @@ import {WordSlides} from '../word-slides/word-slides';
   directives: [AudioSetting],
 })
 export class WordsPage {
-  private unit: any;
-  private course: any;
-  private words: any[] = [];
-  private selectedWords: number[] = [];
+  unit: any;
+  course: any;
+  words: any[] = [];
+  selectedWords: number[] = [];
+  currentCourseSubscription: Subscription;
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
@@ -27,7 +29,17 @@ export class WordsPage {
     this.words = this.course.units[unitIndex].words;
   }
 
+  ionViewWillLeave() {
+    this.currentCourseSubscription.unsubscribe();
+  }
+
   ionViewWillEnter() {
+    this.course = this.courseService.currentCourse;
+    let unitIndex = this.course.units.findIndex(unit => unit.number === this.unit.number);
+    this.words = this.course.units[unitIndex].words;
+    this.currentCourseSubscription = this.courseService.currentCourseSubject.subscribe(
+      course => this.course = course
+    );
     this.selectedWords = [];
   }
 
@@ -50,6 +62,13 @@ export class WordsPage {
 
   toggleBookmark($event, word) {
     word.starred = !word.starred;
+    this.course.units.forEach(unit => {
+      unit.words.forEach(item => {
+        if (item.number == word.number)
+          item.starred = word.starred;
+      });
+    });
+    this.courseService.updateCourse(this.course);
     $event.stopPropagation();
   }
 

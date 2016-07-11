@@ -75,7 +75,7 @@ export class AudioService {
     currentCourse.units.forEach(unit => {
       unit.words.forEach(word => {
         if (listWord.indexOf(word.number) >= 0)
-          this.listWord.push(word);
+          this.listWord.push(Object.assign({}, word));
       });
     });
     this.isPlaying = true;

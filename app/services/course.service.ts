@@ -12,6 +12,7 @@ export class CourseService {
   db: any;
   listCourse: any[] = null;
   listCourseSubject: Subject<any[]> = new Subject<any[]>();
+  currentCourseSubject: Subject<any> = new Subject<any>();
   currentCourse: any = null;
 
   constructor() {
@@ -21,7 +22,8 @@ export class CourseService {
     File.readAsText(dbDir, dbFile)
       .then(result => {
         return this.db.get('_local/preloaded').then(doc => {
-          this.getListCourse()
+          this.listenForChange();
+          return this.getListCourse()
             .then(listCourse => {
               this.listCourseSubject.next(listCourse);
             });
@@ -30,15 +32,25 @@ export class CourseService {
           if (err.name !== 'not_found') throw err;
           return this.db.load(result)
             .then(() => {
+              this.listenForChange();
               this.getListCourse()
                 .then(listCourse => {
                   this.listCourseSubject.next(listCourse);
-                })
+                });
               return this.db.put({_id: '_local/preloaded'});
             });
         });
       })
       .catch(utils.errorHandler('Error loading database file'));
+  }
+
+  private listenForChange() {
+    const onDatabaseChange = (change) => {
+      this.currentCourse = change.doc;
+      this.currentCourseSubject.next(change.doc);
+    };
+    this.db.changes({ live: true, since: 'now', include_docs: true })
+      .on('change', onDatabaseChange);
   }
 
   getListCourse() {
@@ -48,7 +60,6 @@ export class CourseService {
           this.listCourse = docs.rows.map(row => {
             let course = row.doc;
             delete course.units;
-            course.imageUrl = `images/${course.imageUrl}`;
             return course;
           });
           return this.listCourse;
@@ -63,7 +74,6 @@ export class CourseService {
     if (!this.currentCourse || this.currentCourse._id !== courseId) {
       return Promise.resolve(this.db.get(courseId))
         .then(course => {
-          course.imageUrl = `images/${course.imageUrl}`;
           this.currentCourse = course;
           return course;
         })
@@ -71,5 +81,9 @@ export class CourseService {
     } else {
       return Promise.resolve(this.currentCourse);
     }
+  }
+
+  updateCourse(course) {
+    this.db.put(course);
   }
 }
