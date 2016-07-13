@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, NgZone} from '@angular/core';
+import {Subscription} from 'rxjs';
 import {Toast} from 'ionic-native';
 import {NavController, Popover, Alert} from 'ionic-angular';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
@@ -6,6 +7,7 @@ import {UnitsPage} from '../units-page/units-page';
 import {CourseService} from '../../services/course.service';
 import {LIST_COURSE} from '../../services/list-course.data';
 import {WordSlides} from '../word-slides/word-slides';
+import {Loader} from '../../components/loader/loader';
 import * as utils from '../../utils';
 
 @Component({
@@ -13,25 +15,26 @@ import * as utils from '../../utils';
 })
 export class HomePage {
   courses: Object[];
+  listCourseSubscription: Subscription;
 
   constructor(private navController: NavController, private courseService: CourseService) {
+    this.courses = this.courseService.listCourse;
     this.courseService.listCourseSubject.subscribe(
-      listCourse => this.courses = listCourse
-    );
+      listCourse => this.courses = listCourse);
+  }
+
+  ionViewWillEnter() {
+    this.listCourseSubscription = this.courseService.listCourseSubject.subscribe(
+      listCourse => this.courses = listCourse);
+  }
+
+  ionViewWillLeave() {
+    this.listCourseSubscription.unsubscribe();
   }
 
   goToCourse($event, course) {
     this.navController.push(UnitsPage, {selectedCourse: course});
     $event.stopPropagation();
-  }
-
-  presentPopover($event) {
-    let popover = Popover.create(PopoverMenu, {
-      menu: ['Setting']
-    });
-    this.navController.present(popover, {
-      ev: $event
-    });
   }
 
   buyCourse(course) {

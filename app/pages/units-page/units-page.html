@@ -10,7 +10,7 @@
   </ion-buttons>
 </ion-navbar>
 
-<div class="cover" padding>
+<div class="cover" padding (click)="test()">
   <img [src]="course.imageUrl" class="course-icon" />
   <div class="course-info">
     <h1 class="course-title">{{course.courseName}}</h1>

@@ -11,10 +11,12 @@ export class AudioService {
   intervalGetCurrentPosition: any;
   listTrack: MediaPlugin[] = null;
   listWord: any[];
+  listWordOrder: number[];
   isPlaying: boolean = false;
   isLoop: boolean = false;
   isShuffle: boolean = false;
   playSingleWord: boolean = false;
+  singleWordIndex: number;
 
   constructor(private courseService: CourseService) {
     this.currentTrack.seekTime = '00:00';
@@ -52,6 +54,18 @@ export class AudioService {
     return `${minutes}:${seconds}`;
   }
 
+  private getListWordOrder() {
+    this.listWordOrder = this.listWord.map((word, index) => index);
+    if (this.isShuffle) {
+      for (let i = this.listWordOrder.length - 1; i >= 0; --i) {
+        let k = Math.floor(Math.random() * (i + 1));
+        let temp = this.listWordOrder[i];
+        this.listWordOrder[i] = this.listWordOrder[k];
+        this.listWordOrder[k] = temp;
+      }
+    }
+  }
+
   playListUnit(listUnit) {
     this.playSingleWord = false;
     let currentCourse = this.courseService.currentCourse;
@@ -61,7 +75,7 @@ export class AudioService {
         this.listWord = this.listWord.concat(unit.words);
       }
     });
-    this.isPlaying = true;
+    this.getListWordOrder();
     this.stopListTrack();
     this.generateListTrack();
     this.currentTrack.index = 0;
@@ -78,7 +92,7 @@ export class AudioService {
           this.listWord.push(Object.assign({}, word));
       });
     });
-    this.isPlaying = true;
+    this.getListWordOrder();
     this.stopListTrack();
     this.generateListTrack();
     this.currentTrack.index = 0;
@@ -87,8 +101,8 @@ export class AudioService {
 
   private generateListTrack() {
     this.listTrack = [];
-    this.listWord.forEach((word, index) => {
-      this.listTrack.push(new MediaPlugin(`file:///android_asset/www/audio/audio${index % 3 + 1}.mp3`));
+    this.listWordOrder.forEach((wordIndex, index) => {
+      this.listTrack.push(new MediaPlugin(`file:///android_asset/www/audio/audio${wordIndex % 3 + 1}.mp3`));
       this.listTrack[index].play();
       this.listTrack[index].pause();
     });
@@ -96,6 +110,7 @@ export class AudioService {
 
   playWord(unitNumber, wordIndex) {
     this.playSingleWord = true;
+    this.singleWordIndex = wordIndex;
     let currentCourse = this.courseService.currentCourse;
     this.listWord = [];
     currentCourse.units.forEach(unit => {
@@ -103,6 +118,7 @@ export class AudioService {
         this.listWord = unit.words;
       }
     });
+    this.getListWordOrder();
     this.stopListTrack();
     this.listTrack = [
       new MediaPlugin(`file:///android_asset/www/audio/audio${wordIndex % 3 + 1}.mp3`)
@@ -165,8 +181,6 @@ export class AudioService {
       this.currentTrack.duration = this.convertText(Math.max(duration, 0));
       let playedDuration = this.getPlayedDurationUntil(this.currentTrack.index);
       track.getCurrentPosition().then(position => {
-        // Toast.show(`currentPosition ${position}`, '500', 'center')
-        //     .subscribe(() => {});
         if (position >= 0) {
           position += playedDuration;
           this.currentTrack.playedPercent = Math.ceil(position / duration * 100);
@@ -179,8 +193,6 @@ export class AudioService {
   }
 
   private stopGetCurrentPositionInterval() {
-    Toast.show(`stopCurrentTrack`, '500', 'center')
-      .subscribe(() => {});
     clearInterval(this.intervalGetCurrentPosition);
     this.intervalGetCurrentPosition = null;
   }
@@ -241,17 +253,23 @@ export class AudioService {
     return nextIndex;
   }
 
-  seekToWord(wordIndex) {
+  seekToWord(index) {
     if (this.playSingleWord) {
-      let continuePlaying = this.currentTrack.isPlaying;
-      this.pauseCurrentTrack();
-      this.listTrack[0].release();
-      this.listTrack[0] = new MediaPlugin(`file:///android_asset/www/audio/audio${wordIndex % 3 + 1}.mp3`);
-      this.currentTrack.index = 0;
-      if (continuePlaying) this.playCurrentTrack();
+      let wordIndex = this.listWordOrder[index];
+      if (this.singleWordIndex !== wordIndex) {
+        this.singleWordIndex = wordIndex;
+        let continuePlaying = this.currentTrack.isPlaying;
+        this.pauseCurrentTrack();
+        this.listTrack[0].release();
+        this.listTrack[0] = new MediaPlugin(`file:///android_asset/www/audio/audio${wordIndex % 3 + 1}.mp3`);
+        this.currentTrack.index = 0;
+        this.currentTrack.seekTime = '00:00';
+        this.currentTrack.playedPercent = 0;
+        if (continuePlaying) this.playCurrentTrack();
+      }
       return;
     }
-    let nextIndex = wordIndex;
+    let nextIndex = index;
     let duration = this.getTotalDuration();
     let position = this.getPlayedDurationUntil(nextIndex);
     if (nextIndex != this.currentTrack.index) {
@@ -274,6 +292,61 @@ export class AudioService {
     this.pauseCurrentTrack();
     this.listTrack[this.currentTrack.index].seekTo(0);
     this.playCurrentTrack();
+  }
+
+  generateListWordOrder() {
+    if (this.isShuffle) {
+      if (this.playSingleWord) {
+        let index = this.listWordOrder.indexOf(this.singleWordIndex);
+        for (let i = index - 1; i >= 0; --i) {
+          let k = Math.floor(Math.random() * (i + 1));
+          let temp = this.listWordOrder[i];
+          this.listWordOrder[i] = this.listWordOrder[k];
+          this.listWordOrder[k] = temp;
+        }
+        for (let i = this.listWordOrder.length - 1; i > index; --i) {
+          let k = index + 1 + Math.floor(Math.random() * (i - index));
+          let temp = this.listWordOrder[i];
+          this.listWordOrder[i] = this.listWordOrder[k];
+          this.listWordOrder[k] = temp;
+        }
+      } else {
+        let index = this.currentTrack.index;
+        for (let i = index - 1; i >= 0; --i) {
+          let k = Math.floor(Math.random() * (i + 1));
+          let temp = this.listWordOrder[i];
+          this.listWordOrder[i] = this.listWordOrder[k];
+          this.listWordOrder[k] = temp;
+
+          let tempTrack = this.listTrack[i];
+          this.listTrack[i] = this.listTrack[k];
+          this.listTrack[k] = tempTrack;
+        }
+        for (let i = this.listWordOrder.length - 1; i > index; --i) {
+          let k = index + 1 + Math.floor(Math.random() * (i - index));
+          let temp = this.listWordOrder[i];
+          this.listWordOrder[i] = this.listWordOrder[k];
+          this.listWordOrder[k] = temp;
+
+          let tempTrack = this.listTrack[i];
+          this.listTrack[i] = this.listTrack[k];
+          this.listTrack[k] = tempTrack;
+        }
+      }
+    } else {
+      if (this.playSingleWord) {
+        this.listWordOrder = this.listWord.map((word, index) => index);
+      } else {
+        let wordIndex = this.listWordOrder[this.currentTrack.index];
+        let tempListTrack = new Array<any>(this.listTrack.length);
+        this.listTrack.forEach((track, index) => {
+          tempListTrack[this.listWordOrder[index]] = track;
+        });
+        this.listWordOrder = this.listWord.map((word, index) => index);
+        this.listTrack = tempListTrack;
+        this.currentTrack.index = wordIndex;
+      }
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, Popover} from 'ionic-angular';
+import {NavController, NavParams, Popover, Loading, Alert} from 'ionic-angular';
 import {Subscription} from 'rxjs';
 import {Toast} from 'ionic-native';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
@@ -47,7 +47,8 @@ export class WordsPage {
     let wordIndex = this.words.findIndex(item => item.number == word.number);
     this.audioService.playWord(this.unit.number, wordIndex);
     this.sliderService.resetSlider();
-    this.sliderService.currentSlide = wordIndex + 1;
+    this.sliderService.currentSlide =
+      this.audioService.listWordOrder.indexOf(wordIndex) + 1;
     this.navController.push(WordSlides);
   }
 
@@ -57,6 +58,27 @@ export class WordsPage {
       this.selectedWords.splice(index, 1);
     else
       this.selectedWords.push(word.number);
+    $event.stopPropagation();
+  }
+
+  addToPlaylist($event, word) {
+    let alert = Alert.create();
+    alert.setTitle('Lightsaber color');
+
+    alert.addInput({
+      type: 'radio',
+      label: 'Blue',
+      value: 'blue',
+      checked: true
+    });
+
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'OK',
+      handler: data => {
+        Toast.showLongCenter(`${data}`).subscribe(() => {});
+      }
+    });
     $event.stopPropagation();
   }
 
@@ -87,21 +109,16 @@ export class WordsPage {
     this.audioService.playListWord(this.selectedWords);
     this.sliderService.resetSlider();
     this.sliderService.currentSlide = 1;
-    this.navController.push(WordSlides);
     this.selectedWords = [];
+    this.navController.push(WordSlides);
   }
 
   continuePlaying() {
     this.audioService.playCurrentTrack();
+    this.audioService.generateListWordOrder();
+    if (this.audioService.playSingleWord)
+      this.sliderService.currentSlide =
+        this.audioService.listWordOrder.indexOf(this.audioService.singleWordIndex) + 1;
     this.navController.push(WordSlides);
-  }
-
-  presentPopover($event) {
-    let popover = Popover.create(PopoverMenu, {
-      menu: ['Setting']
-    });
-    this.navController.present(popover, {
-      ev: $event
-    });
   }
 }

@@ -55,8 +55,11 @@ export class CourseService {
 
   getListCourse() {
     if (!this.listCourse) {
-      return Promise.resolve(this.db.allDocs({ include_docs: true }))
-        .then(docs => {
+      return Promise.resolve(this.db.allDocs({
+        include_docs: true,
+        startkey: 'course',
+        endkey: 'course\uffff'
+      })).then(docs => {
           this.listCourse = docs.rows.map(row => {
             let course = row.doc;
             delete course.units;
@@ -81,6 +84,10 @@ export class CourseService {
     } else {
       return Promise.resolve(this.currentCourse);
     }
+  }
+
+  getAllPlaylists() {
+
   }
 
   updateCourse(course) {

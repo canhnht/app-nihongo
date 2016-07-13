@@ -6,9 +6,13 @@
 // These are the imports which make up the design of this app.
 // By default each design mode includes these shared imports.
 // App Shared Sass variables belong in app.variables.scss.
+@import "font-awesome";
+
 @import "../pages/home-page/home-page";
 @import "../pages/words-page/words-page";
 @import "../pages/word-slides/word-slides";
 @import "../pages/units-page/units-page";
 @import "../components/audio-setting/audio-setting";
 @import "../components/audio-player/audio-player";
+@import "../components/loader/loader";
+@import "../pages/playlists-page/playlists-page.scss";

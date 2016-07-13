@@ -25,7 +25,9 @@ export class WordSlides {
 
   constructor(private _navController: NavController, private audioService: AudioService,
     private sliderService: SliderService, private courseService: CourseService) {
-    this.words = this.audioService.listWord;
+    this.words = this.audioService.listWordOrder.map(
+      wordIndex => this.audioService.listWord[wordIndex]
+    );
     if (this.sliderService.currentSlide >= 0)
       this.sliderOptions.initialSlide = this.sliderService.currentSlide - 1;
   }

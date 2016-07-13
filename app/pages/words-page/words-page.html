@@ -3,11 +3,6 @@
   <ion-title>
     {{course.courseName}} - {{unit.unitName}}
   </ion-title>
-  <ion-buttons end>
-    <button (click)="presentPopover($event)">
-      <ion-icon name="more"></ion-icon>
-    </button>
-  </ion-buttons>
 </ion-navbar>
 
 <div class="select-all" padding>
@@ -29,7 +24,7 @@
         <p>{{word.hira_kata}}</p>
       </ion-label>
       <ion-icon item-right [name]="word.starred ? 'star' : 'star-outline'"
-        (click)="toggleBookmark($event, word)">
+        (click)="addToPlaylist($event, word)">
       </ion-icon>
     </ion-item>
   </ion-list>
