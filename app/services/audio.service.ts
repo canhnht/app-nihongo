@@ -66,6 +66,16 @@ export class AudioService {
     }
   }
 
+  playPlaylists(listWord) {
+    this.playSingleWord = false;
+    this.listWord = listWord;
+    this.getListWordOrder();
+    this.stopListTrack();
+    this.generateListTrack();
+    this.currentTrack.index = 0;
+    this.playCurrentTrack();
+  }
+
   playListUnit(listUnit) {
     this.playSingleWord = false;
     let currentCourse = this.courseService.currentCourse;

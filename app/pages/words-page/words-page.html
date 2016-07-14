@@ -23,9 +23,9 @@
         <h2>{{word.kanji}}</h2>
         <p>{{word.hira_kata}}</p>
       </ion-label>
-      <ion-icon item-right [name]="word.starred ? 'star' : 'star-outline'"
-        (click)="addToPlaylist($event, word)">
-      </ion-icon>
+      <button item-right large clear (click)="addToPlaylist($event, word)">
+        <ion-icon name="star"></ion-icon>
+      </button>
     </ion-item>
   </ion-list>
 </ion-content>

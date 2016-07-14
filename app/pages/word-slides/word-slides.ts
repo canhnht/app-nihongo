@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {NavController, Slides} from 'ionic-angular';
+import {NavController, Slides, Alert} from 'ionic-angular';
 import {AudioPlayer} from '../../components/audio-player/audio-player';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
@@ -22,8 +22,10 @@ export class WordSlides {
   currentIndex: number = 0;
   currentCourseSubscription: Subscription;
   trackIndexSubscription: Subscription;
+  playlistSubscription: Subscription;
+  playlists: any[];
 
-  constructor(private _navController: NavController, private audioService: AudioService,
+  constructor(private navController: NavController, private audioService: AudioService,
     private sliderService: SliderService, private courseService: CourseService) {
     this.words = this.audioService.listWordOrder.map(
       wordIndex => this.audioService.listWord[wordIndex]
@@ -39,6 +41,19 @@ export class WordSlides {
     );
     this.currentCourseSubscription = this.courseService.currentCourseSubject.subscribe(
       course => this.course = course
+    );
+
+    this.courseService.getAllPlaylists()
+      .then(allPlaylists => {
+        this.playlists = allPlaylists;
+      });
+    this.playlistSubscription = this.courseService.playlistSubject.subscribe(
+      playlist => {
+        this.playlists = this.playlists.map(item => {
+          if (item._id == playlist._id) return playlist;
+          else return item;
+        });
+      }
     );
   }
 
@@ -83,6 +98,40 @@ export class WordSlides {
     $event.stopPropagation();
   }
 
+  addToPlaylist($event) {
+    let word = this.words[this.currentIndex];
+    let alert = Alert.create();
+    alert.setTitle('Add word to');
+    this.playlists.forEach((playlist, index) => {
+      alert.addInput({
+        type: 'checkbox',
+        label: playlist.name,
+        value: index + '',
+        checked: playlist.listWordNumber.indexOf(word.number) >= 0
+      });
+    });
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'Okay',
+      handler: data => {
+        data = data.map(e => parseInt(e));
+        data.forEach(index => {
+          if (this.playlists[index].listWordNumber.indexOf(word.number) == -1)
+            this.playlists[index].listWordNumber.push(word.number);
+        });
+        this.playlists.forEach((playlist, index) => {
+          let searchIndex = playlist.listWordNumber.indexOf(word.number);
+          if (searchIndex >= 0 && data.indexOf(index) == -1) {
+            playlist.listWordNumber.splice(searchIndex, 1);
+          }
+        });
+        this.courseService.updateMultiplePlaylists(this.playlists);
+      }
+    });
+    this.navController.present(alert);
+    $event.stopPropagation();
+  }
+
   toggleBookmark($event) {
     let word = this.words[this.currentIndex];
     word.starred = !word.starred;
@@ -98,6 +147,6 @@ export class WordSlides {
 
   closeSlide() {
     this.audioService.pauseCurrentTrack();
-    this._navController.pop();
+    this.navController.pop();
   }
 }

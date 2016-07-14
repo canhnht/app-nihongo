@@ -10,7 +10,7 @@
   </ion-buttons>
 </ion-navbar>
 
-<div class="cover" padding (click)="test()">
+<div class="cover" padding>
   <img [src]="course.imageUrl" class="course-icon" />
   <div class="course-info">
     <h1 class="course-title">{{course.courseName}}</h1>
@@ -47,6 +47,7 @@
       <ion-item-options>
         <button danger (click)="deleteUnit(unit)">
           <ion-icon name="trash" large></ion-icon>
+          Delete
         </button>
       </ion-item-options>
     </ion-item-sliding>

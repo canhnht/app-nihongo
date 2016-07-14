@@ -103,7 +103,4 @@ export class UnitsPage {
       ev: $event
     });
   }
-
-  test() {
-  }
 }

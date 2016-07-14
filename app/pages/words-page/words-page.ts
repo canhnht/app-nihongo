@@ -19,6 +19,8 @@ export class WordsPage {
   words: any[] = [];
   selectedWords: number[] = [];
   currentCourseSubscription: Subscription;
+  playlistSubscription: Subscription;
+  playlists: any[];
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
@@ -31,6 +33,7 @@ export class WordsPage {
 
   ionViewWillLeave() {
     this.currentCourseSubscription.unsubscribe();
+    this.playlistSubscription.unsubscribe();
   }
 
   ionViewWillEnter() {
@@ -41,6 +44,19 @@ export class WordsPage {
       course => this.course = course
     );
     this.selectedWords = [];
+
+    this.courseService.getAllPlaylists()
+      .then(allPlaylists => {
+        this.playlists = allPlaylists;
+      });
+    this.playlistSubscription = this.courseService.playlistSubject.subscribe(
+      playlist => {
+        this.playlists = this.playlists.map(item => {
+          if (item._id == playlist._id) return playlist;
+          else return item;
+        });
+      }
+    );
   }
 
   selectWord(word) {
@@ -63,22 +79,34 @@ export class WordsPage {
 
   addToPlaylist($event, word) {
     let alert = Alert.create();
-    alert.setTitle('Lightsaber color');
-
-    alert.addInput({
-      type: 'radio',
-      label: 'Blue',
-      value: 'blue',
-      checked: true
+    alert.setTitle('Add word to');
+    this.playlists.forEach((playlist, index) => {
+      alert.addInput({
+        type: 'checkbox',
+        label: playlist.name,
+        value: index + '',
+        checked: playlist.listWordNumber.indexOf(word.number) >= 0
+      });
     });
-
     alert.addButton('Cancel');
     alert.addButton({
-      text: 'OK',
+      text: 'Okay',
       handler: data => {
-        Toast.showLongCenter(`${data}`).subscribe(() => {});
+        data = data.map(e => parseInt(e));
+        data.forEach(index => {
+          if (this.playlists[index].listWordNumber.indexOf(word.number) == -1)
+            this.playlists[index].listWordNumber.push(word.number);
+        });
+        this.playlists.forEach((playlist, index) => {
+          let searchIndex = playlist.listWordNumber.indexOf(word.number);
+          if (searchIndex >= 0 && data.indexOf(index) == -1) {
+            playlist.listWordNumber.splice(searchIndex, 1);
+          }
+        });
+        this.courseService.updateMultiplePlaylists(this.playlists);
       }
     });
+    this.navController.present(alert);
     $event.stopPropagation();
   }
 

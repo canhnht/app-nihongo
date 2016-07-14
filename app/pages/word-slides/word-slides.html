@@ -26,10 +26,8 @@
       (click)="repeatCurrentVocabulary($event)">
       <ion-icon name="volume-up"></ion-icon>
     </button>
-    <button danger round class="btn-bookmark"
-      [class.disabled]="!words[currentIndex].starred"
-      (click)="toggleBookmark($event)">
-      <ion-icon name="star-outline"></ion-icon>
+    <button danger round class="btn-bookmark" (click)="addToPlaylist($event)">
+      <ion-icon name="star"></ion-icon>
     </button>
   </div>
 </ion-content>

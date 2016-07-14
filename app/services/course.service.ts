@@ -13,6 +13,7 @@ export class CourseService {
   listCourse: any[] = null;
   listCourseSubject: Subject<any[]> = new Subject<any[]>();
   currentCourseSubject: Subject<any> = new Subject<any>();
+  playlistSubject: Subject<any> = new Subject<any>();
   currentCourse: any = null;
 
   constructor() {
@@ -46,8 +47,13 @@ export class CourseService {
 
   private listenForChange() {
     const onDatabaseChange = (change) => {
-      this.currentCourse = change.doc;
-      this.currentCourseSubject.next(change.doc);
+      let doc = change.doc
+      if (doc._id.startsWith('course')) {
+        this.currentCourse = doc;
+        this.currentCourseSubject.next(doc);
+      } else if (doc._id.startsWith('playlist')) {
+        this.playlistSubject.next(doc);
+      }
     };
     this.db.changes({ live: true, since: 'now', include_docs: true })
       .on('change', onDatabaseChange);
@@ -62,7 +68,6 @@ export class CourseService {
       })).then(docs => {
           this.listCourse = docs.rows.map(row => {
             let course = row.doc;
-            delete course.units;
             return course;
           });
           return this.listCourse;
@@ -87,10 +92,32 @@ export class CourseService {
   }
 
   getAllPlaylists() {
+    return Promise.resolve(this.db.allDocs({
+        include_docs: true,
+        startkey: 'playlist',
+        endkey: 'playlist\uffff'
+      }))
+      .then(docs => {
+        return docs.rows.map(row => row.doc);
+      })
+      .catch(utils.errorHandler('Error get all playlists'));
+  }
 
+  updateMultiplePlaylists(playlists) {
+    this.db.bulkDocs(playlists)
+      .then(resp => {})
+      .catch(utils.errorHandler('Error update playlists'));
   }
 
   updateCourse(course) {
-    this.db.put(course);
+    this.db.put(course)
+      .then(resp => {})
+      .catch(utils.errorHandler('Error update course'));
+  }
+
+  addPlaylist(playlist) {
+    this.db.put(playlist)
+      .then(resp => {})
+      .catch(utils.errorHandler('Error add playlist'));
   }
 }
