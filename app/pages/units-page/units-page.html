@@ -44,7 +44,7 @@
           item-right *ngIf="unit.downloaded">
         </ion-icon>
       </ion-item>
-      <ion-item-options>
+      <ion-item-options *ngIf="unit.downloaded">
         <button danger (click)="deleteUnit(unit)">
           <ion-icon name="trash" large></ion-icon>
           Delete

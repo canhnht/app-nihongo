@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams, Popover, List, Alert} from 'ionic-angular';
-import {Toast, Transfer} from 'ionic-native';
+import {Toast, Transfer, File} from 'ionic-native';
 import {WordsPage} from '../words-page/words-page';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
@@ -10,6 +10,7 @@ import {CourseService} from '../../services/course.service';
 import {LoaderService} from '../../services/loader.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {Loader} from '../../components/loader/loader';
+import {Subscription} from 'rxjs';
 
 @Component({
   templateUrl: 'build/pages/units-page/units-page.html',
@@ -20,20 +21,32 @@ export class UnitsPage {
   private units: any[] = [];
   private course: any;
   private selectedUnits: number[] = [];
+  currentCourseSubscription: Subscription;
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
     private courseService: CourseService, private loaderService: LoaderService) {
     this.course = this.navParams.data.selectedCourse;
-    this.courseService.getCourse(this.course._id)
-      .then(course => {
-        this.course = course;
-        this.units = this.course.units;
-      });
+    this.units = this.course.units;
   }
 
   ionViewWillEnter() {
+    // this.courseService.getCourse(this.course._id)
+    //   .then(course => {
+    //     this.course = course;
+    //     this.units = this.course.units;
+    //   });
+    this.currentCourseSubscription = this.courseService.currentCourseSubject.subscribe(
+      course => {
+        this.course = course;
+        this.units = this.course.units;
+      }
+    );
     this.selectedUnits = [];
+  }
+
+  ionViewWillLeave() {
+    this.currentCourseSubscription.unsubscribe();
   }
 
   goToUnit(unit) {
@@ -51,26 +64,55 @@ export class UnitsPage {
 
   downloadUnit($event, unit) {
     unit.downloading = true;
-    const fileTransfer = new Transfer();
-    fileTransfer.download(
-      'https://s3-ap-southeast-1.amazonaws.com/app-nihongo/audio1.mp3',
-      'file:///android_asset/www/audio/audio1.mp3')
+    let audioFiles = ['audio1.mp3', 'audio2.mp3', 'audio3.mp3'];
+    let audioPromises = audioFiles.map(audio => {
+      const fileTransfer = new Transfer();
+      return Promise.resolve(fileTransfer.download(
+        `https://s3-ap-southeast-1.amazonaws.com/app-nihongo/${audio}`,
+        `file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/${audio}`));
+    });
+    Promise.all(audioPromises)
       .then(resp => {
         unit.downloading = false;
+        this.course.units.some(item => {
+          if (item.number == unit.number) {
+            item.downloaded = true;
+            return true;
+          }
+          return false;
+        });
+        this.courseService.updateCourse(this.course);
         Toast.showLongTop(`${JSON.stringify(resp)}`).subscribe(() => {});
       })
       .catch(err => {
         unit.downloading = false;
         Toast.showLongBottom(`Error ${JSON.stringify(err)}`).subscribe(() => {});
       });
-    fileTransfer.onProgress(event => {
-      Toast.showShortCenter(`progress ${JSON.stringify(event)}`).subscribe(() => {});
-    });
     $event.stopPropagation();
   }
 
   deleteUnit(unit) {
-    unit.downloaded = false;
+    let audioFiles = ['audio1.mp3', 'audio2.mp3', 'audio3.mp3'];
+    let audioPromises = audioFiles.map(audio => {
+      return Promise.resolve(File.removeFile(
+        'file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/', audio
+      ));
+    })
+    Promise.all(audioPromises)
+      .then(resp => {
+        Toast.showLongTop(`${JSON.stringify(resp)}`).subscribe(() => {});
+      })
+      .catch(err => {
+        Toast.showLongBottom(`Error DEL ${JSON.stringify(err)}`).subscribe(() => {});
+      });
+    this.course.units.some(item => {
+      if (item.number == unit.number) {
+        item.downloaded = false;
+        return true;
+      }
+      return false;
+    });
+    this.courseService.updateCourse(this.course);
     this.list.closeSlidingItems();
   }
 
