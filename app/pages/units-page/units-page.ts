@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
-import {NavController, NavParams, Popover, List} from 'ionic-angular';
-import {Toast} from 'ionic-native';
+import {NavController, NavParams, Popover, List, Alert} from 'ionic-angular';
+import {Toast, Transfer} from 'ionic-native';
 import {WordsPage} from '../words-page/words-page';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
@@ -36,21 +36,37 @@ export class UnitsPage {
     this.selectedUnits = [];
   }
 
-  goToUnit($event, unit) {
-    this.navController.push(WordsPage, { selectedUnit: unit });
-    $event.stopPropagation();
+  goToUnit(unit) {
+    if (!unit.downloaded) {
+      let alert = Alert.create({
+        title: 'Download unit',
+        subTitle: 'You need to download this unit before proceeding.',
+        buttons: ['OK']
+      });
+      this.navController.present(alert);
+    } else {
+      this.navController.push(WordsPage, { selectedUnit: unit });
+    }
   }
 
   downloadUnit($event, unit) {
-    console.log('download', unit);
     unit.downloading = true;
+    const fileTransfer = new Transfer();
+    fileTransfer.download(
+      'https://s3-ap-southeast-1.amazonaws.com/app-nihongo/audio1.mp3',
+      'file:///android_asset/www/audio/audio1.mp3')
+      .then(resp => {
+        unit.downloading = false;
+        Toast.showLongTop(`${JSON.stringify(resp)}`).subscribe(() => {});
+      })
+      .catch(err => {
+        unit.downloading = false;
+        Toast.showLongBottom(`Error ${JSON.stringify(err)}`).subscribe(() => {});
+      });
+    fileTransfer.onProgress(event => {
+      Toast.showShortCenter(`progress ${JSON.stringify(event)}`).subscribe(() => {});
+    });
     $event.stopPropagation();
-
-    // set timeout for completing download
-    setTimeout(() => {
-      unit.downloading = false;
-      unit.downloaded = true;
-    }, 2000);
   }
 
   deleteUnit(unit) {

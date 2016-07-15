@@ -39,7 +39,8 @@
     "cordova-plugin-x-toast",
     "cordova-plugin-splashscreen",
     "cordova-plugin-whitelist",
-    "cordova-plugin-sqlite-2"
+    "cordova-plugin-sqlite-2",
+    "cordova-plugin-file-transfer"
   ],
   "cordovaPlatforms": [
     {
