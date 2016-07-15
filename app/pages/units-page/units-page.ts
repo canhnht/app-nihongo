@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams, Popover, List, Alert} from 'ionic-angular';
-import {Toast, Transfer, File} from 'ionic-native';
+import {Toast, Transfer, File, SpinnerDialog} from 'ionic-native';
 import {WordsPage} from '../words-page/words-page';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
@@ -31,11 +31,11 @@ export class UnitsPage {
   }
 
   ionViewWillEnter() {
-    // this.courseService.getCourse(this.course._id)
-    //   .then(course => {
-    //     this.course = course;
-    //     this.units = this.course.units;
-    //   });
+    this.courseService.getCourse(this.course._id)
+      .then(course => {
+        this.course = course;
+        this.units = this.course.units;
+      });
     this.currentCourseSubscription = this.courseService.currentCourseSubject.subscribe(
       course => {
         this.course = course;
@@ -137,6 +137,7 @@ export class UnitsPage {
   }
 
   playSelectedList() {
+    SpinnerDialog.show('Processing', 'Please wait a second', false);
     this.audioService.playListUnit(this.selectedUnits);
     this.sliderService.resetSlider();
     this.sliderService.currentSlide = 1;

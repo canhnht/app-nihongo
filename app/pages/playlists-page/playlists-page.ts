@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NavController, Alert} from 'ionic-angular';
 import {CourseService} from '../../services/course.service';
-import {Toast} from 'ionic-native';
+import {Toast, SpinnerDialog} from 'ionic-native';
 import {Subscription} from 'rxjs';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {AudioService} from '../../services/audio.service';
@@ -85,6 +85,7 @@ export class PlaylistsPage {
   }
 
   playSelectedList() {
+    SpinnerDialog.show('Processing', 'Please wait a second', false);
     let listWord = this.selectedPlaylists.map(
       e => this.playlists.find(item => item._id == e).listWord
     ).reduce((ar, e) => ar.concat(e), []);

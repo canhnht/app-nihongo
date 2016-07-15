@@ -4,7 +4,7 @@ import {AudioPlayer} from '../../components/audio-player/audio-player';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {CourseService} from '../../services/course.service';
-import {Toast} from 'ionic-native';
+import {Toast, SpinnerDialog} from 'ionic-native';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -35,6 +35,10 @@ export class WordSlides {
     );
     if (this.sliderService.currentSlide >= 0)
       this.sliderOptions.initialSlide = this.sliderService.currentSlide - 1;
+  }
+
+  ionViewDidEnter() {
+    SpinnerDialog.hide();
   }
 
   ionViewWillEnter() {

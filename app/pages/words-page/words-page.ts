@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, Popover, Loading, Alert} from 'ionic-angular';
 import {Subscription} from 'rxjs';
-import {Toast} from 'ionic-native';
+import {Toast, SpinnerDialog} from 'ionic-native';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
@@ -134,6 +134,7 @@ export class WordsPage {
   }
 
   playSelectedList() {
+    SpinnerDialog.show('Processing', 'Please wait a second', false);
     this.audioService.playListWord(this.selectedWords);
     this.sliderService.resetSlider();
     this.sliderService.currentSlide = 1;
