@@ -138,4 +138,43 @@ export class PlaylistsPage {
     });
     this.navController.present(prompt);
   }
+
+  deletePlaylist(playlist) {
+    let searchIndex = this.playlists.findIndex(item => item._id == playlist._id);
+    this.playlists.splice(searchIndex, 1);
+    this.courseService.deletePlaylist(playlist);
+  }
+
+  editPlaylist(playlist) {
+    let prompt = Alert.create({
+      title: 'Edit playlist',
+      inputs: [
+        {
+          name: 'title',
+          value: playlist.name
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            let searchIndex = this.playlists.findIndex(item => item.name == data.title);
+            if (searchIndex >= 0)
+              Toast.showShortCenter('Playlist name already exists! Please choose another name')
+                .subscribe(() => {});
+            else {
+              playlist.name = data.title;
+              let newPlaylist = Object.assign({}, playlist);
+              delete newPlaylist.listWord;
+              this.courseService.updatePlaylist(newPlaylist);
+            }
+          }
+        }
+      ]
+    });
+    this.navController.present(prompt);
+  }
 }

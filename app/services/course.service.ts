@@ -47,7 +47,8 @@ export class CourseService {
 
   private listenForChange() {
     const onDatabaseChange = (change) => {
-      let doc = change.doc
+      if (change.deleted) return;
+      let doc = change.doc;
       if (doc._id.startsWith('course')) {
         this.currentCourse = doc;
         this.currentCourseSubject.next(doc);
@@ -119,5 +120,17 @@ export class CourseService {
     this.db.put(playlist)
       .then(resp => {})
       .catch(utils.errorHandler('Error add playlist'));
+  }
+
+  deletePlaylist(playlist) {
+    this.db.remove(playlist)
+      .then(resp => {})
+      .catch(utils.errorHandler('Error delete playlist'));
+  }
+
+  updatePlaylist(playlist) {
+    this.db.put(playlist)
+      .then(resp => {})
+      .catch(utils.errorHandler('Error update playlist'));
   }
 }
