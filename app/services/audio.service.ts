@@ -76,6 +76,35 @@ export class AudioService {
     this.playCurrentTrack();
   }
 
+  playWordInPlaylist(listWord, wordIndex) {
+    this.playSingleWord = true;
+    this.singleWordIndex = wordIndex;
+    this.listWord = listWord;
+    this.getListWordOrder();
+    this.stopListTrack();
+    this.listTrack = [
+      new MediaPlugin(`file:///android_asset/www/audio/audio${wordIndex % 3 + 1}.mp3`)
+    ];
+    this.listTrack[0].play();
+    this.listTrack[0].pause();
+    this.currentTrack.index = 0;
+    this.playCurrentTrack();
+  }
+
+  playListWordInPlaylist(listWord, listWordNumber) {
+    this.playSingleWord = false;
+    this.listWord = [];
+    listWord.forEach(word => {
+      if (listWordNumber.indexOf(word.number) >= 0)
+        this.listWord.push(Object.assign({}, word));
+    });
+    this.getListWordOrder();
+    this.stopListTrack();
+    this.generateListTrack();
+    this.currentTrack.index = 0;
+    this.playCurrentTrack();
+  }
+
   playListUnit(listUnit) {
     this.playSingleWord = false;
     let currentCourse = this.courseService.currentCourse;

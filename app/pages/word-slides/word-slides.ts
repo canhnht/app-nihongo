@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {NavController, Slides, Alert} from 'ionic-angular';
+import {NavController, Slides, Alert, NavParams} from 'ionic-angular';
 import {AudioPlayer} from '../../components/audio-player/audio-player';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
@@ -24,9 +24,12 @@ export class WordSlides {
   trackIndexSubscription: Subscription;
   playlistSubscription: Subscription;
   playlists: any[];
+  hideBookmark: boolean;
 
   constructor(private navController: NavController, private audioService: AudioService,
-    private sliderService: SliderService, private courseService: CourseService) {
+    private sliderService: SliderService, private courseService: CourseService,
+    private navParams: NavParams) {
+    this.hideBookmark = this.navParams.data.hideBookmark;
     this.words = this.audioService.listWordOrder.map(
       wordIndex => this.audioService.listWord[wordIndex]
     );

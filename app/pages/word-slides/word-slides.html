@@ -26,7 +26,7 @@
       (click)="repeatCurrentVocabulary($event)">
       <ion-icon name="volume-up"></ion-icon>
     </button>
-    <button danger round class="btn-bookmark" (click)="addToPlaylist($event)">
+    <button *ngIf="!hideBookmark" danger round class="btn-bookmark" (click)="addToPlaylist($event)">
       <ion-icon name="star"></ion-icon>
     </button>
   </div>

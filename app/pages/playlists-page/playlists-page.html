@@ -20,7 +20,7 @@
 <ion-content>
   <ion-list>
     <ion-item-sliding *ngFor="let playlist of playlists">
-      <ion-item button-primary text-wrap>
+      <ion-item button-primary text-wrap (click)="goToPlaylistDetail(playlist)">
         <input class="btn-select" type="checkbox" item-left (click)="checkPlaylist($event, playlist)"
           [checked]="selectedPlaylists.indexOf(playlist._id) >= 0" />
         <ion-badge item-left>

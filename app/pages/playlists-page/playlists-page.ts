@@ -7,6 +7,7 @@ import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {WordSlides} from '../word-slides/word-slides';
+import {PlaylistDetail} from '../playlist-detail/playlist-detail';
 
 @Component({
   templateUrl: 'build/pages/playlists-page/playlists-page.html',
@@ -60,6 +61,7 @@ export class PlaylistsPage {
   }
 
   goToPlaylistDetail(playlist) {
+    this.navController.push(PlaylistDetail, { selectedPlaylist: playlist });
   }
 
   checkPlaylist($event, playlist) {
@@ -90,7 +92,7 @@ export class PlaylistsPage {
     this.sliderService.resetSlider();
     this.sliderService.currentSlide = 1;
     this.selectedPlaylists = [];
-    this.navController.push(WordSlides);
+    this.navController.push(WordSlides, { hideBookmark: true });
   }
 
   continuePlaying() {
@@ -99,7 +101,7 @@ export class PlaylistsPage {
     if (this.audioService.playSingleWord)
       this.sliderService.currentSlide =
         this.audioService.listWordOrder.indexOf(this.audioService.singleWordIndex) + 1;
-    this.navController.push(WordSlides);
+    this.navController.push(WordSlides, { hideBookmark: true });
   }
 
   addNewPlaylist() {
