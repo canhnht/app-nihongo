@@ -7,9 +7,7 @@ import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {CourseService} from '../../services/course.service';
-import {LoaderService} from '../../services/loader.service';
 import {WordSlides} from '../word-slides/word-slides';
-import {Loader} from '../../components/loader/loader';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -25,7 +23,7 @@ export class UnitsPage {
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
-    private courseService: CourseService, private loaderService: LoaderService) {
+    private courseService: CourseService) {
     this.course = this.navParams.data.selectedCourse;
     this.units = this.course.units;
   }

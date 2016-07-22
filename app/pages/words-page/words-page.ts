@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, Popover, Loading, Alert} from 'ionic-angular';
+import {NavController, NavParams, Popover, Loading, Alert, Modal} from 'ionic-angular';
 import {Subscription} from 'rxjs';
 import {Toast, SpinnerDialog} from 'ionic-native';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
@@ -8,6 +8,7 @@ import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {CourseService} from '../../services/course.service';
 import {WordSlides} from '../word-slides/word-slides';
+import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 
 @Component({
   templateUrl: 'build/pages/words-page/words-page.html',
@@ -107,6 +108,8 @@ export class WordsPage {
       }
     });
     this.navController.present(alert);
+    // let modal = Modal.create(PlaylistOptions);
+    // this.navController.present(modal);
     $event.stopPropagation();
   }
 

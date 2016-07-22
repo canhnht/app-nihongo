@@ -7,7 +7,6 @@ import {UnitsPage} from '../units-page/units-page';
 import {CourseService} from '../../services/course.service';
 import {LIST_COURSE} from '../../services/list-course.data';
 import {WordSlides} from '../word-slides/word-slides';
-import {Loader} from '../../components/loader/loader';
 import * as utils from '../../utils';
 
 @Component({

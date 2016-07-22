@@ -17,8 +17,8 @@ export class AudioService {
   isShuffle: boolean = false;
   playSingleWord: boolean = false;
   singleWordIndex: number;
-  basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/';
-  // basePath: string = 'file:///android_asset/www/audio/';
+  // basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/';
+  basePath: string = 'file:///android_asset/www/audio/';
 
   constructor(private courseService: CourseService) {
     this.currentTrack.seekTime = '00:00';
@@ -85,7 +85,7 @@ export class AudioService {
     this.getListWordOrder();
     this.stopListTrack();
     this.listTrack = [
-      new MediaPlugin(`${this.basePath}audio${wordIndex % 3 + 1}.mp3`)
+      new MediaPlugin(`${this.basePath}${this.listWord[wordIndex].audioFile}.mp3`)
     ];
     this.listTrack[0].play();
     this.listTrack[0].pause();
@@ -144,7 +144,8 @@ export class AudioService {
     this.listTrack = [];
 
     this.listWordOrder.forEach((wordIndex, index) => {
-      this.listTrack.push(new MediaPlugin(`${this.basePath}audio${wordIndex % 3 + 1}.mp3`));
+      let word = this.listWord[wordIndex];
+      this.listTrack.push(new MediaPlugin(`${this.basePath}${word.audioFile}.mp3`));
       this.listTrack[index].play();
       this.listTrack[index].pause();
     });
@@ -163,11 +164,12 @@ export class AudioService {
     this.getListWordOrder();
     this.stopListTrack();
     this.listTrack = [
-      new MediaPlugin(`${this.basePath}audio${wordIndex % 3 + 1}.mp3`)
+      new MediaPlugin(`${this.basePath}${this.listWord[wordIndex].audioFile}.mp3`)
     ];
     this.listTrack[0].play();
     this.listTrack[0].pause();
     this.currentTrack.index = 0;
+    this.currentTrack.seekTime = '00:00';
     this.playCurrentTrack();
   }
 
@@ -303,7 +305,7 @@ export class AudioService {
         let continuePlaying = this.currentTrack.isPlaying;
         this.pauseCurrentTrack();
         this.listTrack[0].release();
-        this.listTrack[0] = new MediaPlugin(`${this.basePath}audio${wordIndex % 3 + 1}.mp3`);
+        this.listTrack[0] = new MediaPlugin(`${this.basePath}${this.listWord[wordIndex].audioFile}.mp3`);
         this.currentTrack.index = 0;
         this.currentTrack.seekTime = '00:00';
         this.currentTrack.playedPercent = 0;
