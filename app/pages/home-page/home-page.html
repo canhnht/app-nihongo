@@ -6,7 +6,7 @@
 </ion-navbar>
 
 <ion-content>
-  <ion-list [virtualScroll]="courses">
+  <!--<ion-list [virtualScroll]="courses">
     <ion-item button-primary *virtualItem="let course"
       (click)="course.free ? goToCourse($event, course) : buyCourse(course)">
       <ion-avatar item-left>
@@ -20,5 +20,39 @@
         [class.hidden]="course.free">
       </ion-img>
     </ion-item>
-  </ion-list>
+  </ion-list>-->
+  <ion-card *ngFor="let course of courses">
+    <div class="card-course">
+      <div class="left-side">
+        <div class="course-title">{{course.courseName}}</div>
+        <div class="progress" hidden>33%</div>
+      </div>
+      <div class="right-side">
+        <div class="number-units">
+          <strong>{{course.units.length}}</strong> Unit{{course.units.length > 1 ? 's' : ''}}
+        </div>
+        <div class="number-words">
+          <strong>{{course.noWords}}</strong> Word{{course.noWords > 1 ? 's' : ''}}
+        </div>
+        <div class="number-comments">
+          <i class="fa fa-comment"></i> 0 Comment
+        </div>
+        <div class="rating">
+          <span>☆</span>
+          <span class="focus">☆</span>
+          <span>☆</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+      </div>
+    </div>
+    <ion-item>
+      <span class="progress" item-left secondary>0%</span>
+      <button primary clear item-right large
+        (click)="goToCourse($event, course)">
+        <ion-icon name="navigate"></ion-icon>
+        Start
+      </button>
+    </ion-item>
+  </ion-card>
 </ion-content>

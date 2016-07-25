@@ -37,7 +37,7 @@ export class MyApp {
         Splashscreen.hide();
         this.authService.checkLoginStatus().then(() => {
           this.isSignedIn = this.authService.isSignedIn;
-        })
+        });
       });
   }
 
