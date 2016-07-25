@@ -16,6 +16,12 @@
         <ion-icon name="settings" item-left></ion-icon>
         Setting
       </ion-item>
+      <ion-item button-primary menuClose
+        (click)="isSignedIn ? signOut() : signIn()">
+        <ion-icon name="person" item-left></ion-icon>
+        {{isSignedIn ? 'Sign out' : 'Sign in with Facebook'}}
+        <!--Sign in with Facebook-->
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>

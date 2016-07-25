@@ -8,6 +8,7 @@ import {AudioService} from './services/audio.service';
 import {SliderService} from './services/slider.service';
 import {CourseService} from './services/course.service';
 import {WordSlides} from './pages/word-slides/word-slides';
+import {AuthService} from './services/auth.service';
 declare var require: any;
 let firebase = require('firebase');
 
@@ -17,15 +18,16 @@ let firebase = require('firebase');
 export class MyApp {
   homePage = HomePage;
   playlistsPage = PlaylistsPage;
-  rootPage = LoginPage;
+  rootPage = HomePage;
+  isSignedIn: boolean = false;
 
-  constructor(private platform: Platform) {
+  constructor(private platform: Platform, private authService: AuthService) {
     // Initialize Firebase
     var config = {
-      apiKey: "AIzaSyDoRI41vY0FIrejvn4jBXshgVxlUKR3zvM",
-      authDomain: "app-nihongo-techybrain.firebaseapp.com",
-      databaseURL: "https://app-nihongo-techybrain.firebaseio.com",
-      storageBucket: "app-nihongo-techybrain.appspot.com",
+      apiKey: "AIzaSyALm56LkjP4JQeNcCWA5XWPJ-xD7jAdXDs",
+      authDomain: "mimi-kara-nihongo.firebaseapp.com",
+      databaseURL: "https://mimi-kara-nihongo.firebaseio.com",
+      storageBucket: "mimi-kara-nihongo.appspot.com",
     };
     firebase.initializeApp(config);
 
@@ -33,7 +35,22 @@ export class MyApp {
       .then(() => {
         StatusBar.styleDefault();
         Splashscreen.hide();
-      })
+        this.authService.checkLoginStatus().then(() => {
+          this.isSignedIn = this.authService.isSignedIn;
+        })
+      });
+  }
+
+  signIn() {
+    this.authService.signInWithFacebook().then(() => {
+      this.isSignedIn = this.authService.isSignedIn;
+    });
+  }
+
+  signOut() {
+    this.authService.signOut().then(() => {
+      this.isSignedIn = false;
+    });
   }
 
   openPage(page) {
@@ -41,4 +58,4 @@ export class MyApp {
   }
 }
 
-ionicBootstrap(MyApp, [AudioService, SliderService, CourseService]);
+ionicBootstrap(MyApp, [AudioService, SliderService, CourseService, AuthService]);

@@ -43,16 +43,18 @@
     "cordova-plugin-sqlite-2",
     "cordova-plugin-file-transfer",
     "cordova-plugin-spinner-dialog",
-    "cordova-plugin-inappbrowser",
     {
       "id": "cordova-plugin-facebook4",
       "locator": "cordova-plugin-facebook4",
       "variables": {
         "APP_ID": "1732596063667087",
-        "APP_NAME": "app-nihongo"
+        "APP_NAME": "Mimi Kara Nihongo"
       }
     },
-    "cordova-plugin-googleplus"
+    {
+      "locator": "https://github.com/EddyVerbruggen/cordova-plugin-googleplus",
+      "id": "cordova-plugin-googleplus"
+    }
   ],
   "cordovaPlatforms": [
     {
