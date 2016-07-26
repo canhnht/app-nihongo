@@ -48,12 +48,20 @@ export class AudioService {
   }
 
   private convertText(seconds) {
+    let text = '';
     seconds = Math.floor(seconds);
+    if (Math.floor(seconds / 3600) > 0) {
+      let hours = Math.floor(seconds / 3600).toString();
+      while (hours.length < 2) hours = '0' + hours;
+      text += hours;
+    }
+    seconds = seconds % 3600;
     let minutes = Math.floor(seconds / 60).toString();
     while (minutes.length < 2) minutes = '0' + minutes;
     seconds = (seconds % 60).toString();
     while (seconds.length < 2) seconds = '0' + seconds;
-    return `${minutes}:${seconds}`;
+    text += `${minutes}:${seconds}`;
+    return text;
   }
 
   private getListWordOrder() {
@@ -98,7 +106,7 @@ export class AudioService {
     this.listWord = [];
     listWord.forEach(word => {
       if (listWordNumber.indexOf(word.number) >= 0)
-        this.listWord.push(Object.assign({}, word));
+        this.listWord.push(word);
     });
     this.getListWordOrder();
     this.stopListTrack();
@@ -130,7 +138,7 @@ export class AudioService {
     currentCourse.units.forEach(unit => {
       unit.words.forEach(word => {
         if (listWord.indexOf(word.number) >= 0)
-          this.listWord.push(Object.assign({}, word));
+          this.listWord.push(word);
       });
     });
     this.getListWordOrder();
@@ -146,8 +154,6 @@ export class AudioService {
     this.listWordOrder.forEach((wordIndex, index) => {
       let word = this.listWord[wordIndex];
       this.listTrack.push(new MediaPlugin(`${this.basePath}${word.audioFile}.mp3`));
-      this.listTrack[index].play();
-      this.listTrack[index].pause();
     });
   }
 
@@ -166,8 +172,6 @@ export class AudioService {
     this.listTrack = [
       new MediaPlugin(`${this.basePath}${this.listWord[wordIndex].audioFile}.mp3`)
     ];
-    this.listTrack[0].play();
-    this.listTrack[0].pause();
     this.currentTrack.index = 0;
     this.currentTrack.seekTime = '00:00';
     this.playCurrentTrack();
@@ -201,35 +205,41 @@ export class AudioService {
   }
 
   private getTotalDuration() {
-    let totalDuration = this.listTrack.reduce((sum, track) => {
-      return sum + track.getDuration();
+    if (this.playSingleWord)
+      return this.listTrack[0].getDuration();
+    let totalDuration = this.listWordOrder.reduce((sum, wordIndex) => {
+      return sum + this.listWord[wordIndex].audioDuration;
     }, 0);
     return totalDuration;
   }
 
   private getPlayedDurationUntil(trackIndex) {
+    if (this.playSingleWord) return 0;
     let playedDuration = 0;
-    this.listTrack.forEach((track, index) => {
+    this.listWordOrder.forEach((wordIndex, index) => {
       if (index < trackIndex) {
-        playedDuration += track.getDuration();
+        playedDuration += this.listWord[wordIndex].audioDuration;
       }
     });
     return playedDuration;
   }
 
   private startGetCurrentPositionInterval() {
+    let duration = this.getTotalDuration();
     this.intervalGetCurrentPosition = setInterval(() => {
+      if (this.playSingleWord) duration = this.getTotalDuration();
       let track: MediaPlugin = this.listTrack[this.currentTrack.index];
-      let duration = this.getTotalDuration();
       this.currentTrack.durationInSeconds = duration;
       this.currentTrack.duration = this.convertText(Math.max(duration, 0));
       let playedDuration = this.getPlayedDurationUntil(this.currentTrack.index);
       track.getCurrentPosition().then(position => {
         if (position >= 0) {
           position += playedDuration;
+          this.currentTrack.playedDuration = position;
           this.currentTrack.playedPercent = Math.ceil(position / duration * 100);
           this.currentTrack.seekTime = this.convertText(position);
         } else {
+          this.currentTrack.playedPercent = 100;
           this.goToNextTrack();
         }
       });
@@ -290,9 +300,9 @@ export class AudioService {
 
   getNextTrackIndex(seconds: number) {
     let nextIndex: number = 0;
-    while (seconds > this.listTrack[nextIndex].getDuration()) {
+    while (seconds > this.listWord[this.listWordOrder[nextIndex]].audioDuration) {
       nextIndex += 1;
-      seconds -= this.listTrack[nextIndex].getDuration();
+      seconds -= this.listWord[this.listWordOrder[nextIndex]].audioDuration;
     }
     return nextIndex;
   }
@@ -332,7 +342,7 @@ export class AudioService {
 
   repeatCurrentTrack() {
     Toast.hide();
-    Toast.showShortBottom('Repeat current vocabulary').subscribe(() => {});
+    Toast.showShortTop('Repeat current vocabulary').subscribe(() => {});
     this.pauseCurrentTrack();
     this.listTrack[this.currentTrack.index].seekTo(0);
     this.playCurrentTrack();

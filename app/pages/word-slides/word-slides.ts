@@ -67,6 +67,7 @@ export class WordSlides {
   ionViewWillLeave() {
     this.currentCourseSubscription.unsubscribe();
     this.trackIndexSubscription.unsubscribe();
+    this.audioService.pauseCurrentTrack();
   }
 
   prev() {

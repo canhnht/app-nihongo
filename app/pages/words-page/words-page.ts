@@ -61,6 +61,7 @@ export class WordsPage {
   }
 
   selectWord(word) {
+    SpinnerDialog.show('Processing', 'Please wait a second', false);
     let wordIndex = this.words.findIndex(item => item.number == word.number);
     this.audioService.playWord(this.unit.number, wordIndex);
     this.sliderService.resetSlider();
