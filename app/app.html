@@ -18,9 +18,8 @@
       </ion-item>
       <ion-item button-primary menuClose
         (click)="isSignedIn ? signOut() : signIn()">
-        <ion-icon name="person" item-left></ion-icon>
+        <i class="fa fa-facebook-square" item-left></i>
         {{isSignedIn ? 'Sign out' : 'Sign in with Facebook'}}
-        <!--Sign in with Facebook-->
       </ion-item>
     </ion-list>
   </ion-content>

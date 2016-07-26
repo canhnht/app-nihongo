@@ -35,6 +35,15 @@ export class HomePage {
     $event.stopPropagation();
   }
 
+  showAlert() {
+    let alert = Alert.create({
+      title: 'Sorry!',
+      subTitle: 'This course is not available yet.',
+      buttons: ['OK']
+    });
+    this.navController.present(alert);
+  }
+
   buyCourse(course) {
     let confirm = Alert.create({
       title: `Buy course ${course.title}?`,

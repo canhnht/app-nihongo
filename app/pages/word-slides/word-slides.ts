@@ -25,11 +25,13 @@ export class WordSlides {
   playlistSubscription: Subscription;
   playlists: any[];
   hideBookmark: boolean;
+  hideAudioBar: boolean = false;
 
   constructor(private navController: NavController, private audioService: AudioService,
     private sliderService: SliderService, private courseService: CourseService,
     private navParams: NavParams) {
     this.hideBookmark = this.navParams.data.hideBookmark;
+    this.hideAudioBar = this.audioService.playSingleWord;
     this.words = this.audioService.listWordOrder.map(
       wordIndex => this.audioService.listWord[wordIndex]
     );

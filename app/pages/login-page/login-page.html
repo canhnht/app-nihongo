@@ -7,19 +7,18 @@
   Sign in with Facebook
 </button>-->
 
-<ion-content>
+<!--<ion-content>
   <ion-card>
     <div class="card-course">
       <div class="left-side">
         <div class="course-title">N3</div>
-        <div class="progress" hidden>33%</div>
       </div>
       <div class="right-side">
         <div class="number-units">
-          <strong>10</strong> Units
+          10 Units
         </div>
         <div class="number-words">
-          <strong>100</strong> Words
+          100 Words
         </div>
         <div class="number-comments">
           <i class="fa fa-comment"></i> 50 Comments
@@ -32,13 +31,34 @@
           <span>☆</span>
         </div>
       </div>
-    </div>
-    <ion-item>
-      <span class="progress" item-left secondary>33%</span>
-      <button primary clear item-right large>
+      <button primary item-right class="btn-start">
         <ion-icon name="navigate"></ion-icon>
         Start
       </button>
-    </ion-item>
+    </div>
+    <div class="progress-bar">
+      <div class="percent-bar" [style.width.%]="90"></div>
+    </div>
   </ion-card>
+</ion-content>-->
+
+<ion-content>
+  <ion-list>
+    <ion-item button-primary menuClose>
+      <ion-icon name="home" item-left></ion-icon>
+      Home
+    </ion-item>
+    <ion-item button-primary menuClose>
+      <ion-icon name="bookmark" item-left></ion-icon>
+      My Playlist
+    </ion-item>
+    <ion-item button-primary menuClose>
+      <ion-icon name="settings" item-left></ion-icon>
+      Setting
+    </ion-item>
+    <ion-item button-primary menuClose>
+      <i class="fa fa-facebook-square" item-left></i>
+      {{isSignedIn ? 'Sign out' : 'Sign in with Facebook'}}
+    </ion-item>
+  </ion-list>
 </ion-content>

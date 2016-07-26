@@ -10,13 +10,13 @@
   </ion-buttons>
 </ion-navbar>
 
-<div class="cover" padding>
+<!--<div class="cover" padding>
   <img [src]="course.imageUrl" class="course-icon" />
   <div class="course-info">
     <h1 class="course-title">{{course.courseName}}</h1>
     <p class="no-units">{{units.length}} unit{{units.length > 1 ? 's' : ''}}</p>
   </div>
-</div>
+</div>-->
 <div class="select-all" padding>
   <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
     [checked]="selectedUnits.length == units.length" />

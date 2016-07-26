@@ -188,8 +188,14 @@ export class AudioService {
   goToNextTrack() {
     this.pauseCurrentTrack();
     this.listTrack[this.currentTrack.index].seekTo(0);
+    if (this.playSingleWord) {
+      if (this.isLoop) this.playCurrentTrack();
+      return;
+    }
     this.currentTrack.index += 1;
     if (this.currentTrack.index == this.listTrack.length) {
+      this.currentTrack.playedPercent = 100;
+      this.currentTrack.seekTime = this.convertText(this.getTotalDuration());
       this.currentTrack.index = 0;
       if (this.isLoop) {
         this.trackIndexSubject.next(this.currentTrack.index);
@@ -239,7 +245,6 @@ export class AudioService {
           this.currentTrack.playedPercent = Math.ceil(position / duration * 100);
           this.currentTrack.seekTime = this.convertText(position);
         } else {
-          this.currentTrack.playedPercent = 100;
           this.goToNextTrack();
         }
       });
@@ -312,14 +317,13 @@ export class AudioService {
       let wordIndex = this.listWordOrder[index];
       if (this.singleWordIndex !== wordIndex) {
         this.singleWordIndex = wordIndex;
-        let continuePlaying = this.currentTrack.isPlaying;
         this.pauseCurrentTrack();
         this.listTrack[0].release();
         this.listTrack[0] = new MediaPlugin(`${this.basePath}${this.listWord[wordIndex].audioFile}.mp3`);
         this.currentTrack.index = 0;
         this.currentTrack.seekTime = '00:00';
         this.currentTrack.playedPercent = 0;
-        if (continuePlaying) this.playCurrentTrack();
+        this.playCurrentTrack();
       }
       return;
     }
