@@ -205,6 +205,7 @@ export class AudioService {
         this.pauseCurrentTrack();
       }
     } else {
+      Toast.showLongTop(`${JSON.stringify(this.listWord[this.listWordOrder[this.currentTrack.index]])}`).subscribe(() => {});
       this.trackIndexSubject.next(this.currentTrack.index);
       this.playCurrentTrack();
     }
@@ -232,6 +233,7 @@ export class AudioService {
 
   private startGetCurrentPositionInterval() {
     let duration = this.getTotalDuration();
+    let playing = false;
     this.intervalGetCurrentPosition = setInterval(() => {
       if (this.playSingleWord) duration = this.getTotalDuration();
       let track: MediaPlugin = this.listTrack[this.currentTrack.index];
@@ -239,15 +241,19 @@ export class AudioService {
       this.currentTrack.duration = this.convertText(Math.max(duration, 0));
       let playedDuration = this.getPlayedDurationUntil(this.currentTrack.index);
       track.getCurrentPosition().then(position => {
+        Toast.showShortTop(`getCurrentPosition ${position}`).subscribe(() => {});
         if (position >= 0) {
+          playing = true;
           position += playedDuration;
           this.currentTrack.playedDuration = position;
           this.currentTrack.playedPercent = Math.ceil(position / duration * 100);
           this.currentTrack.seekTime = this.convertText(position);
-        } else {
+        } else if (playing) {
           this.goToNextTrack();
         }
-      });
+      }).catch(err => {
+        alert('ERROR getCurrentPosition ' + JSON.stringify(err));
+      })
     }, 1000);
   }
 

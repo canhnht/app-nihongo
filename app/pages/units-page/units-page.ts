@@ -25,19 +25,19 @@ export class UnitsPage {
     private audioService: AudioService, private sliderService: SliderService,
     private courseService: CourseService) {
     this.course = this.navParams.data.selectedCourse;
-    this.units = this.course.units;
+    this.units = [...this.course.units];
   }
 
   ionViewWillEnter() {
     this.courseService.getCourse(this.course._id)
       .then(course => {
         this.course = course;
-        this.units = this.course.units;
+        this.units = [...this.course.units];
       });
     this.currentCourseSubscription = this.courseService.currentCourseSubject.subscribe(
       course => {
         this.course = course;
-        this.units = this.course.units;
+        this.units = [...this.course.units];
       }
     );
     this.selectedUnits = [];
@@ -104,7 +104,7 @@ export class UnitsPage {
         Toast.showLongBottom(`Error DEL ${JSON.stringify(err)}`).subscribe(() => {});
       });
     this.course.units.some(item => {
-      if (item.number == unit.number) {
+      if (item.number === unit.number) {
         item.downloaded = false;
         return true;
       }

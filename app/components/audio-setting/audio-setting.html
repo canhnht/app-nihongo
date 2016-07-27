@@ -1,5 +1,6 @@
 <div class="audio-setting">
   <button secondary [class.disabled]="!audioService.isLoop"
+    [disabled]="!isReady && !audioService.isPlaying"
     (click)="toggleLoop($event)">
     <ion-icon name="repeat"></ion-icon>
   </button>
@@ -8,6 +9,7 @@
     {{audioService.isPlaying && !isReady ? 'Continue' : 'Ready'}}
   </button>
   <button secondary [class.disabled]="!audioService.isShuffle"
+    [disabled]="!isReady && !audioService.isPlaying"
     (click)="toggleShuffle($event)">
     <ion-icon name="shuffle"></ion-icon>
   </button>
