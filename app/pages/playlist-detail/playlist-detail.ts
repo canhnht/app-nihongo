@@ -6,7 +6,6 @@ import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
-import {CourseService} from '../../services/course.service';
 import {WordSlides} from '../word-slides/word-slides';
 
 @Component({
@@ -22,8 +21,7 @@ export class PlaylistDetail {
   playlists: any[];
 
   constructor(private navController: NavController, private navParams: NavParams,
-    private audioService: AudioService, private sliderService: SliderService,
-    private courseService: CourseService) {
+    private audioService: AudioService, private sliderService: SliderService) {
     this.playlist = this.navParams.data.selectedPlaylist;
     this.words = this.playlist.listWord;
   }

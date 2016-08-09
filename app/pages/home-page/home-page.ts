@@ -1,12 +1,10 @@
-import {Component, NgZone} from '@angular/core';
+import {Component} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {Toast} from 'ionic-native';
 import {NavController, Popover, Alert} from 'ionic-angular';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {UnitsPage} from '../units-page/units-page';
-import {CourseService} from '../../services/course.service';
-import {WordSlides} from '../word-slides/word-slides';
-import * as utils from '../../utils';
+import {DbService} from '../../services/db.service';
 
 @Component({
   templateUrl: 'build/pages/home-page/home-page.html',
@@ -15,14 +13,14 @@ export class HomePage {
   courses: Object[];
   listCourseSubscription: Subscription;
 
-  constructor(private navController: NavController, private courseService: CourseService) {
-    this.courses = this.courseService.listCourse;
-    this.courseService.listCourseSubject.subscribe(
+  constructor(private navController: NavController, private dbService: DbService) {
+    this.courses = this.dbService.listCourse;
+    this.dbService.listCourseSubject.subscribe(
       listCourse => this.courses = listCourse);
   }
 
   ionViewWillEnter() {
-    this.listCourseSubscription = this.courseService.listCourseSubject.subscribe(
+    this.listCourseSubscription = this.dbService.listCourseSubject.subscribe(
       listCourse => this.courses = listCourse);
   }
 

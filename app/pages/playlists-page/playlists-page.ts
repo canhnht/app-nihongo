@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {NavController, Alert} from 'ionic-angular';
-import {CourseService} from '../../services/course.service';
+import {DbService} from '../../services/db.service';
 import {Toast, SpinnerDialog} from 'ionic-native';
 import {Subscription} from 'rxjs';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
@@ -18,12 +18,12 @@ export class PlaylistsPage {
   playlistSubscription: Subscription;
   selectedPlaylists: string[] = [];
 
-  constructor(private navController: NavController, private courseService: CourseService,
+  constructor(private navController: NavController, private dbService: DbService,
     private audioService: AudioService, private sliderService: SliderService) {
-    this.courseService.getAllPlaylists()
+    this.dbService.getAllPlaylists()
       .then(allPlaylists => {
         this.playlists = allPlaylists;
-        return this.courseService.getListCourse()
+        return this.dbService.getListCourse()
       })
       .then(listCourse => {
         this.playlists.forEach(playlist => {
@@ -47,7 +47,7 @@ export class PlaylistsPage {
   }
 
   ionViewWillEnter() {
-    this.playlistSubscription = this.courseService.playlistSubject.subscribe(
+    this.playlistSubscription = this.dbService.playlistSubject.subscribe(
       playlist => {
         let searchIndex = this.playlists.findIndex(item => item._id == playlist._id);
         if (searchIndex == -1) this.playlists.push(playlist);
@@ -131,7 +131,7 @@ export class PlaylistsPage {
                 name: data.title,
                 listWordNumber: []
               };
-              this.courseService.addPlaylist(newPlaylist);
+              this.dbService.addPlaylist(newPlaylist);
             }
           }
         }
@@ -143,7 +143,7 @@ export class PlaylistsPage {
   deletePlaylist(playlist) {
     let searchIndex = this.playlists.findIndex(item => item._id == playlist._id);
     this.playlists.splice(searchIndex, 1);
-    this.courseService.deletePlaylist(playlist);
+    this.dbService.deletePlaylist(playlist);
   }
 
   editPlaylist(playlist) {
@@ -170,7 +170,7 @@ export class PlaylistsPage {
               playlist.name = data.title;
               let newPlaylist = Object.assign({}, playlist);
               delete newPlaylist.listWord;
-              this.courseService.updatePlaylist(newPlaylist);
+              this.dbService.updatePlaylist(newPlaylist);
             }
           }
         }

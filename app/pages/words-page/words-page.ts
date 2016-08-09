@@ -6,7 +6,7 @@ import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
-import {CourseService} from '../../services/course.service';
+import {DbService} from '../../services/db.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 
@@ -25,9 +25,9 @@ export class WordsPage {
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
-    private courseService: CourseService) {
+    private dbService: DbService) {
     this.unit = this.navParams.data.selectedUnit;
-    this.course = this.courseService.currentCourse;
+    this.course = this.dbService.currentCourse;
     let unitIndex = this.course.units.findIndex(unit => unit.number === this.unit.number);
     this.words = this.course.units[unitIndex].words;
   }
@@ -38,19 +38,19 @@ export class WordsPage {
   }
 
   ionViewWillEnter() {
-    this.course = this.courseService.currentCourse;
+    this.course = this.dbService.currentCourse;
     let unitIndex = this.course.units.findIndex(unit => unit.number === this.unit.number);
     this.words = this.course.units[unitIndex].words;
-    this.currentCourseSubscription = this.courseService.currentCourseSubject.subscribe(
+    this.currentCourseSubscription = this.dbService.currentCourseSubject.subscribe(
       course => this.course = course
     );
     this.selectedWords = [];
 
-    this.courseService.getAllPlaylists()
+    this.dbService.getAllPlaylists()
       .then(allPlaylists => {
         this.playlists = allPlaylists;
       });
-    this.playlistSubscription = this.courseService.playlistSubject.subscribe(
+    this.playlistSubscription = this.dbService.playlistSubject.subscribe(
       playlist => {
         this.playlists = this.playlists.map(item => {
           if (item._id == playlist._id) return playlist;
@@ -63,11 +63,11 @@ export class WordsPage {
   selectWord(word) {
     SpinnerDialog.show('Processing', 'Please wait a second', false);
     let wordIndex = this.words.findIndex(item => item.number == word.number);
-    this.audioService.playWord(this.unit.number, wordIndex);
-    this.sliderService.resetSlider();
-    this.sliderService.currentSlide =
-      this.audioService.listWordOrder.indexOf(wordIndex) + 1;
-    this.navController.push(WordSlides);
+    this.navController.push(WordSlides, {
+      playSingleWord: true,
+      listWord: this.unit.words,
+      wordIndex: wordIndex
+    });
   }
 
   checkWord($event, word) {
@@ -105,7 +105,7 @@ export class WordsPage {
             playlist.listWordNumber.splice(searchIndex, 1);
           }
         });
-        this.courseService.updateMultiplePlaylists(this.playlists);
+        this.dbService.updateMultiplePlaylists(this.playlists);
       }
     });
     this.navController.present(alert);
@@ -122,7 +122,7 @@ export class WordsPage {
           item.starred = word.starred;
       });
     });
-    this.courseService.updateCourse(this.course);
+    this.dbService.updateCourse(this.course);
     $event.stopPropagation();
   }
 

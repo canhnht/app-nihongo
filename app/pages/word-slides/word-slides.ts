@@ -3,8 +3,8 @@ import {NavController, Slides, Alert, NavParams} from 'ionic-angular';
 import {AudioPlayer} from '../../components/audio-player/audio-player';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
-import {CourseService} from '../../services/course.service';
-import {Toast, SpinnerDialog} from 'ionic-native';
+import {DbService} from '../../services/db.service';
+import {Toast, SpinnerDialog, MediaPlugin} from 'ionic-native';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -24,19 +24,31 @@ export class WordSlides {
   trackIndexSubscription: Subscription;
   playlistSubscription: Subscription;
   playlists: any[];
-  hideBookmark: boolean;
+  hideBookmark: boolean = false;
   hideAudioBar: boolean = false;
+  playSingleWord: boolean = false;
+  singleTrack: MediaPlugin = null;
+  // basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/';
+  basePath: string = 'file:///android_asset/www/audio/';
 
   constructor(private navController: NavController, private audioService: AudioService,
-    private sliderService: SliderService, private courseService: CourseService,
+    private sliderService: SliderService, private dbService: DbService,
     private navParams: NavParams) {
-    this.hideBookmark = this.navParams.data.hideBookmark;
-    this.hideAudioBar = this.audioService.playSingleWord;
-    this.words = this.audioService.listWordOrder.map(
-      wordIndex => this.audioService.listWord[wordIndex]
-    );
-    if (this.sliderService.currentSlide >= 0)
-      this.sliderOptions.initialSlide = this.sliderService.currentSlide - 1;
+    let params = this.navParams.data;
+    this.hideBookmark = params.hideBookmark;
+    if (params.playSingleWord) {
+      this.playSingleWord = this.hideAudioBar = true;
+      this.words = params.listWord;
+      this.sliderOptions.initialSlide = params.wordIndex;
+      // this.singleTrack = new MediaPlugin(`${this.basePath}${this.words[params.wordIndex].audioFile}.mp3`);
+      // this.singleTrack.play();
+    } else {
+      this.words = this.audioService.listWordOrder.map(
+        wordIndex => this.audioService.listWord[wordIndex]
+      );
+      if (this.sliderService.currentSlide >= 0)
+        this.sliderOptions.initialSlide = this.sliderService.currentSlide - 1;
+    }
   }
 
   ionViewDidEnter() {
@@ -44,19 +56,15 @@ export class WordSlides {
   }
 
   ionViewWillEnter() {
-    this.course = this.courseService.currentCourse;
-    this.trackIndexSubscription = this.audioService.trackIndexSubject.subscribe(
-      trackIndex => this.vocabSlider.slideTo(trackIndex + 1)
-    );
-    this.currentCourseSubscription = this.courseService.currentCourseSubject.subscribe(
+    this.course = this.dbService.currentCourse;
+    this.currentCourseSubscription = this.dbService.currentCourseSubject.subscribe(
       course => this.course = course
     );
-
-    this.courseService.getAllPlaylists()
+    this.dbService.getAllPlaylists()
       .then(allPlaylists => {
         this.playlists = allPlaylists;
       });
-    this.playlistSubscription = this.courseService.playlistSubject.subscribe(
+    this.playlistSubscription = this.dbService.playlistSubject.subscribe(
       playlist => {
         this.playlists = this.playlists.map(item => {
           if (item._id == playlist._id) return playlist;
@@ -64,10 +72,16 @@ export class WordSlides {
         });
       }
     );
+
+    this.trackIndexSubscription = this.audioService.trackIndexSubject.subscribe(
+      trackIndex => this.vocabSlider.slideTo(trackIndex + 1)
+    );
   }
 
   ionViewWillLeave() {
     this.currentCourseSubscription.unsubscribe();
+    this.playlistSubscription.unsubscribe();
+    if (this.playSingleWord) return this.singleTrack.release();
     this.trackIndexSubscription.unsubscribe();
     this.audioService.pauseCurrentTrack();
   }
@@ -87,6 +101,16 @@ export class WordSlides {
   }
 
   onSlideChanged($event) {
+    if (this.playSingleWord) {
+      this.currentIndex = this.getWordIndex($event.activeIndex);
+      if (this.singleTrack) {
+        this.singleTrack.release();
+      }
+      this.singleTrack = new MediaPlugin(`${this.basePath}${this.words[this.currentIndex].audioFile}.mp3`);
+      this.singleTrack.play();
+      return;
+    }
+
     this.currentIndex = this.getWordIndex($event.activeIndex);
     if (this.sliderService.currentSlide < 0 && this.sliderService.firstTime)
       this.sliderService.currentSlide = $event.activeIndex;
@@ -104,7 +128,8 @@ export class WordSlides {
   }
 
   repeatCurrentVocabulary($event) {
-    this.audioService.repeatCurrentTrack();
+    if (this.playSingleWord) this.singleTrack.seekTo(0);
+    else this.audioService.repeatCurrentTrack();
     $event.stopPropagation();
   }
 
@@ -135,28 +160,14 @@ export class WordSlides {
             playlist.listWordNumber.splice(searchIndex, 1);
           }
         });
-        this.courseService.updateMultiplePlaylists(this.playlists);
+        this.dbService.updateMultiplePlaylists(this.playlists);
       }
     });
     this.navController.present(alert);
     $event.stopPropagation();
   }
 
-  toggleBookmark($event) {
-    let word = this.words[this.currentIndex];
-    word.starred = !word.starred;
-    this.course.units.forEach(unit => {
-      unit.words.forEach(item => {
-        if (item.number == word.number)
-          item.starred = word.starred;
-      });
-    });
-    this.courseService.updateCourse(this.course);
-    $event.stopPropagation();
-  }
-
   closeSlide() {
-    this.audioService.pauseCurrentTrack();
     this.navController.pop();
   }
 }

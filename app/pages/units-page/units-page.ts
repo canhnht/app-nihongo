@@ -6,7 +6,7 @@ import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
-import {CourseService} from '../../services/course.service';
+import {DbService} from '../../services/db.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {Subscription} from 'rxjs';
 
@@ -23,24 +23,23 @@ export class UnitsPage {
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
-    private courseService: CourseService) {
+    private dbService: DbService) {
     this.course = this.navParams.data.selectedCourse;
     this.units = [...this.course.units];
   }
 
   ionViewWillEnter() {
-    this.courseService.getCourse(this.course._id)
+    this.dbService.getCourse(this.course._id)
       .then(course => {
         this.course = course;
         this.units = [...this.course.units];
       });
-    this.currentCourseSubscription = this.courseService.currentCourseSubject.subscribe(
+    this.currentCourseSubscription = this.dbService.currentCourseSubject.subscribe(
       course => {
         this.course = course;
         this.units = [...this.course.units];
       }
     );
-    this.selectedUnits = [];
   }
 
   ionViewWillLeave() {
@@ -79,7 +78,7 @@ export class UnitsPage {
           }
           return false;
         });
-        this.courseService.updateCourse(this.course);
+        this.dbService.updateCourse(this.course);
         Toast.showLongTop(`${JSON.stringify(resp)}`).subscribe(() => {});
       })
       .catch(err => {
@@ -110,7 +109,7 @@ export class UnitsPage {
       }
       return false;
     });
-    this.courseService.updateCourse(this.course);
+    this.dbService.updateCourse(this.course);
     this.list.closeSlidingItems();
   }
 

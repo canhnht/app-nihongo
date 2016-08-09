@@ -6,7 +6,7 @@ import {LoginPage} from './pages/login-page/login-page';
 import {PlaylistsPage} from './pages/playlists-page/playlists-page';
 import {AudioService} from './services/audio.service';
 import {SliderService} from './services/slider.service';
-import {CourseService} from './services/course.service';
+import {DbService} from './services/db.service';
 import {WordSlides} from './pages/word-slides/word-slides';
 import {AuthService} from './services/auth.service';
 declare var require: any;
@@ -58,4 +58,4 @@ export class MyApp {
   }
 }
 
-ionicBootstrap(MyApp, [AudioService, SliderService, CourseService, AuthService]);
+ionicBootstrap(MyApp, [AudioService, SliderService, DbService, AuthService]);

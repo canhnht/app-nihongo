@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {NavController, Alert, ViewController} from 'ionic-angular';
-import {CourseService} from '../../services/course.service';
+import {DbService} from '../../services/db.service';
 import {Toast} from 'ionic-native';
 
 @Component({
@@ -11,7 +11,7 @@ export class PlaylistOptions {
   // selectedPlaylists: string[] = [];
 
   constructor(
-    private viewController: ViewController, private courseService: CourseService) {
+    private viewController: ViewController, private dbService: DbService) {
     // this.courseService.getAllPlaylists()
     //   .then(allPlaylists => {
     //     this.playlists = allPlaylists;

@@ -8,7 +8,7 @@ let PouchDB = require('pouchdb');
 PouchDB.plugin(require('pouchdb-load'));
 
 @Injectable()
-export class CourseService {
+export class DbService {
   db: any;
   listCourse: any[] = null;
   listCourseSubject: Subject<any[]> = new Subject<any[]>();

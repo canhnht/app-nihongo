@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Subject, Observable} from 'rxjs';
 import {MediaPlugin, Toast} from 'ionic-native';
-import {CourseService} from './course.service';
+import {DbService} from './db.service';
 
 @Injectable()
 export class AudioService {
@@ -20,7 +20,7 @@ export class AudioService {
   // basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/';
   basePath: string = 'file:///android_asset/www/audio/';
 
-  constructor(private courseService: CourseService) {
+  constructor(private dbService: DbService) {
     this.currentTrack.seekTime = '00:00';
     this.currentTrack.duration = '00:00';
   }
@@ -117,7 +117,7 @@ export class AudioService {
 
   playListUnit(listUnit) {
     this.playSingleWord = false;
-    let currentCourse = this.courseService.currentCourse;
+    let currentCourse = this.dbService.currentCourse;
     this.listWord = [];
     currentCourse.units.forEach(unit => {
       if (listUnit.indexOf(unit.number) >= 0) {
@@ -133,7 +133,7 @@ export class AudioService {
 
   playListWord(listWord) {
     this.playSingleWord = false;
-    let currentCourse = this.courseService.currentCourse;
+    let currentCourse = this.dbService.currentCourse;
     this.listWord = [];
     currentCourse.units.forEach(unit => {
       unit.words.forEach(word => {
@@ -160,7 +160,7 @@ export class AudioService {
   playWord(unitNumber, wordIndex) {
     this.playSingleWord = true;
     this.singleWordIndex = wordIndex;
-    let currentCourse = this.courseService.currentCourse;
+    let currentCourse = this.dbService.currentCourse;
     this.listWord = [];
     currentCourse.units.forEach(unit => {
       if (unit.number === unitNumber) {
