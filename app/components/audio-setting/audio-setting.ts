@@ -22,6 +22,8 @@ export class AudioSetting implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isDisable = this.settingService.status === SettingStatus.None;
+    this.isContinue = this.settingService.status === SettingStatus.Playing;
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
         this.isDisable = setting.status === SettingStatus.None;

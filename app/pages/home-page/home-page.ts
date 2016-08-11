@@ -5,6 +5,7 @@ import {NavController, Popover, Alert} from 'ionic-angular';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {UnitsPage} from '../units-page/units-page';
 import {DbService} from '../../services/db.service';
+import {SettingService} from '../../services/setting.service';
 
 @Component({
   templateUrl: 'build/pages/home-page/home-page.html',
@@ -13,11 +14,13 @@ export class HomePage {
   courses: any[];
   listCourseSubscription: Subscription;
 
-  constructor(private navController: NavController, private dbService: DbService) {
+  constructor(private navController: NavController, private dbService: DbService,
+    private settingService: SettingService) {
     this.courses = this.dbService.listCourse;
   }
 
   ionViewWillEnter() {
+    this.settingService.reset(true);
     this.listCourseSubscription = this.dbService.listCourseSubject.subscribe(
       listCourse => this.courses = listCourse);
   }

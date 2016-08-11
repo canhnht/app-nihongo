@@ -123,19 +123,7 @@ export class WordsPage {
     }
   }
 
-  playSelectedList() {
-    SpinnerDialog.show('Processing', 'Please wait a second', false);
-    this.audioService.playSetting();
-    this.sliderService.resetSlider();
-    this.navController.push(WordSlides);
-  }
-
-  continuePlaying() {
-    this.audioService.playCurrentTrack();
-    this.audioService.generateListWordOrder();
-    if (this.audioService.playSingleWord)
-      this.sliderService.currentSlide =
-        this.audioService.listWordOrder.indexOf(this.audioService.singleWordIndex) + 1;
+  goToWordSlides() {
     this.navController.push(WordSlides);
   }
 }

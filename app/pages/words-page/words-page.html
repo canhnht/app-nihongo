@@ -28,6 +28,5 @@
     </ion-item>
   </ion-list>
 </ion-content>
-<audio-setting [isReady]="selectedWords.length > 0"
-  (onReady)="audioService.isPlaying && selectedWords.length == 0 ? continuePlaying() : playSelectedList()">
+<audio-setting (onPageTransfer)="goToWordSlides()">
 </audio-setting>

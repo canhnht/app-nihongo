@@ -24,8 +24,8 @@ export class SettingService {
   constructor(private dbService: DbService) {
   }
 
-  reset() {
-    if (this.status === SettingStatus.Selecting) {
+  reset(force: boolean = false) {
+    if (this.status === SettingStatus.Selecting || force) {
       this.status = SettingStatus.None;
       this.selectedList = [];
       this.selectedType = SelectedType.None;
