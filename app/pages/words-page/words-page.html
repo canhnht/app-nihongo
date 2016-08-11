@@ -18,7 +18,7 @@
       (click)="selectWord(word)">
       <input type="checkbox" class="btn-select" item-left
         (click)="checkWord($event, word)"
-        [checked]="selectedWords.indexOf(word.number) >= 0" />
+        [checked]="selectedWords.indexOf(word._id) >= 0" />
       <ion-label>
         <h2>{{word.kanji}}</h2>
       </ion-label>

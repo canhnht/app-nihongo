@@ -6,6 +6,7 @@ import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
+import {SettingService, SelectedType} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 
 @Component({
@@ -15,56 +16,61 @@ import {WordSlides} from '../word-slides/word-slides';
 export class PlaylistDetail {
   playlist: any;
   words: any[] = [];
-  selectedWords: number[] = [];
-  currentCourseSubscription: Subscription;
-  playlistSubscription: Subscription;
+  selectedWords: any[] = [];
+  settingSubscription: Subscription;
   playlists: any[];
 
   constructor(private navController: NavController, private navParams: NavParams,
-    private audioService: AudioService, private sliderService: SliderService) {
+    private audioService: AudioService, private sliderService: SliderService,
+    private settingService: SettingService) {
     this.playlist = this.navParams.data.selectedPlaylist;
-    this.words = this.playlist.listWord;
+    this.words = this.playlist.words;
   }
 
   ionViewWillEnter() {
-    this.selectedWords = [];
+    if (this.settingService.selectedType === SelectedType.WordInPlaylist)
+      this.selectedWords = this.settingService.selectedList;
+    else this.selectedWords = [];
+    this.settingSubscription = this.settingService.settingSubject.subscribe(
+      setting => {
+        if (setting.selectedType === SelectedType.WordInPlaylist)
+          this.selectedWords = setting.selectedList;
+      }
+    );
+  }
+
+  ionViewWillLeave() {
+    this.settingSubscription.unsubscribe();
   }
 
   selectWord(word) {
-    let wordIndex = this.words.findIndex(item => item.number == word.number);
-    this.audioService.playWordInPlaylist(this.playlist.listWord, wordIndex);
-    this.sliderService.resetSlider();
-    this.sliderService.currentSlide =
-      this.audioService.listWordOrder.indexOf(wordIndex) + 1;
-    this.navController.push(WordSlides, { hideBookmark: true });
+    SpinnerDialog.show('Processing', 'Please wait a second', false);
+    let wordIndex = this.words.findIndex(item => item._id === word._id);
+    this.navController.push(WordSlides, {
+      hideBookmark: true,
+      playSingleWord: true,
+      listWord: this.playlist.words,
+      wordIndex: wordIndex
+    });
   }
 
   checkWord($event, word) {
-    let index: number = this.selectedWords.indexOf(word.number);
-    if (index >= 0)
-      this.selectedWords.splice(index, 1);
-    else
-      this.selectedWords.push(word.number);
     $event.stopPropagation();
+    this.settingService.addWordInPlaylist(word);
   }
 
   toggleSelectAll() {
     if (this.selectedWords.length == this.words.length) {
-      this.selectedWords = [];
+      this.settingService.selectWordsInPlaylist([]);
     } else {
-      this.selectedWords = [];
-      this.words.forEach(word => {
-        this.selectedWords.push(word.number);
-      });
+      this.settingService.selectWordsInPlaylist(this.words);
     }
   }
 
   playSelectedList() {
     SpinnerDialog.show('Processing', 'Please wait a second', false);
-    this.audioService.playListWordInPlaylist(this.playlist.listWord, this.selectedWords);
+    this.audioService.playSetting();
     this.sliderService.resetSlider();
-    this.sliderService.currentSlide = 1;
-    this.selectedWords = [];
     this.navController.push(WordSlides, { hideBookmark: true });
   }
 

@@ -18,9 +18,7 @@ export class WordSlides {
     loop: true,
   };
   words: any[] = [];
-  course: any;
   currentIndex: number = 0;
-  currentCourseSubscription: Subscription;
   trackIndexSubscription: Subscription;
   playlistSubscription: Subscription;
   playlists: any[];
@@ -40,8 +38,6 @@ export class WordSlides {
       this.playSingleWord = this.hideAudioBar = true;
       this.words = params.listWord;
       this.sliderOptions.initialSlide = params.wordIndex;
-      // this.singleTrack = new MediaPlugin(`${this.basePath}${this.words[params.wordIndex].audioFile}.mp3`);
-      // this.singleTrack.play();
     } else {
       this.words = this.audioService.listWordOrder.map(
         wordIndex => this.audioService.listWord[wordIndex]
@@ -56,10 +52,6 @@ export class WordSlides {
   }
 
   ionViewWillEnter() {
-    this.course = this.dbService.currentCourse;
-    this.currentCourseSubscription = this.dbService.currentCourseSubject.subscribe(
-      course => this.course = course
-    );
     this.dbService.getAllPlaylists()
       .then(allPlaylists => {
         this.playlists = allPlaylists;
@@ -79,7 +71,6 @@ export class WordSlides {
   }
 
   ionViewWillLeave() {
-    this.currentCourseSubscription.unsubscribe();
     this.playlistSubscription.unsubscribe();
     if (this.playSingleWord) return this.singleTrack.release();
     this.trackIndexSubscription.unsubscribe();
@@ -108,32 +99,32 @@ export class WordSlides {
       }
       this.singleTrack = new MediaPlugin(`${this.basePath}${this.words[this.currentIndex].audioFile}.mp3`);
       this.singleTrack.play();
-      return;
-    }
-
-    this.currentIndex = this.getWordIndex($event.activeIndex);
-    if (this.sliderService.currentSlide < 0 && this.sliderService.firstTime)
+    } else {
+      this.currentIndex = this.getWordIndex($event.activeIndex);
+      if (this.sliderService.currentSlide < 0 && this.sliderService.firstTime)
+        this.sliderService.currentSlide = $event.activeIndex;
+      if (this.sliderService.firstTime) return this.sliderService.firstTime = false;
       this.sliderService.currentSlide = $event.activeIndex;
-    if (this.sliderService.firstTime) return this.sliderService.firstTime = false;
-    this.sliderService.currentSlide = $event.activeIndex;
-    let wordIndex: number = -1;
-    let activeIndex = $event.activeIndex;
-    if (activeIndex == 0 || activeIndex == this.words.length)
-      wordIndex = this.words.length - 1;
-    else if (activeIndex == 1 || activeIndex == this.words.length + 1)
-      wordIndex = 0;
-    else
-      wordIndex = activeIndex - 1;
-    this.audioService.seekToWord(wordIndex);
+      let wordIndex: number = -1;
+      let activeIndex = $event.activeIndex;
+      if (activeIndex == 0 || activeIndex == this.words.length)
+        wordIndex = this.words.length - 1;
+      else if (activeIndex == 1 || activeIndex == this.words.length + 1)
+        wordIndex = 0;
+      else
+        wordIndex = activeIndex - 1;
+      this.audioService.seekToWord(wordIndex);
+    }
   }
 
   repeatCurrentVocabulary($event) {
+    $event.stopPropagation();
     if (this.playSingleWord) this.singleTrack.seekTo(0);
     else this.audioService.repeatCurrentTrack();
-    $event.stopPropagation();
   }
 
   addToPlaylist($event) {
+    $event.stopPropagation();
     let word = this.words[this.currentIndex];
     let alert = Alert.create();
     alert.setTitle('Add word to');
@@ -142,7 +133,7 @@ export class WordSlides {
         type: 'checkbox',
         label: playlist.name,
         value: index + '',
-        checked: playlist.listWordNumber.indexOf(word.number) >= 0
+        checked: playlist.words.findIndex(e => e._id === word._id) >= 0
       });
     });
     alert.addButton('Cancel');
@@ -151,20 +142,19 @@ export class WordSlides {
       handler: data => {
         data = data.map(e => parseInt(e));
         data.forEach(index => {
-          if (this.playlists[index].listWordNumber.indexOf(word.number) == -1)
-            this.playlists[index].listWordNumber.push(word.number);
+          if (this.playlists[index].words.findIndex(e => e._id === word._id) === -1)
+            this.playlists[index].words.push(word);
         });
         this.playlists.forEach((playlist, index) => {
-          let searchIndex = playlist.listWordNumber.indexOf(word.number);
+          let searchIndex = playlist.words.findIndex(e => e._id === word._id);
           if (searchIndex >= 0 && data.indexOf(index) == -1) {
-            playlist.listWordNumber.splice(searchIndex, 1);
+            playlist.words.splice(searchIndex, 1);
           }
         });
         this.dbService.updateMultiplePlaylists(this.playlists);
       }
     });
     this.navController.present(alert);
-    $event.stopPropagation();
   }
 
   closeSlide() {

@@ -13,6 +13,7 @@ export class SliderService {
 
   resetSlider() {
     this.firstTime = true;
+    this.currentSlide = 1;
   }
 }
 

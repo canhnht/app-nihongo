@@ -3,6 +3,7 @@ import {Http} from '@angular/http';
 import {Subject, Observable} from 'rxjs';
 import {MediaPlugin, Toast} from 'ionic-native';
 import {DbService} from './db.service';
+import {SettingService} from './setting.service';
 
 @Injectable()
 export class AudioService {
@@ -20,7 +21,7 @@ export class AudioService {
   // basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/';
   basePath: string = 'file:///android_asset/www/audio/';
 
-  constructor(private dbService: DbService) {
+  constructor(private dbService: DbService, private settingService: SettingService) {
     this.currentTrack.seekTime = '00:00';
     this.currentTrack.duration = '00:00';
   }
@@ -76,71 +77,8 @@ export class AudioService {
     }
   }
 
-  playPlaylists(listWord) {
-    this.playSingleWord = false;
-    this.listWord = listWord;
-    this.getListWordOrder();
-    this.stopListTrack();
-    this.generateListTrack();
-    this.currentTrack.index = 0;
-    this.playCurrentTrack();
-  }
-
-  playWordInPlaylist(listWord, wordIndex) {
-    this.playSingleWord = true;
-    this.singleWordIndex = wordIndex;
-    this.listWord = listWord;
-    this.getListWordOrder();
-    this.stopListTrack();
-    this.listTrack = [
-      new MediaPlugin(`${this.basePath}${this.listWord[wordIndex].audioFile}.mp3`)
-    ];
-    this.listTrack[0].play();
-    this.listTrack[0].pause();
-    this.currentTrack.index = 0;
-    this.playCurrentTrack();
-  }
-
-  playListWordInPlaylist(listWord, listWordNumber) {
-    this.playSingleWord = false;
-    this.listWord = [];
-    listWord.forEach(word => {
-      if (listWordNumber.indexOf(word.number) >= 0)
-        this.listWord.push(word);
-    });
-    this.getListWordOrder();
-    this.stopListTrack();
-    this.generateListTrack();
-    this.currentTrack.index = 0;
-    this.playCurrentTrack();
-  }
-
-  playListUnit(listUnit) {
-    this.playSingleWord = false;
-    let currentCourse = this.dbService.currentCourse;
-    this.listWord = [];
-    currentCourse.units.forEach(unit => {
-      if (listUnit.indexOf(unit.number) >= 0) {
-        this.listWord = this.listWord.concat(unit.words);
-      }
-    });
-    this.getListWordOrder();
-    this.stopListTrack();
-    this.generateListTrack();
-    this.currentTrack.index = 0;
-    this.playCurrentTrack();
-  }
-
-  playListWord(listWord) {
-    this.playSingleWord = false;
-    let currentCourse = this.dbService.currentCourse;
-    this.listWord = [];
-    currentCourse.units.forEach(unit => {
-      unit.words.forEach(word => {
-        if (listWord.indexOf(word.number) >= 0)
-          this.listWord.push(word);
-      });
-    });
+  playSetting() {
+    this.listWord = this.settingService.selectedWords;
     this.getListWordOrder();
     this.stopListTrack();
     this.generateListTrack();
@@ -155,26 +93,6 @@ export class AudioService {
       let word = this.listWord[wordIndex];
       this.listTrack.push(new MediaPlugin(`${this.basePath}${word.audioFile}.mp3`));
     });
-  }
-
-  playWord(unitNumber, wordIndex) {
-    this.playSingleWord = true;
-    this.singleWordIndex = wordIndex;
-    let currentCourse = this.dbService.currentCourse;
-    this.listWord = [];
-    currentCourse.units.forEach(unit => {
-      if (unit.number === unitNumber) {
-        this.listWord = unit.words;
-      }
-    });
-    this.getListWordOrder();
-    this.stopListTrack();
-    this.listTrack = [
-      new MediaPlugin(`${this.basePath}${this.listWord[wordIndex].audioFile}.mp3`)
-    ];
-    this.currentTrack.index = 0;
-    this.currentTrack.seekTime = '00:00';
-    this.playCurrentTrack();
   }
 
   playCurrentTrack() {
@@ -241,7 +159,6 @@ export class AudioService {
       this.currentTrack.duration = this.convertText(Math.max(duration, 0));
       let playedDuration = this.getPlayedDurationUntil(this.currentTrack.index);
       track.getCurrentPosition().then(position => {
-        Toast.showShortTop(`getCurrentPosition ${position}`).subscribe(() => {});
         if (position >= 0) {
           playing = true;
           position += playedDuration;

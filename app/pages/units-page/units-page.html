@@ -10,13 +10,6 @@
   </ion-buttons>
 </ion-navbar>
 
-<!--<div class="cover" padding>
-  <img [src]="course.imageUrl" class="course-icon" />
-  <div class="course-info">
-    <h1 class="course-title">{{course.courseName}}</h1>
-    <p class="no-units">{{units.length}} unit{{units.length > 1 ? 's' : ''}}</p>
-  </div>
-</div>-->
 <div class="select-all" padding>
   <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
     [checked]="selectedUnits.length == units.length" />
@@ -29,7 +22,7 @@
     <ion-item-sliding *virtualItem="let unit">
       <ion-item button-primary text-wrap (click)="goToUnit(unit)">
         <input class="btn-select" type="checkbox" item-left (click)="checkUnit($event, unit)"
-          [checked]="selectedUnits.indexOf(unit.number) >= 0" />
+          [checked]="selectedUnits.indexOf(unit._id) >= 0" />
         <ion-badge class="unit-icon" item-left>U{{unit.number}}</ion-badge>
         <ion-label>
           <h2>{{unit.unitName}}</h2>

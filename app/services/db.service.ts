@@ -86,7 +86,7 @@ export class DbService {
           this.currentCourse = course;
           return course;
         })
-        .catch(utils.errorHandler('Error get course by id'));
+        .catch(utils.errorHandler(`Error get course by id ${courseId}`));
     } else {
       return Promise.resolve(this.currentCourse);
     }
@@ -129,8 +129,8 @@ export class DbService {
   }
 
   updatePlaylist(playlist) {
-    this.db.put(playlist)
-      .then(resp => {})
-      .catch(utils.errorHandler('Error update playlist'));
+    this.db.put(playlist).then(resp => {}).catch(
+      utils.errorHandler('Error update playlist')
+    );
   }
 }

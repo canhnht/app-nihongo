@@ -6,6 +6,7 @@ import {Subscription} from 'rxjs';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
+import {SettingService, SelectedType} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistDetail} from '../playlist-detail/playlist-detail';
 
@@ -16,34 +17,15 @@ import {PlaylistDetail} from '../playlist-detail/playlist-detail';
 export class PlaylistsPage {
   playlists: any[] = [];
   playlistSubscription: Subscription;
-  selectedPlaylists: string[] = [];
+  settingSubscription: Subscription;
+  selectedPlaylists: any[] = [];
 
   constructor(private navController: NavController, private dbService: DbService,
-    private audioService: AudioService, private sliderService: SliderService) {
-    this.dbService.getAllPlaylists()
-      .then(allPlaylists => {
-        this.playlists = allPlaylists;
-        return this.dbService.getListCourse()
-      })
-      .then(listCourse => {
-        this.playlists.forEach(playlist => {
-          playlist.listWord = playlist.listWordNumber.map(wordNumber => {
-            let searchWord = {};
-            listCourse.forEach(course => {
-              course.units.forEach(unit => {
-                unit.words.some(word => {
-                  if (word.number == wordNumber) {
-                    searchWord = word;
-                    return true;
-                  }
-                  return false;
-                });
-              });
-            });
-            return searchWord;
-          });
-        });
-      });
+    private audioService: AudioService, private sliderService: SliderService,
+    private settingService: SettingService) {
+    this.dbService.getAllPlaylists().then(
+      allPlaylists => this.playlists = allPlaylists
+    );
   }
 
   ionViewWillEnter() {
@@ -53,11 +35,22 @@ export class PlaylistsPage {
         if (searchIndex == -1) this.playlists.push(playlist);
         else this.playlists[searchIndex] = playlist;
       }
-    )
+    );
+
+    if (this.settingService.selectedType === SelectedType.Playlist)
+      this.selectedPlaylists = this.settingService.selectedList;
+    else this.selectedPlaylists = [];
+    this.settingSubscription = this.settingService.settingSubject.subscribe(
+      setting => {
+        if (setting.selectedType === SelectedType.Playlist)
+          this.selectedPlaylists = setting.selectedList;
+      }
+    );
   }
 
   ionViewWillLeave() {
     this.playlistSubscription.unsubscribe();
+    this.settingSubscription.unsubscribe();
   }
 
   goToPlaylistDetail(playlist) {
@@ -65,31 +58,21 @@ export class PlaylistsPage {
   }
 
   checkPlaylist($event, playlist) {
-    let index: number = this.selectedPlaylists.indexOf(playlist._id);
-    if (index >= 0)
-      this.selectedPlaylists.splice(index, 1);
-    else
-      this.selectedPlaylists.push(playlist._id);
     $event.stopPropagation();
+    this.settingService.addPlaylist(playlist);
   }
 
   toggleSelectAll() {
     if (this.selectedPlaylists.length == this.playlists.length) {
-      this.selectedPlaylists = [];
+      this.settingService.selectPlaylists([]);
     } else {
-      this.selectedPlaylists = [];
-      this.playlists.forEach(playlist => {
-        this.selectedPlaylists.push(playlist._id);
-      });
+      this.settingService.selectPlaylists(this.playlists);
     }
   }
 
   playSelectedList() {
     SpinnerDialog.show('Processing', 'Please wait a second', false);
-    let listWord = this.selectedPlaylists.map(
-      e => this.playlists.find(item => item._id == e).listWord
-    ).reduce((ar, e) => ar.concat(e), []);
-    this.audioService.playPlaylists(listWord);
+    this.audioService.playSetting();
     this.sliderService.resetSlider();
     this.sliderService.currentSlide = 1;
     this.selectedPlaylists = [];
@@ -126,10 +109,12 @@ export class PlaylistsPage {
               Toast.showShortCenter('Playlist name already exists! Please choose another name')
                 .subscribe(() => {});
             else {
+              let lastId = parseInt(this.playlists[this.playlists.length - 1]._id.substring(8));
+              Toast.showLongTop(`lastId ${lastId}`).subscribe(() => {});
               let newPlaylist = {
-                _id: `playlist${this.playlists.length + 1}`,
+                _id: `playlist${lastId + 1}`,
                 name: data.title,
-                listWordNumber: []
+                words: []
               };
               this.dbService.addPlaylist(newPlaylist);
             }
@@ -168,9 +153,7 @@ export class PlaylistsPage {
                 .subscribe(() => {});
             else {
               playlist.name = data.title;
-              let newPlaylist = Object.assign({}, playlist);
-              delete newPlaylist.listWord;
-              this.dbService.updatePlaylist(newPlaylist);
+              this.dbService.updatePlaylist(playlist);
             }
           }
         }

@@ -9,6 +9,7 @@ import {SliderService} from './services/slider.service';
 import {DbService} from './services/db.service';
 import {WordSlides} from './pages/word-slides/word-slides';
 import {AuthService} from './services/auth.service';
+import {SettingService} from './services/setting.service';
 declare var require: any;
 let firebase = require('firebase');
 
@@ -58,4 +59,10 @@ export class MyApp {
   }
 }
 
-ionicBootstrap(MyApp, [AudioService, SliderService, DbService, AuthService]);
+ionicBootstrap(MyApp, [
+  AudioService,
+  SliderService,
+  DbService,
+  AuthService,
+  SettingService
+]);

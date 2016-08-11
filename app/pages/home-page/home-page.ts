@@ -10,13 +10,11 @@ import {DbService} from '../../services/db.service';
   templateUrl: 'build/pages/home-page/home-page.html',
 })
 export class HomePage {
-  courses: Object[];
+  courses: any[];
   listCourseSubscription: Subscription;
 
   constructor(private navController: NavController, private dbService: DbService) {
     this.courses = this.dbService.listCourse;
-    this.dbService.listCourseSubject.subscribe(
-      listCourse => this.courses = listCourse);
   }
 
   ionViewWillEnter() {
@@ -29,7 +27,7 @@ export class HomePage {
   }
 
   goToCourse($event, course) {
-    this.navController.push(UnitsPage, {selectedCourse: course});
+    this.navController.push(UnitsPage, {selectedCourseId: course._id});
     $event.stopPropagation();
   }
 

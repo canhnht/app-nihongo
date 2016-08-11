@@ -7,6 +7,7 @@ import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {DbService} from '../../services/db.service';
+import {SettingService, SelectedType} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 
@@ -15,36 +16,23 @@ import {PlaylistOptions} from '../../components/playlist-options/playlist-option
   directives: [AudioSetting],
 })
 export class WordsPage {
-  unit: any;
-  course: any;
+  unit: any = {};
+  course: any = {};
   words: any[] = [];
-  selectedWords: number[] = [];
-  currentCourseSubscription: Subscription;
+  selectedWords: any[] = [];
   playlistSubscription: Subscription;
+  settingSubscription: Subscription;
   playlists: any[];
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
-    private dbService: DbService) {
-    this.unit = this.navParams.data.selectedUnit;
-    this.course = this.dbService.currentCourse;
-    let unitIndex = this.course.units.findIndex(unit => unit.number === this.unit.number);
-    this.words = this.course.units[unitIndex].words;
-  }
-
-  ionViewWillLeave() {
-    this.currentCourseSubscription.unsubscribe();
-    this.playlistSubscription.unsubscribe();
+    private dbService: DbService, private settingService: SettingService) {
   }
 
   ionViewWillEnter() {
+    this.unit = this.navParams.data.selectedUnit;
     this.course = this.dbService.currentCourse;
-    let unitIndex = this.course.units.findIndex(unit => unit.number === this.unit.number);
-    this.words = this.course.units[unitIndex].words;
-    this.currentCourseSubscription = this.dbService.currentCourseSubject.subscribe(
-      course => this.course = course
-    );
-    this.selectedWords = [];
+    this.words = [...this.unit.words];
 
     this.dbService.getAllPlaylists()
       .then(allPlaylists => {
@@ -53,16 +41,31 @@ export class WordsPage {
     this.playlistSubscription = this.dbService.playlistSubject.subscribe(
       playlist => {
         this.playlists = this.playlists.map(item => {
-          if (item._id == playlist._id) return playlist;
+          if (item._id === playlist._id) return playlist;
           else return item;
         });
       }
     );
+
+    if (this.settingService.selectedType === SelectedType.WordInUnit)
+      this.selectedWords = this.settingService.selectedList;
+    else this.selectedWords = [];
+    this.settingSubscription = this.settingService.settingSubject.subscribe(
+      setting => {
+        if (setting.selectedType === SelectedType.WordInUnit)
+          this.selectedWords = setting.selectedList;
+      }
+    );
+  }
+
+  ionViewWillLeave() {
+    this.playlistSubscription.unsubscribe();
+    this.settingSubscription.unsubscribe();
   }
 
   selectWord(word) {
     SpinnerDialog.show('Processing', 'Please wait a second', false);
-    let wordIndex = this.words.findIndex(item => item.number == word.number);
+    let wordIndex = this.words.findIndex(item => item._id === word._id);
     this.navController.push(WordSlides, {
       playSingleWord: true,
       listWord: this.unit.words,
@@ -71,15 +74,12 @@ export class WordsPage {
   }
 
   checkWord($event, word) {
-    let index: number = this.selectedWords.indexOf(word.number);
-    if (index >= 0)
-      this.selectedWords.splice(index, 1);
-    else
-      this.selectedWords.push(word.number);
     $event.stopPropagation();
+    this.settingService.addWordInUnit(word);
   }
 
   addToPlaylist($event, word) {
+    $event.stopPropagation();
     let alert = Alert.create();
     alert.setTitle('Add word to');
     this.playlists.forEach((playlist, index) => {
@@ -87,7 +87,7 @@ export class WordsPage {
         type: 'checkbox',
         label: playlist.name,
         value: index + '',
-        checked: playlist.listWordNumber.indexOf(word.number) >= 0
+        checked: playlist.words.findIndex(e => e._id === word._id) >= 0
       });
     });
     alert.addButton('Cancel');
@@ -96,13 +96,13 @@ export class WordsPage {
       handler: data => {
         data = data.map(e => parseInt(e));
         data.forEach(index => {
-          if (this.playlists[index].listWordNumber.indexOf(word.number) == -1)
-            this.playlists[index].listWordNumber.push(word.number);
+          if (this.playlists[index].words.findIndex(e => e._id === word._id) === -1)
+            this.playlists[index].words.push(word);
         });
         this.playlists.forEach((playlist, index) => {
-          let searchIndex = playlist.listWordNumber.indexOf(word.number);
-          if (searchIndex >= 0 && data.indexOf(index) == -1) {
-            playlist.listWordNumber.splice(searchIndex, 1);
+          let searchIndex = playlist.words.findIndex(e => e._id === word._id);
+          if (searchIndex >= 0 && data.indexOf(index) === -1) {
+            playlist.words.splice(searchIndex, 1);
           }
         });
         this.dbService.updateMultiplePlaylists(this.playlists);
@@ -111,38 +111,20 @@ export class WordsPage {
     this.navController.present(alert);
     // let modal = Modal.create(PlaylistOptions);
     // this.navController.present(modal);
-    $event.stopPropagation();
-  }
-
-  toggleBookmark($event, word) {
-    word.starred = !word.starred;
-    this.course.units.forEach(unit => {
-      unit.words.forEach(item => {
-        if (item.number == word.number)
-          item.starred = word.starred;
-      });
-    });
-    this.dbService.updateCourse(this.course);
-    $event.stopPropagation();
   }
 
   toggleSelectAll() {
     if (this.selectedWords.length == this.words.length) {
-      this.selectedWords = [];
+      this.settingService.selectWordsInUnit([]);
     } else {
-      this.selectedWords = [];
-      this.words.forEach(word => {
-        this.selectedWords.push(word.number);
-      });
+      this.settingService.selectWordsInUnit(this.words);
     }
   }
 
   playSelectedList() {
     SpinnerDialog.show('Processing', 'Please wait a second', false);
-    this.audioService.playListWord(this.selectedWords);
+    this.audioService.playSetting();
     this.sliderService.resetSlider();
-    this.sliderService.currentSlide = 1;
-    this.selectedWords = [];
     this.navController.push(WordSlides);
   }
 
