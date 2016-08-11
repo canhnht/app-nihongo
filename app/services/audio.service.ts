@@ -16,7 +16,6 @@ export class AudioService {
   isPlaying: boolean = false;
   isLoop: boolean = false;
   isShuffle: boolean = false;
-  playSingleWord: boolean = false;
   singleWordIndex: number;
   // basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/';
   basePath: string = 'file:///android_asset/www/audio/';
@@ -104,11 +103,8 @@ export class AudioService {
 
   goToNextTrack() {
     this.pauseCurrentTrack();
-    this.listTrack[this.currentTrack.index].seekTo(0);
-    if (this.playSingleWord) {
-      if (this.isLoop) this.playCurrentTrack();
-      return;
-    }
+    this.listTrack[this.currentTrack.index].release();
+    // this.listTrack[this.currentTrack.index].seekTo(0);
     this.currentTrack.index += 1;
     if (this.currentTrack.index == this.listTrack.length) {
       this.currentTrack.playedPercent = 100;
@@ -129,8 +125,6 @@ export class AudioService {
   }
 
   private getTotalDuration() {
-    if (this.playSingleWord)
-      return this.listTrack[0].getDuration();
     let totalDuration = this.listWordOrder.reduce((sum, wordIndex) => {
       return sum + this.listWord[wordIndex].audioDuration;
     }, 0);
@@ -138,7 +132,6 @@ export class AudioService {
   }
 
   private getPlayedDurationUntil(trackIndex) {
-    if (this.playSingleWord) return 0;
     let playedDuration = 0;
     this.listWordOrder.forEach((wordIndex, index) => {
       if (index < trackIndex) {
@@ -152,7 +145,6 @@ export class AudioService {
     let duration = this.getTotalDuration();
     let playing = false;
     this.intervalGetCurrentPosition = setInterval(() => {
-      if (this.playSingleWord) duration = this.getTotalDuration();
       let track: MediaPlugin = this.listTrack[this.currentTrack.index];
       this.currentTrack.durationInSeconds = duration;
       this.currentTrack.duration = this.convertText(Math.max(duration, 0));
@@ -200,28 +192,27 @@ export class AudioService {
 
   seekPercent(percent) {
     this.currentTrack.playedPercent = percent;
-    if (this.listTrack) {
-      let seconds = Math.max(this.getTotalDuration(), 0);
-      seconds = seconds * percent / 100;
-      let nextIndex: number = this.getNextTrackIndex(seconds);
-      if (nextIndex != this.currentTrack.index) {
-        this.trackIndexSubject.next(nextIndex);
-        let continuePlaying = this.currentTrack.isPlaying;
-        this.pauseCurrentTrack();
-        this.listTrack[this.currentTrack.index].seekTo(0);
-        this.currentTrack.index = nextIndex;
-        let track: MediaPlugin = this.listTrack[this.currentTrack.index];
-        if (continuePlaying)
-          this.playCurrentTrack();
-        this.currentTrack.seekTime = this.convertText(seconds);
-        seconds -= this.getPlayedDurationUntil(this.currentTrack.index);
-        track.seekTo(Math.round(seconds * 1000));
-      } else {
-        this.currentTrack.seekTime = this.convertText(seconds);
-        let track: MediaPlugin = this.listTrack[this.currentTrack.index];
-        seconds -= this.getPlayedDurationUntil(this.currentTrack.index);
-        track.seekTo(Math.round(seconds * 1000));
-      }
+    let seconds = Math.max(this.getTotalDuration(), 0);
+    seconds = seconds * percent / 100;
+    let nextIndex: number = this.getNextTrackIndex(seconds);
+    if (nextIndex != this.currentTrack.index) {
+      this.trackIndexSubject.next(nextIndex);
+      let continuePlaying = this.currentTrack.isPlaying;
+      this.pauseCurrentTrack();
+      this.listTrack[this.currentTrack.index].release();
+      // this.listTrack[this.currentTrack.index].seekTo(0);
+      this.currentTrack.index = nextIndex;
+      let track: MediaPlugin = this.listTrack[this.currentTrack.index];
+      if (continuePlaying)
+        this.playCurrentTrack();
+      this.currentTrack.seekTime = this.convertText(seconds);
+      seconds -= this.getPlayedDurationUntil(this.currentTrack.index);
+      track.seekTo(Math.round(seconds * 1000));
+    } else {
+      this.currentTrack.seekTime = this.convertText(seconds);
+      let track: MediaPlugin = this.listTrack[this.currentTrack.index];
+      seconds -= this.getPlayedDurationUntil(this.currentTrack.index);
+      track.seekTo(Math.round(seconds * 1000));
     }
   }
 
@@ -235,20 +226,6 @@ export class AudioService {
   }
 
   seekToWord(index) {
-    if (this.playSingleWord) {
-      let wordIndex = this.listWordOrder[index];
-      if (this.singleWordIndex !== wordIndex) {
-        this.singleWordIndex = wordIndex;
-        this.pauseCurrentTrack();
-        this.listTrack[0].release();
-        this.listTrack[0] = new MediaPlugin(`${this.basePath}${this.listWord[wordIndex].audioFile}.mp3`);
-        this.currentTrack.index = 0;
-        this.currentTrack.seekTime = '00:00';
-        this.currentTrack.playedPercent = 0;
-        this.playCurrentTrack();
-      }
-      return;
-    }
     let nextIndex = index;
     let duration = this.getTotalDuration();
     let position = this.getPlayedDurationUntil(nextIndex);
@@ -276,56 +253,36 @@ export class AudioService {
 
   generateListWordOrder() {
     if (this.isShuffle) {
-      if (this.playSingleWord) {
-        let index = this.listWordOrder.indexOf(this.singleWordIndex);
-        for (let i = index - 1; i >= 0; --i) {
-          let k = Math.floor(Math.random() * (i + 1));
-          let temp = this.listWordOrder[i];
-          this.listWordOrder[i] = this.listWordOrder[k];
-          this.listWordOrder[k] = temp;
-        }
-        for (let i = this.listWordOrder.length - 1; i > index; --i) {
-          let k = index + 1 + Math.floor(Math.random() * (i - index));
-          let temp = this.listWordOrder[i];
-          this.listWordOrder[i] = this.listWordOrder[k];
-          this.listWordOrder[k] = temp;
-        }
-      } else {
-        let index = this.currentTrack.index;
-        for (let i = index - 1; i >= 0; --i) {
-          let k = Math.floor(Math.random() * (i + 1));
-          let temp = this.listWordOrder[i];
-          this.listWordOrder[i] = this.listWordOrder[k];
-          this.listWordOrder[k] = temp;
+      let index = this.currentTrack.index;
+      for (let i = index - 1; i >= 0; --i) {
+        let k = Math.floor(Math.random() * (i + 1));
+        let temp = this.listWordOrder[i];
+        this.listWordOrder[i] = this.listWordOrder[k];
+        this.listWordOrder[k] = temp;
 
-          let tempTrack = this.listTrack[i];
-          this.listTrack[i] = this.listTrack[k];
-          this.listTrack[k] = tempTrack;
-        }
-        for (let i = this.listWordOrder.length - 1; i > index; --i) {
-          let k = index + 1 + Math.floor(Math.random() * (i - index));
-          let temp = this.listWordOrder[i];
-          this.listWordOrder[i] = this.listWordOrder[k];
-          this.listWordOrder[k] = temp;
+        let tempTrack = this.listTrack[i];
+        this.listTrack[i] = this.listTrack[k];
+        this.listTrack[k] = tempTrack;
+      }
+      for (let i = this.listWordOrder.length - 1; i > index; --i) {
+        let k = index + 1 + Math.floor(Math.random() * (i - index));
+        let temp = this.listWordOrder[i];
+        this.listWordOrder[i] = this.listWordOrder[k];
+        this.listWordOrder[k] = temp;
 
-          let tempTrack = this.listTrack[i];
-          this.listTrack[i] = this.listTrack[k];
-          this.listTrack[k] = tempTrack;
-        }
+        let tempTrack = this.listTrack[i];
+        this.listTrack[i] = this.listTrack[k];
+        this.listTrack[k] = tempTrack;
       }
     } else {
-      if (this.playSingleWord) {
-        this.listWordOrder = this.listWord.map((word, index) => index);
-      } else {
-        let wordIndex = this.listWordOrder[this.currentTrack.index];
-        let tempListTrack = new Array<any>(this.listTrack.length);
-        this.listTrack.forEach((track, index) => {
-          tempListTrack[this.listWordOrder[index]] = track;
-        });
-        this.listWordOrder = this.listWord.map((word, index) => index);
-        this.listTrack = tempListTrack;
-        this.currentTrack.index = wordIndex;
-      }
+      let wordIndex = this.listWordOrder[this.currentTrack.index];
+      let tempListTrack = new Array<any>(this.listTrack.length);
+      this.listTrack.forEach((track, index) => {
+        tempListTrack[this.listWordOrder[index]] = track;
+      });
+      this.listWordOrder = this.listWord.map((word, index) => index);
+      this.listTrack = tempListTrack;
+      this.currentTrack.index = wordIndex;
     }
   }
 }
