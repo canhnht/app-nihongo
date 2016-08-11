@@ -6,7 +6,7 @@ import {Subscription} from 'rxjs';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
-import {SettingService, SelectedType} from '../../services/setting.service';
+import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistDetail} from '../playlist-detail/playlist-detail';
 
@@ -37,9 +37,9 @@ export class PlaylistsPage {
       }
     );
 
-    if (this.settingService.selectedType === SelectedType.Playlist)
+    if (this.settingService.selectedType === SelectedType.Playlist
+      && this.settingService.status === SettingStatus.Playing)
       this.selectedPlaylists = this.settingService.selectedList;
-    else this.selectedPlaylists = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
         if (setting.selectedType === SelectedType.Playlist)
@@ -51,6 +51,8 @@ export class PlaylistsPage {
   ionViewWillLeave() {
     this.playlistSubscription.unsubscribe();
     this.settingSubscription.unsubscribe();
+    this.selectedPlaylists = [];
+    this.settingService.reset();
   }
 
   goToPlaylistDetail(playlist) {
@@ -110,7 +112,6 @@ export class PlaylistsPage {
                 .subscribe(() => {});
             else {
               let lastId = parseInt(this.playlists[this.playlists.length - 1]._id.substring(8));
-              Toast.showLongTop(`lastId ${lastId}`).subscribe(() => {});
               let newPlaylist = {
                 _id: `playlist${lastId + 1}`,
                 name: data.title,

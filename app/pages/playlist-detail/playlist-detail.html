@@ -5,7 +5,7 @@
   </ion-title>
 </ion-navbar>
 
-<div class="select-all" padding>
+<div class="select-all" padding *ngIf="words.length > 0">
   <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
     [checked]="selectedWords.length == words.length" />
   <ion-label class="desc">

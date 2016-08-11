@@ -10,7 +10,7 @@
   </ion-buttons>
 </ion-navbar>
 
-<div class="select-all" padding>
+<div class="select-all" padding *ngIf="playlists.length > 0">
   <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
     [checked]="selectedPlaylists.length == playlists.length" />
   <ion-label class="desc">

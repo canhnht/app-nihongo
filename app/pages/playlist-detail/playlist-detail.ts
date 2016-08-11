@@ -6,7 +6,7 @@ import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
-import {SettingService, SelectedType} from '../../services/setting.service';
+import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 
 @Component({
@@ -28,9 +28,9 @@ export class PlaylistDetail {
   }
 
   ionViewWillEnter() {
-    if (this.settingService.selectedType === SelectedType.WordInPlaylist)
+    if (this.settingService.selectedType === SelectedType.WordInPlaylist
+      && this.settingService.status === SettingStatus.Playing)
       this.selectedWords = this.settingService.selectedList;
-    else this.selectedWords = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
         if (setting.selectedType === SelectedType.WordInPlaylist)
@@ -41,6 +41,8 @@ export class PlaylistDetail {
 
   ionViewWillLeave() {
     this.settingSubscription.unsubscribe();
+    this.selectedWords = [];
+    this.settingService.reset();
   }
 
   selectWord(word) {

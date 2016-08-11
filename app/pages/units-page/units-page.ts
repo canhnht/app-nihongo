@@ -7,7 +7,7 @@ import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {DbService} from '../../services/db.service';
-import {SettingService, SelectedType} from '../../services/setting.service';
+import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {Subscription} from 'rxjs';
 
@@ -41,9 +41,9 @@ export class UnitsPage {
       }
     );
 
-    if (this.settingService.selectedType === SelectedType.Unit)
+    if (this.settingService.selectedType === SelectedType.Unit
+      && this.settingService.status === SettingStatus.Playing)
       this.selectedUnits = this.settingService.selectedList;
-    else this.selectedUnits = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
         if (setting.selectedType === SelectedType.Unit)
@@ -55,6 +55,8 @@ export class UnitsPage {
   ionViewWillLeave() {
     this.currentCourseSubscription.unsubscribe();
     this.settingSubscription.unsubscribe();
+    this.selectedUnits = [];
+    this.settingService.reset();
   }
 
   goToUnit(unit) {
@@ -137,19 +139,7 @@ export class UnitsPage {
     }
   }
 
-  playSelectedList() {
-    SpinnerDialog.show('Processing', 'Please wait a second', false);
-    this.audioService.playSetting();
-    this.sliderService.resetSlider();
-    this.navController.push(WordSlides);
-  }
-
-  continuePlaying() {
-    this.audioService.playCurrentTrack();
-    this.audioService.generateListWordOrder();
-    if (this.audioService.playSingleWord)
-      this.sliderService.currentSlide =
-        this.audioService.listWordOrder.indexOf(this.audioService.singleWordIndex) + 1;
+  goToWordSlides() {
     this.navController.push(WordSlides);
   }
 

@@ -88,7 +88,6 @@ export class AudioService {
 
   private generateListTrack() {
     this.listTrack = [];
-
     this.listWordOrder.forEach((wordIndex, index) => {
       let word = this.listWord[wordIndex];
       this.listTrack.push(new MediaPlugin(`${this.basePath}${word.audioFile}.mp3`));

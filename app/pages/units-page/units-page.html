@@ -46,6 +46,5 @@
     </ion-item-sliding>
   </ion-list>
 </ion-content>
-<audio-setting [isReady]="selectedUnits.length > 0"
-  (onReady)="audioService.isPlaying && selectedUnits.length == 0 ? continuePlaying() : playSelectedList()">
+<audio-setting (onPageTransfer)="goToWordSlides()">
 </audio-setting>

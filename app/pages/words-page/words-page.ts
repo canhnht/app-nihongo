@@ -7,7 +7,7 @@ import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {DbService} from '../../services/db.service';
-import {SettingService, SelectedType} from '../../services/setting.service';
+import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 
@@ -47,9 +47,9 @@ export class WordsPage {
       }
     );
 
-    if (this.settingService.selectedType === SelectedType.WordInUnit)
+    if (this.settingService.selectedType === SelectedType.WordInUnit
+      && this.settingService.status === SettingStatus.Playing)
       this.selectedWords = this.settingService.selectedList;
-    else this.selectedWords = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
         if (setting.selectedType === SelectedType.WordInUnit)
@@ -61,6 +61,8 @@ export class WordsPage {
   ionViewWillLeave() {
     this.playlistSubscription.unsubscribe();
     this.settingSubscription.unsubscribe();
+    this.selectedWords = [];
+    this.settingService.reset();
   }
 
   selectWord(word) {
