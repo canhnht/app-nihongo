@@ -4,6 +4,7 @@ import {Subject, Observable} from 'rxjs';
 import {MediaPlugin, Toast} from 'ionic-native';
 import {DbService} from './db.service';
 import {SettingService} from './setting.service';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Injectable()
 export class AudioService {
@@ -20,7 +21,8 @@ export class AudioService {
   // basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/';
   basePath: string = 'file:///android_asset/www/audio/';
 
-  constructor(private dbService: DbService, private settingService: SettingService) {
+  constructor(private dbService: DbService, private settingService: SettingService,
+    private translate: TranslateService) {
     this.currentTrack.seekTime = '00:00';
     this.currentTrack.duration = '00:00';
   }
@@ -29,10 +31,10 @@ export class AudioService {
     this.isLoop = !this.isLoop;
     if (this.isLoop) {
       Toast.hide();
-      Toast.showShortCenter('Repeating all tracks').subscribe(() => {});
+      Toast.showShortCenter(this.translate.instant('Repeating_all')).subscribe(() => {});
     } else {
       Toast.hide();
-      Toast.showShortCenter('Repeat is off').subscribe(() => {});
+      Toast.showShortCenter(this.translate.instant('Repeat_off')).subscribe(() => {});
     }
   }
 
@@ -40,10 +42,10 @@ export class AudioService {
     this.isShuffle = !this.isShuffle;
     if (this.isShuffle) {
       Toast.hide();
-      Toast.showShortCenter('Shuffle is on').subscribe(() => {});
+      Toast.showShortCenter(this.translate.instant('Shuffle_on')).subscribe(() => {});
     } else {
       Toast.hide();
-      Toast.showShortCenter('Shuffle is off').subscribe(() => {});
+      Toast.showShortCenter(this.translate.instant('Shuffle_off')).subscribe(() => {});
     }
   }
 
@@ -118,7 +120,7 @@ export class AudioService {
         this.pauseCurrentTrack();
       }
     } else {
-      Toast.showLongTop(`${JSON.stringify(this.listWord[this.listWordOrder[this.currentTrack.index]])}`).subscribe(() => {});
+      // Toast.showLongTop(`${JSON.stringify(this.listWord[this.listWordOrder[this.currentTrack.index]])}`).subscribe(() => {});
       this.trackIndexSubject.next(this.currentTrack.index);
       this.playCurrentTrack();
     }

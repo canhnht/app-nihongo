@@ -15,10 +15,10 @@ export class AuthService {
 
   checkLoginStatus() {
     return Facebook.getLoginStatus().then(response => {
-      Toast.showLongCenter(`checkLoginStatus ${response.status}`).subscribe(() => {});
+      // Toast.showLongCenter(`checkLoginStatus ${response.status}`).subscribe(() => {});
       this.isSignedIn = !!response && response.status === 'connected';
-      if (this.isSignedIn)
-        Toast.showShortBottom('You are already signed in').subscribe(() => {});
+      // if (this.isSignedIn)
+        // Toast.showShortBottom('You are already signed in').subscribe(() => {});
     }).catch(utils.errorHandler('Error get facebook login status'));
   }
 
@@ -58,7 +58,7 @@ export class AuthService {
 
     return Facebook.logout().then(resp => {
       this.isSignedIn = false;
-      Toast.showShortBottom('Sign out successfully').subscribe(() => {});
+      // Toast.showShortBottom('Sign out successfully').subscribe(() => {});
     }).catch(utils.errorHandler('Error sign out facebook'));
   }
 }

@@ -9,6 +9,7 @@ import {SliderService} from '../../services/slider.service';
 import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistDetail} from '../playlist-detail/playlist-detail';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Component({
   templateUrl: 'build/pages/playlists-page/playlists-page.html',
@@ -22,7 +23,7 @@ export class PlaylistsPage {
 
   constructor(private navController: NavController, private dbService: DbService,
     private audioService: AudioService, private sliderService: SliderService,
-    private settingService: SettingService) {
+    private settingService: SettingService, private translate: TranslateService) {
     this.dbService.getAllPlaylists().then(
       allPlaylists => this.playlists = allPlaylists
     );
@@ -78,23 +79,23 @@ export class PlaylistsPage {
 
   addNewPlaylist() {
     let prompt = Alert.create({
-      title: 'Add new playlist',
+      title: this.translate.instant('Add_new_playlist'),
       inputs: [
         {
           name: 'title',
-          placeholder: 'Enter new playlist name'
+          placeholder: this.translate.instant('Enter_playlist')
         },
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.translate.instant('Cancel'),
         },
         {
-          text: 'Save',
+          text: this.translate.instant('Save'),
           handler: data => {
             let searchIndex = this.playlists.findIndex(item => item.name == data.title);
             if (searchIndex >= 0)
-              Toast.showShortCenter('Playlist name already exists! Please choose another name')
+              Toast.showShortCenter(this.translate.instant('Duplicate_playlist_message'))
                 .subscribe(() => {});
             else {
               let lastId = parseInt(this.playlists[this.playlists.length - 1]._id.substring(8));
@@ -120,7 +121,7 @@ export class PlaylistsPage {
 
   editPlaylist(playlist) {
     let prompt = Alert.create({
-      title: 'Edit playlist',
+      title: this.translate.instant('Edit_playlist'),
       inputs: [
         {
           name: 'title',
@@ -129,14 +130,14 @@ export class PlaylistsPage {
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.translate.instant('Cancel'),
         },
         {
-          text: 'Save',
+          text: this.translate.instant('Save'),
           handler: data => {
             let searchIndex = this.playlists.findIndex(item => item.name == data.title);
             if (searchIndex >= 0)
-              Toast.showShortCenter('Playlist name already exists! Please choose another name')
+              Toast.showShortCenter(this.translate.instant('Duplicate_playlist_message'))
                 .subscribe(() => {});
             else {
               playlist.name = data.title;

@@ -14,7 +14,7 @@
   <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
     [checked]="selectedUnits.length == units.length" />
   <ion-label class="desc">
-    {{selectedUnits.length == units.length ? 'Deselect all' : 'Select all'}}
+    {{(selectedUnits.length == units.length ? 'Deselect_all' : 'Select_all') | translate}}
   </ion-label>
 </div>
 <ion-content>
@@ -26,7 +26,7 @@
         <ion-badge class="unit-icon" item-left>U{{unit.number}}</ion-badge>
         <ion-label>
           <h2>{{unit.unitName}}</h2>
-          <p>{{unit.noWords}} word{{unit.noWords > 1 ? 's' : ''}}</p>
+          <p>{{unit.noWords}} {{'word' | translate}}</p>
         </ion-label>
         <ion-spinner item-right name="bubbles" *ngIf="unit.downloading"></ion-spinner>
         <button outline round item-right (click)="downloadUnit($event, unit)"
@@ -39,8 +39,8 @@
       </ion-item>
       <ion-item-options *ngIf="unit.downloaded">
         <button danger (click)="deleteUnit(unit)">
-          <ion-icon name="trash" large></ion-icon>
-          Delete
+          <ion-icon name="trash" large></ion-icon><br />
+          {{'Delete' | translate}}
         </button>
       </ion-item-options>
     </ion-item-sliding>

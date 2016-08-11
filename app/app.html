@@ -6,20 +6,20 @@
     <ion-list>
       <ion-item button-primary menuClose (click)="openPage(homePage)">
         <ion-icon name="home" item-left></ion-icon>
-        Home
+        {{'Home' | translate}}
       </ion-item>
       <ion-item button-primary menuClose (click)="openPage(playlistsPage)">
         <ion-icon name="bookmark" item-left></ion-icon>
-        My Playlist
+        {{'My_playlist' | translate}}
       </ion-item>
       <ion-item button-primary menuClose>
         <ion-icon name="settings" item-left></ion-icon>
-        Setting
+        {{'Setting' | translate}}
       </ion-item>
       <ion-item button-primary menuClose
         (click)="isSignedIn ? signOut() : signIn()">
         <i class="fa fa-facebook-square" item-left></i>
-        {{isSignedIn ? 'Sign out' : 'Sign in with Facebook'}}
+        {{(isSignedIn ? 'Sign_out' : 'Sign_in_facebook') | translate}}
       </ion-item>
     </ion-list>
   </ion-content>

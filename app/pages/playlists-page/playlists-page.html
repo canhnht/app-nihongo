@@ -2,7 +2,7 @@
   <button menuToggle left>
     <ion-icon name="menu"></ion-icon>
   </button>
-  <ion-title>My Playlist</ion-title>
+  <ion-title>{{'My_playlist' | translate}}</ion-title>
   <ion-buttons end>
     <button (click)="addNewPlaylist()">
       <ion-icon name="add"></ion-icon>
@@ -14,7 +14,7 @@
   <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
     [checked]="selectedPlaylists.length == playlists.length" />
   <ion-label class="desc">
-    {{selectedPlaylists.length == playlists.length ? 'Deselect all' : 'Select all'}}
+    {{(selectedPlaylists.length == playlists.length ? 'Deselect_all' : 'Select_all') | translate}}
   </ion-label>
 </div>
 <ion-content>
@@ -28,17 +28,17 @@
         </ion-badge>
         <ion-label>
           <h2>{{playlist.name}}</h2>
-          <p>{{playlist.words.length}} word{{playlist.words.length > 1 ? 's' : ''}}</p>
+          <p>{{playlist.words.length}} {{'word' | translate}}</p>
         </ion-label>
       </ion-item>
       <ion-item-options>
         <button primary (click)="editPlaylist(playlist)">
-          <ion-icon name="create" large></ion-icon>
-          Edit
+          <ion-icon name="create" large></ion-icon><br />
+          {{'Edit' | translate}}
         </button>
         <button danger (click)="deletePlaylist(playlist)">
-          <ion-icon name="trash" large></ion-icon>
-          Delete
+          <ion-icon name="trash" large></ion-icon><br />
+          {{'Delete' | translate}}
         </button>
       </ion-item-options>
     </ion-item-sliding>

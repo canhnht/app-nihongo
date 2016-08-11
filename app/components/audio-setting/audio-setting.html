@@ -6,7 +6,7 @@
   </button>
   <button round class="btn-ready" [disabled]="isDisable"
     (click)="playAudio()">
-    {{isContinue ? 'Continue' : 'Ready'}}
+    {{(isContinue ? 'Continue' : 'Ready') | translate}}
   </button>
   <button secondary [class.disabled]="!audioService.isShuffle"
     [disabled]="isDisable"

@@ -5,6 +5,7 @@ import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {SettingService, SettingStatus} from '../../services/setting.service';
 import {Subscription} from 'rxjs';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Component({
   selector: 'audio-setting',
@@ -18,7 +19,7 @@ export class AudioSetting implements OnInit, OnDestroy {
   settingSubscription: Subscription;
 
   constructor(private audioService: AudioService, private settingService: SettingService,
-    private sliderService: SliderService) {
+    private sliderService: SliderService, private translate: TranslateService) {
   }
 
   ngOnInit() {
@@ -41,7 +42,8 @@ export class AudioSetting implements OnInit, OnDestroy {
       this.audioService.playCurrentTrack();
       this.audioService.generateListWordOrder();
     } else {
-      SpinnerDialog.show('Processing', 'Please wait a second', false);
+      SpinnerDialog.show(this.translate.instant('Processing'),
+        this.translate.instant('Please_wait'), false);
       this.audioService.playSetting();
       this.settingService.playAudio();
       this.sliderService.resetSlider();

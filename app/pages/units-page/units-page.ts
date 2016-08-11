@@ -10,6 +10,7 @@ import {DbService} from '../../services/db.service';
 import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {Subscription} from 'rxjs';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Component({
   templateUrl: 'build/pages/units-page/units-page.html',
@@ -25,7 +26,8 @@ export class UnitsPage {
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
-    private dbService: DbService, private settingService: SettingService) {
+    private dbService: DbService, private settingService: SettingService,
+    private translate: TranslateService) {
   }
 
   ionViewWillEnter() {
@@ -62,9 +64,9 @@ export class UnitsPage {
   goToUnit(unit) {
     if (!unit.downloaded) {
       let alert = Alert.create({
-        title: 'Download unit',
-        subTitle: 'You need to download this unit before proceeding.',
-        buttons: ['OK']
+        title: this.translate.instant('Download_unit'),
+        subTitle: this.translate.instant('Download_unit_message'),
+        buttons: [this.translate.instant('OK')]
       });
       this.navController.present(alert);
     } else {
@@ -145,7 +147,7 @@ export class UnitsPage {
 
   presentPopover($event) {
     let popover = Popover.create(PopoverMenu, {
-      menu: ['Download all', 'Delete all']
+      menu: [this.translate.instant('Download_all'), this.translate.instant('Delete_all')]
     });
     this.navController.present(popover, {
       ev: $event

@@ -16,10 +16,10 @@
           {{course.units.length}} Unit{{course.units.length > 1 ? 's' : ''}}
         </div>
         <div class="number-words">
-          {{course.noWords}} Word{{course.noWords > 1 ? 's' : ''}}
+          {{course.noWords}} {{'Word' | translate}}
         </div>
         <div class="number-comments">
-          <i class="fa fa-comment"></i> 0 Comment
+          <i class="fa fa-comment"></i> 0 {{'Comment' | translate}}
         </div>
         <div class="rating">
           <span>☆</span>
@@ -32,7 +32,7 @@
           [disabled]="!course.downloaded"
           (click)="course.downloaded ? goToCourse($event, course) : showAlert()">
           <ion-icon name="navigate"></ion-icon>
-          Start
+          {{'Start' | translate}}
         </button>
       </div>
     </div>

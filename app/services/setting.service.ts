@@ -55,10 +55,11 @@ export class SettingService {
   }
 
   selectUnits(units) {
-    this.status = SettingStatus.Selecting;
     this.selectedType = SelectedType.Unit;
     this.selectedList = units.map(unit => unit._id);
     this.selectedWords = units.reduce((arr, unit) => arr.concat(unit.words), []);
+    if (this.selectedList.length === 0) this.status = SettingStatus.None;
+    else this.status = SettingStatus.Selecting;
     this.pushState();
   }
 
@@ -72,10 +73,11 @@ export class SettingService {
   }
 
   selectPlaylists(playlists) {
-    this.status = SettingStatus.Selecting;
     this.selectedType = SelectedType.Playlist;
     this.selectedList = playlists.map(unit => unit._id);
     this.selectedWords = playlists.reduce((arr, unit) => arr.concat(unit.words), []);
+    if (this.selectedList.length === 0) this.status = SettingStatus.None;
+    else this.status = SettingStatus.Selecting;
     this.pushState();
   }
 
@@ -89,10 +91,11 @@ export class SettingService {
   }
 
   selectWordsInUnit(words) {
-    this.status = SettingStatus.Selecting;
     this.selectedType = SelectedType.WordInUnit;
     this.selectedList = words.map(word => word._id);
     this.selectedWords = words;
+    if (this.selectedList.length === 0) this.status = SettingStatus.None;
+    else this.status = SettingStatus.Selecting;
     this.pushState();
   }
 
@@ -106,10 +109,11 @@ export class SettingService {
   }
 
   selectWordsInPlaylist(words) {
-    this.status = SettingStatus.Selecting;
     this.selectedType = SelectedType.WordInPlaylist;
     this.selectedList = words.map(word => word._id);
     this.selectedWords = words;
+    if (this.selectedList.length === 0) this.status = SettingStatus.None;
+    else this.status = SettingStatus.Selecting;
     this.pushState();
   }
 }

@@ -10,6 +10,7 @@ import {DbService} from '../../services/db.service';
 import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Component({
   templateUrl: 'build/pages/words-page/words-page.html',
@@ -26,7 +27,8 @@ export class WordsPage {
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
-    private dbService: DbService, private settingService: SettingService) {
+    private dbService: DbService, private settingService: SettingService,
+    private translate: TranslateService) {
   }
 
   ionViewWillEnter() {
@@ -66,7 +68,8 @@ export class WordsPage {
   }
 
   selectWord(word) {
-    SpinnerDialog.show('Processing', 'Please wait a second', false);
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
     let wordIndex = this.words.findIndex(item => item._id === word._id);
     this.navController.push(WordSlides, {
       playSingleWord: true,
@@ -83,7 +86,7 @@ export class WordsPage {
   addToPlaylist($event, word) {
     $event.stopPropagation();
     let alert = Alert.create();
-    alert.setTitle('Add word to');
+    alert.setTitle(this.translate.instant('Add_word'));
     this.playlists.forEach((playlist, index) => {
       alert.addInput({
         type: 'checkbox',
@@ -92,9 +95,9 @@ export class WordsPage {
         checked: playlist.words.findIndex(e => e._id === word._id) >= 0
       });
     });
-    alert.addButton('Cancel');
+    alert.addButton(this.translate.instant('Cancel'));
     alert.addButton({
-      text: 'Okay',
+      text: this.translate.instant('OK'),
       handler: data => {
         data = data.map(e => parseInt(e));
         data.forEach(index => {

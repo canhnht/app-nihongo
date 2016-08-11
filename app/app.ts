@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, PLATFORM_PIPES} from '@angular/core';
+import {Http} from '@angular/http';
 import {Platform, ionicBootstrap} from 'ionic-angular';
 import {StatusBar, Splashscreen, Toast} from 'ionic-native';
 import {HomePage} from './pages/home-page/home-page';
@@ -10,6 +11,7 @@ import {DbService} from './services/db.service';
 import {WordSlides} from './pages/word-slides/word-slides';
 import {AuthService} from './services/auth.service';
 import {SettingService} from './services/setting.service';
+import {TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
 declare var require: any;
 let firebase = require('firebase');
 
@@ -22,7 +24,8 @@ export class MyApp {
   rootPage = HomePage;
   isSignedIn: boolean = false;
 
-  constructor(private platform: Platform, private authService: AuthService) {
+  constructor(private platform: Platform, private authService: AuthService,
+    private translate: TranslateService) {
     // Initialize Firebase
     var config = {
       apiKey: "AIzaSyALm56LkjP4JQeNcCWA5XWPJ-xD7jAdXDs",
@@ -40,6 +43,17 @@ export class MyApp {
           this.isSignedIn = this.authService.isSignedIn;
         });
       });
+
+    this.initializeI18n();
+  }
+
+  initializeI18n() {
+    let userLang = 'vi';
+    // var userLang = navigator.language.split('-')[0];
+    // userLang = /(de|en|hr)/gi.test(userLang) ? userLang : 'en';
+
+    this.translate.setDefaultLang('vi');
+    this.translate.use(userLang);
   }
 
   signIn() {
@@ -64,5 +78,16 @@ ionicBootstrap(MyApp, [
   SliderService,
   DbService,
   AuthService,
-  SettingService
+  SettingService,
+  {
+    provide: TranslateLoader,
+    useFactory: (http: Http) => new TranslateStaticLoader(http, 'i18n', '.json'),
+    deps: [Http],
+  },
+  TranslateService,
+  {
+    provide: PLATFORM_PIPES,
+    useValue: TranslatePipe,
+    multi: true,
+  }
 ]);

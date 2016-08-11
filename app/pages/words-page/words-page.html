@@ -9,7 +9,7 @@
   <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
     [checked]="selectedWords.length == words.length" />
   <ion-label class="desc">
-    {{selectedWords.length == words.length ? 'Deselect all' : 'Select all'}}
+    {{(selectedWords.length == words.length ? 'Deselect_all' : 'Select_all') | translate}}
   </ion-label>
 </div>
 <ion-content>
