@@ -16,10 +16,10 @@ export class HomePage {
 
   constructor(private navController: NavController, private dbService: DbService,
     private settingService: SettingService) {
-    this.courses = this.dbService.listCourse;
   }
 
   ionViewWillEnter() {
+    this.dbService.getListCourse().then(listCourse => this.courses = listCourse);
     this.settingService.reset(true);
     this.listCourseSubscription = this.dbService.listCourseSubject.subscribe(
       listCourse => this.courses = listCourse);

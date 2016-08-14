@@ -49,12 +49,8 @@
       "locator": "cordova-plugin-facebook4",
       "variables": {
         "APP_ID": "1732596063667087",
-        "APP_NAME": "Mimi Kara Nihongo"
+        "APP_NAME": "app-nihongo"
       }
-    },
-    {
-      "locator": "https://github.com/EddyVerbruggen/cordova-plugin-googleplus",
-      "id": "cordova-plugin-googleplus"
     }
   ],
   "cordovaPlatforms": [

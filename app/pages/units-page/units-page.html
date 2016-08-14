@@ -19,7 +19,7 @@
 </div>
 <ion-content>
   <ion-list [virtualScroll]="units">
-    <ion-item-sliding *virtualItem="let unit">
+    <ion-item-sliding *virtualItem="let unit; let i = index">
       <ion-item button-primary text-wrap (click)="goToUnit(unit)">
         <input class="btn-select" type="checkbox" item-left (click)="checkUnit($event, unit)"
           [checked]="selectedUnits.indexOf(unit._id) >= 0" />
@@ -29,7 +29,7 @@
           <p>{{unit.noWords}} {{'word' | translate}}</p>
         </ion-label>
         <ion-spinner item-right name="bubbles" *ngIf="unit.downloading"></ion-spinner>
-        <button outline round item-right (click)="downloadUnit($event, unit)"
+        <button outline round item-right (click)="downloadUnit($event, unit, i)"
           *ngIf="!unit.downloading && !unit.downloaded">
           <ion-icon name="cloud-download"></ion-icon>
         </button>

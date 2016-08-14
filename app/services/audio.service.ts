@@ -18,8 +18,8 @@ export class AudioService {
   isLoop: boolean = false;
   isShuffle: boolean = false;
   singleWordIndex: number;
-  // basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/';
-  basePath: string = 'file:///android_asset/www/audio/';
+  basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.mimi_kara_nihongo/files';
+  // basePath: string = 'file:///android_asset/www/audio';
 
   constructor(private dbService: DbService, private settingService: SettingService,
     private translate: TranslateService) {
@@ -91,7 +91,7 @@ export class AudioService {
     this.listTrack = [];
     this.listWordOrder.forEach((wordIndex, index) => {
       let word = this.listWord[wordIndex];
-      this.listTrack.push(new MediaPlugin(`${this.basePath}${word.audioFile}.mp3`));
+      this.listTrack.push(new MediaPlugin(`${this.basePath}/${word.audioFile}`));
     });
   }
 

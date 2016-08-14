@@ -12,6 +12,7 @@ import {WordSlides} from './pages/word-slides/word-slides';
 import {AuthService} from './services/auth.service';
 import {SettingService} from './services/setting.service';
 import {TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
+import {firebaseConfig} from './config-local';
 declare var require: any;
 let firebase = require('firebase');
 
@@ -27,13 +28,7 @@ export class MyApp {
   constructor(private platform: Platform, private authService: AuthService,
     private translate: TranslateService) {
     // Initialize Firebase
-    var config = {
-      apiKey: "AIzaSyALm56LkjP4JQeNcCWA5XWPJ-xD7jAdXDs",
-      authDomain: "mimi-kara-nihongo.firebaseapp.com",
-      databaseURL: "https://mimi-kara-nihongo.firebaseio.com",
-      storageBucket: "mimi-kara-nihongo.appspot.com",
-    };
-    firebase.initializeApp(config);
+    firebase.initializeApp(firebaseConfig);
 
     this.platform.ready()
       .then(() => {

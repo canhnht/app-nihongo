@@ -9,12 +9,12 @@ PouchDB.plugin(require('pouchdb-load'));
 
 @Injectable()
 export class DbService {
-  db: any;
-  listCourse: any[] = null;
+  db: any = null;
+  listCourse: any[] = [];
   listCourseSubject: Subject<any[]> = new Subject<any[]>();
   currentCourseSubject: Subject<any> = new Subject<any>();
   playlistSubject: Subject<any> = new Subject<any>();
-  currentCourse: any = null;
+  currentCourse: any = {};
 
   constructor() {
     this.db = new PouchDB('app-nihongo', {adapter: 'websql'});
@@ -61,22 +61,32 @@ export class DbService {
   }
 
   getListCourse() {
-    if (!this.listCourse) {
-      return Promise.resolve(this.db.allDocs({
-        include_docs: true,
-        startkey: 'course',
-        endkey: 'course\uffff'
-      })).then(docs => {
-          this.listCourse = docs.rows.map(row => {
-            let course = row.doc;
-            return course;
-          });
-          return this.listCourse;
-        })
-        .catch(utils.errorHandler('Error get list course'));
-    } else {
-      return Promise.resolve(this.listCourse);
-    }
+    return Promise.resolve(this.db.allDocs({
+      include_docs: true,
+      startkey: 'course',
+      endkey: 'course\uffff'
+    })).then(docs => {
+      return docs.rows.map(row => {
+        let course = row.doc;
+        return course;
+      });
+    }).catch(utils.errorHandler('Error get list course'));
+    // if (!this.listCourse) {
+    //   return Promise.resolve(this.db.allDocs({
+    //     include_docs: true,
+    //     startkey: 'course',
+    //     endkey: 'course\uffff'
+    //   })).then(docs => {
+    //       this.listCourse = docs.rows.map(row => {
+    //         let course = row.doc;
+    //         return course;
+    //       });
+    //       return this.listCourse;
+    //     })
+    //     .catch(utils.errorHandler('Error get list course'));
+    // } else {
+    //   return Promise.resolve(this.listCourse);
+    // }
   }
 
   getCourse(courseId) {
@@ -111,7 +121,7 @@ export class DbService {
   }
 
   updateCourse(course) {
-    this.db.put(course)
+    return this.db.put(course)
       .then(resp => {})
       .catch(utils.errorHandler('Error update course'));
   }

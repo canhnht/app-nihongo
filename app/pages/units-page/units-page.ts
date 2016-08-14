@@ -11,6 +11,8 @@ import {SettingService, SelectedType, SettingStatus} from '../../services/settin
 import {WordSlides} from '../word-slides/word-slides';
 import {Subscription} from 'rxjs';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+declare var require: any;
+let firebase = require('firebase');
 
 @Component({
   templateUrl: 'build/pages/units-page/units-page.html',
@@ -74,52 +76,60 @@ export class UnitsPage {
     }
   }
 
-  downloadUnit($event, unit) {
-    unit.downloading = true;
-    let audioFiles = ['audio1.mp3', 'audio2.mp3', 'audio3.mp3'];
-    let audioPromises = audioFiles.map(audio => {
-      const fileTransfer = new Transfer();
-      return Promise.resolve(fileTransfer.download(
-        `https://s3-ap-southeast-1.amazonaws.com/app-nihongo/${audio}`,
-        `file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/${audio}`));
-    });
-    Promise.all(audioPromises)
-      .then(resp => {
-        unit.downloading = false;
-        this.course.units.some(item => {
-          if (item.number == unit.number) {
-            item.downloaded = true;
-            return true;
-          }
-          return false;
-        });
-        this.dbService.updateCourse(this.course);
-        Toast.showLongTop(`${JSON.stringify(resp)}`).subscribe(() => {});
-      })
-      .catch(err => {
-        unit.downloading = false;
-        Toast.showLongBottom(`Error ${JSON.stringify(err)}`).subscribe(() => {});
-      });
+  downloadUnit($event, unit, unitIndex) {
     $event.stopPropagation();
+    unit.downloading = true;
+    let unitRef = firebase.database().ref(`${this.course._id}/units/${unit._id}`);
+    let unitData;
+    unitRef.once('value').then(snapshot => {
+      unitData = snapshot.val();
+      Object.assign(this.course.units[unitIndex], unitData);
+      this.course.noWords += unitData.noWords;
+      return this.dbService.updateCourse(this.course);
+    }).then(() => {
+      let storage = firebase.storage();
+      let urlPromise = unitData.words.map(word => {
+        let pathReference = storage.ref(`${this.course._id}/${unit._id}/${word.audioFile}.mp3`);
+        return Promise.resolve(pathReference.getDownloadURL());
+      });
+      return Promise.all(urlPromise);
+    }).then(listUrl => {
+      let folderPath = `file:///storage/emulated/0/Android/data/io.techybrain.mimi_kara_nihongo/files/${this.course._id}/${unit._id}`;
+      let downloadPromise = listUrl.map((url, index) => {
+        const fileTransfer = new Transfer();
+        return Promise.resolve(fileTransfer.download(url,
+          `${folderPath}/${unitData.words[index].audioFile}.mp3`));
+      });
+      return Promise.all(downloadPromise);
+    }).then(res => {
+      Toast.showLongCenter(`Unit ${unit.unitName} of course ${this.course.courseName} has been downloaded successfully`).subscribe(() => {});
+      this.units[unitIndex].downloading = false;
+      this.course.units[unitIndex].downloaded = true;
+      this.course.units[unitIndex].words.forEach(word => {
+        word.audioFile = `${this.course._id}/${unit._id}/${word.audioFile}.mp3`;
+      });
+      return this.dbService.updateCourse(this.course);
+    })
+    .catch(err => {
+      this.units[unitIndex].downloading = false;
+      Toast.showLongBottom('Error downloading').subscribe(() => {});
+    });
   }
 
   deleteUnit(unit) {
-    let audioFiles = ['audio1.mp3', 'audio2.mp3', 'audio3.mp3'];
-    let audioPromises = audioFiles.map(audio => {
-      return Promise.resolve(File.removeFile(
-        'file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/', audio
-      ));
-    })
-    Promise.all(audioPromises)
-      .then(resp => {
-        Toast.showLongTop(`${JSON.stringify(resp)}`).subscribe(() => {});
-      })
-      .catch(err => {
-        Toast.showLongBottom(`Error DEL ${JSON.stringify(err)}`).subscribe(() => {});
-      });
+    let folderPath = `file:///storage/emulated/0/Android/data/io.techybrain.mimi_kara_nihongo/files/${this.course._id}/`;
+    File.removeRecursively(folderPath, unit._id).then(res => {
+      Toast.showLongCenter(`Unit ${unit.unitName} of course ${this.course.courseName} has been deleted successfully`).subscribe(() => {});
+    }).catch(err => {
+      Toast.showLongBottom('Error deleting').subscribe(() => {});
+    });
+
     this.course.units.some(item => {
       if (item.number === unit.number) {
         item.downloaded = false;
+        this.course.noWords -= item.noWords;
+        item.noWords = 0;
+        item.words = [];
         return true;
       }
       return false;
