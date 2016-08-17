@@ -62,7 +62,7 @@ export class PlaylistsPage {
 
   checkPlaylist($event, playlist) {
     $event.stopPropagation();
-    this.settingService.addPlaylist(playlist);
+    this.settingService.togglePlaylist(playlist);
   }
 
   toggleSelectAll() {

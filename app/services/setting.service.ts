@@ -28,6 +28,7 @@ export class SettingService {
     if (this.status === SettingStatus.Selecting || force) {
       this.status = SettingStatus.None;
       this.selectedList = [];
+      this.selectedWords = [];
       this.selectedType = SelectedType.None;
     }
   }
@@ -45,12 +46,25 @@ export class SettingService {
     });
   }
 
-  addUnit(unit) {
+  private removeItem(index) {
+    this.selectedList.splice(index, 1);
+    this.selectedWords.splice(index, 1);
+    if (this.selectedList.length > 0) this.status = SettingStatus.Selecting;
+    else this.status = SettingStatus.None;
+  }
+
+  private addItem(item, listWord) {
+    this.selectedList.push(item);
+    this.selectedWords.push(listWord);
     this.status = SettingStatus.Selecting;
-    if (this.selectedType !== SelectedType.Unit) this.selectedList = [];
+  }
+
+  toggleUnit(unit) {
+    if (this.selectedType !== SelectedType.Unit) this.reset(true);
     this.selectedType = SelectedType.Unit;
-    this.selectedList.push(unit._id);
-    this.selectedWords = [...this.selectedWords, ...unit.words];
+    let searchIndex = this.selectedList.indexOf(unit._id);
+    if (searchIndex >= 0) this.removeItem(searchIndex);
+    else this.addItem(unit._id, unit.words);
     this.pushState();
   }
 
@@ -63,12 +77,12 @@ export class SettingService {
     this.pushState();
   }
 
-  addPlaylist(playlist) {
-    this.status = SettingStatus.Selecting;
-    if (this.selectedType !== SelectedType.Playlist) this.selectedList = [];
+  togglePlaylist(playlist) {
+    if (this.selectedType !== SelectedType.Playlist) this.reset(true);
     this.selectedType = SelectedType.Playlist;
-    this.selectedList.push(playlist._id);
-    this.selectedWords = [...this.selectedWords, ...playlist.words];
+    let searchIndex = this.selectedList.indexOf(playlist._id);
+    if (searchIndex >= 0) this.removeItem(searchIndex);
+    else this.addItem(playlist._id, playlist.words);
     this.pushState();
   }
 
@@ -81,12 +95,12 @@ export class SettingService {
     this.pushState();
   }
 
-  addWordInUnit(word) {
-    this.status = SettingStatus.Selecting;
-    if (this.selectedType !== SelectedType.WordInUnit) this.selectedList = [];
+  toggleWordInUnit(word) {
+    if (this.selectedType !== SelectedType.WordInUnit) this.reset(true);
     this.selectedType = SelectedType.WordInUnit;
-    this.selectedList.push(word._id);
-    this.selectedWords.push(word);
+    let searchIndex = this.selectedList.indexOf(word._id);
+    if (searchIndex >= 0) this.removeItem(searchIndex);
+    else this.addItem(word._id, [word]);
     this.pushState();
   }
 
@@ -99,12 +113,13 @@ export class SettingService {
     this.pushState();
   }
 
-  addWordInPlaylist(word) {
+  toggleWordInPlaylist(word) {
     this.status = SettingStatus.Selecting;
-    if (this.selectedType !== SelectedType.WordInPlaylist) this.selectedList = [];
+    if (this.selectedType !== SelectedType.WordInPlaylist) this.reset(true);
     this.selectedType = SelectedType.WordInPlaylist;
-    this.selectedList.push(word._id);
-    this.selectedWords.push(word);
+    let searchIndex = this.selectedList.indexOf(word._id);
+    if (searchIndex >= 0) this.removeItem(searchIndex);
+    else this.addItem(word._id, [word]);
     this.pushState();
   }
 

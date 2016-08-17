@@ -1,24 +1,50 @@
 <ion-menu [content]="content" side="left">
-  <ion-toolbar secondary>
-    <ion-title>Mimi Kara Nihongo</ion-title>
-  </ion-toolbar>
+  <!--<ion-toolbar primary>
+    <div class="app-toolbar">
+      <div class="app-name">
+        Mimi Kara Nihongo
+      </div>
+      <div class="app-version">
+        Version 1.1
+      </div>
+      <div class="copyright">
+        © Designed by <strong>TechyBrain</strong>
+      </div>
+    </div>
+  </ion-toolbar>-->
+  <ion-header primary class="app-toolbar">
+    <div class="app-name">
+      Mimi Kara Nihongo
+    </div>
+    <div class="app-version">
+      Version 1.1
+    </div>
+    <div class="copyright">
+      © Designed by <strong>TechyBrain</strong>
+    </div>
+    <i class="fa fa-facebook-official app-fb"></i>
+  </ion-header>
   <ion-content>
     <ion-list>
       <ion-item button-primary menuClose (click)="openPage(homePage)">
-        <ion-icon name="home" item-left></ion-icon>
+        <ion-icon primary name="home" item-left></ion-icon>
         {{'Home' | translate}}
       </ion-item>
       <ion-item button-primary menuClose (click)="openPage(playlistsPage)">
-        <ion-icon name="bookmark" item-left></ion-icon>
+        <ion-icon primary name="bookmark" item-left></ion-icon>
         {{'My_playlist' | translate}}
       </ion-item>
       <ion-item button-primary menuClose>
-        <ion-icon name="settings" item-left></ion-icon>
+        <ion-icon primary name="mail" item-left></ion-icon>
+        Góp ý và liên hệ
+      </ion-item>
+      <ion-item button-primary menuClose>
+        <ion-icon primary name="settings" item-left></ion-icon>
         {{'Setting' | translate}}
       </ion-item>
       <ion-item button-primary menuClose
         (click)="isSignedIn ? signOut() : signIn()">
-        <i class="fa fa-facebook-square" item-left></i>
+        <i primary class="fa fa-facebook-square icon-signin" item-left></i>
         {{(isSignedIn ? 'Sign_out' : 'Sign_in_facebook') | translate}}
       </ion-item>
     </ion-list>

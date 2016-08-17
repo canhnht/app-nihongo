@@ -140,7 +140,7 @@ export class UnitsPage {
 
   checkUnit($event, unit) {
     $event.stopPropagation();
-    this.settingService.addUnit(unit);
+    this.settingService.toggleUnit(unit);
   }
 
   toggleSelectAll() {

@@ -79,7 +79,9 @@ export class AudioService {
   }
 
   playSetting() {
-    this.listWord = this.settingService.selectedWords;
+    this.listWord = this.settingService.selectedWords.reduce((result, listWord) => {
+      return result.concat(listWord);
+    }, []);
     this.getListWordOrder();
     this.stopListTrack();
     this.generateListTrack();

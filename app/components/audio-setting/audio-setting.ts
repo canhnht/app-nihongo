@@ -39,13 +39,13 @@ export class AudioSetting implements OnInit, OnDestroy {
 
   playAudio() {
     if (this.isContinue) {
-      this.audioService.playCurrentTrack();
       this.audioService.generateListWordOrder();
+      this.audioService.playCurrentTrack();
     } else {
       SpinnerDialog.show(this.translate.instant('Processing'),
         this.translate.instant('Please_wait'), false);
-      this.audioService.playSetting();
       this.settingService.playAudio();
+      this.audioService.playSetting();
       this.sliderService.resetSlider();
     }
     this.onPageTransfer.emit({});

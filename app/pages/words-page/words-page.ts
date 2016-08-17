@@ -52,6 +52,7 @@ export class WordsPage {
     if (this.settingService.selectedType === SelectedType.WordInUnit
       && this.settingService.status === SettingStatus.Playing)
       this.selectedWords = this.settingService.selectedList;
+    else this.selectedWords = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
         if (setting.selectedType === SelectedType.WordInUnit)
@@ -63,7 +64,6 @@ export class WordsPage {
   ionViewWillLeave() {
     this.playlistSubscription.unsubscribe();
     this.settingSubscription.unsubscribe();
-    this.selectedWords = [];
     this.settingService.reset();
   }
 
@@ -80,7 +80,7 @@ export class WordsPage {
 
   checkWord($event, word) {
     $event.stopPropagation();
-    this.settingService.addWordInUnit(word);
+    this.settingService.toggleWordInUnit(word);
   }
 
   addToPlaylist($event, word) {

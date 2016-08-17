@@ -26,8 +26,8 @@ export class WordSlides {
   hideAudioBar: boolean = false;
   playSingleWord: boolean = false;
   singleTrack: MediaPlugin = null;
-  // basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.app_nihongo/files/';
-  basePath: string = 'file:///android_asset/www/audio/';
+  basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.mimi_kara_nihongo/files';
+  // basePath: string = 'file:///android_asset/www/audio';
 
   constructor(private navController: NavController, private audioService: AudioService,
     private sliderService: SliderService, private dbService: DbService,
@@ -97,7 +97,7 @@ export class WordSlides {
       if (this.singleTrack) {
         this.singleTrack.release();
       }
-      this.singleTrack = new MediaPlugin(`${this.basePath}${this.words[this.currentIndex].audioFile}.mp3`);
+      this.singleTrack = new MediaPlugin(`${this.basePath}/${this.words[this.currentIndex].audioFile}`);
       this.singleTrack.play();
     } else {
       this.currentIndex = this.getWordIndex($event.activeIndex);

@@ -28,16 +28,17 @@
           <span>☆</span>
           <span>☆</span>
         </div>
-        <button primary item-right class="btn-start"
-          [disabled]="!course.downloaded"
-          (click)="course.downloaded ? goToCourse($event, course) : showAlert()">
+        <button primary class="btn-start" *ngIf="course.downloaded"
+          (click)="goToCourse($event, course)">
           <ion-icon name="navigate"></ion-icon>
           {{'Start' | translate}}
         </button>
+        <button primary class="btn-download" *ngIf="!course.downloaded"
+          (click)="showAlert()">
+          <ion-icon name="download"></ion-icon>
+          Download
+        </button>
       </div>
-    </div>
-    <div class="progress-bar">
-      <div class="percent-bar" [style.width.%]="90"></div>
     </div>
   </ion-card>
 </ion-content>

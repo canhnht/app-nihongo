@@ -1,11 +1,13 @@
 
-<!--<ion-content class="login-page">
-  <h1 primary class="title">Mimi Kara Nihongo</h1>
-</ion-content>
-<button (click)="signInFacebook()" class="btn-facebook">
-  <i class="fa fa-facebook-square icon-facebook"></i>
-  Sign in with Facebook
-</button>-->
+<ion-navbar *navbar primary>
+  <button menuToggle left>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Mimi Kara Nihongo</ion-title>
+  <ion-buttons end>
+    <ion-checkbox class="chk-all" secondary checked="true"></ion-checkbox>
+  </ion-buttons>
+</ion-navbar>
 
 <ion-content>
   <div class="abc">
@@ -32,13 +34,16 @@
             <span>☆</span>
           </div>
         </div>
-        <button primary item-right class="btn-start">
+        <button primary class="btn-start" *ngIf="false"
+          (click)="test()" menuToggle>
           <ion-icon name="navigate"></ion-icon>
           Start
         </button>
-      </div>
-      <div class="progress-bar">
-        <div class="percent-bar" [style.width.%]="90"></div>
+        <button primary class="btn-download">
+          <ion-icon name="download"></ion-icon>
+          Download
+        </button>
+        <i class="fa fa-circle-o-notch fa-spin progress" primary></i>
       </div>
     </ion-card>
   </div>

@@ -58,7 +58,7 @@ export class PlaylistDetail {
 
   checkWord($event, word) {
     $event.stopPropagation();
-    this.settingService.addWordInPlaylist(word);
+    this.settingService.toggleWordInPlaylist(word);
   }
 
   toggleSelectAll() {
