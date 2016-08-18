@@ -6,7 +6,7 @@
 </ion-navbar>
 
 <ion-content class="home-page">
-  <ion-card *ngFor="let course of courses">
+  <ion-card *ngFor="let course of courses; let i = index">
     <div class="card-course">
       <div class="left-side">
         <div class="course-title">{{course.courseName}}</div>
@@ -34,9 +34,15 @@
           {{'Start' | translate}}
         </button>
         <button primary class="btn-download" *ngIf="!course.downloaded"
-          (click)="showAlert()">
+          (click)="downloadCourse(course, i)" [disabled]="course.downloading">
           <ion-icon name="download"></ion-icon>
           Download
+        </button>
+        <i class="fa fa-spinner fa-spin progress" primary
+          *ngIf="!course.downloaded && course.downloading"></i>
+        <button danger clear round class="btn-delete"
+          *ngIf="course.downloaded">
+          <i class="fa fa-trash"></i>
         </button>
       </div>
     </div>

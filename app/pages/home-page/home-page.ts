@@ -1,11 +1,13 @@
 import {Component} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {Toast} from 'ionic-native';
+import {Toast, Transfer} from 'ionic-native';
 import {NavController, Popover, Alert} from 'ionic-angular';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {UnitsPage} from '../units-page/units-page';
 import {DbService} from '../../services/db.service';
 import {SettingService} from '../../services/setting.service';
+declare var require: any;
+let firebase = require('firebase');
 
 @Component({
   templateUrl: 'build/pages/home-page/home-page.html',
@@ -33,44 +35,62 @@ export class HomePage {
     this.navController.push(UnitsPage, {selectedCourseId: course._id});
   }
 
-  // downloadCourse(course) {
-  //   course.downloading = true;
-  //   let unitRef = firebase.database().ref(`${this.course._id}/units/${unit._id}`);
-  //   let unitData;
-  //   unitRef.once('value').then(snapshot => {
-  //     unitData = snapshot.val();
-  //     Object.assign(this.course.units[unitIndex], unitData);
-  //     this.course.noWords += unitData.noWords;
-  //     return this.dbService.updateCourse(this.course);
-  //   }).then(() => {
-  //     let storage = firebase.storage();
-  //     let urlPromise = unitData.words.map(word => {
-  //       let pathReference = storage.ref(`${this.course._id}/${unit._id}/${word.audioFile}.mp3`);
-  //       return Promise.resolve(pathReference.getDownloadURL());
-  //     });
-  //     return Promise.all(urlPromise);
-  //   }).then(listUrl => {
-  //     let folderPath = `file:///storage/emulated/0/Android/data/io.techybrain.mimi_kara_nihongo/files/${this.course._id}/${unit._id}`;
-  //     let downloadPromise = listUrl.map((url, index) => {
-  //       const fileTransfer = new Transfer();
-  //       return Promise.resolve(fileTransfer.download(url,
-  //         `${folderPath}/${unitData.words[index].audioFile}.mp3`));
-  //     });
-  //     return Promise.all(downloadPromise);
-  //   }).then(res => {
-  //     Toast.showLongCenter(`Unit ${unit.unitName} of course ${this.course.courseName} has been downloaded successfully`).subscribe(() => {});
-  //     this.units[unitIndex].downloading = false;
-  //     this.course.units[unitIndex].downloaded = true;
-  //     this.course.units[unitIndex].words.forEach(word => {
-  //       word.audioFile = `${this.course._id}/${unit._id}/${word.audioFile}.mp3`;
-  //     });
-  //     return this.dbService.updateCourse(this.course);
-  //   })
-  //   .catch(err => {
-  //     this.units[unitIndex].downloading = false;
-  //     Toast.showLongBottom('Error downloading').subscribe(() => {});
-  //   });
-  // }
+  downloadCourse(course, index) {
+    course.downloading = true;
+    let courseRef = firebase.database().ref(`${course._id}`);
+    let courseData;
+    courseRef.once('value').then(snapshot => {
+      snapshot = snapshot.val();
+      courseData = Object.assign({}, snapshot);
+      courseData.units = [];
+      Object.keys(snapshot.units).forEach(unitId => {
+        let unit = Object.assign({_id: unitId}, snapshot.units[unitId]);
+        courseData.units.push(unit);
+      });
+      courseData.units = courseData.units.sort((u1, u2) => {
+        return u1.number - u2.number;
+      });
+      Object.assign(course, courseData);
+      return this.dbService.updateCourse(course);
+    }).then(() => {
+      let storage = firebase.storage();
+      let urlPromise = courseData.units.reduce((res, unit) => {
+        let listPromise = unit.words.map(word => {
+          let pathReference = storage.ref(`${course._id}/${unit._id}/${word.audioFile}.mp3`);
+          return Promise.resolve(pathReference.getDownloadURL()).then(url => ({
+            url,
+            unitId: unit._id,
+            audioFile: word.audioFile,
+          }));
+        });
+        return res.concat(listPromise);
+      }, []);
+      return Promise.all(urlPromise);
+    }).then(listUrl => {
+      let downloadPromise = listUrl.map(item => {
+        let folderPath = `file:///storage/emulated/0/Android/data/io.techybrain.mimi_kara_nihongo/files/${course._id}/${item.unitId}`;
+        const fileTransfer = new Transfer();
+        return Promise.resolve(fileTransfer.download(item.url,
+          `${folderPath}/${item.audioFile}.mp3`));
+      });
+      return Promise.all(downloadPromise);
+    }).then(res => {
+      Toast.showLongCenter(`Course ${course.courseName} has been downloaded successfully`).subscribe(() => {});
+      course = this.courses[index];
+      course.downloading = false;
+      course.downloaded = true;
+      course.units.forEach(unit => {
+        unit.words.forEach(word => {
+          word.audioFile = `${course._id}/${unit._id}/${word.audioFile}.mp3`;
+        });
+      });
+      return this.dbService.updateCourse(course);
+    })
+    .catch(err => {
+      course.downloading = false;
+      Toast.showLongBottom('Error downloading').subscribe(() => {});
+    });
+  }
 
   showAlert() {
     let alert = Alert.create({

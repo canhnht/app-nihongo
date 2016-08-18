@@ -52,6 +52,9 @@ export class DbService {
       if (doc._id.startsWith('course')) {
         this.currentCourse = doc;
         this.currentCourseSubject.next(doc);
+        let courseIndex = this.listCourse.findIndex(course => course._id === doc._id);
+        this.listCourse[courseIndex] = doc;
+        this.listCourseSubject.next(this.listCourse);
       } else if (doc._id.startsWith('playlist')) {
         this.playlistSubject.next(doc);
       }
@@ -66,10 +69,11 @@ export class DbService {
       startkey: 'course',
       endkey: 'course\uffff'
     })).then(docs => {
-      return docs.rows.map(row => {
+      this.listCourse = docs.rows.map(row => {
         let course = row.doc;
         return course;
       });
+      return this.listCourse;
     }).catch(utils.errorHandler('Error get list course'));
     // if (!this.listCourse) {
     //   return Promise.resolve(this.db.allDocs({

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {IONIC_DIRECTIVES} from 'ionic-angular';
 
 @Component({
@@ -8,6 +8,7 @@ import {IONIC_DIRECTIVES} from 'ionic-angular';
 })
 export class CustomCheckbox {
   @Input() checked: boolean = false;
+  @Output() onClick = new EventEmitter();
 
   constructor() {
   }

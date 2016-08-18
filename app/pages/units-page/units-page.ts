@@ -3,6 +3,7 @@ import {NavController, NavParams, Popover, List, Alert} from 'ionic-angular';
 import {Toast, Transfer, File, SpinnerDialog} from 'ionic-native';
 import {WordsPage} from '../words-page/words-page';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
+import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
@@ -16,7 +17,7 @@ let firebase = require('firebase');
 
 @Component({
   templateUrl: 'build/pages/units-page/units-page.html',
-  directives: [AudioSetting],
+  directives: [AudioSetting, CustomCheckbox],
 })
 export class UnitsPage {
   @ViewChild(List) list: List;

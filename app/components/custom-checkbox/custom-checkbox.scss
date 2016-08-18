@@ -13,7 +13,7 @@
     vertical-align: text-top;
     width: 30px;
     height: 30px;
-    background: white;
+    background: #999;
   }
 
   &:checked + label:before {
@@ -26,7 +26,7 @@
     position: absolute;
     left: 6px;
     top: 10px;
-    background: white;
+    background: #999;
     width: 4px;
     height: 8px;
     box-shadow:
