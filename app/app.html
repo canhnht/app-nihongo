@@ -26,26 +26,40 @@
   </ion-header>
   <ion-content>
     <ion-list>
-      <ion-item button-primary menuClose (click)="openPage(homePage)">
-        <ion-icon primary name="home" item-left></ion-icon>
-        {{'Home' | translate}}
+      <ion-item button-primary menuClose
+        (click)="openPage(homePage)">
+        <div class="menu-item">
+          <ion-icon primary name="home" class="menu-icon"></ion-icon>
+          {{'Home' | translate}}
+        </div>
       </ion-item>
-      <ion-item button-primary menuClose (click)="openPage(playlistsPage)">
-        <ion-icon primary name="bookmark" item-left></ion-icon>
-        {{'My_playlist' | translate}}
+      <ion-item button-primary menuClose
+        (click)="openPage(playlistsPage)">
+        <div class="menu-item">
+          <ion-icon primary name="bookmark" class="menu-icon"></ion-icon>
+          {{'My_playlist' | translate}}
+        </div>
       </ion-item>
-      <ion-item button-primary menuClose>
-        <ion-icon primary name="mail" item-left></ion-icon>
-        Góp ý và liên hệ
+      <ion-item button-primary menuClose
+        (click)="openPage(feedbackPage)">
+        <div class="menu-item">
+          <ion-icon primary name="mail" class="menu-icon"></ion-icon>
+          Góp ý và liên hệ
+        </div>
       </ion-item>
-      <ion-item button-primary menuClose>
-        <ion-icon primary name="settings" item-left></ion-icon>
-        {{'Setting' | translate}}
+      <ion-item button-primary menuClose
+        (click)="openPage(settingPage)">
+        <div class="menu-item">
+          <ion-icon primary name="settings" class="menu-icon"></ion-icon>
+          {{'Setting' | translate}}
+        </div>
       </ion-item>
       <ion-item button-primary menuClose
         (click)="isSignedIn ? signOut() : signIn()">
-        <i primary class="fa fa-facebook-square icon-signin" item-left></i>
-        {{(isSignedIn ? 'Sign_out' : 'Sign_in_facebook') | translate}}
+        <div class="menu-item">
+          <i primary class="fa fa-facebook-square menu-icon"></i>
+          {{(isSignedIn ? 'Sign_out' : 'Sign_in_facebook') | translate}}
+        </div>
       </ion-item>
     </ion-list>
   </ion-content>

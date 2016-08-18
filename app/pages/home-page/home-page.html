@@ -13,7 +13,7 @@
       </div>
       <div class="right-side">
         <div class="number-units">
-          {{course.units.length}} Unit{{course.units.length > 1 ? 's' : ''}}
+          {{course.units.length}} {{'Unit' | translate}}
         </div>
         <div class="number-words">
           {{course.noWords}} {{'Word' | translate}}
@@ -29,7 +29,7 @@
           <span>☆</span>
         </div>
         <button primary class="btn-start" *ngIf="course.downloaded"
-          (click)="goToCourse($event, course)">
+          (click)="goToCourse(course)">
           <ion-icon name="navigate"></ion-icon>
           {{'Start' | translate}}
         </button>

@@ -7,15 +7,15 @@
 // By default each design mode includes these shared imports.
 // App Shared Sass variables belong in app.variables.scss.
 @font-face {
-  font-family: 'Eczar';
-  src: url('../../fonts/Eczar/Eczar-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+  font-family: 'Taviraj';
+  src: url('../../fonts/Taviraj/Taviraj-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
 }
 @font-face {
   font-family: 'Risque';
   src: url('../../fonts/Risque/Risque-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
 }
 * {
-  font-family: 'Risque', Fallback, sans-serif;
+  font-family: 'Taviraj', Fallback, sans-serif;
 }
 @import "font-awesome";
 
@@ -25,6 +25,9 @@
 @import "../pages/units-page/units-page";
 @import "../components/audio-setting/audio-setting";
 @import "../components/audio-player/audio-player";
+@import "../components/custom-checkbox/custom-checkbox";
 @import "../pages/playlists-page/playlists-page";
+@import "../pages/setting-page/setting-page";
+@import "../pages/feedback-page/feedback-page";
 @import "../app";
 // @import "../pages/login-page/login-page";

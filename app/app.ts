@@ -4,6 +4,8 @@ import {Platform, ionicBootstrap} from 'ionic-angular';
 import {StatusBar, Splashscreen, Toast} from 'ionic-native';
 import {HomePage} from './pages/home-page/home-page';
 import {LoginPage} from './pages/login-page/login-page';
+import {SettingPage} from './pages/setting-page/setting-page';
+import {FeedbackPage} from './pages/feedback-page/feedback-page';
 import {PlaylistsPage} from './pages/playlists-page/playlists-page';
 import {AudioService} from './services/audio.service';
 import {SliderService} from './services/slider.service';
@@ -22,6 +24,8 @@ let firebase = require('firebase');
 export class MyApp {
   homePage = HomePage;
   playlistsPage = PlaylistsPage;
+  settingPage = SettingPage;
+  feedbackPage = FeedbackPage;
   rootPage = HomePage;
   isSignedIn: boolean = false;
 

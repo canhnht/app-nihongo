@@ -1,0 +1,42 @@
+
+.styled-checkbox {
+  position: absolute; // take it out of document flow
+  opacity: 0; // hide it
+
+  & + label {
+    position: relative;
+  }
+
+  & + label:before {
+    content: '';
+    display: inline-block;
+    vertical-align: text-top;
+    width: 30px;
+    height: 30px;
+    background: white;
+  }
+
+  &:checked + label:before {
+    background: #32db64;
+  }
+
+  // Checkmark. Could be replaced with an image
+  &:checked + label:after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 10px;
+    background: white;
+    width: 4px;
+    height: 8px;
+    box-shadow:
+      4px 0 0 white,
+      8px 0 0 white,
+      8px -4px 0 white,
+      8px -8px 0 white,
+      8px -12px 0 white;
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+    transform: rotate(45deg);
+  }
+}

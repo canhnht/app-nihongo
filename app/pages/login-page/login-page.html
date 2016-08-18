@@ -5,7 +5,7 @@
   </button>
   <ion-title>Mimi Kara Nihongo</ion-title>
   <ion-buttons end>
-    <ion-checkbox class="chk-all" secondary checked="true"></ion-checkbox>
+    <custom-checkbox></custom-checkbox>
   </ion-buttons>
 </ion-navbar>
 
@@ -18,10 +18,10 @@
         </div>
         <div class="right-side">
           <div class="number-units">
-            10 Units
+            10 Bài
           </div>
           <div class="number-words">
-            100 Words
+            100 Từ
           </div>
           <div class="number-comments">
             <i class="fa fa-comment"></i> 50 Comments
@@ -43,7 +43,10 @@
           <ion-icon name="download"></ion-icon>
           Download
         </button>
-        <i class="fa fa-circle-o-notch fa-spin progress" primary></i>
+        <i class="fa fa-spinner fa-spin progress" primary *ngIf="false"></i>
+        <button danger clear round class="btn-delete" *ngIf="true">
+          <i class="fa fa-trash"></i>
+        </button>
       </div>
     </ion-card>
   </div>

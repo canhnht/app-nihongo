@@ -31,6 +31,7 @@
     padding: 0 20px;
 
     .course-title {
+      font-family: 'Risque', Fallback, sans-serif;
       font-size: 45px;
       font-weight: bold;
       color: white;
@@ -40,7 +41,7 @@
   .right-side {
     width: 100%;
     height: 100%;
-    padding: 20px 5px 10px 20px;
+    padding: 10px 5px 10px 20px;
     color: #999;
 
     .number-units, .number-words {
@@ -49,13 +50,12 @@
     }
 
     .number-words {
-      margin-top: 5px;
-      margin-bottom: 10px;
+      margin-top: -5px;
+      margin-bottom: 5px;
     }
 
     .number-comments {
       font-weight: 500;
-      margin-bottom: 5px;
       font-size: 16px;
 
       .fa-comment {
@@ -97,19 +97,19 @@
 
   .progress {
     position: absolute;
-    bottom: 20px;
-    right: 10px;
+    bottom: 10px;
+    right: 5px;
     font-size: 40px;
+  }
+
+  .btn-delete {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    font-size: 35px;
   }
 }
 
 
-
-
-
-
-.chk-all {
-  // width: 30px;
-  // height: 30px;
-  font-size: 50px;
-}
