@@ -41,7 +41,7 @@
         <i class="fa fa-spinner fa-spin progress" primary
           *ngIf="!course.downloaded && course.downloading"></i>
         <button danger clear round class="btn-delete"
-          *ngIf="course.downloaded">
+          *ngIf="course.downloaded" (click)="deleteCourse(course)">
           <i class="fa fa-trash"></i>
         </button>
       </div>

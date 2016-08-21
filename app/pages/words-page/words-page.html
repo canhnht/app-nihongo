@@ -1,30 +1,35 @@
 
-<ion-navbar *navbar primary>
+<ion-navbar *navbar primary class="words-navbar">
   <ion-title>
     {{course.courseName}} - {{unit.unitName}}
   </ion-title>
+  <ion-buttons end>
+    <custom-checkbox [checked]="selectedWords.length == words.length"
+      (onClick)="toggleSelectAll()">
+    </custom-checkbox>
+  </ion-buttons>
 </ion-navbar>
 
-<div class="select-all" padding>
-  <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
-    [checked]="selectedWords.length == words.length" />
-  <ion-label class="desc">
-    {{(selectedWords.length == words.length ? 'Deselect_all' : 'Select_all') | translate}}
-  </ion-label>
-</div>
 <ion-content>
   <ion-list [virtualScroll]="words">
-    <ion-item button-primary ion-item text-wrap *virtualItem="let word"
-      (click)="selectWord(word)">
-      <input type="checkbox" class="btn-select" item-left
-        (click)="checkWord($event, word)"
-        [checked]="selectedWords.indexOf(word._id) >= 0" />
-      <ion-label>
-        <h2>{{word.kanji}}</h2>
+    <ion-item button-primary text-wrap *virtualItem="let word"
+      (click)="selectWord($event, word)">
+      <ion-label class="word-item">
+        <button clear large class="word-bookmark"
+          [class.hidden]="!word.bookmarked"
+          (click)="addToPlaylist($event, word)">
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button clear large class="word-bookmark"
+          [class.hidden]="word.bookmarked"
+          (click)="addToPlaylist($event, word)">
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <h1>{{word.kanji}}</h1>
       </ion-label>
-      <button item-right clear (click)="addToPlaylist($event, word)">
-        <ion-icon name="add"></ion-icon>
-      </button>
+      <custom-checkbox item-right (onClick)="checkWord($event, word)"
+        [checked]="selectedWords.indexOf(word._id) >= 0">
+      </custom-checkbox>
     </ion-item>
   </ion-list>
 </ion-content>

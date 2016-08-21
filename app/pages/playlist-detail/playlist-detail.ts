@@ -3,6 +3,7 @@ import {NavController, NavParams, Popover, Loading, Alert} from 'ionic-angular';
 import {Subscription} from 'rxjs';
 import {Toast, SpinnerDialog} from 'ionic-native';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
+import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
@@ -11,26 +12,26 @@ import {WordSlides} from '../word-slides/word-slides';
 
 @Component({
   templateUrl: 'build/pages/playlist-detail/playlist-detail.html',
-  directives: [AudioSetting],
+  directives: [AudioSetting, CustomCheckbox],
 })
 export class PlaylistDetail {
-  playlist: any;
+  playlist: any = {};
   words: any[] = [];
   selectedWords: any[] = [];
   settingSubscription: Subscription;
-  playlists: any[];
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
     private settingService: SettingService) {
-    this.playlist = this.navParams.data.selectedPlaylist;
-    this.words = this.playlist.words;
   }
 
   ionViewWillEnter() {
+    this.playlist = this.navParams.data.selectedPlaylist;
+    this.words = this.playlist.words;
     if (this.settingService.selectedType === SelectedType.WordInPlaylist
       && this.settingService.status === SettingStatus.Playing)
       this.selectedWords = this.settingService.selectedList;
+    else this.selectedWords = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
         if (setting.selectedType === SelectedType.WordInPlaylist)
@@ -41,11 +42,11 @@ export class PlaylistDetail {
 
   ionViewWillLeave() {
     this.settingSubscription.unsubscribe();
-    this.selectedWords = [];
     this.settingService.reset();
   }
 
-  selectWord(word) {
+  selectWord($event, word) {
+    if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
     SpinnerDialog.show('Processing', 'Please wait a second', false);
     let wordIndex = this.words.findIndex(item => item._id === word._id);
     this.navController.push(WordSlides, {

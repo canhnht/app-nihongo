@@ -1,74 +1,73 @@
 
-<ion-navbar *navbar primary>
+<ion-navbar *navbar primary class="units-navbar">
   <button menuToggle left>
     <ion-icon name="menu"></ion-icon>
   </button>
   <ion-title>Mimi Kara Nihongo</ion-title>
   <ion-buttons end>
-    <custom-checkbox></custom-checkbox>
+    <custom-checkbox [checked]="isChecked" (onClick)="toggleCheck()">
+    </custom-checkbox>
   </ion-buttons>
 </ion-navbar>
 
 <ion-content>
-  <div class="abc">
-    <ion-card>
-      <div class="card-course">
-        <div class="left-side">
-          <div class="course-title">N3</div>
-        </div>
-        <div class="right-side">
-          <div class="number-units">
-            10 Bài
-          </div>
-          <div class="number-words">
-            100 Từ
-          </div>
-          <div class="number-comments">
-            <i class="fa fa-comment"></i> 50 Comments
-          </div>
-          <div class="rating">
-            <span>☆</span>
-            <span class="focus">☆</span>
-            <span>☆</span>
-            <span>☆</span>
-            <span>☆</span>
-          </div>
-        </div>
-        <button primary class="btn-start" *ngIf="false"
-          (click)="test()" menuToggle>
-          <ion-icon name="navigate"></ion-icon>
-          Start
-        </button>
-        <button primary class="btn-download">
-          <ion-icon name="download"></ion-icon>
-          Download
-        </button>
-        <i class="fa fa-spinner fa-spin progress" primary *ngIf="false"></i>
-        <button danger clear round class="btn-delete" *ngIf="true">
-          <i class="fa fa-trash"></i>
-        </button>
+  <ion-card>
+    <div class="card-course">
+      <div class="left-side">
+        <div class="course-title">N3</div>
       </div>
-    </ion-card>
-  </div>
-</ion-content>
-
-<!--<ion-content>
-  <ion-list>
-    <ion-item button-primary menuClose>
-      <ion-icon name="home" item-left></ion-icon>
-      Home
-    </ion-item>
-    <ion-item button-primary menuClose>
-      <ion-icon name="bookmark" item-left></ion-icon>
-      My Playlist
-    </ion-item>
-    <ion-item button-primary menuClose>
-      <ion-icon name="settings" item-left></ion-icon>
-      Setting
-    </ion-item>
-    <ion-item button-primary menuClose>
-      <i class="fa fa-facebook-square" item-left></i>
-      {{isSignedIn ? 'Sign out' : 'Sign in with Facebook'}}
+      <div class="right-side">
+        <div class="number-units">
+          10 Bài
+        </div>
+        <div class="number-words">
+          100 Từ
+        </div>
+        <div class="number-comments">
+          <i class="fa fa-comment"></i> 50 Comments
+        </div>
+        <div class="rating">
+          <span>☆</span>
+          <span class="focus">☆</span>
+          <span>☆</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+      </div>
+      <button primary class="btn-start" *ngIf="false"
+        (click)="test()" menuToggle>
+        <ion-icon name="navigate"></ion-icon>
+        Start
+      </button>
+      <button primary class="btn-download">
+        <ion-icon name="download"></ion-icon>
+        Download
+      </button>
+      <i class="fa fa-spinner fa-spin progress" primary *ngIf="false"></i>
+      <button danger clear round class="btn-delete" *ngIf="true">
+        <i class="fa fa-trash"></i>
+      </button>
+    </div>
+  </ion-card>
+  <ion-list [virtualScroll]="items">
+    <ion-item button-primary text-wrap *virtualItem="let item"
+      (click)="testClick($event)">
+      <ion-label class="word-item">
+        <button clear large class="word-bookmark"
+          (click)="test($event)">
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button clear large class="word-bookmark" [class.hidden]="true"
+          (click)="test($event)">
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <h1>{{item}}</h1>
+      </ion-label>
+      <custom-checkbox item-right (onClick)="test($event)">
+      </custom-checkbox>
     </ion-item>
   </ion-list>
-</ion-content>-->
+  <button fab fab-right fab-bottom large>
+    <ion-icon name="add"></ion-icon>
+  </button>
+</ion-content>

@@ -13,6 +13,7 @@ import {DbService} from './services/db.service';
 import {WordSlides} from './pages/word-slides/word-slides';
 import {AuthService} from './services/auth.service';
 import {SettingService} from './services/setting.service';
+import {LocalStorageService} from './services/local-storage.service';
 import {TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {firebaseConfig} from './config-local';
 declare var require: any;
@@ -30,18 +31,18 @@ export class MyApp {
   isSignedIn: boolean = false;
 
   constructor(private platform: Platform, private authService: AuthService,
-    private translate: TranslateService) {
+    private translate: TranslateService, private storageService: LocalStorageService) {
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-
-    this.platform.ready()
-      .then(() => {
-        StatusBar.styleDefault();
-        Splashscreen.hide();
-        this.authService.checkLoginStatus().then(() => {
-          this.isSignedIn = this.authService.isSignedIn;
-        });
+    this.platform.ready().then(() => {
+      return this.storageService.init();
+    }).then(() => {
+      StatusBar.styleDefault();
+      Splashscreen.hide();
+      this.authService.checkLoginStatus().then(() => {
+        this.isSignedIn = this.authService.isSignedIn;
       });
+    });
 
     this.initializeI18n();
   }
@@ -88,5 +89,6 @@ ionicBootstrap(MyApp, [
     provide: PLATFORM_PIPES,
     useValue: TranslatePipe,
     multi: true,
-  }
+  },
+  LocalStorageService
 ]);

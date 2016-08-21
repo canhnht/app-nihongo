@@ -1,5 +1,5 @@
 
-<ion-navbar *navbar primary>
+<ion-navbar *navbar primary class="units-navbar">
   <ion-title>
     {{course.courseName}}
   </ion-title>
@@ -13,11 +13,13 @@
 <ion-content>
   <ion-list [virtualScroll]="units">
     <ion-item button-primary text-wrap *virtualItem="let unit"
-      (click)="goToUnit(unit)">
-      <ion-badge class="unit-icon">U{{unit.number}}</ion-badge>
-      <ion-label>
-        <h2>{{unit.unitName}}</h2>
-        <p>{{unit.noWords}} {{'word' | translate}}</p>
+      (click)="goToUnit($event, unit)">
+      <ion-label class="unit-item">
+        <ion-badge class="unit-number">U{{unit.number}}</ion-badge>
+        <div>
+          <h2>{{unit.unitName}}</h2>
+          <p>{{unit.noWords}} {{'word' | translate}}</p>
+        </div>
       </ion-label>
       <custom-checkbox item-right (onClick)="checkUnit($event, unit)"
         [checked]="selectedUnits.indexOf(unit._id) >= 0">

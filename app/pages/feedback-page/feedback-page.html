@@ -1,10 +1,30 @@
 
 <ion-navbar *navbar primary>
-  <ion-title>
-    Setting
-  </ion-title>
+  <button menuToggle left>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Góp ý và liên hệ</ion-title>
 </ion-navbar>
 
 <ion-content>
-  Setting Page
+  <ion-list>
+    <ion-item button-primary text-wrap (click)="displayAuthor()">
+      <ion-label class="setting-item">
+        <ion-icon primary name="information-circle" class="setting-icon"></ion-icon>
+        Giới thiệu tác giả
+      </ion-label>
+    </ion-item>
+    <ion-item button-primary text-wrap>
+      <ion-label class="setting-item">
+        <ion-icon primary name="star-half" class="setting-icon"></ion-icon>
+        Đóng góp ý kiến
+      </ion-label>
+    </ion-item>
+    <ion-item button-primary text-wrap>
+      <ion-label class="setting-item">
+        <ion-icon primary name="card" class="setting-icon"></ion-icon>
+        Donate
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

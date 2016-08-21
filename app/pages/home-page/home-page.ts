@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {Toast, Transfer} from 'ionic-native';
+import {Toast, Transfer, File} from 'ionic-native';
 import {NavController, Popover, Alert} from 'ionic-angular';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {UnitsPage} from '../units-page/units-page';
@@ -33,6 +33,20 @@ export class HomePage {
 
   goToCourse(course) {
     this.navController.push(UnitsPage, {selectedCourseId: course._id});
+  }
+
+  deleteCourse(course) {
+    let folderPath = `file:///storage/emulated/0/Android/data/io.techybrain.mimi_kara_nihongo/files/`;
+    File.removeRecursively(folderPath, course._id).then(res => {
+      Toast.showLongCenter(`Course ${course.courseName} has been deleted successfully`).subscribe(() => {});
+    }).catch(err => {
+      Toast.showLongBottom('Error deleting').subscribe(() => {});
+    });
+
+    course.units = [];
+    course.noWords = 0;
+    course.downloaded = false;
+    this.dbService.updateCourse(course);
   }
 
   downloadCourse(course, index) {

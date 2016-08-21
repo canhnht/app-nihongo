@@ -1,11 +1,22 @@
 
-.unit-icon {
-  border-radius: 50%;
-  color: white;
-  width: 40px;
-  height: 40px;
-  font-size: 17px;
+.unit-item {
   display: flex;
-  justify-content: center;
   align-items: center;
+
+  .unit-number {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+  }
+}
+
+.units-navbar {
+  .custom-checkbox {
+    margin-right: 11px;
+  }
 }

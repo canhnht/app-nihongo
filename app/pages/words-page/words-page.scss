@@ -1,16 +1,25 @@
-.btn-select {
-  width: 20px;
-  height: 20px;
-}
 
-.select-all {
-  background-color: #ddd;
+.word-item {
   display: flex;
   align-items: center;
-  height: 50px;
+
+  .word-bookmark {
+    width: 30px;
+    height: 30px;
+    margin-right: 20px;
+
+    .icon-bookmark {
+      font-size: 1.6em;
+    }
+
+    &.hidden {
+      display: none;
+    }
+  }
 }
 
-.desc {
-  font-size: 20px;
+.words-navbar {
+  .custom-checkbox {
+    margin-right: 11px;
+  }
 }
-

@@ -20,4 +20,16 @@ export class FeedbackPage {
   constructor(private navController: NavController,
     private translate: TranslateService) {
   }
+
+  displayAuthor() {
+    let alert = Alert.create({
+      title: 'Giới thiệu tác giả',
+      subTitle: `
+        <strong>TechyBrain</strong><br />
+        <strong>Email:</strong> techybraingroup@gmail.com<br />
+        <strong>Website:</strong> toithacmac.wordpress.com
+      `,
+    });
+    this.navController.present(alert);
+  }
 }

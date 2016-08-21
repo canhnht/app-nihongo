@@ -1,35 +1,33 @@
-<ion-navbar *navbar primary>
+
+<ion-navbar *navbar primary class="playlists-navbar">
   <button menuToggle left>
     <ion-icon name="menu"></ion-icon>
   </button>
   <ion-title>{{'My_playlist' | translate}}</ion-title>
   <ion-buttons end>
-    <button (click)="addNewPlaylist()">
-      <ion-icon name="add"></ion-icon>
-    </button>
+    <custom-checkbox [checked]="selectedPlaylists.length == playlists.length"
+      (onClick)="toggleSelectAll()" *ngIf="playlists.length > 0">
+    </custom-checkbox>
   </ion-buttons>
 </ion-navbar>
 
-<div class="select-all" padding *ngIf="playlists.length > 0">
-  <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
-    [checked]="selectedPlaylists.length == playlists.length" />
-  <ion-label class="desc">
-    {{(selectedPlaylists.length == playlists.length ? 'Deselect_all' : 'Select_all') | translate}}
-  </ion-label>
-</div>
 <ion-content>
   <ion-list>
     <ion-item-sliding *ngFor="let playlist of playlists">
-      <ion-item button-primary text-wrap (click)="goToPlaylistDetail(playlist)">
-        <input class="btn-select" type="checkbox" item-left (click)="checkPlaylist($event, playlist)"
-          [checked]="selectedPlaylists.indexOf(playlist._id) >= 0" />
-        <ion-badge item-left>
-          <ion-icon large name="musical-notes"></ion-icon>
-        </ion-badge>
-        <ion-label>
-          <h2>{{playlist.name}}</h2>
-          <p>{{playlist.words.length}} {{'word' | translate}}</p>
+      <ion-item button-primary text-wrap
+        (click)="goToPlaylistDetail($event, playlist)">
+        <ion-label class="playlist-item">
+          <ion-badge class="playlist-icon">
+            <ion-icon large name="musical-notes"></ion-icon>
+          </ion-badge>
+          <div>
+            <h2>{{playlist.name}}</h2>
+            <p>{{playlist.words.length}} {{'word' | translate}}</p>
+          </div>
         </ion-label>
+        <custom-checkbox item-right (onClick)="checkPlaylist($event, playlist)"
+          [checked]="selectedPlaylists.indexOf(playlist._id) >= 0">
+        </custom-checkbox>
       </ion-item>
       <ion-item-options>
         <button primary (click)="editPlaylist(playlist)">
@@ -43,6 +41,9 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
+  <button fab fab-right fab-bottom large (click)="addNewPlaylist()">
+    <ion-icon name="add"></ion-icon>
+  </button>
 </ion-content>
 <audio-setting (onPageTransfer)="goToWordSlides()">
 </audio-setting>

@@ -4,6 +4,7 @@ import {DbService} from '../../services/db.service';
 import {Toast, SpinnerDialog} from 'ionic-native';
 import {Subscription} from 'rxjs';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
+import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
@@ -13,7 +14,7 @@ import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Component({
   templateUrl: 'build/pages/playlists-page/playlists-page.html',
-  directives: [AudioSetting],
+  directives: [AudioSetting, CustomCheckbox],
 })
 export class PlaylistsPage {
   playlists: any[] = [];
@@ -56,7 +57,8 @@ export class PlaylistsPage {
     this.settingService.reset();
   }
 
-  goToPlaylistDetail(playlist) {
+  goToPlaylistDetail($event, playlist) {
+    if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
     this.navController.push(PlaylistDetail, { selectedPlaylist: playlist });
   }
 

@@ -9,11 +9,26 @@ import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
   directives: [CustomCheckbox],
 })
 export class LoginPage {
+  isChecked: boolean = false;
+  items = ['item1', 'item2'];
+
   constructor(private navController: NavController, private menu: MenuController) {
     // this.menu.open();
   }
 
-  test() {
+  toggleCheck() {
+    console.log('toggleCheck');
+    this.isChecked = !this.isChecked;
+  }
+
+  test($event) {
     console.log('test');
+    $event.stopPropagation();
+    // alert('test' + $event.target.attributes[0]);
+  }
+
+  testClick($event) {
+    if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
+    console.log('testClick');
   }
 }

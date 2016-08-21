@@ -4,6 +4,7 @@ import {Subject, Observable} from 'rxjs';
 import {MediaPlugin, Toast} from 'ionic-native';
 import {DbService} from './db.service';
 import {SettingService} from './setting.service';
+import {LocalStorageService} from './local-storage.service';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Injectable()
@@ -22,7 +23,7 @@ export class AudioService {
   // basePath: string = 'file:///android_asset/www/audio';
 
   constructor(private dbService: DbService, private settingService: SettingService,
-    private translate: TranslateService) {
+    private translate: TranslateService, private storageService: LocalStorageService) {
     this.currentTrack.seekTime = '00:00';
     this.currentTrack.duration = '00:00';
   }

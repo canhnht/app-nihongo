@@ -1,15 +1,15 @@
-.btn-select {
-  width: 20px;
-  height: 20px;
-}
 
-.select-all {
-  background-color: #ddd;
+.playlist-item {
   display: flex;
   align-items: center;
-  height: 50px;
+
+  .playlist-icon {
+    margin-right: 10px;
+  }
 }
 
-.desc {
-  font-size: 20px;
+.playlists-navbar {
+  .custom-checkbox {
+    margin-right: 11px;
+  }
 }

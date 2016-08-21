@@ -3,6 +3,7 @@ import {NavController, NavParams, Popover, Loading, Alert, Modal} from 'ionic-an
 import {Subscription} from 'rxjs';
 import {Toast, SpinnerDialog} from 'ionic-native';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
+import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
@@ -14,15 +15,17 @@ import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Component({
   templateUrl: 'build/pages/words-page/words-page.html',
-  directives: [AudioSetting],
+  directives: [AudioSetting, CustomCheckbox],
 })
 export class WordsPage {
   unit: any = {};
   course: any = {};
+  unitIndex: number;
   words: any[] = [];
   selectedWords: any[] = [];
   playlistSubscription: Subscription;
   settingSubscription: Subscription;
+  currentCourseSubscription: Subscription;
   playlists: any[];
 
   constructor(private navController: NavController, private navParams: NavParams,
@@ -34,7 +37,17 @@ export class WordsPage {
   ionViewWillEnter() {
     this.unit = this.navParams.data.selectedUnit;
     this.course = this.dbService.currentCourse;
+    this.unitIndex = this.course.units.findIndex(e => e._id === this.unit._id);
     this.words = [...this.unit.words];
+    // alert('check ' + JSON.stringify(this.words));
+
+    this.currentCourseSubscription = this.dbService.currentCourseSubject.subscribe(
+      course => {
+        this.course = course;
+        this.unit = this.course.units[this.unitIndex];
+        this.words = [...this.unit.words];
+      }
+    );
 
     this.dbService.getAllPlaylists()
       .then(allPlaylists => {
@@ -62,12 +75,14 @@ export class WordsPage {
   }
 
   ionViewWillLeave() {
+    this.currentCourseSubscription.unsubscribe();
     this.playlistSubscription.unsubscribe();
     this.settingSubscription.unsubscribe();
     this.settingService.reset();
   }
 
-  selectWord(word) {
+  selectWord($event, word) {
+    if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
     SpinnerDialog.show(this.translate.instant('Processing'),
       this.translate.instant('Please_wait'), false);
     let wordIndex = this.words.findIndex(item => item._id === word._id);
@@ -79,12 +94,12 @@ export class WordsPage {
   }
 
   checkWord($event, word) {
-    $event.stopPropagation();
     this.settingService.toggleWordInUnit(word);
+    $event.stopPropagation();
   }
 
   addToPlaylist($event, word) {
-    $event.stopPropagation();
+    let wordIndex = this.words.findIndex(e => e._id === word._id);
     let alert = Alert.create();
     alert.setTitle(this.translate.instant('Add_word'));
     this.playlists.forEach((playlist, index) => {
@@ -99,6 +114,7 @@ export class WordsPage {
     alert.addButton({
       text: this.translate.instant('OK'),
       handler: data => {
+        this.course.units[this.unitIndex].words[wordIndex].bookmarked = data.length > 0;
         data = data.map(e => parseInt(e));
         data.forEach(index => {
           if (this.playlists[index].words.findIndex(e => e._id === word._id) === -1)
@@ -111,11 +127,13 @@ export class WordsPage {
           }
         });
         this.dbService.updateMultiplePlaylists(this.playlists);
+        this.dbService.updateCourse(this.course);
       }
     });
     this.navController.present(alert);
     // let modal = Modal.create(PlaylistOptions);
     // this.navController.present(modal);
+    $event.stopPropagation();
   }
 
   toggleSelectAll() {

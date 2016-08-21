@@ -1,28 +1,25 @@
 
-<ion-navbar *navbar primary>
+<ion-navbar *navbar primary class="playlist-navbar">
   <ion-title>
     {{playlist.name}}
   </ion-title>
+  <ion-buttons end>
+    <custom-checkbox [checked]="selectedWords.length === words.length"
+      (onClick)="toggleSelectAll()" *ngIf="words.length > 0">
+    </custom-checkbox>
+  </ion-buttons>
 </ion-navbar>
 
-<div class="select-all" padding *ngIf="words.length > 0">
-  <input class="btn-select" type="checkbox" item-left (click)="toggleSelectAll()"
-    [checked]="selectedWords.length == words.length" />
-  <ion-label class="desc">
-    {{(selectedWords.length == words.length ? 'Deselect_all' : 'Select_all') | translate}}
-  </ion-label>
-</div>
 <ion-content>
   <ion-list [virtualScroll]="words">
-    <ion-item button-primary ion-item text-wrap *virtualItem="let word"
-      (click)="selectWord(word)">
-      <input type="checkbox" class="btn-select" item-left
-        (click)="checkWord($event, word)"
-        [checked]="selectedWords.indexOf(word._id) >= 0" />
+    <ion-item button-primary text-wrap *virtualItem="let word"
+      (click)="selectWord($event, word)">
       <ion-label>
-        <h2>{{word.kanji}}</h2>
-        <p>{{word.hira_kata}}</p>
+        <h1>{{word.kanji}}</h1>
       </ion-label>
+      <custom-checkbox item-right (onClick)="checkWord($event, word)"
+        [checked]="selectedWords.indexOf(word._id) >= 0">
+      </custom-checkbox>
     </ion-item>
   </ion-list>
 </ion-content>

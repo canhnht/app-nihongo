@@ -7,6 +7,7 @@ import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {DbService} from '../../services/db.service';
+import {LocalStorageService} from '../../services/local-storage.service';
 import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
@@ -16,8 +17,50 @@ import {TranslateService} from 'ng2-translate/ng2-translate';
   templateUrl: 'build/pages/setting-page/setting-page.html',
 })
 export class SettingPage {
+  timeBetweenWords: number;
+  repeatEachWord: number;
 
   constructor(private navController: NavController,
-    private translate: TranslateService) {
+    private translate: TranslateService, private storageService: LocalStorageService) {
+    this.storageService.get('time_between_words').then(res => this.timeBetweenWords = res);
+    this.storageService.get('repeat_each_word').then(res => this.repeatEachWord = res);
+  }
+
+  selectLanguage() {
+    let languageAlert = Alert.create();
+    languageAlert.setTitle('Chọn ngôn ngữ');
+
+    this.storageService.get('language').then(res => {
+      languageAlert.addInput({
+        type: 'radio',
+        label: 'Tiếng Việt',
+        value: 'vn',
+        checked: res === 'vn'
+      });
+
+      languageAlert.addInput({
+        type: 'radio',
+        label: 'Tiếng Nhật',
+        value: 'ja',
+        checked: res === 'ja'
+      });
+
+      languageAlert.addButton('Hủy');
+      languageAlert.addButton({
+        text: 'Đồng ý',
+        handler: data => {
+          this.storageService.set('language', data);
+        }
+      });
+      this.navController.present(languageAlert);
+    });
+  }
+
+  setTimeBetweenWords() {
+    this.storageService.set('time_between_words', this.timeBetweenWords);
+  }
+
+  setRepeatEachWord() {
+    this.storageService.set('repeat_each_word', this.repeatEachWord);
   }
 }
