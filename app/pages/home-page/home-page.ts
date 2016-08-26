@@ -1,9 +1,12 @@
 import {Component} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {Toast, Transfer, File} from 'ionic-native';
-import {NavController, Popover, Alert} from 'ionic-angular';
+import {NavController, Popover, Alert, NavParams} from 'ionic-angular';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
+import {AudioSetting} from '../../components/audio-setting/audio-setting';
+import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {UnitsPage} from '../units-page/units-page';
+import {WordSlides} from '../word-slides/word-slides';
 import {DbService} from '../../services/db.service';
 import {SettingService} from '../../services/setting.service';
 declare var require: any;
@@ -11,13 +14,16 @@ let firebase = require('firebase');
 
 @Component({
   templateUrl: 'build/pages/home-page/home-page.html',
+  directives: [AudioSetting, CustomCheckbox]
 })
 export class HomePage {
   courses: any[];
   listCourseSubscription: Subscription;
+  tabPage: string;
 
   constructor(private navController: NavController, private dbService: DbService,
-    private settingService: SettingService) {
+    private settingService: SettingService, private navParams: NavParams) {
+    this.tabPage = this.navParams.data.tabPage || 'home';
   }
 
   ionViewWillEnter() {
@@ -133,5 +139,13 @@ export class HomePage {
       ]
     });
     this.navController.present(confirm);
+  }
+
+  getItems($event) {
+    console.log('getItems', $event.value);
+  }
+
+  goToWordSlides() {
+    this.navController.push(WordSlides);
   }
 }

@@ -12,6 +12,7 @@ export class AudioService {
   trackIndexSubject: Subject<number> = new Subject<number>();
   currentTrack: any = {};
   intervalGetCurrentPosition: any;
+  intervalBetweenWords: any;
   listTrack: MediaPlugin[] = null;
   listWord: any[];
   listWordOrder: number[];
@@ -21,6 +22,8 @@ export class AudioService {
   singleWordIndex: number;
   basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.mimi_kara_nihongo/files';
   // basePath: string = 'file:///android_asset/www/audio';
+  repeatEachWord: any = 1;
+  timeBetweenWords: any = 0;
 
   constructor(private dbService: DbService, private settingService: SettingService,
     private translate: TranslateService, private storageService: LocalStorageService) {
@@ -80,14 +83,23 @@ export class AudioService {
   }
 
   playSetting() {
-    this.listWord = this.settingService.selectedWords.reduce((result, listWord) => {
+    this.listWord = [...this.settingService.selectedWords.reduce((result, listWord) => {
       return result.concat(listWord);
-    }, []);
-    this.getListWordOrder();
-    this.stopListTrack();
-    this.generateListTrack();
-    this.currentTrack.index = 0;
-    this.playCurrentTrack();
+    }, [])];
+    let localPromise = [
+      this.storageService.get('repeat_each_word'),
+      this.storageService.get('time_between_words')
+    ];
+    Promise.all(localPromise).then(result => {
+      this.repeatEachWord = result[0];
+      this.timeBetweenWords = result[1];
+      this.listWord.forEach(word => word.repeatCount = 0);
+      this.getListWordOrder();
+      this.stopListTrack();
+      this.generateListTrack();
+      this.currentTrack.index = 0;
+      this.playCurrentTrack();
+    });
   }
 
   private generateListTrack() {
@@ -108,24 +120,38 @@ export class AudioService {
 
   goToNextTrack() {
     this.pauseCurrentTrack();
+    let wordIndex = this.listWordOrder[this.currentTrack.index];
+    this.listWord[wordIndex].repeatCount += 1;
+    if (this.listWord[wordIndex].repeatCount < this.repeatEachWord) {
+      let track: MediaPlugin = this.listTrack[this.currentTrack.index];
+      track.seekTo(0);
+      this.playCurrentTrack();
+      return;
+    }
+    this.listWord[wordIndex].repeatCount = 0;
     this.listTrack[this.currentTrack.index].release();
-    // this.listTrack[this.currentTrack.index].seekTo(0);
     this.currentTrack.index += 1;
     if (this.currentTrack.index == this.listTrack.length) {
       this.currentTrack.playedPercent = 100;
       this.currentTrack.seekTime = this.convertText(this.getTotalDuration());
       this.currentTrack.index = 0;
       if (this.isLoop) {
-        this.trackIndexSubject.next(this.currentTrack.index);
-        this.playCurrentTrack();
+        this.startCountDown(this.timeBetweenWords, () => {
+          this.trackIndexSubject.next(this.currentTrack.index);
+          this.playCurrentTrack();
+        });
       } else {
+        this.trackIndexSubject.next(this.currentTrack.index);
+        this.currentTrack.playedPercent = 0;
+        this.currentTrack.seekTime = this.convertText(0);
         this.isPlaying = false;
         this.pauseCurrentTrack();
       }
     } else {
-      // Toast.showLongTop(`${JSON.stringify(this.listWord[this.listWordOrder[this.currentTrack.index]])}`).subscribe(() => {});
-      this.trackIndexSubject.next(this.currentTrack.index);
-      this.playCurrentTrack();
+      this.startCountDown(this.timeBetweenWords, () => {
+        this.trackIndexSubject.next(this.currentTrack.index);
+        this.playCurrentTrack();
+      });
     }
   }
 
@@ -165,7 +191,7 @@ export class AudioService {
           this.goToNextTrack();
         }
       }).catch(err => {
-        alert('ERROR getCurrentPosition ' + JSON.stringify(err));
+        Toast.showShortBottom('ERROR getCurrentPosition ' + JSON.stringify(err)).subscribe(() => {});
       })
     }, 1000);
   }
@@ -173,6 +199,27 @@ export class AudioService {
   private stopGetCurrentPositionInterval() {
     clearInterval(this.intervalGetCurrentPosition);
     this.intervalGetCurrentPosition = null;
+  }
+
+  private startCountDown(timeAmount, action) {
+    if (timeAmount <= 0) return action();
+    let countDown: number = timeAmount;
+    Toast.showShortTop(`Next word in ${countDown}`).subscribe(() => {});
+    this.intervalBetweenWords = setInterval(() => {
+      --countDown;
+      if (countDown === 0) {
+        this.stopCountDown();
+        action();
+      } else {
+        Toast.hide();
+        Toast.showShortTop(`Next word in ${countDown}`).subscribe(() => {});
+      }
+    }, 1000);
+  }
+
+  stopCountDown() {
+    clearInterval(this.intervalBetweenWords);
+    this.intervalBetweenWords = null;
   }
 
   pauseCurrentTrack() {
@@ -205,8 +252,9 @@ export class AudioService {
       let continuePlaying = this.currentTrack.isPlaying;
       this.pauseCurrentTrack();
       this.listTrack[this.currentTrack.index].release();
-      // this.listTrack[this.currentTrack.index].seekTo(0);
+      this.listWord[this.listWordOrder[this.currentTrack.index]].repeatCount = 0;
       this.currentTrack.index = nextIndex;
+      this.listWord[this.listWordOrder[nextIndex]].repeatCount = 0;
       let track: MediaPlugin = this.listTrack[this.currentTrack.index];
       if (continuePlaying)
         this.playCurrentTrack();
@@ -239,7 +287,9 @@ export class AudioService {
       let continuePlaying = this.currentTrack.isPlaying;
       this.pauseCurrentTrack();
       this.listTrack[this.currentTrack.index].seekTo(0);
+      this.listWord[this.listWordOrder[this.currentTrack.index]].repeatCount = 0;
       this.currentTrack.index = nextIndex;
+      this.listWord[this.listWordOrder[nextIndex]].repeatCount = 0;
       if (continuePlaying)
         this.playCurrentTrack();
       this.currentTrack.seekTime = this.convertText(position);
@@ -250,7 +300,7 @@ export class AudioService {
 
   repeatCurrentTrack() {
     Toast.hide();
-    Toast.showShortTop('Repeat current vocabulary').subscribe(() => {});
+    Toast.showShortTop('Repeat current word').subscribe(() => {});
     this.pauseCurrentTrack();
     this.listTrack[this.currentTrack.index].seekTo(0);
     this.playCurrentTrack();

@@ -1,16 +1,23 @@
-
 <ion-navbar *navbar primary class="units-navbar">
   <button menuToggle left>
     <ion-icon name="menu"></ion-icon>
   </button>
   <ion-title>Mimi Kara Nihongo</ion-title>
-  <ion-buttons end>
-    <custom-checkbox [checked]="isChecked" (onClick)="toggleCheck()">
-    </custom-checkbox>
-  </ion-buttons>
 </ion-navbar>
+<ion-header>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="tabPage">
+      <ion-segment-button value="home">
+        <ion-icon name="home"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="search">
+        <ion-icon name="search"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
 
-<ion-content>
+<ion-content *ngIf="tabPage == 'home'">
   <ion-card>
     <div class="card-course">
       <div class="left-side">
@@ -24,7 +31,7 @@
           100 Từ
         </div>
         <div class="number-comments">
-          <i class="fa fa-comment"></i> 50 Comments
+          0 Comment <i class="fa fa-comment"></i>
         </div>
         <div class="rating">
           <span>☆</span>
@@ -51,7 +58,7 @@
   </ion-card>
   <ion-list [virtualScroll]="items">
     <ion-item button-primary text-wrap *virtualItem="let item"
-      (click)="testClick($event)">
+      (swipe)="testClick($event)">
       <ion-label class="word-item">
         <button clear large class="word-bookmark"
           (click)="test($event)">
@@ -61,13 +68,44 @@
           (click)="test($event)">
           <i class="fa fa-bookmark-o icon-bookmark"></i>
         </button>
-        <h1>{{item}}</h1>
+        <h1>{{item.title}}</h1>
       </ion-label>
-      <custom-checkbox item-right (onClick)="test($event)">
+      <custom-checkbox item-right (onClick)="test($event, item)"
+        [checked]="item.checked">
       </custom-checkbox>
     </ion-item>
   </ion-list>
   <button fab fab-right fab-bottom large>
     <ion-icon name="add"></ion-icon>
   </button>
+</ion-content>
+<audio-setting *ngIf="tabPage == 'home'"></audio-setting>
+
+
+
+
+
+<ion-content *ngIf="tabPage == 'search'">
+  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+  <ion-list [virtualScroll]="items">
+    <ion-item button-primary text-wrap *virtualItem="let item"
+      (swipe)="testClick($event)">
+      <ion-label class="word-item">
+        <button clear large class="word-bookmark"
+          (click)="test($event)">
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button clear large class="word-bookmark" [class.hidden]="true"
+          (click)="test($event)">
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h2>郵便番号 (0)</h2>
+          <p>8:00 AM</p>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right (onClick)="test($event)">
+      </custom-checkbox>
+    </ion-item>
+  </ion-list>
 </ion-content>

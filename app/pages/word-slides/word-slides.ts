@@ -74,6 +74,7 @@ export class WordSlides {
     this.playlistSubscription.unsubscribe();
     if (this.playSingleWord) return this.singleTrack.release();
     this.trackIndexSubscription.unsubscribe();
+    this.audioService.stopCountDown();
     this.audioService.pauseCurrentTrack();
   }
 

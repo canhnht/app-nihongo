@@ -17,9 +17,14 @@ export class AudioSetting implements OnInit, OnDestroy {
   isDisable: boolean = true;
   isContinue: boolean = false;
   settingSubscription: Subscription;
+  fullHeight: boolean = false;
 
   constructor(private audioService: AudioService, private settingService: SettingService,
     private sliderService: SliderService, private translate: TranslateService) {
+  }
+
+  toggleFullHeight() {
+    this.fullHeight = !this.fullHeight;
   }
 
   ngOnInit() {

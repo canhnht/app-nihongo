@@ -39,7 +39,6 @@ export class WordsPage {
     this.course = this.dbService.currentCourse;
     this.unitIndex = this.course.units.findIndex(e => e._id === this.unit._id);
     this.words = [...this.unit.words];
-    // alert('check ' + JSON.stringify(this.words));
 
     this.currentCourseSubscription = this.dbService.currentCourseSubject.subscribe(
       course => {

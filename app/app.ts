@@ -1,6 +1,6 @@
-import {Component, PLATFORM_PIPES} from '@angular/core';
+import {Component, PLATFORM_PIPES, ViewChild} from '@angular/core';
 import {Http} from '@angular/http';
-import {Platform, ionicBootstrap} from 'ionic-angular';
+import {Platform, ionicBootstrap, NavController} from 'ionic-angular';
 import {StatusBar, Splashscreen, Toast} from 'ionic-native';
 import {HomePage} from './pages/home-page/home-page';
 import {LoginPage} from './pages/login-page/login-page';
@@ -23,6 +23,7 @@ let firebase = require('firebase');
   templateUrl: 'build/app.html',
 })
 export class MyApp {
+  @ViewChild('content') navController: NavController;
   homePage = HomePage;
   playlistsPage = PlaylistsPage;
   settingPage = SettingPage;
@@ -68,8 +69,11 @@ export class MyApp {
     });
   }
 
-  openPage(page) {
-    this.rootPage = page;
+  openPage(page, params, isBack = false) {
+    if (isBack)
+      this.navController.push(page, params);
+    else
+      this.navController.setRoot(page, params);
   }
 }
 

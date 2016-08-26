@@ -1,17 +1,4 @@
 <ion-menu [content]="content" side="left">
-  <!--<ion-toolbar primary>
-    <div class="app-toolbar">
-      <div class="app-name">
-        Mimi Kara Nihongo
-      </div>
-      <div class="app-version">
-        Version 1.1
-      </div>
-      <div class="copyright">
-        © Designed by <strong>TechyBrain</strong>
-      </div>
-    </div>
-  </ion-toolbar>-->
   <ion-header primary class="app-toolbar">
     <div class="app-name">
       Mimi Kara Nihongo
@@ -27,7 +14,14 @@
   <ion-content>
     <ion-list>
       <ion-item button-primary menuClose text-wrap
-        (click)="openPage(homePage)">
+        (click)="openPage(homePage, { tabPage: 'search' })">
+        <ion-label class="menu-item">
+          <ion-icon primary name="search" class="menu-icon"></ion-icon>
+          Tìm kiếm
+        </ion-label>
+      </ion-item>
+      <ion-item button-primary menuClose text-wrap
+        (click)="openPage(homePage, { tabPage: 'home' })">
         <ion-label class="menu-item">
           <ion-icon primary name="home" class="menu-icon"></ion-icon>
           {{'Home' | translate}}
@@ -41,14 +35,14 @@
         </ion-label>
       </ion-item>
       <ion-item button-primary menuClose text-wrap
-        (click)="openPage(feedbackPage)">
+        (click)="openPage(feedbackPage, null, true)">
         <ion-label class="menu-item">
           <ion-icon primary name="mail" class="menu-icon"></ion-icon>
           Góp ý và liên hệ
         </ion-label>
       </ion-item>
       <ion-item button-primary menuClose text-wrap
-        (click)="openPage(settingPage)">
+        (click)="openPage(settingPage, null, true)">
         <ion-label class="menu-item">
           <ion-icon primary name="settings" class="menu-icon"></ion-icon>
           {{'Setting' | translate}}

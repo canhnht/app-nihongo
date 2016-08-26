@@ -1,17 +1,79 @@
 .audio-setting {
+  position: relative;
   border-top: 2px solid #ccc;
   background-color: white;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
-  padding: 10px 0;
+  height: 0;
+  transition-property: all;
+	transition-duration: .5s;
+	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+
+  &.full {
+    height: 60px;
+  }
+
+  .btn-up {
+    z-index: 10000;
+    position: absolute;
+    top: -30px;
+    left: calc(50% - 11px);
+    font-size: 40px;
+  }
+
+  .btn-down {
+    z-index: 10000;
+    position: absolute;
+    top: -45px;
+    left: calc(50% - 11px);
+    font-size: 40px;
+  }
 
   .btn-ready {
+    position: relative;
     width: 120px;
-    margin: 0 20px;
+    margin: 0 10px;
+    height: 0px;
+    border: white;
+
+    &.full {
+      height: 36px;
+    }
+  }
+
+  .three-dots {
+    font-size: 40px;
+    margin-left: -5px;
+    color: #E61770;
+    display: none;
+
+    &.full {
+      display: block;
+    }
+  }
+
+  .btn-setting {
+    height: 0;
+    margin: 0 5px;
+
+    &.full {
+      height: 36px;
+    }
   }
 
   .disabled {
     opacity: 0.5;
+  }
+
+  .btn-list {
+    height: 0;
+    margin-left: 5px;
+    font-size: 20px;
+    padding: 0 10px;
+
+    &.full {
+      height: 36px;
+    }
   }
 }

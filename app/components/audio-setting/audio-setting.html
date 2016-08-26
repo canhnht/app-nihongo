@@ -1,16 +1,29 @@
-<div class="audio-setting">
-  <button [class.disabled]="!audioService.isLoop"
-    [disabled]="isDisable"
+<div class="audio-setting" [class.full]="fullHeight">
+  <i class="fa fa-sort-up btn-up" primary
+    (click)="toggleFullHeight()" *ngIf="!fullHeight">
+  </i>
+  <i class="fa fa-sort-down btn-down" primary
+    (click)="toggleFullHeight()" *ngIf="fullHeight">
+  </i>
+  <button round class="btn-ready" [disabled]="isDisable"
+    (click)="playAudio()" [class.full]="fullHeight">
+    {{(isContinue ? 'Continue' : 'Ready') | translate}}
+  </button>
+  <div class="three-dots" [class.full]="fullHeight">
+    &#8226;&#8226;&#8226;
+  </div>
+  <button [class.disabled]="!audioService.isLoop" class="btn-setting"
+    [disabled]="isDisable" [class.full]="fullHeight"
     (click)="toggleLoop($event)">
     <ion-icon name="repeat"></ion-icon>
   </button>
-  <button round class="btn-ready" [disabled]="isDisable"
-    (click)="playAudio()">
-    {{(isContinue ? 'Continue' : 'Ready') | translate}}
-  </button>
-  <button [class.disabled]="!audioService.isShuffle"
-    [disabled]="isDisable"
+  <button [class.disabled]="!audioService.isShuffle" class="btn-setting"
+    [disabled]="isDisable" [class.full]="fullHeight"
     (click)="toggleShuffle($event)">
     <ion-icon name="shuffle"></ion-icon>
+  </button>
+  <button class="btn-list" [class.full]="fullHeight">
+    <ion-icon name="list-box"></ion-icon>
+    100
   </button>
 </div>

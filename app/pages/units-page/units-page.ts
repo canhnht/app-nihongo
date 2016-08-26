@@ -26,7 +26,6 @@ export class UnitsPage {
   selectedUnits: any[] = [];
   currentCourseSubscription: Subscription;
   settingSubscription: Subscription;
-  firstTime: boolean = true;
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
@@ -39,19 +38,11 @@ export class UnitsPage {
       .then(course => {
         this.course = course;
         this.units = [...this.course.units];
-        if (this.firstTime) {
-          this.firstTime = !this.firstTime;
-          this.settingService.selectUnits(this.units);
-        }
       });
     this.currentCourseSubscription = this.dbService.currentCourseSubject.subscribe(
       course => {
         this.course = course;
         this.units = [...this.course.units];
-        if (this.firstTime) {
-          this.firstTime = !this.firstTime;
-          this.settingService.selectUnits(this.units);
-        }
       }
     );
 
