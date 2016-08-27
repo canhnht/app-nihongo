@@ -75,10 +75,6 @@ export class PlaylistsPage {
     }
   }
 
-  goToWordSlides() {
-    this.navController.push(WordSlides, { hideBookmark: true });
-  }
-
   addNewPlaylist() {
     let prompt = Alert.create({
       title: this.translate.instant('Add_new_playlist'),

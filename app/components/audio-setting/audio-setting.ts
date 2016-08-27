@@ -7,6 +7,7 @@ import {SettingService, SettingStatus} from '../../services/setting.service';
 import {Subscription} from 'rxjs';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {SelectedWords} from '../selected-words/selected-words';
+import {WordSlides} from '../../pages/word-slides/word-slides';
 
 @Component({
   selector: 'audio-setting',
@@ -14,7 +15,6 @@ import {SelectedWords} from '../selected-words/selected-words';
   directives: [IONIC_DIRECTIVES],
 })
 export class AudioSetting implements OnInit, OnDestroy {
-  @Output() onPageTransfer = new EventEmitter();
   isDisable: boolean = true;
   isContinue: boolean = false;
   settingSubscription: Subscription;
@@ -57,7 +57,7 @@ export class AudioSetting implements OnInit, OnDestroy {
       this.audioService.playSetting();
       this.sliderService.resetSlider();
     }
-    this.onPageTransfer.emit({});
+    this.navController.push(WordSlides);
   }
 
   toggleLoop() {

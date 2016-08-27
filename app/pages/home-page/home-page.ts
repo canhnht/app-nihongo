@@ -9,17 +9,23 @@ import {UnitsPage} from '../units-page/units-page';
 import {WordSlides} from '../word-slides/word-slides';
 import {DbService} from '../../services/db.service';
 import {SettingService} from '../../services/setting.service';
+import {CustomDatePipe} from '../../custom-date.pipe';
 declare var require: any;
 let firebase = require('firebase');
 
 @Component({
   templateUrl: 'build/pages/home-page/home-page.html',
-  directives: [AudioSetting, CustomCheckbox]
+  directives: [AudioSetting, CustomCheckbox],
+  pipes: [CustomDatePipe],
 })
 export class HomePage {
-  courses: any[];
+  courses: any[] = [];
   listCourseSubscription: Subscription;
   tabPage: string;
+  listWord: any[] = [];
+  searchedWords: any[] = [];
+  selectedWords: any[] = [];
+  settingSubscription: Subscription;
 
   constructor(private navController: NavController, private dbService: DbService,
     private settingService: SettingService, private navParams: NavParams) {
@@ -30,7 +36,22 @@ export class HomePage {
     this.dbService.getListCourse().then(listCourse => this.courses = listCourse);
     this.settingService.reset(true);
     this.listCourseSubscription = this.dbService.listCourseSubject.subscribe(
-      listCourse => this.courses = listCourse);
+      listCourse => {
+        this.courses = listCourse;
+        this.listWord = this.courses.reduce((arr, course) => {
+          let wordsInUnits = course.units.reduce((words, unit) => {
+            return words.concat(unit.words);
+          }, []);
+          return arr.concat(wordsInUnits);
+        }, []);
+        this.searchedWords = this.listWord.sort((w1, w2) => {
+          if (w1.lastPlayed !== w2.lastPlayed)
+            return w2.lastPlayed - w1.lastPlayed;
+          return w2.timesPlayed - w1.timesPlayed;
+        });
+        alert(`${this.searchedWords.length}`);
+      }
+    );
   }
 
   ionViewWillLeave() {
@@ -64,7 +85,11 @@ export class HomePage {
       courseData = Object.assign({}, snapshot);
       courseData.units = [];
       Object.keys(snapshot.units).forEach(unitId => {
-        let unit = Object.assign({_id: unitId}, snapshot.units[unitId]);
+        let unit = Object.assign({ _id: unitId }, snapshot.units[unitId]);
+        unit.words.forEach(word => {
+          word.lastPlayed = null;
+          word.timesPlayed = 0;
+        });
         courseData.units.push(unit);
       });
       courseData.units = courseData.units.sort((u1, u2) => {
@@ -141,11 +166,7 @@ export class HomePage {
     this.navController.present(confirm);
   }
 
-  getItems($event) {
-    console.log('getItems', $event.value);
-  }
-
-  goToWordSlides() {
-    this.navController.push(WordSlides);
+  search($event) {
+    let value = $event.value;
   }
 }

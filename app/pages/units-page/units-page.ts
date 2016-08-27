@@ -81,17 +81,4 @@ export class UnitsPage {
       this.settingService.selectUnits(this.units);
     }
   }
-
-  goToWordSlides() {
-    this.navController.push(WordSlides);
-  }
-
-  presentPopover($event) {
-    let popover = Popover.create(PopoverMenu, {
-      menu: [this.translate.instant('Download_all'), this.translate.instant('Delete_all')]
-    });
-    this.navController.present(popover, {
-      ev: $event
-    });
-  }
 }

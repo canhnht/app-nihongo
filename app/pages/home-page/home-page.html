@@ -15,6 +15,8 @@
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
+  <ion-searchbar *ngIf="tabPage == 'search'" (ionInput)="search($event)">
+  </ion-searchbar>
 </ion-header>
 
 <ion-content class="home-page" *ngIf="tabPage == 'home'">
@@ -62,29 +64,29 @@
 </ion-content>
 
 <ion-content *ngIf="tabPage == 'search'">
-  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
-  <ion-list [virtualScroll]="items">
-    <ion-item button-primary text-wrap *virtualItem="let item"
-      (swipe)="testClick($event)">
+  <ion-list [virtualScroll]="searchedWords">
+    <ion-item button-primary text-wrap *virtualItem="let word"
+      (click)="selectWord($event, word)">
       <ion-label class="word-item">
         <button clear large class="word-bookmark"
-          (click)="test($event)">
+          [class.hidden]="!word.bookmarked"
+          (click)="addToPlaylist($event, word)">
           <i class="fa fa-bookmark icon-bookmark"></i>
         </button>
-        <button clear large class="word-bookmark" [class.hidden]="true"
-          (click)="test($event)">
+        <button clear large class="word-bookmark"
+          [class.hidden]="word.bookmarked"
+          (click)="addToPlaylist($event, word)">
           <i class="fa fa-bookmark-o icon-bookmark"></i>
         </button>
         <div>
-          <h2>郵便番号 (0)</h2>
-          <p>8:00 AM</p>
+          <h2>{{word.kanji}} ({{word.timesPlayed}})</h2>
+          <p>{{word.lastPlayed | customDate}}</p>
         </div>
       </ion-label>
-      <custom-checkbox item-right (onClick)="test($event)">
+      <custom-checkbox item-right (onClick)="checkWord($event, word)"
+        [checked]="selectedWords.indexOf(word._id) >= 0">
       </custom-checkbox>
     </ion-item>
   </ion-list>
 </ion-content>
-<audio-setting *ngIf="tabPage == 'search'"
-  (onPageTransfer)="goToWordSlides()">
-</audio-setting>
+<audio-setting *ngIf="tabPage == 'search'"></audio-setting>

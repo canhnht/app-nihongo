@@ -22,6 +22,7 @@
         <ion-icon name="search"></ion-icon>
       </ion-segment-button>
     </ion-segment>
+    <ion-searchbar *ngIf="tabPage == 'search'" (ionInput)="getItems($event)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -91,7 +92,6 @@
 
 
 <ion-content *ngIf="tabPage == 'search'">
-  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
   <ion-list [virtualScroll]="items">
     <ion-item button-primary text-wrap *virtualItem="let item"
       (swipe)="testClick($event)">
@@ -105,8 +105,8 @@
           <i class="fa fa-bookmark-o icon-bookmark"></i>
         </button>
         <div>
-          <h2>郵便番号 (0)</h2>
-          <p>8:00 AM</p>
+          <h2>{{item.title}} ({{item.timesPlayed}})</h2>
+          <p>{{item.lastPlayed | customDate}}</p>
         </div>
       </ion-label>
       <custom-checkbox item-right (onClick)="test($event)">

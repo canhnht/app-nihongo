@@ -149,7 +149,7 @@ export class WordsPage {
     }
   }
 
-  goToWordSlides() {
-    this.navController.push(WordSlides);
+  getItem($event) {
+    let value = $event.value;
   }
 }

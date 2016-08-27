@@ -69,8 +69,4 @@ export class PlaylistDetail {
       this.settingService.selectWordsInPlaylist(this.words);
     }
   }
-
-  goToWordSlides() {
-    this.navController.push(WordSlides, { hideBookmark: true });
-  }
 }

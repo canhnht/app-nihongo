@@ -6,64 +6,48 @@ import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 import {SelectedWords} from '../../components/selected-words/selected-words';
+import {CustomDatePipe} from '../../custom-date.pipe';
 
 @Component({
   templateUrl: 'build/pages/login-page/login-page.html',
   directives: [CustomCheckbox, AudioSetting],
+  pipes: [CustomDatePipe],
 })
 export class LoginPage {
   isChecked: boolean = false;
   items = [
     {
-      title: 'item1',
-      checked: false
+      title: '郵便番号',
+      checked: false,
+      lastPlayed: Date.now(),
+      timesPlayed: 0,
     },
     {
-      title: 'item2',
-      checked: false
+      title: '郵便番号',
+      checked: false,
+      lastPlayed: Date.now(),
+      timesPlayed: 0,
     },
     {
-      title: 'item1',
-      checked: false
+      title: '郵便番号',
+      checked: false,
+      lastPlayed: Date.now(),
+      timesPlayed: 0,
     },
     {
-      title: 'item2',
-      checked: false
+      title: '郵便番号',
+      checked: false,
+      lastPlayed: Date.now(),
+      timesPlayed: 0,
     },
     {
-      title: 'item1',
-      checked: false
+      title: '郵便番号',
+      checked: false,
+      lastPlayed: Date.now(),
+      timesPlayed: 0,
     },
-    {
-      title: 'item2',
-      checked: false
-    },
-    {
-      title: 'item1',
-      checked: false
-    },
-    {
-      title: 'item2',
-      checked: false
-    },
-    {
-      title: 'item1',
-      checked: false
-    },
-    {
-      title: 'item2',
-      checked: false
-    },
-    {
-      title: 'item1',
-      checked: false
-    },
-    {
-      title: 'item2',
-      checked: false
-    }
   ];
-  tabPage = "home";
+  tabPage = "search";
 
   constructor(private navController: NavController, private menu: MenuController) {
     // this.menu.open();
@@ -90,7 +74,8 @@ export class LoginPage {
   }
 
   testModal() {
-    let profileModal = Modal.create(SelectedWords);
-    this.navController.present(profileModal);
+    // let profileModal = Modal.create(SelectedWords);
+    // this.navController.present(profileModal);
+    this.items.forEach(e => e.lastPlayed = Date.now());
   }
 }
