@@ -4,7 +4,7 @@ import {DbService} from '../../services/db.service';
 import {Toast} from 'ionic-native';
 
 @Component({
-  templateUrl: 'build/pages/playlist-options/playlist-options.html',
+  templateUrl: 'build/components/playlist-options/playlist-options.html',
 })
 export class PlaylistOptions {
   // playlists: any[] = [];
