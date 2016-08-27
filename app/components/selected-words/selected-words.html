@@ -1,0 +1,21 @@
+<ion-navbar *navbar primary>
+  <ion-title>Các từ đã chọn</ion-title>
+  <ion-buttons end>
+    <button (click)="close()">
+      Close
+    </button>
+  </ion-buttons>
+</ion-navbar>
+
+<ion-content>
+  <ion-list>
+    <ion-item button-primary text-wrap *ngFor="let word of selectedWords">
+      <ion-label class="word-item">
+        <h1>{{word.kanji}}</h1>
+      </ion-label>
+      <button item-right clear danger large>
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
+</ion-content>

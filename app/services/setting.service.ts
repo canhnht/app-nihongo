@@ -43,7 +43,7 @@ export class SettingService {
       selectedType: this.selectedType,
       selectedList: this.selectedList,
       status: this.status,
-      countWords: this.selectedWords.length,
+      countWords: this.selectedWords.reduce((sum, item) => sum + item.length, 0),
     });
   }
 
@@ -72,7 +72,7 @@ export class SettingService {
   selectUnits(units) {
     this.selectedType = SelectedType.Unit;
     this.selectedList = units.map(unit => unit._id);
-    this.selectedWords = units.reduce((arr, unit) => arr.concat(unit.words), []);
+    this.selectedWords = units.map(unit => unit.words);
     if (this.selectedList.length === 0) this.status = SettingStatus.None;
     else this.status = SettingStatus.Selecting;
     this.pushState();
@@ -90,7 +90,7 @@ export class SettingService {
   selectPlaylists(playlists) {
     this.selectedType = SelectedType.Playlist;
     this.selectedList = playlists.map(unit => unit._id);
-    this.selectedWords = playlists.reduce((arr, unit) => arr.concat(unit.words), []);
+    this.selectedWords = playlists.map(unit => unit.words);
     if (this.selectedList.length === 0) this.status = SettingStatus.None;
     else this.status = SettingStatus.Selecting;
     this.pushState();
@@ -108,7 +108,7 @@ export class SettingService {
   selectWordsInUnit(words) {
     this.selectedType = SelectedType.WordInUnit;
     this.selectedList = words.map(word => word._id);
-    this.selectedWords = words;
+    this.selectedWords = words.map(word => [word]);
     if (this.selectedList.length === 0) this.status = SettingStatus.None;
     else this.status = SettingStatus.Selecting;
     this.pushState();
@@ -127,7 +127,7 @@ export class SettingService {
   selectWordsInPlaylist(words) {
     this.selectedType = SelectedType.WordInPlaylist;
     this.selectedList = words.map(word => word._id);
-    this.selectedWords = words;
+    this.selectedWords = words.map(word => [word]);
     if (this.selectedList.length === 0) this.status = SettingStatus.None;
     else this.status = SettingStatus.Selecting;
     this.pushState();

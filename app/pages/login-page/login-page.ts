@@ -5,6 +5,7 @@ import {AuthService} from '../../services/auth.service';
 import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
+import {SelectedWords} from '../../components/selected-words/selected-words';
 
 @Component({
   templateUrl: 'build/pages/login-page/login-page.html',
@@ -89,7 +90,7 @@ export class LoginPage {
   }
 
   testModal() {
-    let profileModal = Modal.create(PlaylistOptions);
+    let profileModal = Modal.create(SelectedWords);
     this.navController.present(profileModal);
   }
 }

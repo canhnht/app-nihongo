@@ -1,5 +1,5 @@
 <ion-navbar *navbar primary>
-  <ion-title>Add word to</ion-title>
+  <ion-title>{{'Add_word' | translate}}</ion-title>
   <ion-buttons end>
     <button (click)="addNewPlaylist()">
       <ion-icon name="add"></ion-icon>
@@ -8,13 +8,27 @@
 </ion-navbar>
 
 <ion-content>
+  <ion-buttons end>
+    <button secondary clear (click)="save()">
+      {{'Save' | translate}}
+    </button>
+    <button danger clear (click)="close()">
+      {{'Close' | translate}}
+    </button>
+  </ion-buttons>
   <ion-list>
     <ion-item button-primary text-wrap *ngFor="let playlist of playlists">
-      <ion-badge item-left>
-        <ion-icon large name="musical-notes"></ion-icon>
-      </ion-badge>
-      <ion-label>
-        <h2>{{playlist.name}}</h2>
+      <ion-label class="playlist-item">
+        <ion-checkbox [(ngModel)]="playlist.checked"
+          (click)="togglePlaylist(playlist)">
+        </ion-checkbox>
+        <ion-badge class="playlist-icon">
+          <ion-icon large name="musical-notes"></ion-icon>
+        </ion-badge>
+        <div>
+          <h2>{{playlist.name}}</h2>
+          <p>{{playlist.words.length}} {{'word' | translate}}</p>
+        </div>
       </ion-label>
     </ion-item>
   </ion-list>

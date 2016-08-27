@@ -70,9 +70,18 @@ export class MyApp {
   }
 
   openPage(page, params, isBack = false) {
-    if (isBack)
-      this.navController.push(page, params);
-    else
+    let lastView = this.navController.last();
+    while (lastView.componentType !== HomePage
+      && lastView.componentType !== PlaylistsPage
+      && lastView.componentType !== FeedbackPage
+      && lastView.componentType !== SettingPage
+      && lastView.componentType !== LoginPage) {
+      lastView = this.navController.getPrevious(lastView);
+    }
+    if (isBack) {
+      if (lastView.componentType !== page)
+        this.navController.push(page, params);
+    } else
       this.navController.setRoot(page, params);
   }
 }

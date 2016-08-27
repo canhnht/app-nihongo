@@ -22,8 +22,9 @@
     (click)="toggleShuffle($event)">
     <ion-icon name="shuffle"></ion-icon>
   </button>
-  <button class="btn-list" [class.full]="fullHeight">
-    <ion-icon name="list-box"></ion-icon>
+  <button class="btn-list" [class.full]="fullHeight"
+    (click)="showSelectedWords()">
+    <ion-icon class="icon-list" name="list-box"></ion-icon>
     {{countWords}}
   </button>
 </div>

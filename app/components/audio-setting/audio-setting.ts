@@ -1,11 +1,12 @@
 import {Component, Input, Output, EventEmitter, OnInit, OnDestroy} from '@angular/core';
-import {IONIC_DIRECTIVES} from 'ionic-angular';
+import {IONIC_DIRECTIVES, NavController, Modal} from 'ionic-angular';
 import {Toast, SpinnerDialog} from 'ionic-native';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {SettingService, SettingStatus} from '../../services/setting.service';
 import {Subscription} from 'rxjs';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {SelectedWords} from '../selected-words/selected-words';
 
 @Component({
   selector: 'audio-setting',
@@ -21,7 +22,8 @@ export class AudioSetting implements OnInit, OnDestroy {
   countWords: number = 0;
 
   constructor(private audioService: AudioService, private settingService: SettingService,
-    private sliderService: SliderService, private translate: TranslateService) {
+    private sliderService: SliderService, private translate: TranslateService,
+    private navController: NavController) {
   }
 
   toggleFullHeight() {
@@ -64,5 +66,10 @@ export class AudioSetting implements OnInit, OnDestroy {
 
   toggleShuffle() {
     this.audioService.toggleShuffle();
+  }
+
+  showSelectedWords() {
+    let profileModal = Modal.create(SelectedWords);
+    this.navController.present(profileModal);
   }
 }
