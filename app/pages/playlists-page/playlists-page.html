@@ -5,6 +5,11 @@
   </button>
   <ion-title>{{'My_playlist' | translate}}</ion-title>
   <ion-buttons end>
+    <button (click)="addNewPlaylist()" class="btn-add">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-buttons>
+  <ion-buttons end>
     <custom-checkbox [checked]="selectedPlaylists.length == playlists.length"
       (onClick)="toggleSelectAll()" *ngIf="playlists.length > 0">
     </custom-checkbox>
@@ -41,9 +46,6 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-  <button fab fab-right fab-bottom large (click)="addNewPlaylist()">
-    <ion-icon name="add"></ion-icon>
-  </button>
 </ion-content>
 <audio-setting (onPageTransfer)="goToWordSlides()">
 </audio-setting>

@@ -3,6 +3,14 @@
     <ion-icon name="menu"></ion-icon>
   </button>
   <ion-title>Mimi Kara Nihongo</ion-title>
+  <ion-buttons end>
+    <button class="btn-add">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-buttons>
+  <ion-buttons end>
+    <custom-checkbox></custom-checkbox>
+  </ion-buttons>
 </ion-navbar>
 <ion-header>
   <ion-toolbar>
@@ -17,7 +25,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="tabPage == 'home'">
+<ion-content *ngIf="tabPage == 'home'" class="login-content">
   <ion-card>
     <div class="card-course">
       <div class="left-side">
@@ -75,9 +83,6 @@
       </custom-checkbox>
     </ion-item>
   </ion-list>
-  <button fab fab-right fab-bottom large>
-    <ion-icon name="add"></ion-icon>
-  </button>
 </ion-content>
 <audio-setting *ngIf="tabPage == 'home'"></audio-setting>
 

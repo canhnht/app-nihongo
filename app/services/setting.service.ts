@@ -43,6 +43,7 @@ export class SettingService {
       selectedType: this.selectedType,
       selectedList: this.selectedList,
       status: this.status,
+      countWords: this.selectedWords.length,
     });
   }
 

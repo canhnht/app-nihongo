@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
-import {NavController, MenuController} from 'ionic-angular';
+import {NavController, MenuController, Modal} from 'ionic-angular';
 import {Toast, Facebook, GooglePlus} from 'ionic-native';
 import {AuthService} from '../../services/auth.service';
 import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
+import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 
 @Component({
   templateUrl: 'build/pages/login-page/login-page.html',
@@ -12,6 +13,46 @@ import {AudioSetting} from '../../components/audio-setting/audio-setting';
 export class LoginPage {
   isChecked: boolean = false;
   items = [
+    {
+      title: 'item1',
+      checked: false
+    },
+    {
+      title: 'item2',
+      checked: false
+    },
+    {
+      title: 'item1',
+      checked: false
+    },
+    {
+      title: 'item2',
+      checked: false
+    },
+    {
+      title: 'item1',
+      checked: false
+    },
+    {
+      title: 'item2',
+      checked: false
+    },
+    {
+      title: 'item1',
+      checked: false
+    },
+    {
+      title: 'item2',
+      checked: false
+    },
+    {
+      title: 'item1',
+      checked: false
+    },
+    {
+      title: 'item2',
+      checked: false
+    },
     {
       title: 'item1',
       checked: false
@@ -45,5 +86,10 @@ export class LoginPage {
 
   getItems($event) {
     console.log('getItems', $event.value);
+  }
+
+  testModal() {
+    let profileModal = Modal.create(PlaylistOptions);
+    this.navController.present(profileModal);
   }
 }

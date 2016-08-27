@@ -28,7 +28,7 @@ export class MyApp {
   playlistsPage = PlaylistsPage;
   settingPage = SettingPage;
   feedbackPage = FeedbackPage;
-  rootPage = HomePage;
+  rootPage = LoginPage;
   isSignedIn: boolean = false;
 
   constructor(private platform: Platform, private authService: AuthService,

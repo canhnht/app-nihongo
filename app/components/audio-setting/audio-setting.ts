@@ -18,6 +18,7 @@ export class AudioSetting implements OnInit, OnDestroy {
   isContinue: boolean = false;
   settingSubscription: Subscription;
   fullHeight: boolean = false;
+  countWords: number = 0;
 
   constructor(private audioService: AudioService, private settingService: SettingService,
     private sliderService: SliderService, private translate: TranslateService) {
@@ -34,6 +35,7 @@ export class AudioSetting implements OnInit, OnDestroy {
       setting => {
         this.isDisable = setting.status === SettingStatus.None;
         this.isContinue = setting.status === SettingStatus.Playing;
+        this.countWords = setting.countWords;
       }
     )
   }
