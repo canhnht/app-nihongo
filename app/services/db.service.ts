@@ -58,6 +58,7 @@ export class DbService {
       } else if (doc._id.startsWith('playlist')) {
         this.playlistSubject.next(doc);
       }
+      alert('listen change ' + JSON.stringify(this.listCourse));
     };
     this.db.changes({ live: true, since: 'now', include_docs: true })
       .on('change', onDatabaseChange);

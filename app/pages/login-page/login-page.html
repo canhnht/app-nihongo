@@ -105,8 +105,10 @@
           <i class="fa fa-bookmark-o icon-bookmark"></i>
         </button>
         <div>
-          <h2>{{item.title}} ({{item.timesPlayed}})</h2>
-          <p>{{item.lastPlayed | customDate}}</p>
+          <h1>{{item.title}}</h1>
+          <p>{{item.timesPlayed > 0 ? '(' + item.timesPlayed + ') - ' : ''}}
+            {{item.timesPlayed > 0 ? (item.lastPlayed | customDate) : ''}}
+          </p>
         </div>
       </ion-label>
       <custom-checkbox item-right (onClick)="test($event)">

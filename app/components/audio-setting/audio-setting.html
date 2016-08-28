@@ -9,9 +9,9 @@
     (click)="playAudio()" [class.full]="fullHeight">
     {{(isContinue ? 'Continue' : 'Ready') | translate}}
   </button>
-  <div class="three-dots" [class.full]="fullHeight">
+  <!--<div class="three-dots" [class.full]="fullHeight">
     &#8226;&#8226;&#8226;
-  </div>
+  </div>-->
   <button [class.disabled]="!audioService.isLoop" class="btn-setting"
     [disabled]="isDisable" [class.full]="fullHeight"
     (click)="toggleLoop($event)">

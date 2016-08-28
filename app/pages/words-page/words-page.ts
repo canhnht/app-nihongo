@@ -83,41 +83,8 @@ export class WordsPage {
 
   addToPlaylist($event, word) {
     let wordIndex = this.words.findIndex(e => e._id === word._id);
-    // let alert = Alert.create();
-    // alert.setTitle(this.translate.instant('Add_word'));
-    // this.playlists.forEach((playlist, index) => {
-    //   alert.addInput({
-    //     type: 'checkbox',
-    //     label: playlist.name,
-    //     value: index + '',
-    //     checked: playlist.words.findIndex(e => e._id === word._id) >= 0
-    //   });
-    // });
-    // alert.addButton(this.translate.instant('Cancel'));
-    // alert.addButton({
-    //   text: this.translate.instant('OK'),
-    //   handler: data => {
-    //     this.course.units[this.unitIndex].words[wordIndex].bookmarked = data.length > 0;
-    //     data = data.map(e => parseInt(e));
-    //     data.forEach(index => {
-    //       if (this.playlists[index].words.findIndex(e => e._id === word._id) === -1)
-    //         this.playlists[index].words.push(word);
-    //     });
-    //     this.playlists.forEach((playlist, index) => {
-    //       let searchIndex = playlist.words.findIndex(e => e._id === word._id);
-    //       if (searchIndex >= 0 && data.indexOf(index) === -1) {
-    //         playlist.words.splice(searchIndex, 1);
-    //       }
-    //     });
-    //     this.dbService.updateMultiplePlaylists(this.playlists);
-    //     this.dbService.updateCourse(this.course);
-    //   }
-    // });
-    // this.navController.present(alert);
-
     let modal = Modal.create(PlaylistOptions, { currentWord: word });
     modal.onDismiss(res => {
-      alert('dismis ' + JSON.stringify(res));
       if (!res) return;
       let data = res.data;
       let playlists = res.playlists;

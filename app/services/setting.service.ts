@@ -6,6 +6,7 @@ import {Toast} from 'ionic-native';
 export enum SelectedType {
   Unit, WordInUnit,
   Playlist, WordInPlaylist,
+  WordInSearch,
   None
 }
 
@@ -130,6 +131,16 @@ export class SettingService {
     this.selectedWords = words.map(word => [word]);
     if (this.selectedList.length === 0) this.status = SettingStatus.None;
     else this.status = SettingStatus.Selecting;
+    this.pushState();
+  }
+
+  toggleWordInSearch(word) {
+    this.status = SettingStatus.Selecting;
+    if (this.selectedType !== SelectedType.WordInSearch) this.reset(true);
+    this.selectedType = SelectedType.WordInSearch;
+    let searchIndex = this.selectedList.indexOf(word._id);
+    if (searchIndex >= 0) this.removeItem(searchIndex);
+    else this.addItem(word._id, [word]);
     this.pushState();
   }
 }

@@ -18,7 +18,7 @@ export class AudioSetting implements OnInit, OnDestroy {
   isDisable: boolean = true;
   isContinue: boolean = false;
   settingSubscription: Subscription;
-  fullHeight: boolean = false;
+  fullHeight: boolean = true;
   countWords: number = 0;
 
   constructor(private audioService: AudioService, private settingService: SettingService,

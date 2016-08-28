@@ -79,8 +79,10 @@
           <i class="fa fa-bookmark-o icon-bookmark"></i>
         </button>
         <div>
-          <h2>{{word.kanji}} ({{word.timesPlayed}})</h2>
-          <p>{{word.lastPlayed | customDate}}</p>
+          <h1>{{word.kanji}}</h1>
+          <p>{{word.timesPlayed > 0 ? '(' + word.timesPlayed + ') - ' : ''}}
+            {{word.timesPlayed > 0 ? (word.lastPlayed | customDate) : ''}}
+          </p>
         </div>
       </ion-label>
       <custom-checkbox item-right (onClick)="checkWord($event, word)"

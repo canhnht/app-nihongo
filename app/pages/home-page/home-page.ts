@@ -1,15 +1,17 @@
 import {Component} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {Toast, Transfer, File} from 'ionic-native';
-import {NavController, Popover, Alert, NavParams} from 'ionic-angular';
+import {Toast, Transfer, File, SpinnerDialog} from 'ionic-native';
+import {NavController, Popover, Alert, NavParams, Modal} from 'ionic-angular';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {UnitsPage} from '../units-page/units-page';
 import {WordSlides} from '../word-slides/word-slides';
 import {DbService} from '../../services/db.service';
-import {SettingService} from '../../services/setting.service';
+import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
 import {CustomDatePipe} from '../../custom-date.pipe';
+import {TranslateService} from 'ng2-translate/ng2-translate';
+import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 declare var require: any;
 let firebase = require('firebase');
 
@@ -28,7 +30,8 @@ export class HomePage {
   settingSubscription: Subscription;
 
   constructor(private navController: NavController, private dbService: DbService,
-    private settingService: SettingService, private navParams: NavParams) {
+    private settingService: SettingService, private navParams: NavParams,
+    private translate: TranslateService) {
     this.tabPage = this.navParams.data.tabPage || 'home';
   }
 
@@ -45,17 +48,29 @@ export class HomePage {
           return arr.concat(wordsInUnits);
         }, []);
         this.searchedWords = this.listWord.sort((w1, w2) => {
-          if (w1.lastPlayed !== w2.lastPlayed)
+          if (w1.lastPlayed && w2.lastPlayed && w1.lastPlayed !== w2.lastPlayed)
             return w2.lastPlayed - w1.lastPlayed;
           return w2.timesPlayed - w1.timesPlayed;
         });
-        alert(`${this.searchedWords.length}`);
+      }
+    );
+
+    if (this.settingService.selectedType === SelectedType.WordInSearch
+      && this.settingService.status === SettingStatus.Playing)
+      this.selectedWords = this.settingService.selectedList;
+    else this.selectedWords = [];
+    this.settingSubscription = this.settingService.settingSubject.subscribe(
+      setting => {
+        if (setting.selectedType === SelectedType.WordInSearch)
+          this.selectedWords = setting.selectedList;
       }
     );
   }
 
   ionViewWillLeave() {
     this.listCourseSubscription.unsubscribe();
+    this.settingSubscription.unsubscribe();
+    this.settingService.reset();
   }
 
   goToCourse(course) {
@@ -168,5 +183,27 @@ export class HomePage {
 
   search($event) {
     let value = $event.value;
+  }
+
+  checkWord($event, word) {
+    this.settingService.toggleWordInSearch(word);
+    $event.stopPropagation();
+  }
+
+  selectWord($event, word) {
+    if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
+    this.navController.push(WordSlides, {
+      playSingleWord: true,
+      listWord: [word],
+      wordIndex: 0
+    });
+  }
+
+  addToPlaylist($event, word) {
+    let modal = Modal.create(PlaylistOptions, { currentWord: word });
+    this.navController.present(modal);
+    $event.stopPropagation();
   }
 }

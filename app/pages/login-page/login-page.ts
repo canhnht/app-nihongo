@@ -44,7 +44,7 @@ export class LoginPage {
       title: '郵便番号',
       checked: false,
       lastPlayed: Date.now(),
-      timesPlayed: 0,
+      timesPlayed: 1,
     },
   ];
   tabPage = "search";
