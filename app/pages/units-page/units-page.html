@@ -3,11 +3,6 @@
   <ion-title>
     {{course.courseName}}
   </ion-title>
-  <ion-buttons end>
-    <custom-checkbox [checked]="selectedUnits.length === units.length"
-      (onClick)="toggleSelectAll()">
-    </custom-checkbox>
-  </ion-buttons>
 </ion-navbar>
 
 <ion-content>
@@ -21,10 +16,6 @@
           <p>{{unit.noWords}} {{'word' | translate}}</p>
         </div>
       </ion-label>
-      <custom-checkbox item-right (onClick)="checkUnit($event, unit)"
-        [checked]="selectedUnits.indexOf(unit._id) >= 0">
-      </custom-checkbox>
     </ion-item>
   </ion-list>
 </ion-content>
-<audio-setting></audio-setting>

@@ -8,7 +8,7 @@ import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {DbService} from '../../services/db.service';
-import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
+import {SettingService, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 import {TranslateService} from 'ng2-translate/ng2-translate';
@@ -46,13 +46,13 @@ export class WordsPage {
       }
     );
 
-    if (this.settingService.selectedType === SelectedType.WordInUnit
+    if (this.settingService.selectedType === this.unit._id
       && this.settingService.status === SettingStatus.Playing)
       this.selectedWords = this.settingService.selectedList;
     else this.selectedWords = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
-        if (setting.selectedType === SelectedType.WordInUnit)
+        if (setting.selectedType === this.unit._id)
           this.selectedWords = setting.selectedList;
       }
     );
@@ -77,7 +77,7 @@ export class WordsPage {
   }
 
   checkWord($event, word) {
-    this.settingService.toggleWordInUnit(word);
+    this.settingService.toggleWordInUnit(this.unit._id, word);
     $event.stopPropagation();
   }
 
@@ -110,13 +110,13 @@ export class WordsPage {
 
   toggleSelectAll() {
     if (this.selectedWords.length == this.words.length) {
-      this.settingService.selectWordsInUnit([]);
+      this.settingService.selectWordsInUnit(this.unit._id, []);
     } else {
-      this.settingService.selectWordsInUnit(this.words);
+      this.settingService.selectWordsInUnit(this.unit._id, this.words);
     }
   }
 
-  getItem($event) {
+  search($event) {
     let value = $event.value;
   }
 }

@@ -8,7 +8,7 @@ import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {DbService} from '../../services/db.service';
 import {LocalStorageService} from '../../services/local-storage.service';
-import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
+import {SettingService, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 import {TranslateService} from 'ng2-translate/ng2-translate';

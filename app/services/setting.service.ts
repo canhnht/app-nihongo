@@ -3,13 +3,6 @@ import {Subject} from 'rxjs';
 import {DbService} from './db.service';
 import {Toast} from 'ionic-native';
 
-export enum SelectedType {
-  Unit, WordInUnit,
-  Playlist, WordInPlaylist,
-  WordInSearch,
-  None
-}
-
 export enum SettingStatus {
   Selecting, Playing, None
 }
@@ -17,7 +10,7 @@ export enum SettingStatus {
 @Injectable()
 export class SettingService {
   status: SettingStatus = SettingStatus.None;
-  selectedType: SelectedType = SelectedType.None;
+  selectedType: string = null;
   selectedList: any[] = [];
   settingSubject: Subject<any> = new Subject<any>();
   selectedWords: any[] = [];
@@ -30,7 +23,7 @@ export class SettingService {
       this.status = SettingStatus.None;
       this.selectedList = [];
       this.selectedWords = [];
-      this.selectedType = SelectedType.None;
+      this.selectedType = null;
     }
   }
 
@@ -61,53 +54,17 @@ export class SettingService {
     this.status = SettingStatus.Selecting;
   }
 
-  toggleUnit(unit) {
-    if (this.selectedType !== SelectedType.Unit) this.reset(true);
-    this.selectedType = SelectedType.Unit;
-    let searchIndex = this.selectedList.indexOf(unit._id);
-    if (searchIndex >= 0) this.removeItem(searchIndex);
-    else this.addItem(unit._id, unit.words);
-    this.pushState();
-  }
-
-  selectUnits(units) {
-    this.selectedType = SelectedType.Unit;
-    this.selectedList = units.map(unit => unit._id);
-    this.selectedWords = units.map(unit => unit.words);
-    if (this.selectedList.length === 0) this.status = SettingStatus.None;
-    else this.status = SettingStatus.Selecting;
-    this.pushState();
-  }
-
-  togglePlaylist(playlist) {
-    if (this.selectedType !== SelectedType.Playlist) this.reset(true);
-    this.selectedType = SelectedType.Playlist;
-    let searchIndex = this.selectedList.indexOf(playlist._id);
-    if (searchIndex >= 0) this.removeItem(searchIndex);
-    else this.addItem(playlist._id, playlist.words);
-    this.pushState();
-  }
-
-  selectPlaylists(playlists) {
-    this.selectedType = SelectedType.Playlist;
-    this.selectedList = playlists.map(unit => unit._id);
-    this.selectedWords = playlists.map(unit => unit.words);
-    if (this.selectedList.length === 0) this.status = SettingStatus.None;
-    else this.status = SettingStatus.Selecting;
-    this.pushState();
-  }
-
-  toggleWordInUnit(word) {
-    if (this.selectedType !== SelectedType.WordInUnit) this.reset(true);
-    this.selectedType = SelectedType.WordInUnit;
+  toggleWordInUnit(unitId, word) {
+    if (this.selectedType !== unitId) this.reset(true);
+    this.selectedType = unitId;
     let searchIndex = this.selectedList.indexOf(word._id);
     if (searchIndex >= 0) this.removeItem(searchIndex);
     else this.addItem(word._id, [word]);
     this.pushState();
   }
 
-  selectWordsInUnit(words) {
-    this.selectedType = SelectedType.WordInUnit;
+  selectWordsInUnit(unitId, words) {
+    this.selectedType = unitId;
     this.selectedList = words.map(word => word._id);
     this.selectedWords = words.map(word => [word]);
     if (this.selectedList.length === 0) this.status = SettingStatus.None;
@@ -115,18 +72,18 @@ export class SettingService {
     this.pushState();
   }
 
-  toggleWordInPlaylist(word) {
+  toggleWordInPlaylist(playlistId, word) {
     this.status = SettingStatus.Selecting;
-    if (this.selectedType !== SelectedType.WordInPlaylist) this.reset(true);
-    this.selectedType = SelectedType.WordInPlaylist;
+    if (this.selectedType !== playlistId) this.reset(true);
+    this.selectedType = playlistId;
     let searchIndex = this.selectedList.indexOf(word._id);
     if (searchIndex >= 0) this.removeItem(searchIndex);
     else this.addItem(word._id, [word]);
     this.pushState();
   }
 
-  selectWordsInPlaylist(words) {
-    this.selectedType = SelectedType.WordInPlaylist;
+  selectWordsInPlaylist(playlistId, words) {
+    this.selectedType = playlistId;
     this.selectedList = words.map(word => word._id);
     this.selectedWords = words.map(word => [word]);
     if (this.selectedList.length === 0) this.status = SettingStatus.None;
@@ -136,8 +93,8 @@ export class SettingService {
 
   toggleWordInSearch(word) {
     this.status = SettingStatus.Selecting;
-    if (this.selectedType !== SelectedType.WordInSearch) this.reset(true);
-    this.selectedType = SelectedType.WordInSearch;
+    if (this.selectedType !== 'search') this.reset(true);
+    this.selectedType = 'search';
     let searchIndex = this.selectedList.indexOf(word._id);
     if (searchIndex >= 0) this.removeItem(searchIndex);
     else this.addItem(word._id, [word]);

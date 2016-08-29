@@ -5,14 +5,9 @@
   </button>
   <ion-title>{{'My_playlist' | translate}}</ion-title>
   <ion-buttons end>
-    <button (click)="addNewPlaylist()" class="btn-add">
+    <button (click)="addNewPlaylist()">
       <ion-icon name="add"></ion-icon>
     </button>
-  </ion-buttons>
-  <ion-buttons end>
-    <custom-checkbox [checked]="selectedPlaylists.length == playlists.length"
-      (onClick)="toggleSelectAll()" *ngIf="playlists.length > 0">
-    </custom-checkbox>
   </ion-buttons>
 </ion-navbar>
 
@@ -30,9 +25,6 @@
             <p>{{playlist.words.length}} {{'word' | translate}}</p>
           </div>
         </ion-label>
-        <custom-checkbox item-right (onClick)="checkPlaylist($event, playlist)"
-          [checked]="selectedPlaylists.indexOf(playlist._id) >= 0">
-        </custom-checkbox>
       </ion-item>
       <ion-item-options>
         <button primary (click)="editPlaylist(playlist)">
@@ -47,4 +39,3 @@
     </ion-item-sliding>
   </ion-list>
 </ion-content>
-<audio-setting></audio-setting>

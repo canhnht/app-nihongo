@@ -8,7 +8,7 @@ import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {UnitsPage} from '../units-page/units-page';
 import {WordSlides} from '../word-slides/word-slides';
 import {DbService} from '../../services/db.service';
-import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
+import {SettingService, SettingStatus} from '../../services/setting.service';
 import {CustomDatePipe} from '../../custom-date.pipe';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
@@ -55,13 +55,13 @@ export class HomePage {
       }
     );
 
-    if (this.settingService.selectedType === SelectedType.WordInSearch
+    if (this.settingService.selectedType === 'search'
       && this.settingService.status === SettingStatus.Playing)
       this.selectedWords = this.settingService.selectedList;
     else this.selectedWords = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
-        if (setting.selectedType === SelectedType.WordInSearch)
+        if (setting.selectedType === 'search')
           this.selectedWords = setting.selectedList;
       }
     );
@@ -150,35 +150,6 @@ export class HomePage {
       course.downloading = false;
       Toast.showLongBottom('Error downloading').subscribe(() => {});
     });
-  }
-
-  showAlert() {
-    let alert = Alert.create({
-      title: 'Sorry!',
-      subTitle: 'This course is not available yet.',
-      buttons: ['OK']
-    });
-    this.navController.present(alert);
-  }
-
-  buyCourse(course) {
-    let confirm = Alert.create({
-      title: `Buy course ${course.title}?`,
-      message: 'Do you agree to buy this course? The transaction will be taken immediately.',
-      buttons: [
-        {
-          text: 'Disagree',
-          handler: () => {}
-        },
-        {
-          text: 'Agree',
-          handler: () => {
-            course.isFree = true;
-          }
-        }
-      ]
-    });
-    this.navController.present(confirm);
   }
 
   search($event) {

@@ -3,28 +3,19 @@ import {NavController, Alert} from 'ionic-angular';
 import {DbService} from '../../services/db.service';
 import {Toast, SpinnerDialog} from 'ionic-native';
 import {Subscription} from 'rxjs';
-import {AudioSetting} from '../../components/audio-setting/audio-setting';
-import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
-import {AudioService} from '../../services/audio.service';
-import {SliderService} from '../../services/slider.service';
-import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistDetail} from '../playlist-detail/playlist-detail';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Component({
   templateUrl: 'build/pages/playlists-page/playlists-page.html',
-  directives: [AudioSetting, CustomCheckbox],
 })
 export class PlaylistsPage {
   playlists: any[] = [];
   playlistSubscription: Subscription;
-  settingSubscription: Subscription;
-  selectedPlaylists: any[] = [];
 
   constructor(private navController: NavController, private dbService: DbService,
-    private audioService: AudioService, private sliderService: SliderService,
-    private settingService: SettingService, private translate: TranslateService) {
+    private translate: TranslateService) {
     this.dbService.getAllPlaylists().then(
       allPlaylists => this.playlists = allPlaylists
     );
@@ -38,41 +29,15 @@ export class PlaylistsPage {
         else this.playlists[searchIndex] = playlist;
       }
     );
-
-    if (this.settingService.selectedType === SelectedType.Playlist
-      && this.settingService.status === SettingStatus.Playing)
-      this.selectedPlaylists = this.settingService.selectedList;
-    this.settingSubscription = this.settingService.settingSubject.subscribe(
-      setting => {
-        if (setting.selectedType === SelectedType.Playlist)
-          this.selectedPlaylists = setting.selectedList;
-      }
-    );
   }
 
   ionViewWillLeave() {
     this.playlistSubscription.unsubscribe();
-    this.settingSubscription.unsubscribe();
-    this.selectedPlaylists = [];
-    this.settingService.reset();
   }
 
   goToPlaylistDetail($event, playlist) {
     if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
     this.navController.push(PlaylistDetail, { selectedPlaylist: playlist });
-  }
-
-  checkPlaylist($event, playlist) {
-    $event.stopPropagation();
-    this.settingService.togglePlaylist(playlist);
-  }
-
-  toggleSelectAll() {
-    if (this.selectedPlaylists.length == this.playlists.length) {
-      this.settingService.selectPlaylists([]);
-    } else {
-      this.settingService.selectPlaylists(this.playlists);
-    }
   }
 
   addNewPlaylist() {

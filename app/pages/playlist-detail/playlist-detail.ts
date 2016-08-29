@@ -7,7 +7,7 @@ import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
-import {SettingService, SelectedType, SettingStatus} from '../../services/setting.service';
+import {SettingService, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 
 @Component({
@@ -28,13 +28,13 @@ export class PlaylistDetail {
   ionViewWillEnter() {
     this.playlist = this.navParams.data.selectedPlaylist;
     this.words = this.playlist.words;
-    if (this.settingService.selectedType === SelectedType.WordInPlaylist
+    if (this.settingService.selectedType === this.playlist._id
       && this.settingService.status === SettingStatus.Playing)
       this.selectedWords = this.settingService.selectedList;
     else this.selectedWords = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
-        if (setting.selectedType === SelectedType.WordInPlaylist)
+        if (setting.selectedType === this.playlist._id)
           this.selectedWords = setting.selectedList;
       }
     );
@@ -59,14 +59,14 @@ export class PlaylistDetail {
 
   checkWord($event, word) {
     $event.stopPropagation();
-    this.settingService.toggleWordInPlaylist(word);
+    this.settingService.toggleWordInPlaylist(this.playlist._id, word);
   }
 
   toggleSelectAll() {
     if (this.selectedWords.length == this.words.length) {
-      this.settingService.selectWordsInPlaylist([]);
+      this.settingService.selectWordsInPlaylist(this.playlist._id, []);
     } else {
-      this.settingService.selectWordsInPlaylist(this.words);
+      this.settingService.selectWordsInPlaylist(this.playlist._id, this.words);
     }
   }
 }
