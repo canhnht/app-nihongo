@@ -23,7 +23,7 @@
     <ion-icon name="shuffle"></ion-icon>
   </button>
   <button class="btn-list" [class.full]="fullHeight"
-    (click)="showSelectedWords()">
+    (click)="showSelectedWords()" [disabled]="countWords === 0">
     <ion-icon class="icon-list" name="list-box"></ion-icon>
     {{countWords}}
   </button>

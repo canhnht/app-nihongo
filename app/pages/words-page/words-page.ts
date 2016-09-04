@@ -12,19 +12,22 @@ import {SettingService, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {CustomDatePipe} from '../../custom-date.pipe';
 
 @Component({
   templateUrl: 'build/pages/words-page/words-page.html',
   directives: [AudioSetting, CustomCheckbox],
+  pipes: [CustomDatePipe],
 })
 export class WordsPage {
   unit: any = {};
   course: any = {};
-  unitIndex: number;
   words: any[] = [];
+  searchedWords: any[] = [];
   selectedWords: any[] = [];
   settingSubscription: Subscription;
   currentCourseSubscription: Subscription;
+  value: string = '';
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
@@ -32,24 +35,37 @@ export class WordsPage {
     private translate: TranslateService) {
   }
 
+  sortWordsByAnalytic() {
+    this.words = this.words.sort((w1, w2) => {
+      if (w1.lastPlayed && w2.lastPlayed && w1.lastPlayed !== w2.lastPlayed)
+        return w2.lastPlayed - w1.lastPlayed;
+      return w2.timesPlayed - w1.timesPlayed;
+    });
+  }
+
   ionViewWillEnter() {
     this.unit = this.navParams.data.selectedUnit;
     this.course = this.dbService.currentCourse;
-    this.unitIndex = this.course.units.findIndex(e => e._id === this.unit._id);
-    this.words = [...this.unit.words];
+    this.words = [...this.course.units[this.unit.unitIndex].words];
+    this.sortWordsByAnalytic();
+    this.searchedWords = this.words.filter(word => {
+      return word.kanji.startsWith(this.value) || word.hira_kata.startsWith(this.value);
+    });
 
     this.currentCourseSubscription = this.dbService.currentCourseSubject.subscribe(
       course => {
         this.course = course;
-        this.unit = this.course.units[this.unitIndex];
+        this.unit = this.course.units[this.unit.unitIndex];
         this.words = [...this.unit.words];
+        this.sortWordsByAnalytic();
+        this.searchedWords = this.words.filter(word => {
+          return word.kanji.startsWith(this.value) || word.hira_kata.startsWith(this.value);
+        });
       }
     );
 
-    if (this.settingService.selectedType === this.unit._id
-      && this.settingService.status === SettingStatus.Playing)
+    if (this.settingService.selectedType === this.unit._id)
       this.selectedWords = this.settingService.selectedList;
-    else this.selectedWords = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
         if (setting.selectedType === this.unit._id)
@@ -61,7 +77,6 @@ export class WordsPage {
   ionViewWillLeave() {
     this.currentCourseSubscription.unsubscribe();
     this.settingSubscription.unsubscribe();
-    this.settingService.reset();
   }
 
   selectWord($event, word) {
@@ -82,14 +97,13 @@ export class WordsPage {
   }
 
   addToPlaylist($event, word) {
-    let wordIndex = this.words.findIndex(e => e._id === word._id);
     let modal = Modal.create(PlaylistOptions, { currentWord: word });
     modal.onDismiss(res => {
       if (!res) return;
       let data = res.data;
       let playlists = res.playlists;
 
-      this.course.units[this.unitIndex].words[wordIndex].bookmarked = data.length > 0;
+      this.course.units[this.unit.unitIndex].words[word.wordIndex].bookmarked = data.length > 0;
       data = data.map(e => parseInt(e));
       data.forEach(index => {
         if (playlists[index].words.findIndex(e => e._id === word._id) === -1)
@@ -117,6 +131,9 @@ export class WordsPage {
   }
 
   search($event) {
-    let value = $event.value;
+    this.value = $event.value;
+    this.searchedWords = this.words.filter(word => {
+      return word.kanji.startsWith(this.value) || word.hira_kata.startsWith(this.value);
+    });
   }
 }

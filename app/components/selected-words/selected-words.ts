@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {NavController, Alert, ViewController, NavParams} from 'ionic-angular';
 import {DbService} from '../../services/db.service';
 import {SettingService} from '../../services/setting.service';
@@ -11,21 +11,31 @@ import {Subscription} from 'rxjs';
   templateUrl: 'build/components/selected-words/selected-words.html',
   directives: [CustomCheckbox],
 })
-export class SelectedWords {
+export class SelectedWords implements OnInit, OnDestroy {
   selectedWords: any[] = [];
+  settingSubscription: Subscription;
 
   constructor(private viewController: ViewController, private dbService: DbService,
     private navController: NavController, private navParams: NavParams,
     private translate: TranslateService, private settingService: SettingService) {
-    this.selectedWords = [...this.settingService.selectedWords.reduce((result, listWord) => {
-      return result.concat(listWord);
-    }, [])];;
+  }
+
+  ngOnInit() {
+    this.selectedWords = [...this.settingService.selectedWords];
+    this.settingSubscription = this.settingService.settingSubject.subscribe(
+      setting => this.selectedWords = [...this.settingService.selectedWords]
+    )
+  }
+
+  ngOnDestroy() {
+    this.settingSubscription.unsubscribe();
   }
 
   close() {
     this.viewController.dismiss();
   }
 
-  removeWord(index) {
+  removeWord(word) {
+    this.settingService.deleteSelectedWord(word._id);
   }
 }

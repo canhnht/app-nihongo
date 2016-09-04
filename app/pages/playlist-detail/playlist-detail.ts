@@ -28,10 +28,8 @@ export class PlaylistDetail {
   ionViewWillEnter() {
     this.playlist = this.navParams.data.selectedPlaylist;
     this.words = this.playlist.words;
-    if (this.settingService.selectedType === this.playlist._id
-      && this.settingService.status === SettingStatus.Playing)
+    if (this.settingService.selectedType === this.playlist._id)
       this.selectedWords = this.settingService.selectedList;
-    else this.selectedWords = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
         if (setting.selectedType === this.playlist._id)
@@ -42,7 +40,6 @@ export class PlaylistDetail {
 
   ionViewWillLeave() {
     this.settingSubscription.unsubscribe();
-    this.settingService.reset();
   }
 
   selectWord($event, word) {

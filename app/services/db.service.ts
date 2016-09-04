@@ -147,4 +147,22 @@ export class DbService {
       utils.errorHandler('Error update playlist')
     );
   }
+
+  addOrUpdateNews(listNews) {
+    this.db.bulkDocs(listNews).then(resp => {}).catch(
+      utils.errorHandler('Error update news')
+    );
+  }
+
+  getAllNews() {
+    return Promise.resolve(this.db.allDocs({
+        include_docs: true,
+        startkey: 'news',
+        endkey: 'news\uffff'
+      }))
+      .then(docs => {
+        return docs.rows.map(row => row.doc);
+      })
+      .catch(utils.errorHandler('Error get all news'));
+  }
 }

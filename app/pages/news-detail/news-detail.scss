@@ -1,0 +1,21 @@
+.news-detail {
+
+  .title {
+    display: flex;
+    align-items: center;
+
+    .img-news {
+      margin: 0 10px;
+    }
+  }
+
+  .date {
+    float: right;
+    margin-right: 10px;
+  }
+
+  .content {
+    margin: 20px;
+    font-size: 17px;
+  }
+}

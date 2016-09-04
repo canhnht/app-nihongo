@@ -3,6 +3,8 @@ import {Http} from '@angular/http';
 import {Platform, ionicBootstrap, NavController} from 'ionic-angular';
 import {StatusBar, Splashscreen, Toast} from 'ionic-native';
 import {HomePage} from './pages/home-page/home-page';
+import {NewsPage} from './pages/news-page/news-page';
+import {NewsDetail} from './pages/news-detail/news-detail';
 import {LoginPage} from './pages/login-page/login-page';
 import {SettingPage} from './pages/setting-page/setting-page';
 import {FeedbackPage} from './pages/feedback-page/feedback-page';
@@ -28,7 +30,7 @@ export class MyApp {
   playlistsPage = PlaylistsPage;
   settingPage = SettingPage;
   feedbackPage = FeedbackPage;
-  rootPage = LoginPage;
+  rootPage = HomePage;
   isSignedIn: boolean = false;
 
   constructor(private platform: Platform, private authService: AuthService,

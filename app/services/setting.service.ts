@@ -32,25 +32,36 @@ export class SettingService {
     this.pushState();
   }
 
+  stopAudio() {
+    this.status = SettingStatus.Selecting;
+    this.pushState();
+  }
+
+  deleteSelectedWord(wordId) {
+    let searchIndex = this.selectedList.indexOf(wordId);
+    this.removeWord(searchIndex);
+    this.pushState();
+  }
+
   private pushState() {
     this.settingSubject.next({
       selectedType: this.selectedType,
       selectedList: this.selectedList,
       status: this.status,
-      countWords: this.selectedWords.reduce((sum, item) => sum + item.length, 0),
+      countWords: this.selectedWords.length,
     });
   }
 
-  private removeItem(index) {
+  private removeWord(index) {
     this.selectedList.splice(index, 1);
     this.selectedWords.splice(index, 1);
     if (this.selectedList.length > 0) this.status = SettingStatus.Selecting;
     else this.status = SettingStatus.None;
   }
 
-  private addItem(item, listWord) {
-    this.selectedList.push(item);
-    this.selectedWords.push(listWord);
+  private addWord(word) {
+    this.selectedList.push(word._id);
+    this.selectedWords.push(word);
     this.status = SettingStatus.Selecting;
   }
 
@@ -58,15 +69,15 @@ export class SettingService {
     if (this.selectedType !== unitId) this.reset(true);
     this.selectedType = unitId;
     let searchIndex = this.selectedList.indexOf(word._id);
-    if (searchIndex >= 0) this.removeItem(searchIndex);
-    else this.addItem(word._id, [word]);
+    if (searchIndex >= 0) this.removeWord(searchIndex);
+    else this.addWord(word);
     this.pushState();
   }
 
   selectWordsInUnit(unitId, words) {
     this.selectedType = unitId;
     this.selectedList = words.map(word => word._id);
-    this.selectedWords = words.map(word => [word]);
+    this.selectedWords = [...words];
     if (this.selectedList.length === 0) this.status = SettingStatus.None;
     else this.status = SettingStatus.Selecting;
     this.pushState();
@@ -77,15 +88,15 @@ export class SettingService {
     if (this.selectedType !== playlistId) this.reset(true);
     this.selectedType = playlistId;
     let searchIndex = this.selectedList.indexOf(word._id);
-    if (searchIndex >= 0) this.removeItem(searchIndex);
-    else this.addItem(word._id, [word]);
+    if (searchIndex >= 0) this.removeWord(searchIndex);
+    else this.addWord(word);
     this.pushState();
   }
 
   selectWordsInPlaylist(playlistId, words) {
     this.selectedType = playlistId;
     this.selectedList = words.map(word => word._id);
-    this.selectedWords = words.map(word => [word]);
+    this.selectedWords = [...words];
     if (this.selectedList.length === 0) this.status = SettingStatus.None;
     else this.status = SettingStatus.Selecting;
     this.pushState();
@@ -96,8 +107,8 @@ export class SettingService {
     if (this.selectedType !== 'search') this.reset(true);
     this.selectedType = 'search';
     let searchIndex = this.selectedList.indexOf(word._id);
-    if (searchIndex >= 0) this.removeItem(searchIndex);
-    else this.addItem(word._id, [word]);
+    if (searchIndex >= 0) this.removeWord(searchIndex);
+    else this.addWord(word);
     this.pushState();
   }
 }

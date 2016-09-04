@@ -1,0 +1,15 @@
+<ion-navbar *navbar primary>
+  <ion-title>{{news.title}}</ion-title>
+</ion-navbar>
+
+<ion-content class="news-detail">
+  <div class="title">
+    <img src="images/bg_newstitle.gif" class="img-news" />
+    <h1 [innerHTML]="news.titleWithRuby">
+    </h1>
+  </div>
+  <em class="date">{{news.dateText}}</em>
+  <audio-bar></audio-bar>
+  <div class="content" [innerHTML]="news.contentWithRuby">
+  </div>
+</ion-content>

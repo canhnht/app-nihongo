@@ -18,7 +18,7 @@ export class AudioSetting implements OnInit, OnDestroy {
   isDisable: boolean = true;
   isContinue: boolean = false;
   settingSubscription: Subscription;
-  fullHeight: boolean = true;
+  fullHeight: boolean = false;
   countWords: number = 0;
 
   constructor(private audioService: AudioService, private settingService: SettingService,
@@ -47,17 +47,19 @@ export class AudioSetting implements OnInit, OnDestroy {
   }
 
   playAudio() {
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
     if (this.isContinue) {
       this.audioService.generateListWordOrder();
       this.audioService.playCurrentTrack();
+      this.navController.push(WordSlides);
     } else {
-      SpinnerDialog.show(this.translate.instant('Processing'),
-        this.translate.instant('Please_wait'), false);
       this.settingService.playAudio();
-      this.audioService.playSetting();
       this.sliderService.resetSlider();
+      this.audioService.playSetting().then(() => {
+        this.navController.push(WordSlides);
+      });
     }
-    this.navController.push(WordSlides);
   }
 
   toggleLoop() {

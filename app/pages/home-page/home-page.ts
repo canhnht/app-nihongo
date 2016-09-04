@@ -7,6 +7,8 @@ import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
 import {UnitsPage} from '../units-page/units-page';
 import {WordSlides} from '../word-slides/word-slides';
+import {NewsPage} from '../news-page/news-page';
+import {NewsDetail} from '../news-detail/news-detail';
 import {DbService} from '../../services/db.service';
 import {SettingService, SettingStatus} from '../../services/setting.service';
 import {CustomDatePipe} from '../../custom-date.pipe';
@@ -28,15 +30,37 @@ export class HomePage {
   searchedWords: any[] = [];
   selectedWords: any[] = [];
   settingSubscription: Subscription;
+  latestNews: any = {};
 
   constructor(private navController: NavController, private dbService: DbService,
     private settingService: SettingService, private navParams: NavParams,
     private translate: TranslateService) {
     this.tabPage = this.navParams.data.tabPage || 'home';
+    this.dbService.getAllNews().then(listNews => {
+      this.latestNews = listNews.sort((n1, n2) => {
+        let d1 = new Date(n1.date);
+        let d2 = new Date(n2.date);
+        return d2.getTime() - d1.getTime();
+      })[0];
+    });
   }
 
   ionViewWillEnter() {
-    this.dbService.getListCourse().then(listCourse => this.courses = listCourse);
+    this.dbService.getListCourse().then(listCourse => {
+      this.courses = listCourse;
+      this.listWord = this.courses.reduce((arr, course) => {
+        let wordsInUnits = course.units.reduce((words, unit) => {
+          return words.concat(unit.words);
+        }, []);
+        return arr.concat(wordsInUnits);
+      }, []);
+      this.listWord = this.listWord.sort((w1, w2) => {
+        if (w1.lastPlayed && w2.lastPlayed && w1.lastPlayed !== w2.lastPlayed)
+          return w2.lastPlayed - w1.lastPlayed;
+        return w2.timesPlayed - w1.timesPlayed;
+      });
+      this.searchedWords = [...this.listWord];
+    });
     this.settingService.reset(true);
     this.listCourseSubscription = this.dbService.listCourseSubject.subscribe(
       listCourse => {
@@ -47,18 +71,17 @@ export class HomePage {
           }, []);
           return arr.concat(wordsInUnits);
         }, []);
-        this.searchedWords = this.listWord.sort((w1, w2) => {
+        this.listWord = this.listWord.sort((w1, w2) => {
           if (w1.lastPlayed && w2.lastPlayed && w1.lastPlayed !== w2.lastPlayed)
             return w2.lastPlayed - w1.lastPlayed;
           return w2.timesPlayed - w1.timesPlayed;
         });
+        this.searchedWords = [...this.listWord];
       }
     );
 
-    if (this.settingService.selectedType === 'search'
-      && this.settingService.status === SettingStatus.Playing)
+    if (this.settingService.selectedType === 'search')
       this.selectedWords = this.settingService.selectedList;
-    else this.selectedWords = [];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
       setting => {
         if (setting.selectedType === 'search')
@@ -70,7 +93,6 @@ export class HomePage {
   ionViewWillLeave() {
     this.listCourseSubscription.unsubscribe();
     this.settingSubscription.unsubscribe();
-    this.settingService.reset();
   }
 
   goToCourse(course) {
@@ -109,6 +131,13 @@ export class HomePage {
       });
       courseData.units = courseData.units.sort((u1, u2) => {
         return u1.number - u2.number;
+      });
+      courseData.units.forEach((unit, unitIndex) => {
+        unit.unitIndex = unitIndex;
+        unit.words.forEach((word, wordIndex) => {
+          word.wordIndex = wordIndex;
+          word.unitIndex = unitIndex;
+        });
       });
       Object.assign(course, courseData);
       return this.dbService.updateCourse(course);
@@ -154,6 +183,9 @@ export class HomePage {
 
   search($event) {
     let value = $event.value;
+    this.searchedWords = this.listWord.filter(word => {
+      return word.kanji.startsWith(value) || word.hira_kata.startsWith(value);
+    });
   }
 
   checkWord($event, word) {
@@ -176,5 +208,17 @@ export class HomePage {
     let modal = Modal.create(PlaylistOptions, { currentWord: word });
     this.navController.present(modal);
     $event.stopPropagation();
+  }
+
+  playNews() {
+
+  }
+
+  goToDetail() {
+    this.navController.push(NewsDetail, { selectedNews: this.latestNews });
+  }
+
+  listAllNews() {
+    this.navController.push(NewsPage);
   }
 }

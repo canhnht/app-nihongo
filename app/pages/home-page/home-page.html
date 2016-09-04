@@ -20,6 +20,37 @@
 </ion-header>
 
 <ion-content class="home-page" *ngIf="tabPage == 'home'">
+  <ion-card>
+    <ion-item>
+      Bản tin NHK mới nhất
+    </ion-item>
+    <div class="card-news">
+      <img src="images/bg_newstitle.gif" class="img-news" />
+      <div class="title">
+        <span [innerHTML]="latestNews.titleWithRuby"></span>
+        <div class="date">
+          {{latestNews.dateText}}
+        </div>
+      </div>
+    </div>
+    <ion-row>
+      <ion-col>
+        <button primary clear small (click)="playNews()">
+          Play
+        </button>
+      </ion-col>
+      <ion-col>
+        <button primary clear small (click)="goToDetail()">
+          Chi tiết
+        </button>
+      </ion-col>
+      <ion-col>
+        <button primary clear small (click)="listAllNews()">
+          Xem tất cả
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
   <ion-card *ngFor="let course of courses; let i = index">
     <div class="card-course">
       <div class="left-side">

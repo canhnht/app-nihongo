@@ -83,14 +83,12 @@ export class AudioService {
   }
 
   playSetting() {
-    this.listWord = [...this.settingService.selectedWords.reduce((result, listWord) => {
-      return result.concat(listWord);
-    }, [])];
+    this.listWord = [...this.settingService.selectedWords];
     let localPromise = [
       this.storageService.get('repeat_each_word'),
       this.storageService.get('time_between_words')
     ];
-    Promise.all(localPromise).then(result => {
+    return Promise.all(localPromise).then(result => {
       this.repeatEachWord = result[0];
       this.timeBetweenWords = result[1];
       this.listWord.forEach(word => word.repeatCount = 0);
@@ -98,8 +96,16 @@ export class AudioService {
       this.stopListTrack();
       this.generateListTrack();
       this.currentTrack.index = 0;
+      this.updateAnalytic(this.listWord[this.listWordOrder[0]]);
       this.playCurrentTrack();
     });
+  }
+
+  private updateAnalytic(word) {
+    let course = this.dbService.currentCourse;
+    course.units[word.unitIndex].words[word.wordIndex].lastPlayed = Date.now();
+    course.units[word.unitIndex].words[word.wordIndex].timesPlayed += 1;
+    this.dbService.updateCourse(course);
   }
 
   private generateListTrack() {
@@ -131,11 +137,12 @@ export class AudioService {
     this.listWord[wordIndex].repeatCount = 0;
     this.listTrack[this.currentTrack.index].release();
     this.currentTrack.index += 1;
-    if (this.currentTrack.index == this.listTrack.length) {
+    if (this.currentTrack.index === this.listTrack.length) {
       this.currentTrack.playedPercent = 100;
       this.currentTrack.seekTime = this.convertText(this.getTotalDuration());
       this.currentTrack.index = 0;
       if (this.isLoop) {
+        this.updateAnalytic(this.listWord[this.listWordOrder[this.currentTrack.index]]);
         this.startCountDown(this.timeBetweenWords, () => {
           this.trackIndexSubject.next(this.currentTrack.index);
           this.playCurrentTrack();
@@ -145,9 +152,11 @@ export class AudioService {
         this.currentTrack.playedPercent = 0;
         this.currentTrack.seekTime = this.convertText(0);
         this.isPlaying = false;
+        this.settingService.stopAudio();
         this.pauseCurrentTrack();
       }
     } else {
+      this.updateAnalytic(this.listWord[this.listWordOrder[this.currentTrack.index]]);
       this.startCountDown(this.timeBetweenWords, () => {
         this.trackIndexSubject.next(this.currentTrack.index);
         this.playCurrentTrack();

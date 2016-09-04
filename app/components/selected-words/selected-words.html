@@ -13,7 +13,8 @@
       <ion-label class="word-item">
         <h1>{{word.kanji}}</h1>
       </ion-label>
-      <button item-right clear danger large>
+      <button item-right clear danger large
+        (click)="removeWord(word)">
         <ion-icon name="close"></ion-icon>
       </button>
     </ion-item>

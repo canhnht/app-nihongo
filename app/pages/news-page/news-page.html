@@ -1,0 +1,33 @@
+<ion-navbar *navbar primary>
+  <ion-title>Bản tin NHK</ion-title>
+  <ion-buttons end>
+    <button (click)="refreshNews()">
+      <ion-icon name="refresh"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-navbar>
+
+<ion-content class="news-page">
+  <ion-card *ngFor="let news of listNews">
+    <div class="card-news">
+      <img src="images/bg_newstitle.gif" class="img-news" />
+      <div class="title">
+        <span [innerHTML]="news.titleWithRuby"></span>
+        <div class="date" [innerHTML]="news.dateText">
+        </div>
+      </div>
+    </div>
+    <ion-row>
+      <ion-col text-center>
+        <button primary clear small full (click)="playNews(news)">
+          Play
+        </button>
+      </ion-col>
+      <ion-col text-center>
+        <button primary clear small full (click)="newsDetail(news)">
+          Chi tiết
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+</ion-content>
