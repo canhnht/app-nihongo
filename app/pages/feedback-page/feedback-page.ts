@@ -23,7 +23,7 @@ export class FeedbackPage {
 
   displayAuthor() {
     let alert = Alert.create({
-      title: 'Giới thiệu tác giả',
+      title: this.translate.instant('Author_info'),
       subTitle: `
         <strong>TechyBrain</strong><br />
         <strong>Email:</strong> techybraingroup@gmail.com<br />

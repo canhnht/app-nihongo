@@ -6,6 +6,7 @@ import {SliderService} from '../../services/slider.service';
 import {DbService} from '../../services/db.service';
 import {Toast, SpinnerDialog, MediaPlugin} from 'ionic-native';
 import {Subscription} from 'rxjs';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Component({
   templateUrl: 'build/pages/word-slides/word-slides.html',
@@ -31,7 +32,7 @@ export class WordSlides {
 
   constructor(private navController: NavController, private audioService: AudioService,
     private sliderService: SliderService, private dbService: DbService,
-    private navParams: NavParams) {
+    private navParams: NavParams, private translate: TranslateService) {
     let params = this.navParams.data;
     this.hideBookmark = params.hideBookmark;
     if (params.playSingleWord) {
@@ -128,7 +129,7 @@ export class WordSlides {
     $event.stopPropagation();
     let word = this.words[this.currentIndex];
     let alert = Alert.create();
-    alert.setTitle('Add word to');
+    alert.setTitle(this.translate.instant('Add_word'));
     this.playlists.forEach((playlist, index) => {
       alert.addInput({
         type: 'checkbox',
@@ -137,9 +138,9 @@ export class WordSlides {
         checked: playlist.words.findIndex(e => e._id === word._id) >= 0
       });
     });
-    alert.addButton('Cancel');
+    alert.addButton(this.translate.instant('Cancel'));
     alert.addButton({
-      text: 'Okay',
+      text: this.translate.instant('OK'),
       handler: data => {
         data = data.map(e => parseInt(e));
         data.forEach(index => {

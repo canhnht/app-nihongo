@@ -11,41 +11,41 @@
     <ion-item button-primary text-wrap (click)="selectLanguage()">
       <ion-label class="setting-item">
         <ion-icon primary name="globe" class="setting-icon"></ion-icon>
-        Ngôn ngữ
+        {{'Language' | translate}}
       </ion-label>
     </ion-item>
     <ion-item button-primary text-wrap>
       <ion-label class="setting-item">
         <ion-icon primary name="star-half" class="setting-icon"></ion-icon>
-        Đánh giá ứng dụng
+        {{'Rate_app' | translate}}
       </ion-label>
     </ion-item>
     <ion-item button-primary text-wrap>
       <ion-label class="setting-item">
         <ion-icon primary name="timer" class="setting-icon"></ion-icon>
-        Thời gian nghỉ giữa 2 từ
+        {{'Break_between_words' | translate}}
       </ion-label>
-      <ion-select [(ngModel)]="timeBetweenWords" cancelText="Hủy" okText="Đồng ý"
-        (ionChange)="setTimeBetweenWords()">
-        <ion-option value="0">0 giây</ion-option>
-        <ion-option value="3">3 giây</ion-option>
-        <ion-option value="5">5 giây</ion-option>
-        <ion-option value="10">10 giây</ion-option>
-        <ion-option value="15">15 giây</ion-option>
+      <ion-select [(ngModel)]="timeBetweenWords" cancelText="'Cancel' | translate"
+        okText="'OK' | translate" (ionChange)="setTimeBetweenWords()">
+        <ion-option value="0">0 {{'second' | translate}}</ion-option>
+        <ion-option value="3">3 {{'second' | translate}}</ion-option>
+        <ion-option value="5">5 {{'second' | translate}}</ion-option>
+        <ion-option value="10">10 {{'second' | translate}}</ion-option>
+        <ion-option value="15">15 {{'second' | translate}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item button-primary text-wrap>
       <ion-label class="setting-item">
         <ion-icon primary name="repeat" class="setting-icon"></ion-icon>
-        Số lần lặp lại 1 từ
+        {{'Repeat_times' | translate}}
       </ion-label>
-      <ion-select [(ngModel)]="repeatEachWord" cancelText="Hủy" okText="Đồng ý"
-        (ionChange)="setRepeatEachWord()">
-        <ion-option value="1">1 lần</ion-option>
-        <ion-option value="2">2 lần</ion-option>
-        <ion-option value="3">3 lần</ion-option>
-        <ion-option value="5">5 lần</ion-option>
-        <ion-option value="10">10 lần</ion-option>
+      <ion-select [(ngModel)]="repeatEachWord" cancelText="'Cancel' | translate"
+        okText="'OK' | translate" (ionChange)="setRepeatEachWord()">
+        <ion-option value="1">1 {{'time' | translate}}</ion-option>
+        <ion-option value="2">2 {{'time' | translate}}</ion-option>
+        <ion-option value="3">3 {{'time' | translate}}</ion-option>
+        <ion-option value="5">5 {{'time' | translate}}</ion-option>
+        <ion-option value="10">10 {{'time' | translate}}</ion-option>
       </ion-select>
     </ion-item>
   </ion-list>

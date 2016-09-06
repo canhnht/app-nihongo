@@ -1,139 +1,150 @@
 
 .home-page {
   background-color: rgba(56, 125, 245, 0.2);
-}
 
-.icon-paid {
-  width: 30px;
-  height: 30px;
-}
-
-&.hidden {
-  display: none;
-}
-
-.card-course {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 130px;
-
-  .left-side {
-    width: 35%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #E61770;
-    // background: linear-gradient(white, #E61770);
-    padding: 0 20px;
-
-    .course-title {
-      font-family: 'Risque', Fallback, sans-serif;
-      font-size: 45px;
-      font-weight: bold;
-      color: white;
-    }
+  .icon-paid {
+    width: 30px;
+    height: 30px;
   }
 
-  .right-side {
-    width: 100%;
-    height: 100%;
-    padding: 10px 5px 10px 20px;
-    color: #999;
+  &.hidden {
+    display: none;
+  }
 
-    .number-units, .number-words {
-      font-size: 19px;
-      font-weight: 500;
-    }
+  .card-course {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 130px;
 
-    .number-words {
-      margin-top: -5px;
-      margin-bottom: 5px;
-    }
+    .left-side {
+      width: 35%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #E61770;
+      // background: linear-gradient(white, #E61770);
+      padding: 0 20px;
 
-    .number-comments {
-      font-weight: 500;
-      font-size: 16px;
-
-      .fa-comment {
-        font-size: 18px;
-        margin-right: 5px;
+      .course-title {
+        font-family: 'Risque', Fallback, sans-serif;
+        font-size: 45px;
+        font-weight: bold;
+        color: white;
       }
     }
 
-    .rating {
-      float: left;
-      unicode-bidi: bidi-override;
-      direction: rtl;
-    }
-    .rating > span {
-      display: inline-block;
-      position: relative;
-      width: 1em;
-      font-size: 15px;
-    }
-    .rating > span.focus,
-    .rating > span.focus ~ span {
-      color: transparent;
-    }
-    .rating > span.focus:before,
-    .rating > span.focus ~ span:before {
-      content: "\2605";
-      position: absolute;
-      left: 0;
-      color: #E61770;
-    }
-  }
-
-  .btn-start, .btn-download {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    padding-right: 10px;
-  }
-
-  .progress {
-    position: absolute;
-    bottom: 10px;
-    right: 5px;
-    font-size: 40px;
-  }
-
-  .btn-delete {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 50px;
-    height: 50px;
-    font-size: 35px;
-  }
-}
-
-.card-news {
-  position: relative;
-  display: flex;
-  align-items: center;
-
-  .img-news {
-    width: 40px;
-    margin: 0 5px 0 10px;
-  }
-
-  .title {
-    padding: 0 5px 10px 5px;
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .date {
+    .right-side {
+      width: 100%;
+      height: 100%;
+      padding: 10px 5px 10px 20px;
       color: #999;
-      font-size: 13px;
+
+      .number-units, .number-words {
+        font-size: 19px;
+        font-weight: 500;
+      }
+
+      .number-words {
+        margin-top: -5px;
+        margin-bottom: 5px;
+      }
+
+      .number-comments {
+        font-weight: 500;
+        font-size: 16px;
+
+        .fa-comment {
+          font-size: 18px;
+          margin-right: 5px;
+        }
+      }
+
+      .rating {
+        float: left;
+        unicode-bidi: bidi-override;
+        direction: rtl;
+      }
+      .rating > span {
+        display: inline-block;
+        position: relative;
+        width: 1em;
+        font-size: 15px;
+      }
+      .rating > span.focus,
+      .rating > span.focus ~ span {
+        color: transparent;
+      }
+      .rating > span.focus:before,
+      .rating > span.focus ~ span:before {
+        content: "\2605";
+        position: absolute;
+        left: 0;
+        color: #E61770;
+      }
+    }
+
+    .btn-start, .btn-download {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      padding-right: 10px;
+    }
+
+    .progress {
+      position: absolute;
+      bottom: 10px;
+      right: 5px;
+      font-size: 40px;
+    }
+
+    .btn-delete {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 50px;
+      height: 50px;
+      font-size: 35px;
     }
   }
-}
 
+  .card-news {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .img-news {
+      width: 40px;
+      margin: 0 5px 0 10px;
+    }
+
+    .title {
+      padding: 0 5px 10px 5px;
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .date {
+        color: #999;
+        font-size: 13px;
+      }
+    }
+  }
+
+  .news-loading {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .btn-load-news {
+    width: 150px;
+    margin-left: calc(50% - 75px);
+    margin-bottom: 10px;
+  }
+
+}

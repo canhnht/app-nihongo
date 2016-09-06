@@ -28,26 +28,26 @@ export class SettingPage {
 
   selectLanguage() {
     let languageAlert = Alert.create();
-    languageAlert.setTitle('Chọn ngôn ngữ');
+    languageAlert.setTitle(this.translate.instant('Choose_language'));
 
     this.storageService.get('language').then(res => {
       languageAlert.addInput({
         type: 'radio',
-        label: 'Tiếng Việt',
+        label: this.translate.instant('Vietnamese'),
         value: 'vn',
         checked: res === 'vn'
       });
 
       languageAlert.addInput({
         type: 'radio',
-        label: 'Tiếng Nhật',
+        label: this.translate.instant('Japanese'),
         value: 'ja',
         checked: res === 'ja'
       });
 
-      languageAlert.addButton('Hủy');
+      languageAlert.addButton(this.translate.instant('Cancel'));
       languageAlert.addButton({
-        text: 'Đồng ý',
+        text: this.translate.instant('OK'),
         handler: data => {
           this.storageService.set('language', data);
         }

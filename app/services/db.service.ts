@@ -15,6 +15,8 @@ export class DbService {
   currentCourseSubject: Subject<any> = new Subject<any>();
   playlistSubject: Subject<any> = new Subject<any>();
   currentCourse: any = {};
+  listNews: any[] = [];
+  listNewsSubject: Subject<any[]> = new Subject<any[]>();
 
   constructor() {
     this.db = new PouchDB('app-nihongo', {adapter: 'websql'});
@@ -57,6 +59,14 @@ export class DbService {
         this.listCourseSubject.next(this.listCourse);
       } else if (doc._id.startsWith('playlist')) {
         this.playlistSubject.next(doc);
+      } else if (doc._id.startsWith('news')) {
+        this.listNews.push(doc);
+        this.listNews = this.listNews.sort((n1, n2) => {
+          let d1 = new Date(n1.date);
+          let d2 = new Date(n2.date);
+          return d2.getTime() - d1.getTime();
+        });
+        this.listNewsSubject.next(this.listNews);
       }
     };
     this.db.changes({ live: true, since: 'now', include_docs: true })
@@ -75,22 +85,6 @@ export class DbService {
       });
       return this.listCourse;
     }).catch(utils.errorHandler('Error get list course'));
-    // if (!this.listCourse) {
-    //   return Promise.resolve(this.db.allDocs({
-    //     include_docs: true,
-    //     startkey: 'course',
-    //     endkey: 'course\uffff'
-    //   })).then(docs => {
-    //       this.listCourse = docs.rows.map(row => {
-    //         let course = row.doc;
-    //         return course;
-    //       });
-    //       return this.listCourse;
-    //     })
-    //     .catch(utils.errorHandler('Error get list course'));
-    // } else {
-    //   return Promise.resolve(this.listCourse);
-    // }
   }
 
   getCourse(courseId) {
@@ -161,7 +155,13 @@ export class DbService {
         endkey: 'news\uffff'
       }))
       .then(docs => {
-        return docs.rows.map(row => row.doc);
+        this.listNews = docs.rows.map(row => row.doc);
+        this.listNews = this.listNews.sort((n1, n2) => {
+          let d1 = new Date(n1.date);
+          let d2 = new Date(n2.date);
+          return d2.getTime() - d1.getTime();
+        });
+        return this.listNews;
       })
       .catch(utils.errorHandler('Error get all news'));
   }

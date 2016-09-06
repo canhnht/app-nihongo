@@ -22,9 +22,16 @@
 <ion-content class="home-page" *ngIf="tabPage == 'home'">
   <ion-card>
     <ion-item>
-      Bản tin NHK mới nhất
+      {{'Newest_NHK' | translate}}
     </ion-item>
-    <div class="card-news">
+    <button class="btn-load-news" *ngIf="!latestNews && !loadingNews"
+      (click)="downloadNews()">
+      {{'Download_news' | translate}}
+    </button>
+    <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading"
+      *ngIf="loadingNews">
+    </i>
+    <div class="card-news" *ngIf="!!latestNews">
       <img src="images/bg_newstitle.gif" class="img-news" />
       <div class="title">
         <span [innerHTML]="latestNews.titleWithRuby"></span>
@@ -33,20 +40,15 @@
         </div>
       </div>
     </div>
-    <ion-row>
-      <ion-col>
-        <button primary clear small (click)="playNews()">
-          Play
+    <ion-row *ngIf="!!latestNews">
+      <ion-col text-center>
+        <button primary clear full small (click)="goToDetail()">
+          {{'Detail' | translate}}
         </button>
       </ion-col>
-      <ion-col>
-        <button primary clear small (click)="goToDetail()">
-          Chi tiết
-        </button>
-      </ion-col>
-      <ion-col>
-        <button primary clear small (click)="listAllNews()">
-          Xem tất cả
+      <ion-col text-center>
+        <button primary clear full small (click)="listAllNews()">
+          {{'List_all' | translate}}
         </button>
       </ion-col>
     </ion-row>
@@ -81,7 +83,7 @@
         <button primary class="btn-download" *ngIf="!course.downloaded"
           (click)="downloadCourse(course, i)" [disabled]="course.downloading">
           <ion-icon name="download"></ion-icon>
-          Download
+          {{'Download' | translate}}
         </button>
         <i class="fa fa-spinner fa-spin progress" primary
           *ngIf="!course.downloaded && course.downloading"></i>

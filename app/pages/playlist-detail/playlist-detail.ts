@@ -9,6 +9,7 @@ import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {SettingService, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Component({
   templateUrl: 'build/pages/playlist-detail/playlist-detail.html',
@@ -22,7 +23,7 @@ export class PlaylistDetail {
 
   constructor(private navController: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
-    private settingService: SettingService) {
+    private settingService: SettingService, private translate: TranslateService) {
   }
 
   ionViewWillEnter() {
@@ -44,7 +45,8 @@ export class PlaylistDetail {
 
   selectWord($event, word) {
     if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
-    SpinnerDialog.show('Processing', 'Please wait a second', false);
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
     let wordIndex = this.words.findIndex(item => item._id === word._id);
     this.navController.push(WordSlides, {
       hideBookmark: true,

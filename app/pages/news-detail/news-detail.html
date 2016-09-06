@@ -9,7 +9,7 @@
     </h1>
   </div>
   <em class="date">{{news.dateText}}</em>
-  <audio-bar></audio-bar>
+  <audio-bar [audioLink]="news.voiceUrl"></audio-bar>
   <div class="content" [innerHTML]="news.contentWithRuby">
   </div>
 </ion-content>

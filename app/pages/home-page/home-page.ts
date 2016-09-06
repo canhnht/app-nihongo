@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
+import {Http} from '@angular/http';
 import {Subscription} from 'rxjs';
-import {Toast, Transfer, File, SpinnerDialog} from 'ionic-native';
+import {Toast, Transfer, File, SpinnerDialog, MediaPlugin} from 'ionic-native';
 import {NavController, Popover, Alert, NavParams, Modal} from 'ionic-angular';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
@@ -30,19 +31,15 @@ export class HomePage {
   searchedWords: any[] = [];
   selectedWords: any[] = [];
   settingSubscription: Subscription;
-  latestNews: any = {};
+  listNewsSubscription: Subscription;
+  latestNews: any = null;
+  loadingNews: boolean = true;
 
   constructor(private navController: NavController, private dbService: DbService,
     private settingService: SettingService, private navParams: NavParams,
-    private translate: TranslateService) {
+    private translate: TranslateService, private http: Http) {
     this.tabPage = this.navParams.data.tabPage || 'home';
-    this.dbService.getAllNews().then(listNews => {
-      this.latestNews = listNews.sort((n1, n2) => {
-        let d1 = new Date(n1.date);
-        let d2 = new Date(n2.date);
-        return d2.getTime() - d1.getTime();
-      })[0];
-    });
+    this.downloadNews();
   }
 
   ionViewWillEnter() {
@@ -61,7 +58,6 @@ export class HomePage {
       });
       this.searchedWords = [...this.listWord];
     });
-    this.settingService.reset(true);
     this.listCourseSubscription = this.dbService.listCourseSubject.subscribe(
       listCourse => {
         this.courses = listCourse;
@@ -80,6 +76,7 @@ export class HomePage {
       }
     );
 
+    this.settingService.reset(true);
     if (this.settingService.selectedType === 'search')
       this.selectedWords = this.settingService.selectedList;
     this.settingSubscription = this.settingService.settingSubject.subscribe(
@@ -87,6 +84,13 @@ export class HomePage {
         if (setting.selectedType === 'search')
           this.selectedWords = setting.selectedList;
       }
+    );
+
+    this.dbService.getAllNews().then(listNews => {
+      this.latestNews = listNews[0];
+    });
+    this.listNewsSubscription = this.dbService.listNewsSubject.subscribe(
+      listNews => this.latestNews = listNews[0]
     );
   }
 
@@ -102,7 +106,9 @@ export class HomePage {
   deleteCourse(course) {
     let folderPath = `file:///storage/emulated/0/Android/data/io.techybrain.mimi_kara_nihongo/files/`;
     File.removeRecursively(folderPath, course._id).then(res => {
-      Toast.showLongCenter(`Course ${course.courseName} has been deleted successfully`).subscribe(() => {});
+      Toast.showLongCenter(this.translate.instant('Delete_course_successfully', {
+        courseName: course.courseName
+      })).subscribe(() => {});
     }).catch(err => {
       Toast.showLongBottom('Error deleting').subscribe(() => {});
     });
@@ -164,7 +170,9 @@ export class HomePage {
       });
       return Promise.all(downloadPromise);
     }).then(res => {
-      Toast.showLongCenter(`Course ${course.courseName} has been downloaded successfully`).subscribe(() => {});
+      Toast.showLongCenter(this.translate.instant('Download_course_successfully', {
+        courseName: course.courseName
+      })).subscribe(() => {});
       course = this.courses[index];
       course.downloading = false;
       course.downloaded = true;
@@ -211,7 +219,15 @@ export class HomePage {
   }
 
   playNews() {
-
+    let media = new MediaPlugin(this.latestNews.voiceUrl);
+    media.play();
+    setInterval(() => {
+      let duration = media.getDuration();
+      Toast.showShortBottom(`duration ${duration}`).subscribe(() => {});
+      media.getCurrentPosition().then(position => {
+        Toast.showShortBottom(`position ${position}`).subscribe(() => {});
+      });
+    }, 1000);
   }
 
   goToDetail() {
@@ -220,5 +236,22 @@ export class HomePage {
 
   listAllNews() {
     this.navController.push(NewsPage);
+  }
+
+  downloadNews() {
+    this.loadingNews = true;
+    this.http.get('http://52.11.74.221/nihongo/nhk')
+      .map(res => res.json())
+      .subscribe(listNews => {
+        this.loadingNews = false;
+        this.dbService.addOrUpdateNews(listNews.map(news => {
+          return Object.assign({}, news, {
+            _id: `news${news.id}`
+          });
+        }));
+      }, err => {
+        this.loadingNews = false;
+        Toast.showShortBottom(this.translate.instant('Download_news_error')).subscribe(() => {});
+      });
   }
 }

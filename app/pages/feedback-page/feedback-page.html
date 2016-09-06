@@ -3,7 +3,7 @@
   <button menuToggle left>
     <ion-icon name="menu"></ion-icon>
   </button>
-  <ion-title>Góp ý và liên hệ</ion-title>
+  <ion-title>{{'Feedback_and_contact' | translate}}</ion-title>
 </ion-navbar>
 
 <ion-content>
@@ -11,19 +11,19 @@
     <ion-item button-primary text-wrap (click)="displayAuthor()">
       <ion-label class="setting-item">
         <ion-icon primary name="information-circle" class="setting-icon"></ion-icon>
-        Giới thiệu tác giả
+        {{'Author_info' | translate}}
       </ion-label>
     </ion-item>
     <ion-item button-primary text-wrap>
       <ion-label class="setting-item">
         <ion-icon primary name="star-half" class="setting-icon"></ion-icon>
-        Đóng góp ý kiến
+        {{'Feedback' | translate}}
       </ion-label>
     </ion-item>
     <ion-item button-primary text-wrap>
       <ion-label class="setting-item">
         <ion-icon primary name="card" class="setting-icon"></ion-icon>
-        Donate
+        {{'Donate' | translate}}
       </ion-label>
     </ion-item>
   </ion-list>

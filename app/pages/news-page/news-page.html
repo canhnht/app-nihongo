@@ -1,5 +1,5 @@
 <ion-navbar *navbar primary>
-  <ion-title>Bản tin NHK</ion-title>
+  <ion-title>{{'NHK_News' | translate}}</ion-title>
   <ion-buttons end>
     <button (click)="refreshNews()">
       <ion-icon name="refresh"></ion-icon>
@@ -19,13 +19,8 @@
     </div>
     <ion-row>
       <ion-col text-center>
-        <button primary clear small full (click)="playNews(news)">
-          Play
-        </button>
-      </ion-col>
-      <ion-col text-center>
         <button primary clear small full (click)="newsDetail(news)">
-          Chi tiết
+          {{'Detail' | translate}}
         </button>
       </ion-col>
     </ion-row>
