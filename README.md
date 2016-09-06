@@ -17,3 +17,12 @@ for high quality training of Angular 2
 ## Notes
 - This project is init by this command ```ionic start app-nihongo --v2 --ts```
 - This project uses tabs template in ionic 2. 
+
+## Translation
+- Go to folder ```www/i18n```
+- Meaning of following files:
+  * ```vi.json``` - Vietnamese
+  * ```ja.json``` - Japanese
+  * ```en.json``` - English
+- Each file contains a JSON object. All keys is same across all files.
+Value of JSON key will be translated to equivalent language.
