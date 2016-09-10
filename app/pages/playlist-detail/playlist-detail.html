@@ -11,16 +11,26 @@
 </ion-navbar>
 
 <ion-content>
-  <ion-list [virtualScroll]="words">
-    <ion-item button-primary text-wrap *virtualItem="let word"
-      (click)="selectWord($event, word)">
-      <ion-label>
-        <h1>{{word.kanji}}</h1>
-      </ion-label>
-      <custom-checkbox item-right (onClick)="checkWord($event, word)"
-        [checked]="selectedWords.indexOf(word._id) >= 0">
-      </custom-checkbox>
-    </ion-item>
+  <ion-list>
+    <ion-item-sliding *ngFor="let word of words">
+      <ion-item button-primary text-wrap (click)="selectWord($event, word)">
+        <ion-label>
+          <h1>{{word.kanji}}</h1>
+          <p>{{word.timesPlayed > 0 ? '(' + word.timesPlayed + ') - ' : ''}}
+            {{word.timesPlayed > 0 ? (word.lastPlayed | customDate) : ''}}
+          </p>
+        </ion-label>
+        <custom-checkbox item-right (onClick)="checkWord($event, word)"
+          [checked]="selectedWords.indexOf(word._id) >= 0">
+        </custom-checkbox>
+      </ion-item>
+      <ion-item-options>
+        <button danger (click)="deleteWord(word)">
+          <ion-icon name="trash" large></ion-icon><br />
+          {{'Delete' | translate}}
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 </ion-content>
 <audio-setting></audio-setting>

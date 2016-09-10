@@ -52,16 +52,25 @@ export class AudioBar implements OnInit, OnDestroy {
   }
 
   private startGetCurrentPositionInterval() {
+    let countError = 0;
+    let checkError = true;
     this.intervalGetCurrentPosition = setInterval(() => {
       let duration = this.media.getDuration();
       this.duration = this.convertText(Math.max(duration, 0));
       this.media.getCurrentPosition().then(position => {
         Toast.showShortBottom(`media ${duration} -- ${position}`).subscribe(() => {});
         if (position >= 0) {
+          checkError = false;
           this.currentTime = this.convertText(Math.max(position, 0));
           this.playedPercent = Math.ceil(position / duration * 100);
         } else {
-          this.pause();
+          if (checkError) {
+            ++countError;
+            if (countError >= 5)
+              this.pause();
+          } else {
+            this.pause();
+          }
         }
       }).catch(err => {
         Toast.showShortBottom('ERROR getCurrentPosition ' + JSON.stringify(err)).subscribe(() => {});

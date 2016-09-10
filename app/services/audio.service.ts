@@ -24,11 +24,15 @@ export class AudioService {
   // basePath: string = 'file:///android_asset/www/audio';
   repeatEachWord: any = 1;
   timeBetweenWords: any = 0;
+  courses: any = {};
 
   constructor(private dbService: DbService, private settingService: SettingService,
     private translate: TranslateService, private storageService: LocalStorageService) {
     this.currentTrack.seekTime = '00:00';
     this.currentTrack.duration = '00:00';
+    this.dbService.getAllCourses().then(courses => this.courses = courses);
+    this.dbService.allCoursesSubject.subscribe(
+      courses => this.courses = courses);
   }
 
   toggleLoop() {
@@ -84,6 +88,7 @@ export class AudioService {
 
   playSetting() {
     this.listWord = [...this.settingService.selectedWords];
+    alert(`play setting ${this.listWord.length} ${JSON.stringify(this.listWord[0])} ${JSON.stringify(this.courses)}`);
     let localPromise = [
       this.storageService.get('repeat_each_word'),
       this.storageService.get('time_between_words')
@@ -102,7 +107,7 @@ export class AudioService {
   }
 
   private updateAnalytic(word) {
-    let course = this.dbService.currentCourse;
+    let course = this.courses[word.courseId];
     course.units[word.unitIndex].words[word.wordIndex].lastPlayed = Date.now();
     course.units[word.unitIndex].words[word.wordIndex].timesPlayed += 1;
     this.dbService.updateCourse(course);

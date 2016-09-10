@@ -15,8 +15,12 @@ export class DbService {
   currentCourseSubject: Subject<any> = new Subject<any>();
   playlistSubject: Subject<any> = new Subject<any>();
   currentCourse: any = {};
+  currentPlaylist: any = {};
+  currentPlaylistSubject: Subject<any> = new Subject<any>();
   listNews: any[] = [];
   listNewsSubject: Subject<any[]> = new Subject<any[]>();
+  allCourses: any = {};
+  allCoursesSubject: Subject<any[]> = new Subject<any[]>();
 
   constructor() {
     this.db = new PouchDB('app-nihongo', {adapter: 'websql'});
@@ -54,11 +58,15 @@ export class DbService {
       if (doc._id.startsWith('course')) {
         this.currentCourse = doc;
         this.currentCourseSubject.next(doc);
+        this.allCourses[doc._id] = doc;
+        this.allCoursesSubject.next(this.allCourses);
         let courseIndex = this.listCourse.findIndex(course => course._id === doc._id);
         this.listCourse[courseIndex] = doc;
         this.listCourseSubject.next(this.listCourse);
       } else if (doc._id.startsWith('playlist')) {
         this.playlistSubject.next(doc);
+        if (doc._id === this.currentPlaylist._id)
+          this.currentPlaylistSubject.next(doc);
       } else if (doc._id.startsWith('news')) {
         this.listNews.push(doc);
         this.listNews = this.listNews.sort((n1, n2) => {
@@ -87,6 +95,20 @@ export class DbService {
     }).catch(utils.errorHandler('Error get list course'));
   }
 
+  getAllCourses() {
+    return Promise.resolve(this.db.allDocs({
+      include_docs: true,
+      startkey: 'course',
+      endkey: 'course\uffff'
+    })).then(docs => {
+      this.allCourses = docs.rows.reduce((res, row) => {
+        res[row.doc._id] = row.doc;
+        return res;
+      }, {});
+      return this.allCourses;
+    }).catch(utils.errorHandler('Error get all courses'));
+  }
+
   getCourse(courseId) {
     if (!this.currentCourse || this.currentCourse._id !== courseId) {
       return Promise.resolve(this.db.get(courseId))
@@ -110,6 +132,19 @@ export class DbService {
         return docs.rows.map(row => row.doc);
       })
       .catch(utils.errorHandler('Error get all playlists'));
+  }
+
+  getPlaylist(playlistId) {
+    if (!this.currentPlaylist || this.currentPlaylist._id !== playlistId) {
+      return Promise.resolve(this.db.get(playlistId))
+        .then(playlist => {
+          this.currentPlaylist = playlist;
+          return playlist;
+        })
+        .catch(utils.errorHandler(`Error get playlist by id ${playlistId}`));
+    } else {
+      return Promise.resolve(this.currentPlaylist);
+    }
   }
 
   updateMultiplePlaylists(playlists) {

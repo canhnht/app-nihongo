@@ -34,8 +34,8 @@ export class SettingPage {
       languageAlert.addInput({
         type: 'radio',
         label: this.translate.instant('Vietnamese'),
-        value: 'vn',
-        checked: res === 'vn'
+        value: 'vi',
+        checked: res === 'vi'
       });
 
       languageAlert.addInput({

@@ -31,7 +31,7 @@
     <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading"
       *ngIf="loadingNews">
     </i>
-    <div class="card-news" *ngIf="!!latestNews">
+    <div class="card-news" *ngIf="!loadingNews && !!latestNews">
       <img src="images/bg_newstitle.gif" class="img-news" />
       <div class="title">
         <span [innerHTML]="latestNews.titleWithRuby"></span>
@@ -40,7 +40,7 @@
         </div>
       </div>
     </div>
-    <ion-row *ngIf="!!latestNews">
+    <ion-row *ngIf="!loadingNews && !!latestNews">
       <ion-col text-center>
         <button primary clear full small (click)="goToDetail()">
           {{'Detail' | translate}}

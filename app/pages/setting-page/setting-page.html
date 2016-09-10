@@ -25,8 +25,8 @@
         <ion-icon primary name="timer" class="setting-icon"></ion-icon>
         {{'Break_between_words' | translate}}
       </ion-label>
-      <ion-select [(ngModel)]="timeBetweenWords" cancelText="'Cancel' | translate"
-        okText="'OK' | translate" (ionChange)="setTimeBetweenWords()">
+      <ion-select [(ngModel)]="timeBetweenWords" cancelText="{{'Cancel' | translate}}"
+        okText="{{'OK' | translate}}" (ionChange)="setTimeBetweenWords()">
         <ion-option value="0">0 {{'second' | translate}}</ion-option>
         <ion-option value="3">3 {{'second' | translate}}</ion-option>
         <ion-option value="5">5 {{'second' | translate}}</ion-option>
@@ -39,8 +39,8 @@
         <ion-icon primary name="repeat" class="setting-icon"></ion-icon>
         {{'Repeat_times' | translate}}
       </ion-label>
-      <ion-select [(ngModel)]="repeatEachWord" cancelText="'Cancel' | translate"
-        okText="'OK' | translate" (ionChange)="setRepeatEachWord()">
+      <ion-select [(ngModel)]="repeatEachWord" cancelText="{{'Cancel' | translate}}"
+        okText="{{'OK' | translate}}" (ionChange)="setRepeatEachWord()">
         <ion-option value="1">1 {{'time' | translate}}</ion-option>
         <ion-option value="2">2 {{'time' | translate}}</ion-option>
         <ion-option value="3">3 {{'time' | translate}}</ion-option>

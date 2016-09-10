@@ -32,6 +32,7 @@ export class HomePage {
   selectedWords: any[] = [];
   settingSubscription: Subscription;
   listNewsSubscription: Subscription;
+  downloadNewsSubscription: Subscription;
   latestNews: any = null;
   loadingNews: boolean = true;
 
@@ -97,6 +98,7 @@ export class HomePage {
   ionViewWillLeave() {
     this.listCourseSubscription.unsubscribe();
     this.settingSubscription.unsubscribe();
+    this.downloadNewsSubscription.unsubscribe();
   }
 
   goToCourse(course) {
@@ -143,6 +145,7 @@ export class HomePage {
         unit.words.forEach((word, wordIndex) => {
           word.wordIndex = wordIndex;
           word.unitIndex = unitIndex;
+          word.courseId = course._id;
         });
       });
       Object.assign(course, courseData);
@@ -240,7 +243,7 @@ export class HomePage {
 
   downloadNews() {
     this.loadingNews = true;
-    this.http.get('http://52.11.74.221/nihongo/nhk')
+    this.downloadNewsSubscription = this.http.get('http://52.32.158.240/nihongo/nhk')
       .map(res => res.json())
       .subscribe(listNews => {
         this.loadingNews = false;

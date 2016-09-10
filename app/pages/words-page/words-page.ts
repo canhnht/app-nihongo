@@ -107,7 +107,12 @@ export class WordsPage {
       data = data.map(e => parseInt(e));
       data.forEach(index => {
         if (playlists[index].words.findIndex(e => e._id === word._id) === -1)
-          playlists[index].words.push(word);
+          playlists[index].words.push({
+            _id: word._id,
+            courseId: word.courseId,
+            unitIndex: word.unitIndex,
+            wordIndex: word.wordIndex,
+          });
       });
       playlists.forEach((playlist, index) => {
         let searchIndex = playlist.words.findIndex(e => e._id === word._id);

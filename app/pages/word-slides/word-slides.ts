@@ -145,7 +145,12 @@ export class WordSlides {
         data = data.map(e => parseInt(e));
         data.forEach(index => {
           if (this.playlists[index].words.findIndex(e => e._id === word._id) === -1)
-            this.playlists[index].words.push(word);
+            this.playlists[index].words.push({
+              _id: word._id,
+              courseId: word.courseId,
+              unitIndex: word.unitIndex,
+              wordIndex: word.wordIndex,
+            });
         });
         this.playlists.forEach((playlist, index) => {
           let searchIndex = playlist.words.findIndex(e => e._id === word._id);

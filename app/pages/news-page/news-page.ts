@@ -29,7 +29,7 @@ export class NewsPage {
   refreshNews() {
     SpinnerDialog.show(this.translate.instant('Downloading_news'),
       this.translate.instant('Please_wait'), false);
-    this.http.get('http://52.11.74.221/nihongo/nhk').toPromise().then(resp => {
+    this.http.get('http://52.32.158.240/nihongo/nhk').toPromise().then(resp => {
       this.listNews = resp.json();
       this.dbService.addOrUpdateNews(this.listNews.map(news => {
         return Object.assign({}, news, {

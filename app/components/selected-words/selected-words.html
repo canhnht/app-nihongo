@@ -8,8 +8,8 @@
 </ion-navbar>
 
 <ion-content>
-  <ion-list>
-    <ion-item button-primary text-wrap *ngFor="let word of selectedWords">
+  <ion-list [virtualScroll]="selectedWords">
+    <ion-item button-primary text-wrap *virtualItem="let word">
       <ion-label class="word-item">
         <h1>{{word.kanji}}</h1>
       </ion-label>

@@ -16,12 +16,12 @@ export class PlaylistsPage {
 
   constructor(private navController: NavController, private dbService: DbService,
     private translate: TranslateService) {
-    this.dbService.getAllPlaylists().then(
-      allPlaylists => this.playlists = allPlaylists
-    );
   }
 
   ionViewWillEnter() {
+    this.dbService.getAllPlaylists().then(
+      allPlaylists => this.playlists = allPlaylists
+    );
     this.playlistSubscription = this.dbService.playlistSubject.subscribe(
       playlist => {
         let searchIndex = this.playlists.findIndex(item => item._id == playlist._id);
@@ -37,7 +37,7 @@ export class PlaylistsPage {
 
   goToPlaylistDetail($event, playlist) {
     if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
-    this.navController.push(PlaylistDetail, { selectedPlaylist: playlist });
+    this.navController.push(PlaylistDetail, { selectedPlaylistId: playlist._id });
   }
 
   addNewPlaylist() {

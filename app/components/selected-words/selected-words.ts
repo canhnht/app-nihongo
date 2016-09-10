@@ -23,7 +23,10 @@ export class SelectedWords implements OnInit, OnDestroy {
   ngOnInit() {
     this.selectedWords = [...this.settingService.selectedWords];
     this.settingSubscription = this.settingService.settingSubject.subscribe(
-      setting => this.selectedWords = [...this.settingService.selectedWords]
+      setting => {
+        this.selectedWords = [...this.settingService.selectedWords];
+        if (this.selectedWords.length === 0) this.close();
+      }
     )
   }
 
