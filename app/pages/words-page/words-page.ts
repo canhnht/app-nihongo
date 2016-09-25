@@ -86,7 +86,7 @@ export class WordsPage {
     let wordIndex = this.words.findIndex(item => item._id === word._id);
     this.navController.push(WordSlides, {
       playSingleWord: true,
-      listWord: this.unit.words,
+      listWord: this.words,
       wordIndex: wordIndex
     });
   }
