@@ -37,13 +37,13 @@ platforms/*
 !platforms/android/
 
 platforms/android/*
-!platforms/android/build
+!platforms/android/build/
 
 platforms/android/build/*
-!platforms/android/build/outputs
+!platforms/android/build/outputs/
 
 platforms/android/build/outputs/*
-!platforms/android/build/outputs/apk
+!platforms/android/build/outputs/apk/
 
 platforms/android/build/outputs/apk/*
 !platforms/android/build/outputs/apk/android-debug.apk

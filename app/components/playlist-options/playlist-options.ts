@@ -12,7 +12,6 @@ import {Subscription} from 'rxjs';
 })
 export class PlaylistOptions {
   playlists: any[] = [];
-  selectedPlaylists: string[] = [];
   playlistSubscription: Subscription;
 
   constructor(private viewController: ViewController, private dbService: DbService,
@@ -40,15 +39,6 @@ export class PlaylistOptions {
 
   ionViewWillLeave() {
     this.playlistSubscription.unsubscribe();
-  }
-
-  checkPlaylist($event, playlist) {
-    let index: number = this.selectedPlaylists.indexOf(playlist._id);
-    if (index >= 0)
-      this.selectedPlaylists.splice(index, 1);
-    else
-      this.selectedPlaylists.push(playlist._id);
-    $event.stopPropagation();
   }
 
   addNewPlaylist() {
@@ -92,8 +82,8 @@ export class PlaylistOptions {
   }
 
   save() {
-    let data = this.playlists.filter(playlist => playlist.checked)
-      .map((playlist, index) => index);
+    let data = this.playlists.map((playlist, index) => index)
+      .filter(index => this.playlists[index].checked);
     this.viewController.dismiss({
       data: data,
       playlists: this.playlists,
