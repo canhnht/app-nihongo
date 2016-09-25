@@ -29,6 +29,8 @@ export class WordSlides {
   singleTrack: MediaPlugin = null;
   basePath: string = 'file:///storage/emulated/0/Android/data/io.techybrain.mimi_kara_nihongo/files';
   // basePath: string = 'file:///android_asset/www/audio';
+  courses: any = {};
+  allCoursesSubscription: Subscription;
 
   constructor(private navController: NavController, private audioService: AudioService,
     private sliderService: SliderService, private dbService: DbService,
@@ -66,13 +68,19 @@ export class WordSlides {
       }
     );
 
-    this.trackIndexSubscription = this.audioService.trackIndexSubject.subscribe(
-      trackIndex => this.vocabSlider.slideTo(trackIndex + 1)
-    );
+    this.dbService.getAllCourses().then(courses => this.courses = courses);
+    this.allCoursesSubscription = this.dbService.allCoursesSubject.subscribe(
+      courses => this.courses = courses);
+
+    if (!this.playSingleWord)
+      this.trackIndexSubscription = this.audioService.trackIndexSubject.subscribe(
+        trackIndex => this.vocabSlider.slideTo(trackIndex + 1)
+      );
   }
 
   ionViewWillLeave() {
     this.playlistSubscription.unsubscribe();
+    this.allCoursesSubscription.unsubscribe();
     if (this.playSingleWord) return this.singleTrack.release();
     this.trackIndexSubscription.unsubscribe();
     this.audioService.stopCountDown();
@@ -93,6 +101,13 @@ export class WordSlides {
     return activeIndex - 1;
   }
 
+  private updateAnalytic(word) {
+    let course = this.courses[word.courseId];
+    course.units[word.unitIndex].words[word.wordIndex].lastPlayed = Date.now();
+    course.units[word.unitIndex].words[word.wordIndex].timesPlayed += 1;
+    this.dbService.updateCourse(course);
+  }
+
   onSlideChanged($event) {
     if (this.playSingleWord) {
       this.currentIndex = this.getWordIndex($event.activeIndex);
@@ -101,6 +116,7 @@ export class WordSlides {
       }
       this.singleTrack = new MediaPlugin(`${this.basePath}/${this.words[this.currentIndex].audioFile}`);
       this.singleTrack.play();
+      this.updateAnalytic(this.words[this.currentIndex]);
     } else {
       this.currentIndex = this.getWordIndex($event.activeIndex);
       if (this.sliderService.currentSlide < 0 && this.sliderService.firstTime)

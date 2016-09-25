@@ -88,7 +88,6 @@ export class AudioService {
 
   playSetting() {
     this.listWord = [...this.settingService.selectedWords];
-    alert(`play setting ${this.listWord.length} ${JSON.stringify(this.listWord[0])} ${JSON.stringify(this.courses)}`);
     let localPromise = [
       this.storageService.get('repeat_each_word'),
       this.storageService.get('time_between_words')
