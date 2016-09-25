@@ -30,5 +30,20 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 
-# But not these files
-outputs/apk/android-debug.apk
+# Don't ignore android build
+!platforms/
+
+platforms/*
+!platforms/android/
+
+platforms/android/*
+!platforms/android/build
+
+platforms/android/build/*
+!platforms/android/build/outputs
+
+platforms/android/build/outputs/*
+!platforms/android/build/outputs/apk
+
+platforms/android/build/outputs/apk/*
+!platforms/android/build/outputs/apk/android-debug.apk
