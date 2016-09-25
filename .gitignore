@@ -29,3 +29,6 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+
+# But not these files
+outputs/apk/android-debug.apk
