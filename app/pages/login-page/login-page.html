@@ -22,11 +22,11 @@
         <ion-icon name="search"></ion-icon>
       </ion-segment-button>
     </ion-segment>
-    <ion-searchbar *ngIf="tabPage == 'search'" (ionInput)="getItems($event)"></ion-searchbar>
+    <!--<ion-searchbar *ngIf="tabPage == 'search'" (ionInput)="getItems($event)"></ion-searchbar>-->
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="tabPage == 'home'" class="login-content">
+<ion-content *ngIf="tabPage == 'home'" class="home-page news-page">
   <ion-card>
     <ion-item>
       Bản tin NHK mới nhất
@@ -123,8 +123,12 @@
 
 
 
-<ion-content *ngIf="tabPage == 'search'">
-  <ion-list [virtualScroll]="items">
+<ion-content *ngIf="tabPage == 'search'" class="home-page">
+  <h1 class="no-words">
+    Bạn đang không có từ nào.<br>
+    Hãy tải khóa học về để bắt đầu.
+  </h1>
+  <!--<ion-list [virtualScroll]="items">
     <ion-item button-primary text-wrap *virtualItem="let item"
       (swipe)="testClick($event)">
       <ion-label class="word-item">
@@ -146,5 +150,5 @@
       <custom-checkbox item-right (onClick)="test($event)">
       </custom-checkbox>
     </ion-item>
-  </ion-list>
+  </ion-list>-->
 </ion-content>

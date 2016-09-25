@@ -15,18 +15,14 @@
     position: relative;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 130px;
+    align-items: stretch;
 
     .left-side {
-      width: 35%;
-      height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       background-color: #E61770;
-      // background: linear-gradient(white, #E61770);
       padding: 0 20px;
 
       .course-title {
@@ -38,10 +34,9 @@
     }
 
     .right-side {
-      width: 100%;
-      height: 100%;
-      padding: 10px 5px 10px 20px;
-      color: #999;
+      flex-grow: 1;
+      padding: 10px 5px 0 20px;
+      color: #888;
 
       .number-units, .number-words {
         font-size: 19px;
@@ -130,7 +125,7 @@
       }
 
       .date {
-        color: #999;
+        color: #888;
         font-size: 13px;
       }
     }
@@ -147,4 +142,10 @@
     margin-bottom: 10px;
   }
 
+  .no-words {
+    text-align: center;
+    color: #777;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
 }

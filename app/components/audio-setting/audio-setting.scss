@@ -18,8 +18,10 @@
     z-index: 10000;
     position: absolute;
     top: -30px;
-    left: calc(50% - 11px);
-    font-size: 40px;
+    left: calc(50% - 20px);
+    font-size: 20px;
+    width: 40px;
+    text-align: center;
   }
 
   .btn-down {
