@@ -121,7 +121,10 @@ export class WordSlides {
 
   repeatCurrentVocabulary($event) {
     $event.stopPropagation();
-    if (this.playSingleWord) this.singleTrack.seekTo(0);
+    if (this.playSingleWord) {
+      this.singleTrack.seekTo(0);
+      this.singleTrack.play();
+    }
     else this.audioService.repeatCurrentTrack();
   }
 

@@ -47,7 +47,7 @@ export class LoginPage {
       timesPlayed: 1,
     },
   ];
-  tabPage = "home";
+  tabPage = "search";
 
   constructor(private navController: NavController, private menu: MenuController) {
     // this.menu.open();
