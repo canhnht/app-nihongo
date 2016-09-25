@@ -77,7 +77,6 @@ export class HomePage {
       }
     );
 
-    this.settingService.reset(true);
     if (this.settingService.selectedType === 'search')
       this.selectedWords = this.settingService.selectedList;
     this.settingSubscription = this.settingService.settingSubject.subscribe(
@@ -102,6 +101,7 @@ export class HomePage {
   }
 
   goToCourse(course) {
+    this.settingService.reset(true);
     this.navController.push(UnitsPage, {selectedCourseId: course._id});
   }
 
