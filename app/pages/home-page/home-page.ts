@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Http} from '@angular/http';
 import {Subscription} from 'rxjs';
-import {Toast, Transfer, File, SpinnerDialog, MediaPlugin} from 'ionic-native';
+import {Toast, Transfer, File, SpinnerDialog, MediaPlugin, Network} from 'ionic-native';
 import {NavController, Popover, Alert, NavParams, Modal} from 'ionic-angular';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
@@ -122,6 +122,15 @@ export class HomePage {
   }
 
   downloadCourse(course, index) {
+    if (Network.connection === 'none' || Network.connection === 'unknown') {
+      let alert = Alert.create({
+        title: 'Kết nối internet',
+        subTitle: 'Hãy bật kết nối internet để bắt đầu tải khóa học!',
+        buttons: ['Đồng ý']
+      });
+      this.navController.present(alert);
+      return;
+    }
     course.downloading = true;
     let courseRef = firebase.database().ref(`${course._id}`);
     let courseData;

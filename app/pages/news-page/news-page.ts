@@ -38,8 +38,13 @@ export class NewsPage {
       }))
       SpinnerDialog.hide();
     }).catch(err => {
-      Toast.showShortBottom(this.translate.instant('Download_news_error')).subscribe(() => {});
       SpinnerDialog.hide();
+      let alert = Alert.create({
+        title: 'Không thể tải tin tức',
+        subTitle: 'Lỗi kết nối internet!',
+        buttons: ['Đồng ý']
+      });
+      this.navController.present(alert);
     });
   }
 

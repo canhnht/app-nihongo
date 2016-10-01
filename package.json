@@ -52,7 +52,8 @@
         "APP_ID": "1732596063667087",
         "APP_NAME": "app-nihongo"
       }
-    }
+    },
+    "cordova-plugin-network-information"
   ],
   "cordovaPlatforms": [
     {
