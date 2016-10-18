@@ -35,6 +35,13 @@
         </ion-label>
       </ion-item>
       <ion-item button-primary menuClose text-wrap
+        (click)="openPage(gamePage)">
+        <ion-label class="menu-item">
+          <ion-icon primary name="game-controller-b" class="menu-icon"></ion-icon>
+          {{'Game' | translate}}
+        </ion-label>
+      </ion-item>
+      <ion-item button-primary menuClose text-wrap
         (click)="openPage(feedbackPage)">
         <ion-label class="menu-item">
           <ion-icon primary name="mail" class="menu-icon"></ion-icon>

@@ -5,7 +5,7 @@ import {Toast} from 'ionic-native';
 
 export enum SettingStatus {
   Selecting, Playing, None
-}
+};
 
 @Injectable()
 export class SettingService {

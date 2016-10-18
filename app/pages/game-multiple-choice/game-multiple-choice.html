@@ -1,0 +1,21 @@
+
+<ion-navbar *navbar primary>
+  <button menuToggle left>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>{{'Game' | translate}}</ion-title>
+</ion-navbar>
+
+<ion-content class="game-multiple-choice">
+  <div class="instruction">
+    <h1 class="title">Hướng dẫn</h1>
+    <div>
+      <p>Mỗi level sẽ có một lượng câu hỏi để người chơi trả lời</p>
+      <p>Nếu trong 1 lượt chơi, người chơi trả lời sai một câu hỏi thì sẽ phải trả lời lại từ đầu tất cả câu hỏi trong level đó</p>
+      <p>Người chơi vượt qua một level khi đã trả lời đúng tất cả các câu hỏi chỉ trong một lượt chơi</p>
+    </div>
+    <button block class="btn-start" (click)="start()">
+      {{'Start' | translate}}
+    </button>
+  </div>
+</ion-content>

@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {NavController, MenuController, Modal} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {NavController, MenuController, Modal, Slides} from 'ionic-angular';
 import {Toast, Facebook, GooglePlus} from 'ionic-native';
 import {AuthService} from '../../services/auth.service';
 import {CustomCheckbox} from '../../components/custom-checkbox/custom-checkbox';
@@ -14,6 +14,13 @@ import {CustomDatePipe} from '../../custom-date.pipe';
   pipes: [CustomDatePipe],
 })
 export class LoginPage {
+  @ViewChild('questionSlider') questionSlider: Slides;
+
+  sliderOptions: any = {
+    loop: true,
+  };
+
+
   isChecked: boolean = false;
   items = [
     {
@@ -77,5 +84,22 @@ export class LoginPage {
     // let profileModal = Modal.create(SelectedWords);
     // this.navController.present(profileModal);
     this.items.forEach(e => e.lastPlayed = Date.now());
+  }
+
+  prev() {
+    this.questionSlider.slidePrev();
+  }
+
+  next() {
+    this.questionSlider.slideNext();
+  }
+
+  onSlideChanged($event) {
+    Toast.showLongBottom('onSlideChanged').subscribe(() => {});
+  }
+
+  clickSlide() {
+    console.log('click');
+    this.isChecked = true;
   }
 }

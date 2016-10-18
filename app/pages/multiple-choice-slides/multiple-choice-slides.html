@@ -1,0 +1,29 @@
+<ion-header class="multiple-choice-header">
+  <div class="question-number">1/10</div>
+  <div class="countdown">
+    <ion-icon name="timer"></ion-icon>
+    60
+  </div>
+  <button large (click)="close()">
+    <ion-icon name="close"></ion-icon>
+  </button>
+</ion-header>
+<ion-content class="multiple-choice-slides">
+  <ion-slides #questionSlider [options]="sliderOptions">
+    <ion-slide class="question-slide" *ngFor="let question of listQuestion; let i = index" [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
+      <div class="question" *ngIf="true">
+        {{question.question}}
+      </div>
+      <i class="fa fa-volume-up question" *ngIf="false"></i>
+      <div class="option" *ngFor="let option of question.options; let o = index"
+        (click)="select(question, o)" [class.activated]="question.selected == o"
+        [class.disabled]="question.selected != -1">
+        {{option}}
+      </div>
+      <i class="fa fa-check answer" primary
+        *ngIf="question.selected != -1 && question.selected == question.answer"></i>
+      <i class="fa fa-close answer" danger
+        *ngIf="question.selected != -1 && question.selected != question.answer"></i>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

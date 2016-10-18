@@ -1,153 +1,36 @@
-<ion-navbar *navbar primary class="units-navbar">
-  <button menuToggle left>
-    <ion-icon name="menu"></ion-icon>
+<ion-header class="multiple-choice-header">
+  <div class="question-number">1/10</div>
+  <div class="countdown">
+    <ion-icon name="timer"></ion-icon>
+    60
+  </div>
+  <button large>
+    <ion-icon name="close"></ion-icon>
   </button>
-  <ion-title>Mimi Kara Nihongo</ion-title>
-  <ion-buttons end>
-    <button class="btn-add" (click)="testModal()">
-      <ion-icon name="add"></ion-icon>
-    </button>
-  </ion-buttons>
-  <ion-buttons end>
-    <custom-checkbox></custom-checkbox>
-  </ion-buttons>
-</ion-navbar>
-<ion-header>
-  <ion-toolbar>
-    <ion-segment [(ngModel)]="tabPage">
-      <ion-segment-button value="home">
-        <ion-icon name="home"></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button value="search">
-        <ion-icon name="search"></ion-icon>
-      </ion-segment-button>
-    </ion-segment>
-    <!--<ion-searchbar *ngIf="tabPage == 'search'" (ionInput)="getItems($event)"></ion-searchbar>-->
-  </ion-toolbar>
 </ion-header>
-
-<ion-content *ngIf="tabPage == 'home'" class="home-page news-page">
-  <ion-card>
-    <ion-item>
-      Bản tin NHK mới nhất
-    </ion-item>
-    <div class="card-news">
-      <img src="images/bg_newstitle.gif" class="img-news" />
-      <div class="title">
-        テレビで<ruby>有名<rt>ゆうめい</rt></ruby>なフライパン　「<ruby>宣伝<rt>せんでん</rt></ruby>は<ruby>本当<rt>ほんとう</rt></ruby>ではない」
-        <div class="date">
-          [09月02日 15時40分]
-        </div>
+<ion-content class="multiple-choice-slides">
+  <ion-slides #questionSlider [options]="sliderOptions"
+    (ionDidChange)="onSlideChanged($event)">
+    <ion-slide class="question-slide"
+      [class.odd]="true" [class.even]="false">
+      <div class="question" *ngIf="true">
+        question question question
       </div>
-    </div>
-    <ion-row>
-      <ion-col>
-        <button primary clear small>
-          Play
-        </button>
-      </ion-col>
-      <ion-col>
-        <button primary clear small>
-          Chi tiết
-        </button>
-      </ion-col>
-      <ion-col>
-        <button primary clear small>
-          Xem tất cả
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-card>
-
-  <ion-card>
-    <div class="card-course">
-      <div class="left-side">
-        <div class="course-title">N3</div>
+      <i class="fa fa-volume-up question" *ngIf="false"></i>
+      <div class="option activated">
+        question option[0]
       </div>
-      <div class="right-side">
-        <div class="number-units">
-          10 Bài
-        </div>
-        <div class="number-words">
-          100 Từ
-        </div>
-        <div class="number-comments">
-          0 Comment <i class="fa fa-comment"></i>
-        </div>
-        <div class="rating">
-          <span>☆</span>
-          <span class="focus">☆</span>
-          <span>☆</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
+      <div class="option disabled">
+        question option[1]
       </div>
-      <button primary class="btn-start" *ngIf="false"
-        (click)="test()" menuToggle>
-        <ion-icon name="navigate"></ion-icon>
-        Start
-      </button>
-      <button primary class="btn-download">
-        <ion-icon name="download"></ion-icon>
-        Download
-      </button>
-      <i class="fa fa-spinner fa-spin progress" primary *ngIf="false"></i>
-      <button danger clear round class="btn-delete" *ngIf="true">
-        <i class="fa fa-trash"></i>
-      </button>
-    </div>
-  </ion-card>
-  <ion-list [virtualScroll]="items">
-    <ion-item button-primary text-wrap *virtualItem="let item"
-      (swipe)="testClick($event)">
-      <ion-label class="word-item">
-        <button clear large class="word-bookmark"
-          (click)="test($event)">
-          <i class="fa fa-bookmark icon-bookmark"></i>
-        </button>
-        <button clear large class="word-bookmark" [class.hidden]="true"
-          (click)="test($event)">
-          <i class="fa fa-bookmark-o icon-bookmark"></i>
-        </button>
-        <h1>{{item.title}}</h1>
-      </ion-label>
-      <custom-checkbox item-right (onClick)="test($event, item)"
-        [checked]="item.checked">
-      </custom-checkbox>
-    </ion-item>
-  </ion-list>
+      <div class="option">
+        question option[2]
+      </div>
+      <div class="option">
+        question option[3]
+      </div>
+      <i class="fa fa-check answer" primary *ngIf="false"></i>
+      <i class="fa fa-close answer" danger *ngIf="true"></i>
+    </ion-slide>
+  </ion-slides>
 </ion-content>
-
-
-
-
-<ion-content *ngIf="tabPage == 'search'" class="home-page">
-  <h1 class="no-words">
-    Bạn đang không có từ nào.<br>
-    Hãy tải khóa học về để bắt đầu.
-  </h1>
-  <!--<ion-list [virtualScroll]="items">
-    <ion-item button-primary text-wrap *virtualItem="let item"
-      (swipe)="testClick($event)">
-      <ion-label class="word-item">
-        <button clear large class="word-bookmark"
-          (click)="test($event)">
-          <i class="fa fa-bookmark icon-bookmark"></i>
-        </button>
-        <button clear large class="word-bookmark" [class.hidden]="true"
-          (click)="test($event)">
-          <i class="fa fa-bookmark-o icon-bookmark"></i>
-        </button>
-        <div>
-          <h1>{{item.title}}</h1>
-          <p>{{item.timesPlayed > 0 ? '(' + item.timesPlayed + ') - ' : ''}}
-            {{item.timesPlayed > 0 ? (item.lastPlayed | customDate) : ''}}
-          </p>
-        </div>
-      </ion-label>
-      <custom-checkbox item-right (onClick)="test($event)">
-      </custom-checkbox>
-    </ion-item>
-  </ion-list>-->
-</ion-content>
-<audio-setting *ngIf="tabPage == 'search'"></audio-setting>

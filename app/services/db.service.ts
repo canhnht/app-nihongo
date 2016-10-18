@@ -200,4 +200,14 @@ export class DbService {
       })
       .catch(utils.errorHandler('Error get all news'));
   }
+
+  getWordsOfAllCourses() {
+    let listWord = this.listCourse.reduce((arr, course) => {
+      let wordsInUnits = course.units.reduce((words, unit) => {
+        return words.concat(unit.words);
+      }, []);
+      return arr.concat(wordsInUnits);
+    }, []);
+    return listWord;
+  }
 }

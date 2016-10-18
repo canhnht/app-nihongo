@@ -1,0 +1,19 @@
+
+<ion-navbar *navbar primary>
+  <button menuToggle left>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>{{'Game' | translate}}</ion-title>
+</ion-navbar>
+
+<ion-content>
+  <ion-list [virtualScroll]="games">
+    <ion-item button-primary text-wrap *virtualItem="let game"
+      (click)="playGame(game)">
+      <ion-label class="game-item">
+        <h1>{{game.name}}</h1>
+        <p>Level {{game.level}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

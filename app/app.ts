@@ -9,6 +9,7 @@ import {LoginPage} from './pages/login-page/login-page';
 import {SettingPage} from './pages/setting-page/setting-page';
 import {FeedbackPage} from './pages/feedback-page/feedback-page';
 import {PlaylistsPage} from './pages/playlists-page/playlists-page';
+import {GamePage} from './pages/game-page/game-page';
 import {AudioService} from './services/audio.service';
 import {SliderService} from './services/slider.service';
 import {DbService} from './services/db.service';
@@ -16,6 +17,7 @@ import {WordSlides} from './pages/word-slides/word-slides';
 import {AuthService} from './services/auth.service';
 import {SettingService} from './services/setting.service';
 import {LocalStorageService} from './services/local-storage.service';
+import {GameMultipleChoiceService} from './services/game-multiple-choice.service';
 import {TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {firebaseConfig} from './config-local';
 declare var require: any;
@@ -30,6 +32,7 @@ export class MyApp {
   playlistsPage = PlaylistsPage;
   settingPage = SettingPage;
   feedbackPage = FeedbackPage;
+  gamePage = GamePage;
   rootPage = HomePage;
   isSignedIn: boolean = false;
 
@@ -77,7 +80,8 @@ export class MyApp {
       && lastView.componentType !== PlaylistsPage
       && lastView.componentType !== FeedbackPage
       && lastView.componentType !== SettingPage
-      && lastView.componentType !== LoginPage) {
+      && lastView.componentType !== LoginPage
+      && lastView.componentType !== GamePage) {
       lastView = this.navController.getPrevious(lastView);
     }
     if (isBack) {
@@ -105,5 +109,6 @@ ionicBootstrap(MyApp, [
     useValue: TranslatePipe,
     multi: true,
   },
-  LocalStorageService
+  LocalStorageService,
+  GameMultipleChoiceService
 ]);
