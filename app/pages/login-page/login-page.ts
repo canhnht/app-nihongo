@@ -50,6 +50,14 @@ export class LoginPage {
     currentLevel: 2
   };
 
+  quotes = [
+    'Hãy cố gắng trả lời đúng tất cả!',
+    'Rất tốt! Tiếp tục phát huy nào!',
+    'Nửa chặng rồi! Cố gắng lên!',
+    'Bạn đã bỏ câu. Bạn phải chơi lại từ đầu.',
+    'Bạn đã sai. Bạn phải chơi lại từ đầu.'
+  ];
+
   constructor(private navController: NavController, private menu: MenuController) {
     // this.menu.open();
   }

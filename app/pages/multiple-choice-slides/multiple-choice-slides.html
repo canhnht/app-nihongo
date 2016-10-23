@@ -1,13 +1,14 @@
 <ion-header class="multiple-choice-header">
-  <div class="question-number">1/10</div>
-  <div class="countdown">
-    <ion-icon name="timer"></ion-icon>
-    60
-  </div>
+  <marquee class="quote">
+    Hãy cố gắng trả lời đúng tất cả!
+  </marquee>
   <button large (click)="close()">
     <ion-icon name="close"></ion-icon>
   </button>
 </ion-header>
+<div class="countdown-bar">
+  <div class="current-countdown" [style.width.%]="90"></div>
+</div>
 <ion-content class="multiple-choice-slides">
   <ion-slides #questionSlider [options]="sliderOptions">
     <ion-slide class="question-slide" *ngFor="let question of listQuestion; let i = index" [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
@@ -27,3 +28,34 @@
     </ion-slide>
   </ion-slides>
 </ion-content>
+
+<div class="slides-progress">
+  <div class="current-progress" [style.width.%]="20"></div>
+</div>
+<div class="answer-screen" *ngIf="false">
+  <i class="fa fa-check answer" primary *ngIf="true"></i>
+  <i class="fa fa-close answer" danger *ngIf="false"></i>
+  <button class="btn-continue">Tiếp tục</button>
+</div>
+
+<div class="level-result" *ngIf="false">
+  <div class="title">Chúc mừng!</div>
+  <div class="level">
+    Cấp độ 5
+    <div class="overlay">
+      <i class="fa fa-lock"></i>
+    </div>
+  </div>
+  <div class="row">
+    <div class="text">Số câu hỏi:</div>
+    <div class="number">10</div>
+  </div>
+  <div class="row">
+    <div class="text">Tổng số lần chơi:</div>
+    <div class="number">100</div>
+  </div>
+  <div class="group-btn">
+    <button round secondary>Chơi tiếp</button>
+    <button round danger>Lưu và thoát</button>
+  </div>
+</div>
