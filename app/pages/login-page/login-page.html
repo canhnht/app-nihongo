@@ -1,22 +1,73 @@
-
-<ion-content class="game-multiple-choice">
-  <div class="game-title">Vòng lặp <br/> trắc nghiệm</div>
-  <div class="menu">
-    <button class="menu-item">
-      Chơi cấp độ {{data.currentLevel}}
-    </button>
-    <button class="menu-item" *ngIf="data.currentLevel != 1"
-      (click)="resetGame()">
-      Chơi lại từ đầu
-    </button>
-    <button class="menu-item" (click)="openAchievements()">
-      Thành tích
-    </button>
-    <button class="menu-item" (click)="openGameRule()">
-      Hướng dẫn chơi
-    </button>
-    <button class="menu-item" (click)="closeGame()">
-      Thoát
-    </button>
+<ion-header class="multiple-choice-header">
+  <div class="quote">
+    Hãy cố gắng trả lời đúng tất cả. Hãy cố gắng trả lời đúng tất cả
   </div>
+  <button large (click)="close()">
+    <ion-icon name="close"></ion-icon>
+  </button>
+</ion-header>
+<div class="countdown-bar">
+  <div class="current-countdown"></div>
+</div>
+<ion-content class="multiple-choice-slides">
+  <ion-slides #questionSlider [options]="sliderOptions">
+    <ion-slide class="question-slide"
+      [class.odd]="true" [class.even]="false">
+      <div class="question" *ngIf="true">
+        question question question question
+      </div>
+      <i class="fa fa-volume-up question" *ngIf="false"></i>
+      <div class="option">
+        <div class="bullet">A</div>
+        option
+      </div>
+      <div class="option">
+        <div class="bullet">B</div>
+        option
+      </div>
+      <div class="option">
+        <div class="bullet">C</div>
+        option
+      </div>
+      <div class="option">
+        <div class="bullet">D</div>
+        option
+      </div>
+      <i class="fa fa-check answer" primary *ngIf="false"></i>
+      <i class="fa fa-close answer" danger *ngIf="false"></i>
+    </ion-slide>
+
+
+    <ion-slide class="question-slide"
+      [class.odd]="false" [class.even]="true">
+      <div class="question" *ngIf="true">
+        question question question question
+      </div>
+      <i class="fa fa-volume-up question" *ngIf="false"></i>
+      <div class="option">
+        <div class="bullet">A</div>
+        option
+      </div>
+      <div class="option">
+        <div class="bullet">B</div>
+        option
+      </div>
+      <div class="option">
+        <div class="bullet">C</div>
+        option
+      </div>
+      <div class="option">
+        <div class="bullet">D</div>
+        option
+      </div>
+    </ion-slide>
+  </ion-slides>
 </ion-content>
+<div class="slides-progress">
+  <div class="current-progress"></div>
+</div>
+<div class="answer-screen" *ngIf="true">
+  <i class="fa fa-check answer" primary *ngIf="true"></i>
+  <i class="fa fa-close answer" danger *ngIf="false"></i>
+  <button class="btn-continue">Tiếp tục</button>
+</div>

@@ -17,9 +17,11 @@ export class LoginPage {
   @ViewChild('questionSlider') questionSlider: Slides;
 
   sliderOptions: any = {
-    loop: true,
+    loop: false,
+    onInit: function(slides) {
+      slides.lockSwipeToPrev();
+    }
   };
-
 
   isChecked: boolean = false;
   items = [

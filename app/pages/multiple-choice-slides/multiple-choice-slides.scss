@@ -10,23 +10,14 @@
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   color: white;
 
-  .question-number {
-    float: left;
-    font-size: 25px;
-    // color: white;
-    margin: 0 10px;
-    font-weight: 500;
-  }
-
-  .countdown {
-    font-size: 25px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-
-    [name="timer"] {
-      margin-right: 5px;
-    }
+  .quote {
+    width: 80%;
+    margin-left: 5px;
+    font-size: 18px;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -48,10 +39,11 @@
     left: 0;
     right: 0;
     text-align: center;
-    font-size: 30px;
+    font-size: 26px;
     font-weight: bold;
     margin-bottom: 50px;
     padding: 0 10px;
+    color: white;
   }
 
   .btn-listen {
@@ -59,14 +51,31 @@
   }
 
   .option {
+    position: relative;
     width: 90%;
-    color: black;
+    height: 50px;
+    color: white;
     font-size: 22px;
-    padding: 5px;
-    border: 1px solid #555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid white;
     margin: 10px auto;
-    text-align: center;
+    border-radius: 25px;
 
+    .bullet {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1px solid white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   .activated {
@@ -86,13 +95,64 @@
   .even {
     background-color: #59a8f2;
   }
+}
+
+.slides-progress {
+  position: relative;
+  height: 10px;
+  width: 100%;
+  background-color: #777;
+
+  .current-progress {
+    position: absolute;
+    background-color: #E61770;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 20%;
+  }
+}
+
+.countdown-bar {
+  position: relative;
+  height: 10px;
+  width: 100%;
+  background-color: white;
+
+  .current-countdown {
+    position: absolute;
+    background-image: linear-gradient(
+      to right,
+      red, #f06d06
+    );
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 90%;
+  }
+}
+
+.answer-screen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 
   .answer {
-    position: absolute;
-    bottom: 20px;
-    font-size: 100px;
-    width: 100px;
-    text-align: center;
-    right: calc(50% - 50px);
+    font-size: 200px;
+  }
+
+  .btn-continue {
+    font-size: 20px;
+    height: 50px;
+    width: 60%;
+    border-radius: 25px;
   }
 }
