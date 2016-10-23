@@ -30,25 +30,31 @@ export class DbService {
       .then(result => {
         return this.db.get('_local/preloaded').then(doc => {
           this.listenForChange();
-          return this.getListCourse()
-            .then(listCourse => {
-              this.listCourseSubject.next(listCourse);
-            });
-        })
-        .catch(err => {
+          return this.getListCourse().then(listCourse => {
+            this.listCourseSubject.next(listCourse);
+          });
+        }).catch(err => {
           if (err.name !== 'not_found') throw err;
-          return this.db.load(result)
-            .then(() => {
-              this.listenForChange();
-              this.getListCourse()
-                .then(listCourse => {
-                  this.listCourseSubject.next(listCourse);
-                });
-              return this.db.put({_id: '_local/preloaded'});
-            });
+          return this.initDatabase(result);
         });
       })
       .catch(utils.errorHandler('Error loading database file'));
+  }
+
+  private initDatabase(courseData) {
+    return this.db.load(courseData).then(() => {
+      this.listenForChange();
+      this.getListCourse().then(listCourse => {
+        this.listCourseSubject.next(listCourse);
+      });
+      let localLoadedPromise = this.db.put({_id: '_local/preloaded'});
+      let gameMultipleChoicePromise = this.db.put({
+        _id: 'gameMultipleChoice',
+        currentLevel: 1,
+        achievements: []
+      });
+      return Promise.all([localLoadedPromise, gameMultipleChoicePromise]);
+    });
   }
 
   private listenForChange() {

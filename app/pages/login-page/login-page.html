@@ -1,34 +1,22 @@
 
-<ion-navbar *navbar primary>
-  <button menuToggle left>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>{{'Game' | translate}}</ion-title>
-</ion-navbar>
-
-<ion-content class="game-page">
-  <ion-card>
-    <div class="card-game">
-      <img src="images/question-loop-icon.jpg" class="game-icon" />
-      <div class="right-side">
-        <div class="game-title">
-          Vòng lặp trắc nghiệm
-        </div>
-        <div class="game-level">
-          Cấp độ: 1
-        </div>
-        <div class="rating">
-          <span>☆</span>
-          <span class="focus">☆</span>
-          <span>☆</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-        <button primary class="btn-start">
-          <ion-icon name="navigate"></ion-icon>
-          {{'Start' | translate}}
-        </button>
-      </div>
-    </div>
-  </ion-card>
+<ion-content class="game-multiple-choice">
+  <div class="game-title">Vòng lặp <br/> trắc nghiệm</div>
+  <div class="menu">
+    <button class="menu-item">
+      Chơi cấp độ {{data.currentLevel}}
+    </button>
+    <button class="menu-item" *ngIf="data.currentLevel != 1"
+      (click)="resetGame()">
+      Chơi lại từ đầu
+    </button>
+    <button class="menu-item" (click)="openAchievements()">
+      Thành tích
+    </button>
+    <button class="menu-item" (click)="openGameRule()">
+      Hướng dẫn chơi
+    </button>
+    <button class="menu-item" (click)="closeGame()">
+      Thoát
+    </button>
+  </div>
 </ion-content>
