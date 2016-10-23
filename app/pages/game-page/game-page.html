@@ -6,14 +6,29 @@
   <ion-title>{{'Game' | translate}}</ion-title>
 </ion-navbar>
 
-<ion-content>
-  <ion-list [virtualScroll]="games">
-    <ion-item button-primary text-wrap *virtualItem="let game"
-      (click)="playGame(game)">
-      <ion-label class="game-item">
-        <h1>{{game.name}}</h1>
-        <p>Level {{game.level}}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+<ion-content class="game-page">
+  <ion-card *ngFor="let game of games">
+    <div class="card-game">
+      <img src="images/question-loop-icon.jpg" class="game-icon" />
+      <div class="right-side">
+        <div class="game-title">
+          {{game.name}}
+        </div>
+        <div class="game-level">
+          Cấp độ: {{game.level}}
+        </div>
+        <div class="rating">
+          <span>☆</span>
+          <span class="focus">☆</span>
+          <span>☆</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+        <button primary class="btn-start" (click)="playGame(game)">
+          <ion-icon name="navigate"></ion-icon>
+          {{'Start' | translate}}
+        </button>
+      </div>
+    </div>
+  </ion-card>
 </ion-content>
