@@ -7,6 +7,8 @@ import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 import {SelectedWords} from '../../components/selected-words/selected-words';
 import {CustomDatePipe} from '../../custom-date.pipe';
+import {GameMultipleChoice} from '../game-multiple-choice/game-multiple-choice';
+import {GameMissingInfo} from '../game-missing-info/game-missing-info';
 
 @Component({
   templateUrl: 'build/pages/login-page/login-page.html',
@@ -56,6 +58,19 @@ export class LoginPage {
     'Nửa chặng rồi! Cố gắng lên!',
     'Bạn đã bỏ câu. Bạn phải chơi lại từ đầu.',
     'Bạn đã sai. Bạn phải chơi lại từ đầu.'
+  ];
+
+  games = [
+    {
+      name: 'Vòng lặp trắc nghiệm',
+      page: GameMultipleChoice,
+      level: 0
+    },
+    {
+      name: 'Tìm thông tin còn thiếu',
+      page: GameMissingInfo,
+      level: 0
+    }
   ];
 
   constructor(private navController: NavController, private menu: MenuController) {

@@ -66,30 +66,53 @@
 <div class="slides-progress">
   <div class="current-progress" [style.width.%]="20"></div>
 </div>
-<div class="answer-screen" *ngIf="false">
+<div class="answer-screen" *ngIf="true">
   <i class="fa fa-check answer" primary *ngIf="true"></i>
   <i class="fa fa-close answer" danger *ngIf="false"></i>
   <button class="btn-continue">Tiếp tục</button>
 </div>
 
-<div class="level-result" *ngIf="true">
-  <div class="title">Chúc mừng!</div>
+<div class="level-success" *ngIf="false">
   <div class="level">
     Cấp độ 5
-    <div class="overlay">
-      <i class="fa fa-lock"></i>
-    </div>
   </div>
+  <div class="title">Chúc mừng</div>
   <div class="row">
     <div class="text">Số câu hỏi:</div>
     <div class="number">10</div>
   </div>
   <div class="row">
-    <div class="text">Tổng số lần chơi:</div>
+    <div class="text">Số lần chơi:</div>
     <div class="number">100</div>
   </div>
   <div class="group-btn">
-    <button round secondary>Chơi tiếp</button>
-    <button round danger>Lưu và thoát</button>
+    <button round secondary>
+      <ion-icon name="log-in"></ion-icon>
+      Chơi tiếp
+    </button>
+    <button round danger>
+      <ion-icon name="undo"></ion-icon>
+      Lưu và thoát
+    </button>
+  </div>
+</div>
+<div class="level-fail" *ngIf="true">
+  <div class="level">
+    Cấp độ 10
+  </div>
+  <div class="title">Thất bại</div>
+  <div class="row">
+    <div class="text">Trả lời sai</div>
+    <div class="number">10</div>
+  </div>
+  <div class="group-btn">
+    <button round secondary>
+      <ion-icon name="sync"></ion-icon>
+      Chơi lại
+    </button>
+    <button round danger>
+      <ion-icon name="undo"></ion-icon>
+      Thoát
+    </button>
   </div>
 </div>
