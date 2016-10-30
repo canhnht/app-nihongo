@@ -13,10 +13,10 @@
   <ion-slides #questionSlider [options]="sliderOptions"
     (ionDidChange)="onSlideChanged($event)">
     <ion-slide class="question-slide" *ngFor="let question of listQuestion; let i = index" [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
-      <div class="question" *ngIf="true">
+      <div class="question" *ngIf="isTextQuestion(question)">
         {{question.question}}
       </div>
-      <i class="fa fa-volume-up question" *ngIf="false"></i>
+      <i class="fa fa-volume-up question voice" *ngIf="isVoiceQuestion(question)" (click)="playQuestion(question)"></i>
       <div class="option" (click)="select(question, 0)"
         [class.activated]="selectedOption == 0">
         <div class="bullet">A</div>

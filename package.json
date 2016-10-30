@@ -53,7 +53,8 @@
         "APP_NAME": "app-nihongo"
       }
     },
-    "cordova-plugin-network-information"
+    "cordova-plugin-network-information",
+    "cordova-plugin-tts"
   ],
   "cordovaPlatforms": [
     {

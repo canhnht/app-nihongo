@@ -4,7 +4,7 @@ import {AudioPlayer} from '../../components/audio-player/audio-player';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {DbService} from '../../services/db.service';
-import {Toast, SpinnerDialog, MediaPlugin} from 'ionic-native';
+import {Toast, SpinnerDialog, MediaPlugin, TextToSpeech} from 'ionic-native';
 import {Subscription} from 'rxjs';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GameMultipleChoiceService, QuestionType} from '../../services/game-multiple-choice.service';
@@ -72,6 +72,22 @@ export class MultipleChoiceSlides {
 
   ionViewWillLeave() {
     this.dataSubscription.unsubscribe();
+  }
+
+  isTextQuestion(question) {
+    return question.type == QuestionType.KanjiToHiragana_Text
+      || question.type == QuestionType.HiraganaToKanji_Text;
+  }
+
+  isVoiceQuestion(question) {
+    return question.type == QuestionType.KanjiToHiragana_Voice
+      || question.type == QuestionType.HiraganaToKanji_Voice;
+  }
+
+  playQuestion(question) {
+    TextToSpeech.speak('Hello World')
+      .then(() => console.log('Success'))
+      .catch((reason: any) => console.log(reason));
   }
 
   next() {
