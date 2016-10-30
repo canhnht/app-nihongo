@@ -21,6 +21,7 @@ export class DbService {
   listNewsSubject: Subject<any[]> = new Subject<any[]>();
   allCourses: any = {};
   allCoursesSubject: Subject<any[]> = new Subject<any[]>();
+  gameMultipleChoiceSubject: Subject<any> = new Subject<any>();
 
   constructor() {
     this.db = new PouchDB('app-nihongo', {adapter: 'websql'});
@@ -51,6 +52,7 @@ export class DbService {
       let gameMultipleChoicePromise = this.db.put({
         _id: 'gameMultipleChoice',
         currentLevel: 1,
+        numberPlay: 0,
         achievements: []
       });
       return Promise.all([localLoadedPromise, gameMultipleChoicePromise]);
@@ -81,6 +83,8 @@ export class DbService {
           return d2.getTime() - d1.getTime();
         });
         this.listNewsSubject.next(this.listNews);
+      } else if (doc._id == 'gameMultipleChoice') {
+        this.gameMultipleChoiceSubject.next(doc);
       }
     };
     this.db.changes({ live: true, since: 'now', include_docs: true })
@@ -215,5 +219,17 @@ export class DbService {
       return arr.concat(wordsInUnits);
     }, []);
     return listWord;
+  }
+
+  getGameMultipleChoice() {
+    return this.db.get('gameMultipleChoice').catch(
+      utils.errorHandler('Error get game info')
+    );
+  }
+
+  updateGameMultipleChoice(game) {
+    this.db.put(game).then(resp => {}).catch(
+      utils.errorHandler('Error update game')
+    );
   }
 }

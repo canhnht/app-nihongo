@@ -3,7 +3,7 @@ import {Subject} from 'rxjs';
 import {DbService} from './db.service';
 import {Toast} from 'ionic-native';
 
-enum QuestionType {
+export enum QuestionType {
   KanjiToHiragana_Text,
   HiraganaToKanji_Text,
   KanjiToHiragana_Voice,
@@ -14,11 +14,17 @@ enum QuestionType {
 export class GameMultipleChoiceService {
   currentLevel: number;
   numberQuestions: number;
+  timeLimit: number;
   listQuestion: any[];
   listWord: any[];
 
   constructor(private dbService: DbService) {
-    this.currentLevel = 1;
+    this.dbService.getGameMultipleChoice().then(
+      data => this.currentLevel = data.currentLevel
+    );
+    this.dbService.gameMultipleChoiceSubject.subscribe(
+      data => this.currentLevel = data.currentLevel
+    );
     this.listWord = this.dbService.getWordsOfAllCourses();
   }
 
@@ -34,7 +40,8 @@ export class GameMultipleChoiceService {
   generateListQuestion() {
     if (this.listWord.length == 0) return false;
     this.shuffleWords();
-    this.numberQuestions = 10;
+    this.numberQuestions = this.getNumberQuestions();
+    this.timeLimit = this.getTimeLimit();
     let types = [
       QuestionType.KanjiToHiragana_Text,
       QuestionType.HiraganaToKanji_Text,
@@ -89,4 +96,23 @@ export class GameMultipleChoiceService {
     question.answer = randomIndex;
     return question;
   }
+
+  getTimeLimit() {
+    if (this.currentLevel <= 10) return 60;
+    if (this.currentLevel <= 20) return 55;
+    if (this.currentLevel <= 30) return 50;
+    if (this.currentLevel <= 40) return 45;
+    if (this.currentLevel <= 50) return 40;
+    if (this.currentLevel <= 60) return 35;
+    if (this.currentLevel <= 70) return 30;
+    if (this.currentLevel <= 80) return 25;
+    if (this.currentLevel <= 90) return 20;
+    return 15;
+  }
+
+  getNumberQuestions() {
+    return 9 + this.currentLevel;
+  }
+
+
 }

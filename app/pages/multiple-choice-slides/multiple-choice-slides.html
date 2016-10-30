@@ -1,77 +1,95 @@
 <ion-header class="multiple-choice-header">
   <marquee class="quote">
-    Hãy cố gắng trả lời đúng tất cả!
+    {{quote}}
   </marquee>
   <button large (click)="close()">
     <ion-icon name="close"></ion-icon>
   </button>
 </ion-header>
 <div class="countdown-bar">
-  <div class="current-countdown" [style.width.%]="90"></div>
+  <div class="current-countdown" [style.width.%]="countdownPercent"></div>
 </div>
 <ion-content class="multiple-choice-slides">
-  <ion-slides #questionSlider [options]="sliderOptions">
+  <ion-slides #questionSlider [options]="sliderOptions"
+    (ionDidChange)="onSlideChanged($event)">
     <ion-slide class="question-slide" *ngFor="let question of listQuestion; let i = index" [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
       <div class="question" *ngIf="true">
         {{question.question}}
       </div>
       <i class="fa fa-volume-up question" *ngIf="false"></i>
-      <div class="option" *ngFor="let option of question.options; let o = index"
-        (click)="select(question, o)" [class.activated]="question.selected == o"
-        [class.disabled]="question.selected != -1">
-        {{option}}
+      <div class="option" (click)="select(question, 0)"
+        [class.activated]="selectedOption == 0">
+        <div class="bullet">A</div>
+        {{question.options[0]}}
+      </div>
+      <div class="option" (click)="select(question, 1)"
+        [class.activated]="selectedOption == 1">
+        <div class="bullet">B</div>
+        {{question.options[1]}}
+      </div>
+      <div class="option" (click)="select(question, 2)"
+        [class.activated]="selectedOption == 2">
+        <div class="bullet">C</div>
+        {{question.options[2]}}
+      </div>
+      <div class="option" (click)="select(question, 3)"
+        [class.activated]="selectedOption == 3">
+        <div class="bullet">D</div>
+        {{question.options[3]}}
       </div>
     </ion-slide>
   </ion-slides>
 </ion-content>
 <div class="slides-progress">
-  <div class="current-progress" [style.width.%]="20"></div>
+  <div class="current-progress" [style.width.%]="progressPercent"></div>
 </div>
-<div class="answer-screen" *ngIf="false">
-  <i class="fa fa-check answer" primary *ngIf="true"></i>
-  <i class="fa fa-close answer" danger *ngIf="false"></i>
-  <button class="btn-continue">Tiếp tục</button>
+<div class="answer-screen" *ngIf="selectedOption != -1">
+  <i class="fa fa-check answer" primary *ngIf="isCorrect"></i>
+  <i class="fa fa-close answer" danger *ngIf="!isCorrect"></i>
+  <button class="btn-continue" (click)="next()">
+    Tiếp tục
+  </button>
 </div>
 
-<div class="level-success" *ngIf="false">
+<div class="level-success" *ngIf="answerAll && success">
   <div class="level">
-    Cấp độ 5
+    Cấp độ {{data.currentLevel}}
   </div>
   <div class="title">Chúc mừng</div>
   <div class="row">
     <div class="text">Số câu hỏi:</div>
-    <div class="number">10</div>
+    <div class="number">{{listQuestion.length}}</div>
   </div>
   <div class="row">
     <div class="text">Số lần chơi:</div>
-    <div class="number">100</div>
+    <div class="number">{{data.numberPlay || 0}}</div>
   </div>
   <div class="group-btn">
-    <button round secondary>
+    <button round secondary (click)="playNextLevel()">
       <ion-icon name="log-in"></ion-icon>
       Chơi tiếp
     </button>
-    <button round danger>
+    <button round danger (click)="saveAndClose()">
       <ion-icon name="undo"></ion-icon>
       Lưu và thoát
     </button>
   </div>
 </div>
-<div class="level-fail" *ngIf="true">
+<div class="level-fail" *ngIf="answerAll && !success">
   <div class="level">
-    Cấp độ 10
+    Cấp độ {{data.currentLevel}}
   </div>
   <div class="title">Thất bại</div>
   <div class="row">
     <div class="text">Trả lời sai</div>
-    <div class="number">10</div>
+    <div class="number">{{numberWrongAnswer}}</div>
   </div>
   <div class="group-btn">
-    <button round secondary>
+    <button round secondary (click)="playAgain()">
       <ion-icon name="sync"></ion-icon>
       Chơi lại
     </button>
-    <button round danger>
+    <button round danger (click)="saveAndClose()">
       <ion-icon name="undo"></ion-icon>
       Thoát
     </button>

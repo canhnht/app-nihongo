@@ -18,21 +18,32 @@ import {MultipleChoiceSlides} from '../multiple-choice-slides/multiple-choice-sl
   templateUrl: 'build/pages/game-multiple-choice/game-multiple-choice.html',
 })
 export class GameMultipleChoice {
-  data = {
-    currentLevel: 1
-  };
+  data: any = {};
+  dataSubscription: Subscription;
 
   constructor(private navController: NavController, private dbService: DbService,
     private translate: TranslateService, private storageService: LocalStorageService,
     private gameService: GameMultipleChoiceService) {
   }
 
+  ionViewWillEnter() {
+    this.dbService.getGameMultipleChoice().then(data => this.data = data);
+    this.dataSubscription = this.dbService.gameMultipleChoiceSubject.subscribe(
+      data => this.data = data
+    );
+  }
+
+  ionViewWillLeave() {
+    this.dataSubscription.unsubscribe();
+  }
+
   start() {
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
     if (this.gameService.generateListQuestion()) {
-      SpinnerDialog.show(this.translate.instant('Processing'),
-        this.translate.instant('Please_wait'), false);
       this.navController.push(MultipleChoiceSlides);
     } else {
+      SpinnerDialog.hide();
       let alert = Alert.create({
         title: 'Không có câu hỏi',
         subTitle: 'Hãy tải khóa học về để tạo câu hỏi!',
@@ -58,7 +69,9 @@ export class GameMultipleChoice {
 
   resetGame() {
     this.data.currentLevel = 1;
-    // Update db
+    this.data.numberPlay = 0;
+    this.data.achievements = [];
+    this.dbService.updateGameMultipleChoice(this.data);
   }
 }
 
@@ -102,11 +115,14 @@ class GameMultipleChoiceRules {
         (click)="close()">
         <ion-icon name="close"></ion-icon>
       </button>
-      <div class="title">
+      <div class="title" *ngIf="achievements.length == 0">
+        Bạn chưa có thành tích nào
+      </div>
+      <div class="title" *ngIf="achievements.length > 0">
         Thành tích của bạn
       </div>
-      <ion-list [virtualScroll]="achievements">
-        <ion-item text-wrap *virtualItem="let achievement">
+      <ion-list *ngIf="achievements.length > 0">
+        <ion-item text-wrap *ngFor="let achievement of achievements">
           <ion-label class="achievement-item">
             <ion-badge class="achievement-level">{{achievement.level}}</ion-badge>
             <div class="achievement-desc">
@@ -123,29 +139,14 @@ class GameMultipleChoiceRules {
   `,
 })
 class GameMultipleChoiceAchievements {
-  achievements = [
-    {
-      level: 1,
-      numberQuestions: 10,
-      numberPlay: 1,
-      date: new Date()
-    },
-    {
-      level: 2,
-      numberQuestions: 15,
-      numberPlay: 10,
-      date: new Date()
-    },
-    {
-      level: 3,
-      numberQuestions: 20,
-      numberPlay: 5,
-      date: new Date()
-    }
-  ];
+  achievements: any[] = [];
 
-  constructor(private viewController: ViewController, private navController: NavController) {
-    this.sortAchievements();
+  constructor(private viewController: ViewController, private navController: NavController,
+      private dbService: DbService) {
+    this.dbService.getGameMultipleChoice().then(data => {
+      this.achievements = data.achievements;
+      this.sortAchievements();
+    });
   }
 
   sortAchievements() {
