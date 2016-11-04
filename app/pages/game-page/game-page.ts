@@ -33,7 +33,13 @@ export class GamePage {
   ];
 
   constructor(private navController: NavController,
-    private translate: TranslateService, private storageService: LocalStorageService) {
+    private translate: TranslateService, private dbService: DbService) {
+  }
+
+  ionViewWillEnter() {
+    this.dbService.getGameMultipleChoice().then(
+      data => this.games[0].level = data.currentLevel
+    );
   }
 
   playGame(game) {

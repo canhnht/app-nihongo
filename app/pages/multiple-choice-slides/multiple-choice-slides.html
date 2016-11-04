@@ -53,7 +53,7 @@
 
 <div class="level-success" *ngIf="answerAll && success">
   <div class="level">
-    Cấp độ {{data.currentLevel}}
+    Cấp độ {{currentLevel}}
   </div>
   <div class="title">Chúc mừng</div>
   <div class="row">
@@ -62,22 +62,22 @@
   </div>
   <div class="row">
     <div class="text">Số lần chơi:</div>
-    <div class="number">{{data.numberPlay || 0}}</div>
+    <div class="number">{{numberPlay}}</div>
   </div>
   <div class="group-btn">
     <button round secondary (click)="playNextLevel()">
       <ion-icon name="log-in"></ion-icon>
       Chơi tiếp
     </button>
-    <button round danger (click)="saveAndClose()">
+    <button round danger (click)="close()">
       <ion-icon name="undo"></ion-icon>
-      Lưu và thoát
+      Thoát
     </button>
   </div>
 </div>
 <div class="level-fail" *ngIf="answerAll && !success">
   <div class="level">
-    Cấp độ {{data.currentLevel}}
+    Cấp độ {{currentLevel}}
   </div>
   <div class="title">Thất bại</div>
   <div class="row">
@@ -89,7 +89,7 @@
       <ion-icon name="sync"></ion-icon>
       Chơi lại
     </button>
-    <button round danger (click)="saveAndClose()">
+    <button round danger (click)="close()">
       <ion-icon name="undo"></ion-icon>
       Thoát
     </button>

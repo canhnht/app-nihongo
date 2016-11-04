@@ -98,20 +98,20 @@ export class GameMultipleChoiceService {
   }
 
   getTimeLimit() {
-    if (this.currentLevel <= 10) return 60;
-    if (this.currentLevel <= 20) return 55;
-    if (this.currentLevel <= 30) return 50;
-    if (this.currentLevel <= 40) return 45;
-    if (this.currentLevel <= 50) return 40;
-    if (this.currentLevel <= 60) return 35;
-    if (this.currentLevel <= 70) return 30;
-    if (this.currentLevel <= 80) return 25;
+    if (this.currentLevel <= 10) return 45;
+    if (this.currentLevel <= 20) return 40;
+    if (this.currentLevel <= 30) return 35;
+    if (this.currentLevel <= 40) return 35;
+    if (this.currentLevel <= 50) return 30;
+    if (this.currentLevel <= 60) return 30;
+    if (this.currentLevel <= 70) return 25;
+    if (this.currentLevel <= 80) return 20;
     if (this.currentLevel <= 90) return 20;
     return 15;
   }
 
   getNumberQuestions() {
-    return 9 + this.currentLevel;
+    return 3 + this.currentLevel;
   }
 
 

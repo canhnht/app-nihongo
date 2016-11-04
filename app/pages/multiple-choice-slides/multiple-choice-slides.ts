@@ -33,6 +33,8 @@ export class MultipleChoiceSlides {
     }
   };
   data: any = {};
+  currentLevel: number;
+  numberPlay: number;
   listQuestion: any[];
   intervalCountdown: any = null;
   countdownPercent: number;
@@ -52,8 +54,9 @@ export class MultipleChoiceSlides {
     this.dbService.getGameMultipleChoice().then(data => this.data = data);
   }
 
-  resetGame() {
-    this.listQuestion = [...this.gameService.listQuestion];
+  resetGame(resetQuestion = true) {
+    if (resetQuestion)
+      this.listQuestion = [...this.gameService.listQuestion];
     this.numberWrongAnswer = 0;
     this.answerAll = false;
     this.success = false;
@@ -85,15 +88,27 @@ export class MultipleChoiceSlides {
   }
 
   playQuestion(question) {
-    TextToSpeech.speak('Hello World')
-      .then(() => console.log('Success'))
-      .catch((reason: any) => console.log(reason));
+    let text = '';
+    if (question.type == QuestionType.KanjiToHiragana_Voice) {
+      text = question.question;
+    } else if (question.type == QuestionType.HiraganaToKanji_Voice) {
+      text = question.options[question.answer];
+    }
+    TextToSpeech.speak({
+      text: text,
+      locale: 'ja-jp'
+    }).then(() => {}).catch(err => {
+      alert(`tts ${err}`);
+    });
   }
 
   next() {
     if (this.currentQuestion + 1 == this.gameService.numberQuestions) {
+      this.currentLevel = this.data.currentLevel;
+      this.numberPlay = this.data.numberPlay + 1;
       this.answerAll = true;
       this.success = this.numberWrongAnswer == 0;
+      this.updateDatabase();
     } else {
       this.slides.unlockSwipeToNext();
       this.questionSlider.slideNext();
@@ -102,12 +117,14 @@ export class MultipleChoiceSlides {
   }
 
   onSlideChanged($event) {
-    this.stopQuestion();
-    this.startQuestion($event.activeIndex - 1);
+    let questionIndex = $event.activeIndex - 1;
+    if ($event.activeIndex == this.gameService.numberQuestions + 1)
+      questionIndex = 0;
+    this.startQuestion(questionIndex);
   }
 
   startQuestion(questionIndex) {
-    Toast.showLongBottom(`${this.listQuestion[questionIndex].question} - ${questionIndex} - ${this.listQuestion[questionIndex].answer}`).subscribe(() => {});
+    Toast.showLongBottom(`${questionIndex} - ${this.listQuestion[questionIndex].question} - ${this.listQuestion[questionIndex].answer}`).subscribe(() => {});
     this.currentQuestion = questionIndex;
     this.generateQuote(questionIndex);
     this.progressPercent = (questionIndex + 1) / this.gameService.numberQuestions * 100;
@@ -122,6 +139,9 @@ export class MultipleChoiceSlides {
         this.select(this.listQuestion[questionIndex], -2);
       }
     }, interval);
+    if (this.isVoiceQuestion(this.listQuestion[questionIndex])) {
+      this.playQuestion(this.listQuestion[questionIndex]);
+    }
   }
 
   stopQuestion() {
@@ -140,8 +160,8 @@ export class MultipleChoiceSlides {
   }
 
   close() {
-    this.navController.pop();
     this.stopQuestion();
+    this.navController.pop();
   }
 
   generateQuote(questionIndex) {
@@ -157,36 +177,12 @@ export class MultipleChoiceSlides {
     }
   }
 
-  playNextLevel() {
-    this.data.achievements.push({
-      level: this.data.currentLevel,
-      numberQuestions: this.gameService.numberQuestions,
-      numberPlay: this.data.numberPlay,
-      date: new Date()
-    });
-    this.data.currentLevel++;
-    this.data.numberPlay = 0;
-    this.dbService.updateGameMultipleChoice(this.data);
-    SpinnerDialog.show(this.translate.instant('Processing'),
-      this.translate.instant('Please_wait'), false);
-    this.gameService.generateListQuestion();
-    SpinnerDialog.hide();
-    this.resetGame();
-  }
-
-  playAgain() {
-    this.data.numberPlay++;
-    this.dbService.updateGameMultipleChoice(this.data);
-    this.resetGame();
-    this.startQuestion(0);
-  }
-
-  saveAndClose() {
+  updateDatabase() {
     if (this.success) {
       this.data.achievements.push({
         level: this.data.currentLevel,
         numberQuestions: this.gameService.numberQuestions,
-        numberPlay: this.data.numberPlay,
+        numberPlay: this.data.numberPlay + 1,
         date: new Date()
       });
       this.data.currentLevel++;
@@ -195,6 +191,27 @@ export class MultipleChoiceSlides {
       this.data.numberPlay++;
     }
     this.dbService.updateGameMultipleChoice(this.data);
-    this.navController.pop();
+  }
+
+  playNextLevel() {
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
+    this.gameService.generateListQuestion();
+    SpinnerDialog.hide();
+    this.resetGame();
+    this.slideToBeginning();
+  }
+
+  playAgain() {
+    this.resetGame();
+    this.slideToBeginning();
+  }
+
+  slideToBeginning() {
+    this.slides.unlockSwipeToNext();
+    this.slides.unlockSwipeToPrev();
+    this.questionSlider.slideTo(1);
+    this.slides.lockSwipeToNext();
+    this.slides.lockSwipeToPrev();
   }
 }

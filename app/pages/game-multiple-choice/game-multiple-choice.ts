@@ -145,6 +145,7 @@ class GameMultipleChoiceAchievements {
       private dbService: DbService) {
     this.dbService.getGameMultipleChoice().then(data => {
       this.achievements = data.achievements;
+      this.achievements.forEach(e => e.date = new Date(e.date));
       this.sortAchievements();
     });
   }
