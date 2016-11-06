@@ -25,7 +25,11 @@ export class GameMultipleChoiceService {
     this.dbService.gameMultipleChoiceSubject.subscribe(
       data => this.currentLevel = data.currentLevel
     );
+
     this.listWord = this.dbService.getWordsOfAllCourses();
+    this.dbService.listCourseSubject.subscribe(
+      listCourse => this.listWord = this.dbService.getWordsOfAllCourses()
+    );
   }
 
   shuffleWords() {
