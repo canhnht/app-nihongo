@@ -14,9 +14,9 @@ import {PlaylistOptions} from '../../components/playlist-options/playlist-option
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Component({
-  templateUrl: 'build/pages/game-missing-info/game-missing-info.html',
+  templateUrl: 'build/pages/game-explore-japan/game-explore-japan.html',
 })
-export class GameMissingInfo {
+export class GameExploreJapan {
 
   constructor(private navController: NavController,
     private translate: TranslateService, private storageService: LocalStorageService) {

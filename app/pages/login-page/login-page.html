@@ -1,118 +1,14 @@
-<ion-header class="multiple-choice-header">
-  <marquee class="quote">
-    Hãy cố gắng trả lời đúng tất cả!
-  </marquee>
-  <button large (click)="close()">
-    <ion-icon name="close"></ion-icon>
+
+
+<ion-navbar *navbar primary>
+  <button menuToggle left>
+    <ion-icon name="menu"></ion-icon>
   </button>
-</ion-header>
-<div class="countdown-bar">
-  <div class="current-countdown" [style.width.%]="90"></div>
-</div>
-<ion-content class="multiple-choice-slides">
-  <ion-slides #questionSlider [options]="sliderOptions">
-    <ion-slide class="question-slide"
-      [class.odd]="true" [class.even]="false">
-      <div class="question" *ngIf="true">
-        question question question question
-      </div>
-      <i class="fa fa-volume-up question" *ngIf="false"></i>
-      <div class="option">
-        <div class="bullet">A</div>
-        option
-      </div>
-      <div class="option">
-        <div class="bullet">B</div>
-        option
-      </div>
-      <div class="option">
-        <div class="bullet">C</div>
-        option
-      </div>
-      <div class="option">
-        <div class="bullet">D</div>
-        option
-      </div>
-      <i class="fa fa-check answer" primary *ngIf="false"></i>
-      <i class="fa fa-close answer" danger *ngIf="false"></i>
+  <ion-title>Mimi Kara Nihongo</ion-title>
+</ion-navbar>
+<ion-content class="game-explore-japan">
+  <ion-slides #gameSlider [options]="sliderOptions">
+    <ion-slide>
+      Slide
     </ion-slide>
-
-
-    <ion-slide class="question-slide"
-      [class.odd]="false" [class.even]="true">
-      <div class="question" *ngIf="true">
-        question question question question
-      </div>
-      <i class="fa fa-volume-up question" *ngIf="false"></i>
-      <div class="option">
-        <div class="bullet">A</div>
-        option
-      </div>
-      <div class="option">
-        <div class="bullet">B</div>
-        option
-      </div>
-      <div class="option">
-        <div class="bullet">C</div>
-        option
-      </div>
-      <div class="option">
-        <div class="bullet">D</div>
-        option
-      </div>
-    </ion-slide>
-  </ion-slides>
 </ion-content>
-<div class="slides-progress">
-  <div class="current-progress" [style.width.%]="20"></div>
-</div>
-<div class="answer-screen" *ngIf="true">
-  <i class="fa fa-check answer" primary *ngIf="true"></i>
-  <i class="fa fa-close answer" danger *ngIf="false"></i>
-  <button class="btn-continue">Tiếp tục</button>
-</div>
-
-<div class="level-success" *ngIf="false">
-  <div class="level">
-    Cấp độ 5
-  </div>
-  <div class="title">Chúc mừng</div>
-  <div class="row">
-    <div class="text">Số câu hỏi:</div>
-    <div class="number">10</div>
-  </div>
-  <div class="row">
-    <div class="text">Số lần chơi:</div>
-    <div class="number">100</div>
-  </div>
-  <div class="group-btn">
-    <button round secondary>
-      <ion-icon name="log-in"></ion-icon>
-      Chơi tiếp
-    </button>
-    <button round danger>
-      <ion-icon name="undo"></ion-icon>
-      Lưu và thoát
-    </button>
-  </div>
-</div>
-<div class="level-fail" *ngIf="true">
-  <div class="level">
-    Cấp độ 10
-  </div>
-  <div class="title">Thất bại</div>
-  <div class="row">
-    <div class="text">Trả lời sai</div>
-    <div class="number">10</div>
-  </div>
-  <div class="group-btn">
-    <button round secondary>
-      <ion-icon name="sync"></ion-icon>
-      Chơi lại
-    </button>
-    <button round danger>
-      <ion-icon name="undo"></ion-icon>
-      Thoát
-    </button>
-  </div>
-</div>

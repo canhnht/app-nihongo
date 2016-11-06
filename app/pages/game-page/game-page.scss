@@ -27,29 +27,6 @@
         font-size: 18px;
         color: #555;
       }
-
-      .rating {
-        float: left;
-        unicode-bidi: bidi-override;
-        direction: rtl;
-      }
-      .rating > span {
-        display: inline-block;
-        position: relative;
-        width: 1em;
-        font-size: 15px;
-      }
-      .rating > span.focus,
-      .rating > span.focus ~ span {
-        color: transparent;
-      }
-      .rating > span.focus:before,
-      .rating > span.focus ~ span:before {
-        content: "\2605";
-        position: absolute;
-        left: 0;
-        color: #E61770;
-      }
     }
 
     .btn-start {

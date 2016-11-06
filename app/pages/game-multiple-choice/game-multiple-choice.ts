@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ViewController, NavController, NavParams, Alert, Modal} from 'ionic-angular';
 import {Subscription} from 'rxjs';
-import {Toast, SpinnerDialog} from 'ionic-native';
+import {Toast, SpinnerDialog, NativeAudio} from 'ionic-native';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
@@ -38,6 +38,7 @@ export class GameMultipleChoice {
   }
 
   start() {
+    NativeAudio.play('touch', ()=>{});
     SpinnerDialog.show(this.translate.instant('Processing'),
       this.translate.instant('Please_wait'), false);
     if (this.gameService.generateListQuestion()) {
@@ -54,20 +55,24 @@ export class GameMultipleChoice {
   }
 
   openGameRule() {
+    NativeAudio.play('touch', ()=>{});
     let modal = Modal.create(GameMultipleChoiceRules);
     this.navController.present(modal);
   }
 
   openAchievements() {
+    NativeAudio.play('touch', ()=>{});
     let modal = Modal.create(GameMultipleChoiceAchievements);
     this.navController.present(modal);
   }
 
   closeGame() {
+    NativeAudio.play('touch', ()=>{});
     this.navController.pop();
   }
 
   resetGame() {
+    NativeAudio.play('touch', ()=>{});
     this.data.currentLevel = 1;
     this.data.numberPlay = 0;
     this.data.achievements = [];

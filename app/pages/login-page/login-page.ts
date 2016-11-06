@@ -8,7 +8,7 @@ import {PlaylistOptions} from '../../components/playlist-options/playlist-option
 import {SelectedWords} from '../../components/selected-words/selected-words';
 import {CustomDatePipe} from '../../custom-date.pipe';
 import {GameMultipleChoice} from '../game-multiple-choice/game-multiple-choice';
-import {GameMissingInfo} from '../game-missing-info/game-missing-info';
+import {GameExploreJapan} from '../game-explore-japan/game-explore-japan';
 
 @Component({
   templateUrl: 'build/pages/login-page/login-page.html',
@@ -68,7 +68,7 @@ export class LoginPage {
     },
     {
       name: 'Tìm thông tin còn thiếu',
-      page: GameMissingInfo,
+      page: GameExploreJapan,
       level: 0
     }
   ];

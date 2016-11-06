@@ -1,7 +1,7 @@
 import {Component, PLATFORM_PIPES, ViewChild} from '@angular/core';
 import {Http} from '@angular/http';
 import {Platform, ionicBootstrap, NavController} from 'ionic-angular';
-import {StatusBar, Splashscreen, Toast} from 'ionic-native';
+import {StatusBar, Splashscreen, Toast, NativeAudio} from 'ionic-native';
 import {HomePage} from './pages/home-page/home-page';
 import {NewsPage} from './pages/news-page/news-page';
 import {NewsDetail} from './pages/news-detail/news-detail';
@@ -33,7 +33,7 @@ export class MyApp {
   settingPage = SettingPage;
   feedbackPage = FeedbackPage;
   gamePage = GamePage;
-  rootPage = HomePage;
+  rootPage = LoginPage;
   isSignedIn: boolean = false;
 
   constructor(private platform: Platform, private authService: AuthService,
@@ -48,6 +48,7 @@ export class MyApp {
       this.authService.checkLoginStatus().then(() => {
         this.isSignedIn = this.authService.isSignedIn;
       });
+      NativeAudio.preloadSimple('touch', 'sounds/touch.mp3').then(()=>{},()=>{});
     });
 
     this.initializeI18n();

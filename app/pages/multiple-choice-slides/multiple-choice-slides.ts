@@ -4,7 +4,7 @@ import {AudioPlayer} from '../../components/audio-player/audio-player';
 import {AudioService} from '../../services/audio.service';
 import {SliderService} from '../../services/slider.service';
 import {DbService} from '../../services/db.service';
-import {Toast, SpinnerDialog, MediaPlugin, TextToSpeech} from 'ionic-native';
+import {Toast, SpinnerDialog, NativeAudio, TextToSpeech} from 'ionic-native';
 import {Subscription} from 'rxjs';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GameMultipleChoiceService, QuestionType} from '../../services/game-multiple-choice.service';
@@ -75,6 +75,7 @@ export class MultipleChoiceSlides {
 
   ionViewWillLeave() {
     this.dataSubscription.unsubscribe();
+    this.stopQuestion();
   }
 
   isTextQuestion(question) {
@@ -103,6 +104,7 @@ export class MultipleChoiceSlides {
   }
 
   next() {
+    NativeAudio.play('touch', ()=>{});
     if (this.currentQuestion + 1 == this.gameService.numberQuestions) {
       this.currentLevel = this.data.currentLevel;
       this.numberPlay = this.data.numberPlay + 1;
@@ -160,6 +162,7 @@ export class MultipleChoiceSlides {
   }
 
   close() {
+    NativeAudio.play('touch', ()=>{});
     this.stopQuestion();
     this.navController.pop();
   }
@@ -194,6 +197,7 @@ export class MultipleChoiceSlides {
   }
 
   playNextLevel() {
+    NativeAudio.play('touch', ()=>{});
     SpinnerDialog.show(this.translate.instant('Processing'),
       this.translate.instant('Please_wait'), false);
     this.gameService.generateListQuestion();
@@ -203,6 +207,7 @@ export class MultipleChoiceSlides {
   }
 
   playAgain() {
+    NativeAudio.play('touch', ()=>{});
     this.resetGame();
     this.slideToBeginning();
   }

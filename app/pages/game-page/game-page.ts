@@ -13,7 +13,7 @@ import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GameMultipleChoice} from '../game-multiple-choice/game-multiple-choice';
-import {GameMissingInfo} from '../game-missing-info/game-missing-info';
+import {GameExploreJapan} from '../game-explore-japan/game-explore-japan';
 
 @Component({
   templateUrl: 'build/pages/game-page/game-page.html',
@@ -23,12 +23,14 @@ export class GamePage {
     {
       name: 'Vòng lặp trắc nghiệm',
       page: GameMultipleChoice,
-      level: 0
+      level: 0,
+      icon: 'images/question-loop-icon.jpg'
     },
     {
-      name: 'Tìm thông tin còn thiếu',
-      page: GameMissingInfo,
-      level: 0
+      name: 'Khám phá Nhật Bản',
+      page: GameExploreJapan,
+      level: 0,
+      icon: 'images/explore-japan-icon.png'
     }
   ];
 
