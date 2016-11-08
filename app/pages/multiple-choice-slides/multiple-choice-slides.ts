@@ -110,6 +110,7 @@ export class MultipleChoiceSlides {
       this.numberPlay = this.data.numberPlay + 1;
       this.answerAll = true;
       this.success = this.numberWrongAnswer == 0;
+      NativeAudio.play(this.success ? 'success' : 'fail', ()=>{});
       this.updateDatabase();
     } else {
       this.slides.unlockSwipeToNext();
@@ -157,8 +158,12 @@ export class MultipleChoiceSlides {
     this.stopQuestion();
     this.selectedOption = optionIndex;
     this.isCorrect = this.selectedOption == question.answer;
-    if (!this.isCorrect)
+    if (!this.isCorrect) {
+      NativeAudio.play('incorrect', ()=>{});
       this.numberWrongAnswer++;
+    } else {
+      NativeAudio.play('correct', ()=>{});
+    }
   }
 
   close() {

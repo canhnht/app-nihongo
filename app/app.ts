@@ -33,7 +33,7 @@ export class MyApp {
   settingPage = SettingPage;
   feedbackPage = FeedbackPage;
   gamePage = GamePage;
-  rootPage = LoginPage;
+  rootPage = HomePage;
   isSignedIn: boolean = false;
 
   constructor(private platform: Platform, private authService: AuthService,
@@ -49,6 +49,10 @@ export class MyApp {
         this.isSignedIn = this.authService.isSignedIn;
       });
       NativeAudio.preloadSimple('touch', 'sounds/touch.mp3').then(()=>{},()=>{});
+      NativeAudio.preloadSimple('correct', 'sounds/correct.wav').then(()=>{},()=>{});
+      NativeAudio.preloadSimple('incorrect', 'sounds/incorrect.mp3').then(()=>{},()=>{});
+      NativeAudio.preloadSimple('fail', 'sounds/fail.wav').then(()=>{},()=>{});
+      NativeAudio.preloadSimple('success', 'sounds/success.wav').then(()=>{},()=>{});
     });
 
     this.initializeI18n();
