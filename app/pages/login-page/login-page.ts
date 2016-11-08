@@ -20,9 +20,9 @@ export class LoginPage {
 
   sliderOptions: any = {
     loop: false,
-    onInit: function(slides) {
-      slides.lockSwipeToPrev();
-    }
+    // onInit: function(slides) {
+    //   slides.lockSwipeToPrev();
+    // }
   };
 
   isChecked: boolean = false;

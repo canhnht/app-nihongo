@@ -18,11 +18,46 @@
         Sushi
       </div>
       <div class="list-round">
-        <div class="round" *ngFor="let i of [1,2,3,4,5,6,7,8,9]">
+        <div class="round" *ngFor="let i of ['一','二','三','四','五','六','七','八','九']">
+          {{i}}
           <div class="round-star">
-            <img src="images/sushi-icon.png" class="star class-declaration" />
+            <img src="images/sushi-icon-active.png" class="star active" />
+            <img src="images/sushi-icon-active.png" class="star active" />
             <img src="images/sushi-icon.png" class="star" />
-            <img src="images/sushi-icon.png" class="star" />
+          </div>
+        </div>
+
+      </div>
+    </ion-slide>
+
+    <ion-slide class="tra-dao">
+      <div class="title">
+        Sabou
+      </div>
+      <div class="list-round">
+        <div class="round" *ngFor="let i of ['一','二','三','四','五','六','七','八','九']">
+          {{i}}
+          <div class="round-star">
+            <img src="images/tea-icon-active.png" class="star active" />
+            <img src="images/tea-icon-active.png" class="star active" />
+            <img src="images/tea-icon.png" class="star" />
+          </div>
+        </div>
+
+      </div>
+    </ion-slide>
+
+    <ion-slide class="ikebana">
+      <div class="title">
+        Ikebana
+      </div>
+      <div class="list-round">
+        <div class="round" *ngFor="let i of ['一','二','三','四','五','六','七','八','九']">
+          {{i}}
+          <div class="round-star">
+            <img src="images/flower-icon-active.png" class="star active" />
+            <img src="images/flower-icon-active.png" class="star active" />
+            <img src="images/flower-icon.png" class="star" />
           </div>
         </div>
 
