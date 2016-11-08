@@ -1,14 +1,32 @@
 
 
 <ion-navbar *navbar primary>
-  <button menuToggle left>
-    <ion-icon name="menu"></ion-icon>
+  <button class="star-amount">
+    10
+    <ion-icon name="star"></ion-icon>
   </button>
-  <ion-title>Mimi Kara Nihongo</ion-title>
+  <ion-buttons end>
+    <button>
+      <ion-icon name="settings"></ion-icon>
+    </button>
+  </ion-buttons>
 </ion-navbar>
 <ion-content class="game-explore-japan">
-  <ion-slides #gameSlider [options]="sliderOptions">
-    <ion-slide>
-      Slide
+  <ion-slides #questionSlider [options]="sliderOptions">
+    <ion-slide class="sushi">
+      <div class="title">
+        Sushi
+      </div>
+      <div class="list-round">
+        <div class="round" *ngFor="let i of [1,2,3,4,5,6,7,8,9]">
+          <div class="round-star">
+            <img src="images/sushi-icon.png" class="star class-declaration" />
+            <img src="images/sushi-icon.png" class="star" />
+            <img src="images/sushi-icon.png" class="star" />
+          </div>
+        </div>
+
+      </div>
     </ion-slide>
+  </ion-slides>
 </ion-content>
