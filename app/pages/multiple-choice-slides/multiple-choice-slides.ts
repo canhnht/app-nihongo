@@ -13,7 +13,7 @@ const QUOTES = {
   FIRST_QUESTION: 'Hãy cố gắng trả lời đúng tất cả!',
   CORRECT_QUESTION: 'Rất tốt! Tiếp tục phát huy nào!',
   HALF_WAY: 'Nửa chặng rồi! Cố gắng lên!',
-  SKIP_QUESTION: 'Bạn đã bỏ câu. Bạn phải chơi lại từ đầu.',
+  TIME_OUT: 'Bạn đã bỏ câu. Bạn phải chơi lại từ đầu.',
   WRONG_ANSWER: 'Bạn đã sai. Bạn phải chơi lại từ đầu.'
 };
 @Component({
@@ -42,6 +42,7 @@ export class MultipleChoiceSlides {
   selectedOption: number;
   isCorrect: boolean;
   numberWrongAnswer: number;
+  timeout: boolean;
   quote: string;
   currentQuestion: number;
   answerAll: boolean;
@@ -61,6 +62,7 @@ export class MultipleChoiceSlides {
     this.answerAll = false;
     this.success = false;
     this.selectedOption = -1;
+    this.timeout = false;
   }
 
   ionViewDidEnter() {
@@ -138,6 +140,8 @@ export class MultipleChoiceSlides {
     this.intervalCountdown = setInterval(() => {
       this.countdownPercent = countdown / timeLimit * 100;
       countdown -= interval;
+      if (countdown == 5000)
+        NativeAudio.play('count_down_5', ()=>{});
       if (countdown == 0) {
         this.select(this.listQuestion[questionIndex], -2);
       }
@@ -149,6 +153,7 @@ export class MultipleChoiceSlides {
 
   stopQuestion() {
     if (this.intervalCountdown != null) {
+      NativeAudio.stop('count_down_5');
       clearInterval(this.intervalCountdown);
       this.intervalCountdown = null;
     }
@@ -164,6 +169,11 @@ export class MultipleChoiceSlides {
     } else {
       NativeAudio.play('correct', ()=>{});
     }
+    if (optionIndex == -2) {
+      this.timeout = true;
+    } else {
+      this.timeout = false;
+    }
   }
 
   close() {
@@ -174,7 +184,9 @@ export class MultipleChoiceSlides {
 
   generateQuote(questionIndex) {
     if (questionIndex == 0) this.quote = QUOTES.FIRST_QUESTION;
-    else if (this.numberWrongAnswer > 0) {
+    else if (this.timeout) {
+      this.quote = QUOTES.TIME_OUT;
+    } else if (this.numberWrongAnswer > 0) {
       this.quote = QUOTES.WRONG_ANSWER;
     } else {
       if (questionIndex == Math.floor(this.gameService.numberQuestions / 2)) {

@@ -102,7 +102,7 @@ export class GameMultipleChoiceService {
   }
 
   getTimeLimit() {
-    if (this.currentLevel <= 10) return 45;
+    if (this.currentLevel <= 10) return 10;
     if (this.currentLevel <= 20) return 40;
     if (this.currentLevel <= 30) return 35;
     if (this.currentLevel <= 40) return 35;

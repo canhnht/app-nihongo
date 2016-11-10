@@ -53,6 +53,7 @@ export class MyApp {
       NativeAudio.preloadSimple('incorrect', 'sounds/incorrect.mp3').then(()=>{},()=>{});
       NativeAudio.preloadSimple('fail', 'sounds/fail.wav').then(()=>{},()=>{});
       NativeAudio.preloadSimple('success', 'sounds/success.wav').then(()=>{},()=>{});
+      NativeAudio.preloadSimple('count_down_5', 'sounds/count_down_5.mp3').then(()=>{},()=>{});
     });
 
     this.initializeI18n();
