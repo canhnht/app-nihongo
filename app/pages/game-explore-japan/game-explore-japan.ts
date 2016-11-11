@@ -17,12 +17,33 @@ import {TranslateService} from 'ng2-translate/ng2-translate';
   templateUrl: 'build/pages/game-explore-japan/game-explore-japan.html',
 })
 export class GameExploreJapan {
+  data: any = {};
+  dataSubscription: Subscription;
+  roundLabels = ['一','二','三','四','五','六','七','八','九'];
+  iter = [
+    [],
+    [0],
+    [0,0],
+    [0,0,0]
+  ];
 
-  constructor(private navController: NavController,
-    private translate: TranslateService, private storageService: LocalStorageService) {
+  constructor(private navController: NavController, private translate: TranslateService,
+    private dbService: DbService) {
+
   }
 
-  playGame(game) {
-    console.log(game);
+  ionViewWillEnter() {
+    this.dbService.getGameExploreJapan().then(data => {
+      this.data = data;
+      alert(`${JSON.stringify(this.data)}`);
+    });
+    this.dataSubscription = this.dbService.gameExploreJapanSubject.subscribe(
+      data => this.data = data
+    );
   }
+
+  ionViewWillLeave() {
+    this.dataSubscription.unsubscribe();
+  }
+
 }

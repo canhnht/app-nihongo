@@ -22,6 +22,7 @@ export class DbService {
   allCourses: any = {};
   allCoursesSubject: Subject<any[]> = new Subject<any[]>();
   gameMultipleChoiceSubject: Subject<any> = new Subject<any>();
+  gameExploreJapanSubject: Subject<any> = new Subject<any>();
 
   constructor() {
     this.db = new PouchDB('app-nihongo', {adapter: 'websql'});
@@ -55,7 +56,14 @@ export class DbService {
         numberPlay: 0,
         achievements: []
       });
-      return Promise.all([localLoadedPromise, gameMultipleChoicePromise]);
+      let gameExploreJapanPromise = this.db.put({
+        _id: 'gameExploreJapan',
+        sushi: new Array(9).fill(0),
+        sadou: new Array(9).fill(0),
+        ikebana: new Array(9).fill(0),
+        stars: 0
+      });
+      return Promise.all([localLoadedPromise, gameMultipleChoicePromise, gameExploreJapanPromise]);
     });
   }
 
@@ -85,6 +93,8 @@ export class DbService {
         this.listNewsSubject.next(this.listNews);
       } else if (doc._id == 'gameMultipleChoice') {
         this.gameMultipleChoiceSubject.next(doc);
+      } else if (doc._id == 'gameExploreJapan') {
+        this.gameExploreJapanSubject.next(doc);
       }
     };
     this.db.changes({ live: true, since: 'now', include_docs: true })
@@ -228,6 +238,18 @@ export class DbService {
   }
 
   updateGameMultipleChoice(game) {
+    this.db.put(game).then(resp => {}).catch(
+      utils.errorHandler('Error update game')
+    );
+  }
+
+  getGameExploreJapan() {
+    return this.db.get('gameExploreJapan').catch(
+      utils.errorHandler('Error get game info')
+    );
+  }
+
+  updateGameExploreJapan(game) {
     this.db.put(game).then(resp => {}).catch(
       utils.errorHandler('Error update game')
     );
