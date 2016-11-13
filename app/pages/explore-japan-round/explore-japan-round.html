@@ -6,35 +6,32 @@
       <ion-icon name="close"></ion-icon>
     </button>
   </ion-buttons>
-  <ion-buttons end>
-    <button (click)="pause()" *ngIf="true">
+  <ion-buttons end *ngIf="playing">
+    <button (click)="pause()">
       <ion-icon name="pause"></ion-icon>
     </button>
   </ion-buttons>
 </ion-navbar>
 <div class="countdown-bar">
-  <div class="current-countdown" [style.width.%]="60"></div>
+  <div class="current-countdown" [style.width.%]="countdownPercent"></div>
 </div>
 <ion-content class="explore-japan-round">
   <div class="grid">
-    <div class="cell" *ngFor="let i of arr; let ind = index">
-      <img src="images/sadou/image{{i}}.jpeg" class="cell-img" [hidden]="!flip[ind]" />
-      <div class="label" [hidden]="flip[ind]">{{i}}</div>
-    </div>
-    <div class="cell" *ngFor="let item of listCell">
+    <div class="cell" *ngFor="let item of listCell; let ind = index"
+      (click)="selectCell(ind)">
       <img [src]="item.imageUrl" class="cell-img" *ngIf="!!item.imageUrl"
-        [hidden]="item.flip" />
+        [hidden]="!item.flip" />
       <div class="cell-text" *ngIf="!!item.text"
-        [hidden]="item.flip">{{item.text}}</div>
-      <div class="label" [hidden]="!item.flip">{{i}}</div>
+        [hidden]="!item.flip">{{item.text}}</div>
+      <div class="label" [hidden]="item.flip">{{item.wordIndex}}</div>
     </div>
   </div>
 </ion-content>
 <div class="round-progress">
-  <div class="current-progress" [style.width.%]="30"></div>
+  <div class="current-progress" [style.width.%]="progressPercent"></div>
 </div>
-<div class="waiting" *ngIf="false">
-  <button class="btn-play" clear>
+<div class="waiting" *ngIf="!playing">
+  <button class="btn-play" clear (click)="play()">
     <ion-icon name="play"></ion-icon>
   </button>
 </div>

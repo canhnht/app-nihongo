@@ -21,7 +21,7 @@
       </div>
       <div class="list-round">
         <div class="round" *ngFor="let e of data.sushi; let i = index"
-          (click)="playRound('sushi')">
+          (click)="playRound('sushi', i + 1)">
           {{roundLabels[i]}}
           <div class="round-star">
             <img src="images/sushi-icon-active.png" class="star active" *ngFor="let c of iter[e]" />
@@ -38,7 +38,7 @@
       </div>
       <div class="list-round">
         <div class="round" *ngFor="let e of data.sadou; let i = index"
-          (click)="playRound('sadou')">
+          (click)="playRound('sadou', i + 1)">
           {{roundLabels[i]}}
           <div class="round-star">
             <img src="images/tea-icon-active.png" class="star active" *ngFor="let c of iter[e]" />
@@ -55,7 +55,7 @@
       </div>
       <div class="list-round">
         <div class="round" *ngFor="let e of data.ikebana; let i = index"
-          (click)="playRound('ikebana')">
+          (click)="playRound('ikebana', i + 1)">
           {{roundLabels[i]}}
           <div class="round-star">
             <img src="images/flower-icon-active.png" class="star active" *ngFor="let c of iter[e]" />

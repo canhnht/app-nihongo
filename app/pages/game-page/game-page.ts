@@ -45,6 +45,8 @@ export class GamePage {
   }
 
   playGame(game) {
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
     this.navController.push(game.page);
   }
 }

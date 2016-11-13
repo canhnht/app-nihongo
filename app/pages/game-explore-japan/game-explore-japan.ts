@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, Popover, Loading, Alert, Modal} from 'ionic-angular';
 import {Subscription} from 'rxjs';
-import {Toast, SpinnerDialog} from 'ionic-native';
+import {Toast, SpinnerDialog, NativeAudio} from 'ionic-native';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
@@ -36,7 +36,6 @@ export class GameExploreJapan {
   ionViewWillEnter() {
     this.dbService.getGameExploreJapan().then(data => {
       this.data = data;
-      alert(`${JSON.stringify(this.data)}`);
     });
     this.dataSubscription = this.dbService.gameExploreJapanSubject.subscribe(
       data => this.data = data
@@ -47,7 +46,14 @@ export class GameExploreJapan {
     this.dataSubscription.unsubscribe();
   }
 
-  playRound(topic) {
-    this.navController.push(ExploreJapanRound, {topic});
+  ionViewDidEnter() {
+    SpinnerDialog.hide();
+  }
+
+  playRound(topic, roundNumber) {
+    NativeAudio.play('touch', ()=>{});
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
+    this.navController.push(ExploreJapanRound, {topic, roundNumber});
   }
 }

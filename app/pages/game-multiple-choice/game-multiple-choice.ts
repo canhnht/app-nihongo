@@ -37,6 +37,10 @@ export class GameMultipleChoice {
     this.dataSubscription.unsubscribe();
   }
 
+  ionViewDidEnter() {
+    SpinnerDialog.hide();
+  }
+
   start() {
     NativeAudio.play('touch', ()=>{});
     SpinnerDialog.show(this.translate.instant('Processing'),
