@@ -1,0 +1,102 @@
+
+
+
+.round-progress {
+  position: relative;
+  height: 10px;
+  width: 100%;
+  background-color: #999;
+
+  .current-progress {
+    position: absolute;
+    background-color: #E61770;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0%;
+  }
+}
+
+.countdown-bar {
+  position: relative;
+  height: 10px;
+  width: 100%;
+  background-color: white;
+
+  .current-countdown {
+    position: absolute;
+    background-image: linear-gradient(
+      to right,
+      red, #f06d06
+    );
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
+}
+
+.explore-japan-round {
+  position: relative;
+
+  .grid {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .cell {
+      position: relative;
+      flex-grow: 1;
+      width: 33%;
+      border: 2px solid black;
+      overflow: hidden;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .cell-img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .cell-text {
+        font-size: 40px;
+        color: white;
+      }
+
+      .label {
+        font-size: 50px;
+        color: white;
+      }
+    }
+  }
+
+}
+
+.waiting {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+  .btn-play {
+    font-size: 40px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+}

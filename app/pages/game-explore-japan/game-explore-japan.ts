@@ -12,6 +12,7 @@ import {SettingService, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {ExploreJapanRound} from '../explore-japan-round/explore-japan-round';
 
 @Component({
   templateUrl: 'build/pages/game-explore-japan/game-explore-japan.html',
@@ -46,4 +47,7 @@ export class GameExploreJapan {
     this.dataSubscription.unsubscribe();
   }
 
+  playRound(topic) {
+    this.navController.push(ExploreJapanRound, {topic});
+  }
 }

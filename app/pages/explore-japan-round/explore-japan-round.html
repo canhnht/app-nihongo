@@ -1,13 +1,13 @@
 
 
-<ion-navbar *navbar primary>
+<ion-navbar hideBackButton *navbar primary>
   <ion-buttons left>
-    <button>
+    <button (click)="close()">
       <ion-icon name="close"></ion-icon>
     </button>
   </ion-buttons>
   <ion-buttons end>
-    <button>
+    <button (click)="pause()" *ngIf="true">
       <ion-icon name="pause"></ion-icon>
     </button>
   </ion-buttons>
@@ -20,6 +20,13 @@
     <div class="cell" *ngFor="let i of arr; let ind = index">
       <img src="images/sadou/image{{i}}.jpeg" class="cell-img" [hidden]="!flip[ind]" />
       <div class="label" [hidden]="flip[ind]">{{i}}</div>
+    </div>
+    <div class="cell" *ngFor="let item of listCell">
+      <img [src]="item.imageUrl" class="cell-img" *ngIf="!!item.imageUrl"
+        [hidden]="item.flip" />
+      <div class="cell-text" *ngIf="!!item.text"
+        [hidden]="item.flip">{{item.text}}</div>
+      <div class="label" [hidden]="!item.flip">{{i}}</div>
     </div>
   </div>
 </ion-content>

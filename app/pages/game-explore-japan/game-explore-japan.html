@@ -1,10 +1,12 @@
 
 
 <ion-navbar hideBackButton *navbar primary>
-  <button class="star-amount">
-    {{data.stars}}
-    <ion-icon name="star"></ion-icon>
-  </button>
+  <ion-buttons left>
+    <button class="star-amount">
+      {{data.stars}}
+      <ion-icon name="star"></ion-icon>
+    </button>
+  </ion-buttons>
   <ion-buttons end>
     <button>
       <ion-icon name="settings"></ion-icon>
@@ -18,7 +20,8 @@
         Sushi
       </div>
       <div class="list-round">
-        <div class="round" *ngFor="let e of data.sushi; let i = index">
+        <div class="round" *ngFor="let e of data.sushi; let i = index"
+          (click)="playRound('sushi')">
           {{roundLabels[i]}}
           <div class="round-star">
             <img src="images/sushi-icon-active.png" class="star active" *ngFor="let c of iter[e]" />
@@ -34,7 +37,8 @@
         Sadou
       </div>
       <div class="list-round">
-        <div class="round" *ngFor="let e of data.sadou; let i = index">
+        <div class="round" *ngFor="let e of data.sadou; let i = index"
+          (click)="playRound('sadou')">
           {{roundLabels[i]}}
           <div class="round-star">
             <img src="images/tea-icon-active.png" class="star active" *ngFor="let c of iter[e]" />
@@ -50,7 +54,8 @@
         Ikebana
       </div>
       <div class="list-round">
-        <div class="round" *ngFor="let e of data.sadou; let i = index">
+        <div class="round" *ngFor="let e of data.ikebana; let i = index"
+          (click)="playRound('ikebana')">
           {{roundLabels[i]}}
           <div class="round-star">
             <img src="images/flower-icon-active.png" class="star active" *ngFor="let c of iter[e]" />

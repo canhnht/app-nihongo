@@ -254,4 +254,10 @@ export class DbService {
       utils.errorHandler('Error update game')
     );
   }
+
+  getExploreJapanData() {
+    return this.db.get('exploreJapanData').catch(
+      utils.errorHandler('Error get game data')
+    );
+  }
 }
