@@ -52,7 +52,6 @@
     .cell {
       position: relative;
       flex-grow: 1;
-      width: 33%;
       border: 2px solid black;
       overflow: hidden;
       background-color: rgba(0, 0, 0, 0.8);
@@ -70,19 +69,20 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        font-size: 30px;
+        font-size: 25px;
         color: white;
         overflow: hidden;
         display: flex;
         justify-content: center;
         align-items: center;
+        word-wrap: break-word;
       }
 
       .label {
         position: absolute;
         width: 100%;
         height: 100%;
-        font-size: 50px;
+        font-size: 40px;
         color: white;
         overflow: hidden;
         display: flex;
@@ -112,5 +112,67 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
+  }
+}
+
+.round-result {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: white;
+  z-index: 50;
+
+  .content {
+    position: absolute;
+    top: 20px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: #E61770;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+  }
+
+  .round {
+    position: absolute;
+    top: -20px;
+    width: 200px;
+    height: 40px;
+    left: calc(50% - 100px);
+    border-radius: 20px;
+    border: 2px solid white;
+    font-size: 20px;
+    background: #E61770;
+    font-family: 'Lobster', Fallback, sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .title {
+    font-size: 60px;
+    color: white;
+    text-align: center;
+    font-family: 'Lobster', Fallback, sans-serif;
+    margin-bottom: 30px;
+  }
+
+  .round-star {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+  }
+
+  .group-btn {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
   }
 }

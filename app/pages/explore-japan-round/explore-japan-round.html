@@ -2,13 +2,13 @@
 
 <ion-navbar hideBackButton *navbar primary>
   <ion-buttons left>
-    <button (click)="close()">
-      <ion-icon name="close"></ion-icon>
+    <button (click)="pause()">
+      <ion-icon name="pause"></ion-icon>
     </button>
   </ion-buttons>
   <ion-buttons end *ngIf="playing">
-    <button (click)="pause()">
-      <ion-icon name="pause"></ion-icon>
+    <button (click)="close()">
+      <ion-icon name="close"></ion-icon>
     </button>
   </ion-buttons>
 </ion-navbar>
@@ -18,7 +18,8 @@
 <ion-content class="explore-japan-round">
   <div class="grid">
     <div class="cell" *ngFor="let item of listCell; let ind = index"
-      (click)="selectCell(ind)">
+      (click)="selectCell(ind)" [style.width.%]="100 / width"
+      [style.height.%]="100 / height">
       <img [src]="item.imageUrl" class="cell-img" *ngIf="!!item.imageUrl"
         [hidden]="!item.flip" />
       <div class="cell-text" *ngIf="!!item.text"
@@ -30,8 +31,34 @@
 <div class="round-progress">
   <div class="current-progress" [style.width.%]="progressPercent"></div>
 </div>
+
 <div class="waiting" *ngIf="!playing">
   <button class="btn-play" clear (click)="play()">
     <ion-icon name="play"></ion-icon>
   </button>
+</div>
+
+<div class="round-result" *ngIf="displayResult">
+  <div class="content">
+    <div class="round">
+      {{topic}} - {{roundNumber}}
+    </div>
+    <div class="title">Hoàn thành</div>
+    <div class="round-star">
+      <img [src]="iconActiveUrl" class="star active"
+        *ngFor="let c of iter[numberStars]" />
+      <img [src]="iconUrl" class="star"
+        *ngFor="let c of iter[3 - numberStars]" />
+    </div>
+    <div class="group-btn">
+      <button round secondary (click)="playAgain()">
+        <ion-icon name="sync"></ion-icon>
+        Chơi lại
+      </button>
+      <button round danger (click)="close()">
+        <ion-icon name="undo"></ion-icon>
+        Thoát
+      </button>
+    </div>
+  </div>
 </div>

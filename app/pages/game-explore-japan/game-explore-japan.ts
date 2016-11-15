@@ -56,4 +56,9 @@ export class GameExploreJapan {
       this.translate.instant('Please_wait'), false);
     this.navController.push(ExploreJapanRound, {topic, roundNumber});
   }
+
+  close() {
+    NativeAudio.play('touch', ()=>{});
+    this.navController.pop();
+  }
 }

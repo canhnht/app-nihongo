@@ -18,9 +18,13 @@ import {TranslateService} from 'ng2-translate/ng2-translate';
 })
 export class ExploreJapanRound {
   data: any = {};
+  topic: string;
+  roundNumber: number;
   listWord: any[] = [];
   listCell: any[] = [];
   numberCells: number;
+  width: number = 1;
+  height: number = 1;
   intervalCountdown: any = null;
   countdown: number;
   timeLimit: number;
@@ -30,13 +34,32 @@ export class ExploreJapanRound {
   playing: boolean = true;
   selectedWordIndex: number = -1;
   prevCellIndex: number = -1;
+  displayResult: boolean = false;
+  iter = [
+    [],
+    [0],
+    [0,0],
+    [0,0,0]
+  ];
+  numberStars: number = 0;
+  iconUrl: string;
+  iconActiveUrl: string;
 
   constructor(private navController: NavController, private translate: TranslateService,
     private dbService: DbService, private navParams: NavParams) {
     let {topic, roundNumber} = this.navParams.data;
+    this.topic = topic;
+    this.roundNumber = roundNumber;
+    this.resetGame(topic, roundNumber);
+  }
+
+  resetGame(topic, roundNumber) {
+    this.displayResult = false;
     this.timeLimit = this.getTimeLimit(roundNumber) * 1000;
     this.countdown = this.timeLimit;
     this.numberCells = this.getNumberCells(roundNumber);
+    this.progressPercent = 0;
+    this.numberCorrect = 0;
     this.dbService.getExploreJapanData().then(data => {
       this.data = data;
       this.listWord = this.generateListWord(this.data[topic]);
@@ -104,7 +127,8 @@ export class ExploreJapanRound {
         this.stopGame();
         if (this.numberCorrect < this.numberCells / 2) {
           NativeAudio.play('fail', ()=>{});
-          alert('fail');
+          this.updateResult(false);
+          this.displayResult = true;
         }
       }
     }, interval);
@@ -130,7 +154,15 @@ export class ExploreJapanRound {
   }
 
   getNumberCells(roundNumber) {
-    return 12;
+    if (roundNumber <= 4) {
+      this.width = 3;
+      this.height = 4;
+      return 12;
+    } else {
+      this.width = 4;
+      this.height = 5;
+      return 20;
+    }
   }
 
   pause() {
@@ -147,7 +179,7 @@ export class ExploreJapanRound {
 
   selectCell(cellIndex) {
     let cell = this.listCell[cellIndex];
-    if (cell.correct) return;
+    if (cell.correct || cell.flip) return;
     NativeAudio.play('touch', ()=>{});
     cell.flip = true;
     if (this.selectedWordIndex == -1) {
@@ -164,7 +196,8 @@ export class ExploreJapanRound {
           if (this.numberCorrect == this.numberCells / 2) {
             NativeAudio.play('success', ()=>{});
             this.stopGame();
-            alert('success');
+            this.updateResult(true);
+            this.displayResult = true;
           }
         } else {
           NativeAudio.play('incorrect', ()=>{});
@@ -175,5 +208,33 @@ export class ExploreJapanRound {
         this.selectedWordIndex = -1;
       }, 1000);
     }
+  }
+
+  updateResult(success) {
+    this.numberStars = this.calculateStars(success);
+    this.dbService.getGameExploreJapan().then(gameData => {
+      gameData[this.topic][this.roundNumber - 1] = this.numberStars;
+      this.dbService.updateGameExploreJapan(gameData);
+    });
+    if (this.topic == 'sushi') {
+      this.iconUrl = 'images/sushi-icon.png';
+      this.iconActiveUrl = 'images/sushi-icon-active.png';
+    } else if (this.topic == 'sadou') {
+      this.iconUrl = 'images/tea-icon.png';
+      this.iconActiveUrl = 'images/tea-icon-active.png';
+    } else if (this.topic == 'ikebana') {
+      this.iconUrl = 'images/flower-icon.png';
+      this.iconActiveUrl = 'images/flower-icon-active.png';
+    }
+  }
+
+  calculateStars(success) {
+    if (success) return 3;
+    else return 2;
+  }
+
+  playAgain() {
+    NativeAudio.play('touch', ()=>{});
+    this.resetGame(this.topic, this.roundNumber);
   }
 }
