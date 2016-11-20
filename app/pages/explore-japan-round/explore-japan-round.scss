@@ -90,6 +90,14 @@
         align-items: center;
       }
     }
+
+    .highlight {
+      background-color: white;
+
+      .cell-text {
+        color: rgba(0, 0, 0, 0.8);
+      }
+    }
   }
 
 }

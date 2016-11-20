@@ -44,6 +44,7 @@ export class ExploreJapanRound {
   numberStars: number = 0;
   iconUrl: string;
   iconActiveUrl: string;
+  processing: boolean = false;
 
   constructor(private navController: NavController, private translate: TranslateService,
     private dbService: DbService, private navParams: NavParams) {
@@ -54,6 +55,7 @@ export class ExploreJapanRound {
   }
 
   resetGame(topic, roundNumber) {
+    this.processing = false;
     this.displayResult = false;
     this.timeLimit = this.getTimeLimit(roundNumber) * 1000;
     this.countdown = this.timeLimit;
@@ -180,13 +182,16 @@ export class ExploreJapanRound {
   selectCell(cellIndex) {
     let cell = this.listCell[cellIndex];
     if (cell.correct || cell.flip) return;
+    if (this.processing) return;
     NativeAudio.play('touch', ()=>{});
     cell.flip = true;
     if (this.selectedWordIndex == -1) {
       this.selectedWordIndex = cell.wordIndex;
       this.prevCellIndex = cellIndex;
     } else {
+      this.processing = true;
       setTimeout(() => {
+        this.processing = false;
         if (this.selectedWordIndex == cell.wordIndex) {
           NativeAudio.play('correct', ()=>{});
           this.listCell[this.prevCellIndex].correct = true;
@@ -214,6 +219,7 @@ export class ExploreJapanRound {
     this.numberStars = this.calculateStars(success);
     this.dbService.getGameExploreJapan().then(gameData => {
       gameData[this.topic][this.roundNumber - 1] = this.numberStars;
+      gameData.stars += this.numberStars;
       this.dbService.updateGameExploreJapan(gameData);
     });
     if (this.topic == 'sushi') {
@@ -236,5 +242,6 @@ export class ExploreJapanRound {
   playAgain() {
     NativeAudio.play('touch', ()=>{});
     this.resetGame(this.topic, this.roundNumber);
+    this.startGame();
   }
 }

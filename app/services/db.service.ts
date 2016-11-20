@@ -50,20 +50,21 @@ export class DbService {
         this.listCourseSubject.next(listCourse);
       });
       let localLoadedPromise = this.db.put({_id: '_local/preloaded'});
-      let gameMultipleChoicePromise = this.db.put({
-        _id: 'gameMultipleChoice',
-        currentLevel: 1,
-        numberPlay: 0,
-        achievements: []
-      });
-      let gameExploreJapanPromise = this.db.put({
-        _id: 'gameExploreJapan',
-        sushi: new Array(9).fill(0),
-        sadou: new Array(9).fill(0),
-        ikebana: new Array(9).fill(0),
-        stars: 0
-      });
-      return Promise.all([localLoadedPromise, gameMultipleChoicePromise, gameExploreJapanPromise]);
+      // let gameMultipleChoicePromise = this.db.put({
+      //   _id: 'gameMultipleChoice',
+      //   currentLevel: 1,
+      //   numberPlay: 0,
+      //   achievements: []
+      // });
+      // let gameExploreJapanPromise = this.db.put({
+      //   _id: 'gameExploreJapan',
+      //   sushi: new Array(9).fill(0),
+      //   sadou: new Array(9).fill(0),
+      //   ikebana: new Array(9).fill(0),
+      //   stars: 0
+      // });
+      // return Promise.all([localLoadedPromise, gameMultipleChoicePromise, gameExploreJapanPromise]);
+      return localLoadedPromise;
     });
   }
 

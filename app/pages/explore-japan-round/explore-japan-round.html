@@ -19,12 +19,12 @@
   <div class="grid">
     <div class="cell" *ngFor="let item of listCell; let ind = index"
       (click)="selectCell(ind)" [style.width.%]="100 / width"
-      [style.height.%]="100 / height">
+      [style.height.%]="100 / height" [class.highlight]="item.correct">
       <img [src]="item.imageUrl" class="cell-img" *ngIf="!!item.imageUrl"
         [hidden]="!item.flip" />
       <div class="cell-text" *ngIf="!!item.text"
         [hidden]="!item.flip">{{item.text}}</div>
-      <div class="label" [hidden]="item.flip">{{item.wordIndex}}</div>
+      <div class="label" [hidden]="item.flip">{{ind + 1}}</div>
     </div>
   </div>
 </ion-content>

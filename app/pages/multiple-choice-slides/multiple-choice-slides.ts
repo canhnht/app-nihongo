@@ -129,7 +129,7 @@ export class MultipleChoiceSlides {
   }
 
   startQuestion(questionIndex) {
-    Toast.showLongBottom(`${questionIndex} - ${this.listQuestion[questionIndex].question} - ${this.listQuestion[questionIndex].answer}`).subscribe(() => {});
+    // Toast.showLongBottom(`${questionIndex} - ${this.listQuestion[questionIndex].question} - ${this.listQuestion[questionIndex].answer}`).subscribe(() => {});
     this.currentQuestion = questionIndex;
     this.generateQuote(questionIndex);
     this.progressPercent = (questionIndex + 1) / this.gameService.numberQuestions * 100;
