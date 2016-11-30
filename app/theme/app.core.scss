@@ -8,19 +8,31 @@
 // App Shared Sass variables belong in app.variables.scss.
 @font-face {
   font-family: 'Taviraj';
-  src: url('../../fonts/Taviraj/Taviraj-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+  src: url('../../fonts/Taviraj/Taviraj-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
 }
 @font-face {
   font-family: 'Risque';
-  src: url('../../fonts/Risque/Risque-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+  src: url('../../fonts/Risque/Risque-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
 }
 @font-face {
   font-family: 'Patrick_Hand';
-  src: url('../../fonts/Patrick_Hand/PatrickHand-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+  src: url('../../fonts/Patrick_Hand/PatrickHand-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
 }
 @font-face {
   font-family: 'Lobster';
-  src: url('../../fonts/Lobster/Lobster-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+  src: url('../../fonts/Lobster/Lobster-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
+}
+@font-face {
+  font-family: 'Effra';
+  src: url('../../fonts/Effra/iCielEffra-Regular.otf') format('truetype'); /* Safari, Android, iOS */
+}
+@font-face {
+  font-family: 'Linotte';
+  src: url('../../fonts/Linotte/r0c0i - Linotte Bold.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../../fonts/Linotte/r0c0i - Linotte Heavy.ttf') format('truetype'),
+       url('../../fonts/Linotte/r0c0i - Linotte Light.ttf') format('truetype'),
+       url('../../fonts/Linotte/r0c0i - Linotte Regular.ttf') format('truetype'),
+       url('../../fonts/Linotte/r0c0i - Linotte Semi Bold.ttf') format('truetype');
 }
 * {
   font-family: 'Taviraj', Fallback, sans-serif;

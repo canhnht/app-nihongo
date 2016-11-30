@@ -147,10 +147,10 @@ export class ExploreJapanRound {
   getTimeLimit(roundNumber) {
     let numberWords = this.getNumberCells(roundNumber) / 2;
     let timeLimitPerWord = 0;
-    if (roundNumber <= 2) timeLimitPerWord = 45;
-    else if (roundNumber <= 4) timeLimitPerWord = 35;
-    else if (roundNumber <= 6) timeLimitPerWord = 25;
-    else if (roundNumber <= 8) timeLimitPerWord = 20;
+    if (roundNumber <= 2) timeLimitPerWord = 30;
+    else if (roundNumber <= 4) timeLimitPerWord = 25;
+    else if (roundNumber <= 6) timeLimitPerWord = 20;
+    else if (roundNumber <= 8) timeLimitPerWord = 15;
     else timeLimitPerWord = 15;
     return timeLimitPerWord * numberWords;
   }
@@ -218,6 +218,7 @@ export class ExploreJapanRound {
   updateResult(success) {
     this.numberStars = this.calculateStars(success);
     this.dbService.getGameExploreJapan().then(gameData => {
+      gameData.stars -= gameData[this.topic][this.roundNumber - 1];
       gameData[this.topic][this.roundNumber - 1] = this.numberStars;
       gameData.stars += this.numberStars;
       this.dbService.updateGameExploreJapan(gameData);
@@ -236,7 +237,8 @@ export class ExploreJapanRound {
 
   calculateStars(success) {
     if (success) return 3;
-    else return 2;
+    else if (this.numberCorrect > 0) return 2;
+    else return 0;
   }
 
   playAgain() {
