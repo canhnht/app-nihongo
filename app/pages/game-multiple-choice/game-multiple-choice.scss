@@ -1,7 +1,5 @@
 
 $images: ('../../images/bg-multiple-choice-1.jpg',
-  '../../images/bg-multiple-choice-2.png',
-  '../../images/bg-multiple-choice-3.png',
   '../../images/bg-multiple-choice-4.png');
 
 $img: nth($images, random(length($images)));
@@ -19,9 +17,10 @@ $img: nth($images, random(length($images)));
     text-align: center;
     top: 50px;
     font-size: 35px;
-    color: #E61770;
+    color: color($colors, primary);
     font-weight: bold;
-    font-family: 'Linotte', Fallback, sans-serif;
+    font-family: 'Risque', Fallback, sans-serif;
+    text-shadow: 2px 2px 4px color($colors, light);
   }
   .menu {
     display: flex;
@@ -36,6 +35,10 @@ $img: nth($images, random(length($images)));
       height: 45px;
       margin: 7px 15px;
       font-weight: bold;
+
+      -webkit-box-shadow: 0 0 4px 4px color($colors, light);
+      -moz-box-shadow: 0 0 2px 4px color($colors, light);
+      box-shadow: 0 0 2px 4px color($colors, light);
     }
 
     .button-inner {
@@ -46,6 +49,7 @@ $img: nth($images, random(length($images)));
 }
 
 .multiple-choice-rules {
+  background-color: color($colors, favorite);
 
   .btn-close {
     position: absolute;
@@ -64,7 +68,7 @@ $img: nth($images, random(length($images)));
 
     .title {
       font-size: 30px;
-      color: #E61770;
+      color: color($colors, primary);
       font-weight: bold;
       font-family: 'Risque', Fallback, sans-serif;
     }
@@ -72,12 +76,14 @@ $img: nth($images, random(length($images)));
     p {
       font-size: 23px;
       font-family: 'Effra', Fallback, sans-serif;
+      color: color($colors, dark);
     }
   }
 }
 
 
 .multiple-choice-achievements {
+  background-color: color($colors, favorite);
 
   .btn-close {
     position: absolute;
@@ -89,7 +95,7 @@ $img: nth($images, random(length($images)));
     width: 100%;
     text-align: center;
     font-size: 30px;
-    color: #E61770;
+    color: color($colors, primary);
     font-weight: bold;
     font-family: 'Risque', Fallback, sans-serif;
     margin-top: 60px;
@@ -110,5 +116,13 @@ $img: nth($images, random(length($images)));
       align-items: center;
       margin-right: 10px;
     }
+
+    p {
+      color: color($colors, dark);
+    }
+  }
+
+  ion-list > ion-item {
+    background-color: color($colors, favorite);
   }
 }

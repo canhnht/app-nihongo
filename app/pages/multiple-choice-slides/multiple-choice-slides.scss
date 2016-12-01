@@ -44,7 +44,7 @@
     font-weight: bold;
     margin-bottom: 50px;
     padding: 0 10px;
-    color: white;
+    color: color($colors, primary);
 
     &.voice {
       font-size: 40px;
@@ -71,6 +71,19 @@
     overflow: hidden;
     text-overflow: ellipsis;
 
+    background: url('../../images/btn-wood.png') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    // -webkit-box-shadow: 0 0 2px 3px #87d134;
+    // -moz-box-shadow: 0 0 2px 3px #87d134;
+    // box-shadow: 0 0 2px 3px #87d134;
+    -webkit-box-shadow: 0 0 2px 3px color($colors, favorite);
+    -moz-box-shadow: 0 0 2px 3px color($colors, favorite);
+    box-shadow: 0 0 2px 3px color($colors, favorite);
+
     .bullet {
       position: absolute;
       left: 0;
@@ -87,7 +100,7 @@
   }
 
   .activated {
-    background: #E61770;
+    opacity: 0.7;
     color: white;
   }
 
@@ -97,11 +110,19 @@
   }
 
   .odd {
-    background-color: #51b147;
+    background: url('../../images/bg-odd.jpg') no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
   }
 
   .even {
-    background-color: #59a8f2;
+    background: url('../../images/bg-even.jpg') no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
   }
 }
 
@@ -123,15 +144,18 @@
 
 .countdown-bar {
   position: relative;
-  height: 10px;
+  height: 12px;
   width: 100%;
   background-color: white;
 
   .current-countdown {
     position: absolute;
-    background-image: linear-gradient(
-      to right,
-      red, #f06d06
+    background-image: repeating-linear-gradient(
+      45deg,
+      color($colors, light),
+      color($colors, light) 10px,
+      color($colors, secondary) 10px,
+      color($colors, secondary) 20px
     );
     left: 0;
     top: 0;
@@ -154,7 +178,21 @@
   justify-content: space-around;
 
   .answer {
-    font-size: 200px;
+    font-size: 180px;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.correct {
+      background-color: rgba(230, 23, 112, 0.3);
+    }
+
+    &.incorrect {
+      background-color: rgba(245, 61, 61, 0.3);
+    }
   }
 
   .btn-continue {
@@ -172,7 +210,9 @@
   bottom: 0;
   right: 0;
   left: 0;
-  background: #E61770;
+  background-image: linear-gradient(
+      color($colors, primary) 70%, white
+    );
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -235,7 +275,7 @@
   bottom: 0;
   right: 0;
   left: 0;
-  background: #FFC107;
+  background: color($colors, secondary);
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -252,7 +292,7 @@
     border-radius: 20px;
     border: 2px solid white;
     font-size: 20px;
-    background: #FFC107;
+    background: color($colors, secondary);
     font-family: 'Lobster', Fallback, sans-serif;
     color: white;
     display: flex;

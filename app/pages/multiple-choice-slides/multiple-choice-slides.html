@@ -44,8 +44,8 @@
   <div class="current-progress" [style.width.%]="progressPercent"></div>
 </div>
 <div class="answer-screen" *ngIf="selectedOption != -1">
-  <i class="fa fa-check answer" primary *ngIf="isCorrect"></i>
-  <i class="fa fa-close answer" danger *ngIf="!isCorrect"></i>
+  <i class="fa fa-check answer correct" primary *ngIf="isCorrect"></i>
+  <i class="fa fa-close answer incorrect" danger *ngIf="!isCorrect"></i>
   <button class="btn-continue" (click)="next()">
     Tiếp tục
   </button>
