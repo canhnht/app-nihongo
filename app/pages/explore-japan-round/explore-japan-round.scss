@@ -25,9 +25,12 @@
 
   .current-countdown {
     position: absolute;
-    background-image: linear-gradient(
-      to right,
-      red, #f06d06
+    background-image: repeating-linear-gradient(
+      45deg,
+      color($colors, light),
+      color($colors, light) 10px,
+      color($colors, secondary) 10px,
+      color($colors, secondary) 20px
     );
     left: 0;
     top: 0;

@@ -64,12 +64,14 @@ export class LoginPage {
     {
       name: 'Vòng lặp trắc nghiệm',
       page: GameMultipleChoice,
-      level: 0
+      level: 0,
+      icon: 'images/question-loop-icon.jpg'
     },
     {
-      name: 'Tìm thông tin còn thiếu',
+      name: 'Khám phá Nhật Bản',
       page: GameExploreJapan,
-      level: 0
+      level: 0,
+      icon: 'images/explore-japan-icon.png'
     }
   ];
 
