@@ -1,9 +1,8 @@
 
 $images: ('../../images/bg-multiple-choice-1.jpg',
-  '../../images/bg-multiple-choice-2.jpg',
+  '../../images/bg-multiple-choice-2.png',
   '../../images/bg-multiple-choice-3.png',
-  '../../images/bg-multiple-choice-4.png',
-  '../../images/bg-multiple-choice-5.png');
+  '../../images/bg-multiple-choice-4.png');
 
 $img: nth($images, random(length($images)));
 
@@ -22,7 +21,7 @@ $img: nth($images, random(length($images)));
     font-size: 35px;
     color: #E61770;
     font-weight: bold;
-    font-family: 'Risque', Fallback, sans-serif;
+    font-family: 'Linotte', Fallback, sans-serif;
   }
   .menu {
     display: flex;

@@ -33,7 +33,7 @@ export class MyApp {
   settingPage = SettingPage;
   feedbackPage = FeedbackPage;
   gamePage = GamePage;
-  rootPage = HomePage;
+  rootPage = LoginPage;
   isSignedIn: boolean = false;
 
   constructor(private platform: Platform, private authService: AuthService,

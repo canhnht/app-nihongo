@@ -14,6 +14,11 @@
     display: flex;
     justify-content: center;
   }
+
+  .icon-find, .icon-home, .icon-list, .icon-games, .icon-messages, .icon-setting, .icon-signin-fb {
+    width: 30px;
+    margin-right: 15px;
+  }
 }
 
 .app-toolbar {

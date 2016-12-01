@@ -16,49 +16,57 @@
       <ion-item button-primary menuClose text-wrap
         (click)="openPage(homePage, { tabPage: 'search' })">
         <ion-label class="menu-item">
-          <ion-icon primary name="search" class="menu-icon"></ion-icon>
+          <!-- <ion-icon primary name="search" class="menu-icon"></ion-icon> -->
+          <img class="icon-find" src="images/iconMenu/find.png" />
           Tìm kiếm
         </ion-label>
       </ion-item>
       <ion-item button-primary menuClose text-wrap
         (click)="openPage(homePage, { tabPage: 'home' })">
         <ion-label class="menu-item">
-          <ion-icon primary name="home" class="menu-icon"></ion-icon>
+          <!-- <ion-icon primary name="home" class="menu-icon"></ion-icon> -->
+          <img class="icon-home" src="images/iconMenu/home.png" />
           {{'Home' | translate}}
         </ion-label>
       </ion-item>
       <ion-item button-primary menuClose text-wrap
         (click)="openPage(playlistsPage)">
         <ion-label class="menu-item">
-          <ion-icon primary name="bookmark" class="menu-icon"></ion-icon>
+          <!-- <ion-icon primary name="bookmark" class="menu-icon"></ion-icon> -->
+          <img class="icon-list" src="images/iconMenu/mylist.png" />
           {{'My_playlist' | translate}}
         </ion-label>
       </ion-item>
       <ion-item button-primary menuClose text-wrap
         (click)="openPage(gamePage)">
         <ion-label class="menu-item">
-          <ion-icon primary name="game-controller-b" class="menu-icon"></ion-icon>
+          <!-- <ion-icon primary name="game-controller-b" class="menu-icon"></ion-icon> -->
+          <img class="icon-games" src="images/iconMenu/games.png" />
           {{'Game' | translate}}
         </ion-label>
       </ion-item>
       <ion-item button-primary menuClose text-wrap
         (click)="openPage(feedbackPage)">
         <ion-label class="menu-item">
-          <ion-icon primary name="mail" class="menu-icon"></ion-icon>
+          <!-- <ion-icon primary name="mail" class="menu-icon"></ion-icon> -->
+          <img class="icon-messages" src="images/iconMenu/messages.png" />
           Góp ý và liên hệ
         </ion-label>
       </ion-item>
       <ion-item button-primary menuClose text-wrap
         (click)="openPage(settingPage, null, true)">
         <ion-label class="menu-item">
-          <ion-icon primary name="settings" class="menu-icon"></ion-icon>
+          <!-- <ion-icon primary name="settings" class="menu-icon"></ion-
+          icon> -->
+          <img class="icon-setting" src="images/iconMenu/setting.png" />
           {{'Setting' | translate}}
         </ion-label>
       </ion-item>
       <ion-item button-primary menuClose text-wrap
         (click)="isSignedIn ? signOut() : signIn()">
         <ion-label class="menu-item">
-          <i primary class="fa fa-facebook-square menu-icon"></i>
+          <!-- <i primary class="fa fa-facebook-square menu-icon"></i> -->
+          <img class="icon-signin-fb" src="images/iconMenu/facebook.png" />
           {{(isSignedIn ? 'Sign_out' : 'Sign_in_facebook') | translate}}
         </ion-label>
       </ion-item>

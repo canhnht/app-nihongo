@@ -1,33 +1,22 @@
 
-
-<ion-navbar *navbar primary>
-  <ion-buttons left>
-    <button>
-      <ion-icon name="close"></ion-icon>
+<ion-content class="game-multiple-choice">
+  <div class="game-title">Vòng lặp trắc nghiệm</div>
+  <div class="menu">
+    <button class="menu-item" (click)="start()">
+      Chơi cấp độ 1
     </button>
-  </ion-buttons>
-  <ion-buttons end>
-    <button>
-      <ion-icon name="pause"></ion-icon>
+    <button class="menu-item" *ngIf="true"
+      (click)="resetGame()">
+      Chơi lại từ đầu
     </button>
-  </ion-buttons>
-</ion-navbar>
-<div class="countdown-bar">
-  <div class="current-countdown" [style.width.%]="60"></div>
-</div>
-<ion-content class="explore-japan-round">
-  <div class="grid">
-    <div class="cell" *ngFor="let i of arr; let ind = index">
-      <img src="images/sadou/image{{i}}.jpeg" class="cell-img" [hidden]="!flip[ind]" />
-      <div class="label" [hidden]="flip[ind]">{{i}}</div>
-    </div>
+    <button class="menu-item" (click)="openAchievements()">
+      Thành tích
+    </button>
+    <button class="menu-item" (click)="openGameRule()">
+      Hướng dẫn chơi
+    </button>
+    <button class="menu-item" (click)="closeGame()">
+      Thoát
+    </button>
   </div>
 </ion-content>
-<div class="round-progress">
-  <div class="current-progress" [style.width.%]="30"></div>
-</div>
-<div class="waiting" *ngIf="false">
-  <button class="btn-play" clear>
-    <ion-icon name="play"></ion-icon>
-  </button>
-</div>
