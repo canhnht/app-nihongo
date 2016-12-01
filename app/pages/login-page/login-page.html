@@ -1,124 +1,69 @@
-<ion-header class="multiple-choice-header">
-  <marquee class="quote">
-    Hãy cố gắng trả lời đúng tất cả!
-  </marquee>
-  <button large (click)="close()">
-    <ion-icon name="close"></ion-icon>
-  </button>
-</ion-header>
-<div class="countdown-bar">
-  <div class="current-countdown" [style.width.%]="70"></div>
-</div>
-<ion-content class="multiple-choice-slides">
-  <ion-slides #questionSlider [options]="sliderOptions"
-    (ionDidChange)="onSlideChanged($event)">
-    <ion-slide class="question-slide" [class.odd]="true" [class.even]="false">
-      <div class="question" *ngIf="true">
-        question.question
+
+
+<ion-navbar hideBackButton *navbar primary>
+  <ion-buttons left>
+    <button class="star-amount">
+      10
+      <ion-icon name="star"></ion-icon>
+    </button>
+  </ion-buttons>
+  <ion-buttons end>
+    <button (click)="close()">
+      <ion-icon name="close"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-navbar>
+<ion-content class="game-explore-japan">
+  <ion-slides #questionSlider [options]="sliderOptions">
+    <ion-slide class="sushi">
+      <div class="title">
+        Sushi
       </div>
-      <i class="fa fa-volume-up question voice" *ngIf="false" (click)="playQuestion(question)"></i>
-      <div class="option"
-        [class.activated]="true">
-        <div class="bullet">A</div>
-        question.options[0]
-      </div>
-      <div class="option"
-        [class.activated]="false">
-        <div class="bullet">B</div>
-        question.options[1]
-      </div>
-      <div class="option"
-        [class.activated]="false">
-        <div class="bullet">C</div>
-        question.options[2]
-      </div>
-      <div class="option"
-        [class.activated]="false">
-        <div class="bullet">D</div>
-        question.options[3]
+      <div class="list-round">
+        <div class="round" *ngFor="let e of nround; let i = index"
+          (click)="playRound('sushi', i + 1)">
+          {{roundLabels[i]}}
+          <div class="round-star">
+            <img src="images/sushi-icon-active.png" class="star active" *ngFor="let c of iter[e]" />
+            <img src="images/sushi-icon.png" class="star" *ngFor="let c of iter[3 - e]" />
+          </div>
+        </div>
+
       </div>
     </ion-slide>
 
-    <ion-slide class="question-slide" [class.odd]="false" [class.even]="true">
-      <div class="question" *ngIf="true">
-        question.question
+    <ion-slide class="tra-dao">
+      <div class="title">
+        Sadou
       </div>
-      <i class="fa fa-volume-up question voice" *ngIf="false" (click)="playQuestion(question)"></i>
-      <div class="option"
-        [class.activated]="true">
-        <div class="bullet">A</div>
-        question.options[0]
+      <div class="list-round">
+        <div class="round" *ngFor="let e of nround; let i = index"
+          (click)="playRound('sadou', i + 1)">
+          {{roundLabels[i]}}
+          <div class="round-star">
+            <img src="images/tea-icon-active.png" class="star active" *ngFor="let c of iter[e]" />
+            <img src="images/tea-icon.png" class="star" *ngFor="let c of iter[3 - e]" />
+          </div>
+        </div>
+
       </div>
-      <div class="option"
-        [class.activated]="false">
-        <div class="bullet">B</div>
-        question.options[1]
+    </ion-slide>
+
+    <ion-slide class="ikebana">
+      <div class="title">
+        Ikebana
       </div>
-      <div class="option"
-        [class.activated]="false">
-        <div class="bullet">C</div>
-        question.options[2]
-      </div>
-      <div class="option"
-        [class.activated]="false">
-        <div class="bullet">D</div>
-        question.options[3]
+      <div class="list-round">
+        <div class="round" *ngFor="let e of nround; let i = index"
+          (click)="playRound('ikebana', i + 1)">
+          {{roundLabels[i]}}
+          <div class="round-star">
+            <img src="images/flower-icon-active.png" class="star active" *ngFor="let c of iter[e]" />
+            <img src="images/flower-icon.png" class="star" *ngFor="let c of iter[3 - e]" />
+          </div>
+        </div>
+
       </div>
     </ion-slide>
   </ion-slides>
 </ion-content>
-<div class="slides-progress">
-  <div class="current-progress" [style.width.%]="30"></div>
-</div>
-<div class="answer-screen" *ngIf="false">
-  <i class="fa fa-check answer correct" primary *ngIf="false"></i>
-  <i class="fa fa-close answer incorrect" danger *ngIf="true"></i>
-  <button class="btn-continue" (click)="next()">
-    Tiếp tục
-  </button>
-</div>
-
-<div class="level-success" *ngIf="false">
-  <div class="level">
-    Cấp độ 10
-  </div>
-  <div class="title">Chúc mừng</div>
-  <div class="row">
-    <div class="text">Số câu hỏi:</div>
-    <div class="number">10</div>
-  </div>
-  <div class="row">
-    <div class="text">Số lần chơi:</div>
-    <div class="number">100</div>
-  </div>
-  <div class="group-btn">
-    <button round secondary (click)="playNextLevel()">
-      <ion-icon name="log-in"></ion-icon>
-      Chơi tiếp
-    </button>
-    <button round danger (click)="close()">
-      <ion-icon name="undo"></ion-icon>
-      Thoát
-    </button>
-  </div>
-</div>
-<div class="level-fail" *ngIf="true">
-  <div class="level">
-    Cấp độ 10
-  </div>
-  <div class="title">Thất bại</div>
-  <div class="row">
-    <div class="text">Trả lời sai</div>
-    <div class="number">100</div>
-  </div>
-  <div class="group-btn">
-    <button round primary (click)="playAgain()">
-      <ion-icon name="sync"></ion-icon>
-      Chơi lại
-    </button>
-    <button round danger (click)="close()">
-      <ion-icon name="undo"></ion-icon>
-      Thoát
-    </button>
-  </div>
-</div>

@@ -74,8 +74,16 @@ export class LoginPage {
   ];
 
   // arr = new Array(12).fill(1);
+  nround = [1,1,1,1,1,1,1,1,1];
   arr = [1,2,3,4,5,6,7,8,9,10,11,12];
   flip = [1,0,0,0,0,0,0,0,0,0,0,1];
+  roundLabels = ['一','二','三','四','五','六','七','八','九'];
+  iter = [
+    [],
+    [0],
+    [0,0],
+    [0,0,0]
+  ];
 
   constructor(private navController: NavController, private menu: MenuController) {
     // this.menu.open();
