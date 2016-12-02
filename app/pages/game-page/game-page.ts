@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, Popover, Loading, Alert, Modal} from 'ionic-angular';
 import {Subscription} from 'rxjs';
-import {Toast, SpinnerDialog} from 'ionic-native';
+import {Toast, SpinnerDialog, NativeAudio} from 'ionic-native';
 import {AudioSetting} from '../../components/audio-setting/audio-setting';
 import {PopoverMenu} from '../../components/popover-menu/popover-menu';
 import {AudioService} from '../../services/audio.service';
@@ -19,6 +19,9 @@ import {GameExploreJapan} from '../game-explore-japan/game-explore-japan';
   templateUrl: 'build/pages/game-page/game-page.html',
 })
 export class GamePage {
+  multipleChoice = GameMultipleChoice;
+  exploreJapan = GameExploreJapan;
+
   games = [
     {
       name: 'Vòng lặp trắc nghiệm',
@@ -44,9 +47,10 @@ export class GamePage {
     );
   }
 
-  playGame(game) {
+  playGame(gamePage) {
+    NativeAudio.play('touch', ()=>{});
     SpinnerDialog.show(this.translate.instant('Processing'),
       this.translate.instant('Please_wait'), false);
-    this.navController.push(game.page);
+    this.navController.push(gamePage);
   }
 }

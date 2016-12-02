@@ -1,27 +1,16 @@
 
-<ion-navbar *navbar primary>
-  <button menuToggle left>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>{{'Game' | translate}}</ion-title>
-</ion-navbar>
 
 <ion-content class="game-page">
-  <ion-card *ngFor="let game of games">
-    <div class="card-game">
-      <img [src]="game.icon" class="game-icon" />
-      <div class="right-side">
-        <div class="game-title">
-          {{game.name}}
-        </div>
-        <div class="game-level" *ngIf="game.name != 'Khám phá Nhật Bản'">
-          Cấp độ: {{game.level}}
-        </div>
-        <button primary class="btn-start" (click)="playGame(game)">
-          <ion-icon name="navigate"></ion-icon>
-          {{'Start' | translate}}
-        </button>
-      </div>
+  <div class="card-game game-1" (click)="playGame(multipleChoice)">
+    <img src="images/question-loop-icon.jpg" class="game-icon" />
+    <div class="game-title">
+      Vòng lặp trắc nghiệm
     </div>
-  </ion-card>
+  </div>
+  <div class="card-game game-2" (click)="playGame(exploreJapan)">
+    <img src="images/explore-japan-icon.png" class="game-icon" />
+    <div class="game-title">
+      Khám phá Nhật Bản
+    </div>
+  </div>
 </ion-content>
