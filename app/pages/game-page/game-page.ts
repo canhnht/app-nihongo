@@ -10,6 +10,7 @@ import {DbService} from '../../services/db.service';
 import {LocalStorageService} from '../../services/local-storage.service';
 import {SettingService, SettingStatus} from '../../services/setting.service';
 import {WordSlides} from '../word-slides/word-slides';
+import {HomePage} from '../home-page/home-page';
 import {PlaylistOptions} from '../../components/playlist-options/playlist-options';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GameMultipleChoice} from '../game-multiple-choice/game-multiple-choice';
@@ -52,5 +53,10 @@ export class GamePage {
     SpinnerDialog.show(this.translate.instant('Processing'),
       this.translate.instant('Please_wait'), false);
     this.navController.push(gamePage);
+  }
+
+  exit() {
+    NativeAudio.play('touch', ()=>{});
+    this.navController.setRoot(HomePage);
   }
 }

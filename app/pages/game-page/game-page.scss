@@ -61,4 +61,17 @@
     -webkit-transform: rotate(4deg);
     -moz-transform: rotate(4deg);
   }
+
+  .btn-exit-game {
+    position: absolute;
+    bottom: 5px;
+    left: -20px;
+    width: 100px;
+    height: 100px;
+    background-color: color($colors, light);
+
+    .exit-game-icon {
+      width: 40px;
+    }
+  }
 }
