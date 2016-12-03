@@ -15,7 +15,7 @@
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
-  <ion-searchbar *ngIf="tabPage == 'search' && searchedWords.length > 0"
+  <ion-searchbar *ngIf="tabPage == 'search' && listWord.length > 0"
     (ionInput)="search($event)">
   </ion-searchbar>
 </ion-header>
@@ -98,7 +98,7 @@
 </ion-content>
 
 <ion-content class="home-page" *ngIf="tabPage == 'search'">
-  <h1 class="no-words" *ngIf="searchedWords.length == 0">
+  <h1 class="no-words" *ngIf="listWord.length == 0">
     Bạn đang không có từ nào.<br>
     Hãy tải khóa học về để bắt đầu.
   </h1>
