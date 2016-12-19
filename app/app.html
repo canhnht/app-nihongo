@@ -62,14 +62,6 @@
           {{'Setting' | translate}}
         </ion-label>
       </ion-item>
-      <ion-item button-primary menuClose text-wrap
-        (click)="isSignedIn ? signOut() : signIn()">
-        <ion-label class="menu-item">
-          <!-- <i primary class="fa fa-facebook-square menu-icon"></i> -->
-          <img class="icon-signin-fb" src="images/iconMenu/facebook.png" />
-          {{(isSignedIn ? 'Sign_out' : 'Sign_in_facebook') | translate}}
-        </ion-label>
-      </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>

@@ -45,9 +45,6 @@ export class MyApp {
     }).then(() => {
       StatusBar.styleDefault();
       Splashscreen.hide();
-      this.authService.checkLoginStatus().then(() => {
-        this.isSignedIn = this.authService.isSignedIn;
-      });
       NativeAudio.preloadSimple('touch', 'sounds/touch.mp3').then(()=>{},()=>{});
       NativeAudio.preloadSimple('correct', 'sounds/correct.wav').then(()=>{},()=>{});
       NativeAudio.preloadSimple('incorrect', 'sounds/incorrect.mp3').then(()=>{},()=>{});
@@ -66,18 +63,6 @@ export class MyApp {
 
     this.translate.setDefaultLang('vi');
     this.translate.use(userLang);
-  }
-
-  signIn() {
-    this.authService.signInWithFacebook().then(() => {
-      this.isSignedIn = this.authService.isSignedIn;
-    });
-  }
-
-  signOut() {
-    this.authService.signOut().then(() => {
-      this.isSignedIn = false;
-    });
   }
 
   openPage(page, params, isBack = false) {
