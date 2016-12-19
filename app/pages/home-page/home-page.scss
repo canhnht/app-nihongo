@@ -1,6 +1,6 @@
 
 .home-page {
-  background-color: rgba(56, 125, 245, 0.2);
+  background-color: color($colors, light);
 
   .icon-paid {
     width: 30px;
@@ -22,7 +22,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background-color: #E61770;
+      background-color: color($colors, primary);
       padding: 0 20px;
 
       .course-title {
@@ -78,7 +78,7 @@
         content: "\2605";
         position: absolute;
         left: 0;
-        color: #E61770;
+        color: color($colors, primary);
       }
     }
 

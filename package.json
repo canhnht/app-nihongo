@@ -45,26 +45,18 @@
     "cordova-plugin-sqlite-2",
     "cordova-plugin-file-transfer",
     "cordova-plugin-spinner-dialog",
-    {
-      "id": "cordova-plugin-facebook4",
-      "locator": "cordova-plugin-facebook4",
-      "variables": {
-        "APP_ID": "1732596063667087",
-        "APP_NAME": "app-nihongo"
-      }
-    },
     "cordova-plugin-network-information",
     "cordova-plugin-tts"
   ],
   "cordovaPlatforms": [
     {
       "platform": "android",
-      "version": "",
+      "version": "4.3.1",
       "locator": "android"
     },
     {
       "platform": "browser",
-      "version": "",
+      "version": "4.1.0",
       "locator": "browser"
     }
   ]

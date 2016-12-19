@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.techybrain.mimi_kara_nihongo" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Mimi Kara Nihongo</name>
+<widget id="io.techybrain.minagoi" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>MINAGOI</name>
     <description>
       A FREE App to master Japanese listening skills
     </description>
@@ -21,12 +21,12 @@
         <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon-v1.png" />
         <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon-v1.png" />
         <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon-v1.png" />
-        <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
-        <splash density="port-mdpi" src="resources/android/splash/drawable-port-mdpi-screen.png" />
-        <splash density="port-hdpi" src="resources/android/splash/drawable-port-hdpi-screen.png" />
-        <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
-        <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
-        <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <splash density="port-ldpi" src="resources/android/splash/splash.png" />
+        <splash density="port-mdpi" src="resources/android/splash/splash.png" />
+        <splash density="port-hdpi" src="resources/android/splash/splash.png" />
+        <splash density="port-xhdpi" src="resources/android/splash/splash.png" />
+        <splash density="port-xxhdpi" src="resources/android/splash/splash.png" />
+        <splash density="port-xxxhdpi" src="resources/android/splash/splash.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -39,16 +39,14 @@
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
     <preference name="orientation" value="portrait" />
-    <preference name="SplashScreenDelay" value="10000" />
-    <preference name="FadeSplashScreen" value="true" />
-    <preference name="FadeSplashScreenDuration" value="750" />
-    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="SplashScreenDelay" value="50000" />
+    <preference name="FadeSplashScreen" value="false" />
+    <preference name="FadeSplashScreenDuration" value="500" />
+    <preference name="ShowSplashScreenSpinner" value="true" />
+    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <plugin name="cordova-plugin-facebook4" spec="~1.7.1">
-        <variable name="APP_ID" value="1732596063667087" />
-        <variable name="APP_NAME" value="app-nihongo" />
-    </plugin>
 </widget>
