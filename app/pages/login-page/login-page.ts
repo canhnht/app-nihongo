@@ -86,6 +86,7 @@ export class LoginPage {
     [0,0],
     [0,0,0]
   ];
+  flipped: boolean = false;
 
   constructor(private navController: NavController, private menu: MenuController) {
     // this.menu.open();
@@ -151,6 +152,11 @@ export class LoginPage {
   resetGame() {
     this.data.currentLevel = 1;
     // Update db
+  }
+
+  flipCard() {
+    console.log('flip');
+    this.flipped = !this.flipped;
   }
 }
 
@@ -249,5 +255,4 @@ class GameMultipleChoiceAchievements {
   close() {
     this.viewController.dismiss();
   }
-
 }

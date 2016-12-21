@@ -12,13 +12,25 @@
     (ionDidChange)="onSlideChanged($event)">
     <ion-slide *ngFor="let word of words; let i = index" class="word-slide"
       [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
-      <strong class="kanji">{{word.kanji}}</strong>
-      <h2>{{word.hira_kata}}</h2>
-      <h3>{{word.kanjiMeaning}} - {{word.meaning}}</h3>
-      <p class="example">
-        <strong>{{word.example}}</strong><br/>
-        {{word.exampleMeaning}}
-      </p>
+      <div class="card" (click)="flipCard()" [class.flipped]="flipped">
+        <div class="face front">
+          <strong class="kanji">{{word.kanji}}</strong>
+        </div>
+        <div class="face back">
+          <strong class="kanji">{{word.kanji}}</strong>
+          <h2 *ngFor="let phonetic of word.phonetic">{{phonetic}}</h2>
+          <h3 *ngFor="let meaning of word.meaning">{{meaning.kind}} - {{meaning.mean}}</h3>
+          <p class="example">
+            <strong>{{word.mainExample.content}}</strong><br/>
+            {{word.mainExample.meaning}}
+          </p>
+          <p class="example" *ngFor="let example of word.otherExamples">
+            <strong>{{example.content}}</strong><br/>
+            {{example.phonetic}}<br/>
+            {{example.meaning}}
+          </p>
+        </div>
+      </div>
     </ion-slide>
   </ion-slides>
   <div class="btn-group">
