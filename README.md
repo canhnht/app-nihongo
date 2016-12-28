@@ -1,20 +1,30 @@
-Ionic 2 App Base
+MINAGOI
 =====================
 
-This is the base template for Ionic 2 starter apps.
+## Setup
 
-## Using this project
+- `npm install` to install dependencies
+- `npm install --global ionic cordova` to install ionic cordova
+- `ionic platform add android` to add platform android
+- Install Android SDK
 
-You'll need the Ionic CLI with support for v2 apps:
+## Run project
 
-```bash
-$ npm install -g ionic
-```
+- `ionic serve` to open app in browser
+- `ionic run android` to install app in android device
 
-Then run:
+## Helpful commands
 
-```bash
-$ ionic start myApp
-```
+### Install Ionic plugin
 
-More info on this can be found on the Ionic [Getting Started](http://ionicframework.com/docs/v2/getting-started/) page.
+http://ionicframework.com/docs/v2/native/
+`ionic plugin add <ionic plugin 1> <ionic plugin 2> --save` will install plugin and added plugin info to `config.xml`
+
+### Start new Ionic project
+
+`ionic start <project folder> blank --v2 -a <app name> -i <package name>`
+
+### Generate components, providers, pages, ...
+
+- `ionic g --list` to list all available generators
+- `ionic g page <page name>` to generate page

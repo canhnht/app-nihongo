@@ -1,0 +1,10 @@
+import { Component } from '@angular/core';
+import { NavController } from 'ionic-angular';
+
+@Component({
+  templateUrl: 'login-page.html',
+})
+export class LoginPage {
+  constructor(private navCtrl: NavController) {
+  }
+}

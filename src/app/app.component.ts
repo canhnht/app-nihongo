@@ -1,44 +1,60 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
-import { StatusBar, Splashscreen } from 'ionic-native';
-
-import { Page1 } from '../pages/page1/page1';
-import { Page2 } from '../pages/page2/page2';
-
+import { Platform, NavController } from 'ionic-angular';
+import { StatusBar, Splashscreen, NativeAudio } from 'ionic-native';
+import { TranslateService } from 'ng2-translate/ng2-translate';
+import { LoginPage } from '../pages';
+import { LocalStorageService } from '../services';
+import { ASSETS_BASE_URL } from '../constants';
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
 })
 export class MyApp {
-  @ViewChild(Nav) nav: Nav;
+  @ViewChild('content') nav: NavController;
+  rootPage = LoginPage;
 
-  rootPage: any = Page1;
-
-  pages: Array<{title: string, component: any}>;
-
-  constructor(public platform: Platform) {
+  constructor(private platform: Platform, private translate: TranslateService,
+    private storageService: LocalStorageService) {
     this.initializeApp();
-
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Page One', component: Page1 },
-      { title: 'Page Two', component: Page2 }
-    ];
-
   }
 
   initializeApp() {
+    this.initializeI18n();
+
     this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
+      return this.storageService.init();
+    }).then(() => {
       StatusBar.styleDefault();
       Splashscreen.hide();
+      NativeAudio.preloadSimple('touch', `${ASSETS_BASE_URL}/sounds/touch.mp3`).then(()=>{},()=>{});
+      NativeAudio.preloadSimple('correct', `${ASSETS_BASE_URL}/sounds/correct.wav`).then(()=>{},()=>{});
+      NativeAudio.preloadSimple('incorrect', `${ASSETS_BASE_URL}/sounds/incorrect.mp3`).then(()=>{},()=>{});
+      NativeAudio.preloadSimple('fail', `${ASSETS_BASE_URL}/sounds/fail.wav`).then(()=>{},()=>{});
+      NativeAudio.preloadSimple('success', `${ASSETS_BASE_URL}/sounds/success.wav`).then(()=>{},()=>{});
+      NativeAudio.preloadSimple('count_down_5', `${ASSETS_BASE_URL}/sounds/count_down_5.mp3`).then(()=>{},()=>{});
     });
   }
 
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+  initializeI18n() {
+    let userLang = 'vi';
+    this.translate.setDefaultLang('vi');
+    this.translate.use(userLang);
   }
+
+  // openPage(page, params, isBack = false) {
+  //   let lastView = this.nav.last();
+  //   while (lastView.componentType !== HomePage
+  //     && lastView.componentType !== PlaylistsPage
+  //     && lastView.componentType !== FeedbackPage
+  //     && lastView.componentType !== SettingPage
+  //     && lastView.componentType !== LoginPage
+  //     && lastView.componentType !== GamePage) {
+  //     lastView = this.nav.getPrevious(lastView);
+  //   }
+  //   if (isBack) {
+  //     if (lastView.componentType !== page)
+  //       this.nav.push(page, params);
+  //   } else
+  //     this.nav.setRoot(page, params);
+  // }
 }
