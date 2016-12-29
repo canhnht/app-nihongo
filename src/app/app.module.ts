@@ -6,7 +6,7 @@ import { TranslateModule, TranslateLoader,
 import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { LoginPage } from '../pages';
-import { LocalStorageService } from '../services';
+import { LocalStorageService, SettingService, SliderService, DbService } from '../services';
 
 @NgModule({
   declarations: [
@@ -32,6 +32,9 @@ import { LocalStorageService } from '../services';
       useClass: IonicErrorHandler
     },
     LocalStorageService,
+    SettingService,
+    SliderService,
+    DbService,
     {
       provide: Storage,
       useFactory: () => new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'io.techybrain.minagoi' }),

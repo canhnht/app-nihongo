@@ -28,3 +28,28 @@ http://ionicframework.com/docs/v2/native/
 
 - `ionic g --list` to list all available generators
 - `ionic g page <page name>` to generate page
+
+### Copy database from Android device to computer
+1. Connect your device and launch the application in debug mode.
+2. You may want to use `adb -d shell "run-as com.yourpackge.name ls /data/data/com.yourpackge.name/databases/"` to see what the database filename is.
+3. Copy the database file from your application folder to your SD card.
+```
+adb -d shell "run-as com.yourpackge.name cp /data/data/com.yourpackge.name/databases/filename.sqlite > /sdcard/filename.sqlite"
+```
+
+4. Pull the database files to your machine:
+```
+adb pull /sdcard/filename.sqlite
+```
+
+5. Open db file
+
+### Use sqlite3 in adb shell
+**adb shell sqlite3 works only on emulator.**
+1. Run `adb shell`
+2. Run `run-as <com.package.name>`
+3. Go to database directory at `/data/data/<com.package.name>/databases`
+4. Run `sqlite3 <database file.db>`
+
+6. Access database in device
+Run `./access_database.sh`

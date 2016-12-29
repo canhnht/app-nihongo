@@ -3,7 +3,7 @@ import { Platform, NavController } from 'ionic-angular';
 import { StatusBar, Splashscreen, NativeAudio } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { LoginPage } from '../pages';
-import { LocalStorageService } from '../services';
+import { LocalStorageService, DbService } from '../services';
 import { ASSETS_BASE_URL } from '../constants';
 
 @Component({
@@ -14,7 +14,7 @@ export class MyApp {
   rootPage = LoginPage;
 
   constructor(private platform: Platform, private translate: TranslateService,
-    private storageService: LocalStorageService) {
+    private storageService: LocalStorageService, private dbService: DbService) {
     this.initializeApp();
   }
 
