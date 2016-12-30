@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { SQLite } from 'ionic-native';
+import { SQLite, Toast, File } from 'ionic-native';
 // import * as utils from '../utils';
 import { Subject } from 'rxjs';
+
+declare var cordova: any;
 
 @Injectable()
 export class DbService {
@@ -21,51 +23,33 @@ export class DbService {
   gameExploreJapanSubject: Subject<any> = new Subject<any>();
 
   constructor() {
-    let db = new SQLite();
-    db.openDatabase({
-      name: 'data.db',
-      location: 'default' // the location field is required
-    }).then(() => {
-      alert('open database');
-      db.executeSql(`create table danceMoves(name VARCHAR(32));`, {}).then(() => {
-        alert('executeSql');
-      }, (err) => {
-        alert(`sql ${JSON.stringify(err)}`);
-        db.executeSql(`insert into danceMoves values ('dance 1'); insert into danceMoves values ('dance 2');`, {}).then(() => {
-          alert('insert');
-        }).catch((err) => {
-          alert(`error insert ${JSON.stringify(err)}`);
-        });
-      });
-    }).catch((err) => {
-      alert(JSON.stringify(err));
+    this.db = new SQLite();
+    this.db.openDatabase({
+      name: 'minagoi.db',
+      location: 'default',
+    }).then(this.initDatabase.bind(this)).catch((err) => {
+      Toast.showShortBottom(`Error init database ${JSON.stringify(err)}`).subscribe(() => {});
     });
   }
 
-  // private initDatabase(courseData) {
-  //   return this.db.load(courseData).then(() => {
-  //     this.listenForChange();
-  //     this.getListCourse().then(listCourse => {
-  //       this.listCourseSubject.next(listCourse);
-  //     });
-  //     let localLoadedPromise = this.db.put({_id: '_local/preloaded'});
-  //     // let gameMultipleChoicePromise = this.db.put({
-  //     //   _id: 'gameMultipleChoice',
-  //     //   currentLevel: 1,
-  //     //   numberPlay: 0,
-  //     //   achievements: []
-  //     // });
-  //     // let gameExploreJapanPromise = this.db.put({
-  //     //   _id: 'gameExploreJapan',
-  //     //   sushi: new Array(9).fill(0),
-  //     //   sadou: new Array(9).fill(0),
-  //     //   ikebana: new Array(9).fill(0),
-  //     //   stars: 0
-  //     // });
-  //     // return Promise.all([localLoadedPromise, gameMultipleChoicePromise, gameExploreJapanPromise]);
-  //     return localLoadedPromise;
-  //   });
-  // }
+  private initDatabase() {
+    return File.readAsText(`${cordova.file.applicationDirectory}www/assets`, 'minagoi.sql')
+      .then(sqlText => {
+        let listSQL = sqlText.toString().split(';');
+        return this.db.sqlBatch(listSQL).then(() => {
+          return this.db.executeSql('INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`) VALUES (?,?,?,?,?,?,?)',
+            [
+              'word1',
+              '渇く',
+              '{"content":"のどが渇いた。","meaning":"Khát nước."}',
+              '[{"kind":"v5k, vi","mean":"khát; khát khô cổ"},{"kind":"v5k, vi","mean":"khô; bị khô"}]',
+              '[{"content":"手（のひら）が汗でじっとりとしのどが渇くのを感じる","meaning":"Cảm thấy lòng bàn tày ướt đẫm mồ hôi và khát khô cả cổ","phonetic":"て（のひら）があせでじっとりとしのどがかわくのをかんじる"}]',
+              '["かわく"]',
+              'unit1'
+            ]);
+        });
+      });
+  }
 
   // private listenForChange() {
   //   const onDatabaseChange = (change) => {
