@@ -58,5 +58,8 @@
   "Choose_language": "Chọn ngôn ngữ",
   "Vietnamese": "Tiếng Việt",
   "Japanese": "Tiếng Nhật",
-  "Game": "Trò chơi"
+  "Game": "Trò chơi",
+  "Error_database": "Xảy ra lỗi",
+  "Error_audio": "Xảy ra lỗi",
+  "Next_word_countdown": "Từ tiếp theo trong {{seconds}} giây"
 }

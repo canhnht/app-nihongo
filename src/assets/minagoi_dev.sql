@@ -72,6 +72,23 @@ CREATE TABLE IF NOT EXISTS `word` (
   FOREIGN KEY (`unitId`) REFERENCES `unit` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-- Data for table `word`
+INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`) VALUES
+  ('word1',
+    '渇く',
+    '{"content":"のどが渇いた。","meaning":"Khát nước."}',
+    '[{"kind":"v5k, vi","mean":"khát; khát khô cổ"},{"kind":"v5k, vi","mean":"khô; bị khô"}]',
+    '[{"content":"手（のひら）が汗でじっとりとしのどが渇くのを感じる","meaning":"Cảm thấy lòng bàn tày ướt đẫm mồ hôi và khát khô cả cổ","phonetic":"て（のひら）があせでじっとりとしのどがかわくのをかんじる"}]',
+    '["かわく"]',
+    'unit1'),
+  ('word2',
+    '渇く',
+    '{"content":"のどが渇いた。","meaning":"Khát nước."}',
+    '[{"kind":"v5k, vi","mean":"khát; khát khô cổ"},{"kind":"v5k, vi","mean":"khô; bị khô"}]',
+    '[{"content":"手（のひら）が汗でじっとりとしのどが渇くのを感じる","meaning":"Cảm thấy lòng bàn tày ướt đẫm mồ hôi và khát khô cả cổ","phonetic":"て（のひら）があせでじっとりとしのどがかわくのをかんじる"}]',
+    '["かわく"]',
+    'unit1');
+
 
 
 -- Create table `word_playlist`
@@ -83,3 +100,14 @@ CREATE TABLE IF NOT EXISTS `word_playlist` (
   FOREIGN KEY (`wordId`) REFERENCES `word` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (`playlistId`) REFERENCES `playlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- Data for table `word_playlist`
+INSERT INTO `word_playlist` (`wordId`, `playlistId`) VALUES
+  ('word2', 'playlist2'),
+  ('word1', 'playlist2');
+
+
+
+
+-- .read src/assets/minagoi_dev.sql
+SELECT `playlist`.*, `word_playlist`.`wordId` FROM `playlist` LEFT JOIN `word_playlist` ON `playlist`.`id` = `word_playlist`.`playlistId` AND `word_playlist`.`wordId` = 'word1';

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SQLite, Toast, File } from 'ionic-native';
-// import * as utils from '../utils';
 import { Subject } from 'rxjs';
+import { TranslateService } from 'ng2-translate/ng2-translate';
+import * as utils from '../utils';
 
 declare var cordova: any;
 
@@ -21,8 +22,11 @@ export class DbService {
   allCoursesSubject: Subject<any[]> = new Subject<any[]>();
   gameMultipleChoiceSubject: Subject<any> = new Subject<any>();
   gameExploreJapanSubject: Subject<any> = new Subject<any>();
+  playlistsByWordId: any[];
+  playlistsByWordIdSubject: Subject<any[]> = new Subject<any[]>();
 
-  constructor() {
+
+  constructor(private translate: TranslateService) {
     this.db = new SQLite();
     this.db.openDatabase({
       name: 'minagoi.db',
@@ -35,20 +39,21 @@ export class DbService {
   private initDatabase() {
     return File.readAsText(`${cordova.file.applicationDirectory}www/assets`, 'minagoi.sql')
       .then(sqlText => {
-        let listSQL = sqlText.toString().split(';');
-        return this.db.sqlBatch(listSQL).then(() => {
-          return this.db.executeSql('INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`) VALUES (?,?,?,?,?,?,?)',
-            [
-              'word1',
-              '渇く',
-              '{"content":"のどが渇いた。","meaning":"Khát nước."}',
-              '[{"kind":"v5k, vi","mean":"khát; khát khô cổ"},{"kind":"v5k, vi","mean":"khô; bị khô"}]',
-              '[{"content":"手（のひら）が汗でじっとりとしのどが渇くのを感じる","meaning":"Cảm thấy lòng bàn tày ướt đẫm mồ hôi và khát khô cả cổ","phonetic":"て（のひら）があせでじっとりとしのどがかわくのをかんじる"}]',
-              '["かわく"]',
-              'unit1'
-            ]);
-        });
-      });
+        let listSQL = sqlText.toString().split(';').slice(0, -1);
+        return this.db.sqlBatch(listSQL)
+          .then(() => {
+            return this.db.executeSql('INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`) VALUES (?,?,?,?,?,?,?)',
+              [
+                'word1',
+                '渇く',
+                '{"content":"のどが渇いた。","meaning":"Khát nước."}',
+                '[{"kind":"v5k, vi","mean":"khát; khát khô cổ"},{"kind":"v5k, vi","mean":"khô; bị khô"}]',
+                '[{"content":"手（のひら）が汗でじっとりとしのどが渇くのを感じる","meaning":"Cảm thấy lòng bàn tày ướt đẫm mồ hôi và khát khô cả cổ","phonetic":"て（のひら）があせでじっとりとしのどがかわくのをかんじる"}]',
+                '["かわく"]',
+                'unit1'
+              ]);
+          });
+      }).then(this.getListCourse.bind(this));
   }
 
   // private listenForChange() {
@@ -85,19 +90,21 @@ export class DbService {
   //     .on('change', onDatabaseChange);
   // }
 
-  // getListCourse() {
-  //   return Promise.resolve(this.db.allDocs({
-  //     include_docs: true,
-  //     startkey: 'course',
-  //     endkey: 'course\uffff'
-  //   })).then(docs => {
-  //     this.listCourse = docs.rows.map(row => {
-  //       let course = row.doc;
-  //       return course;
-  //     });
-  //     return this.listCourse;
-  //   }).catch(utils.errorHandler('Error get list course'));
-  // }
+  getListCourse() {
+    return this.db.executeSql('SELECT * FROM `course`', []).then((res) => {
+    }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+    // return Promise.resolve(this.db.allDocs({
+    //   include_docs: true,
+    //   startkey: 'course',
+    //   endkey: 'course\uffff'
+    // })).then(docs => {
+    //   this.listCourse = docs.rows.map(row => {
+    //     let course = row.doc;
+    //     return course;
+    //   });
+    //   return this.listCourse;
+    // }).catch(utils.errorHandler('Error get list course'));
+  }
 
   // getAllCourses() {
   //   return Promise.resolve(this.db.allDocs({
@@ -125,18 +132,34 @@ export class DbService {
   //     return Promise.resolve(this.currentCourse);
   //   }
   // }
+  getPlaylistsByWordId(wordId: string) {
+    return this.db.executeSql('SELECT `playlist`.*, `word_playlist`.`wordId` FROM `playlist` LEFT JOIN `word_playlist` ON `playlist`.`id` = `word_playlist`.`playlistId` AND `word_playlist`.`wordId` = ?',
+      [ wordId ]).then((resultSet) => {
+        let data = this.convertResultSetToArray(resultSet);
+        alert(`getAllPlaylistsByWordId ${JSON.stringify(data)}`);
+        data.forEach((item) => {
+          item.checked = !!item.wordId;
+          delete item.wordId;
+        });
+        this.playlistsByWordId = data;
+        this.playlistsByWordIdSubject.next(data);
+        return data;
+      }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
 
-  // getAllPlaylists() {
-  //   return Promise.resolve(this.db.allDocs({
-  //       include_docs: true,
-  //       startkey: 'playlist',
-  //       endkey: 'playlist\uffff'
-  //     }))
-  //     .then(docs => {
-  //       return docs.rows.map(row => row.doc);
-  //     })
-  //     .catch(utils.errorHandler('Error get all playlists'));
-  // }
+  getAllPlaylists() {
+    return this.db.executeSql('SELECT * FROM `playlist`', []).then((resultSet) => {
+      return this.convertResultSetToArray(resultSet);
+    }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  private convertResultSetToArray(resultSet) {
+    let data = [];
+    for (let iter = 0; iter < resultSet.rows.length; ++iter) {
+      data.push(resultSet.rows.item(iter));
+    }
+    return data;
+  }
 
   // getPlaylist(playlistId) {
   //   if (!this.currentPlaylist || this.currentPlaylist._id !== playlistId) {
@@ -163,11 +186,18 @@ export class DbService {
   //     .catch(utils.errorHandler('Error update course'));
   // }
 
-  // addPlaylist(playlist) {
-  //   this.db.put(playlist)
-  //     .then(resp => {})
-  //     .catch(utils.errorHandler('Error add playlist'));
-  // }
+  addPlaylist(playlist) {
+    return this.db.executeSql('INSERT INTO `playlist` (`id`, `name`, `noWords`) VALUES (?,?,?)',
+      [
+        playlist.id,
+        playlist.name,
+        playlist.noWords
+      ]).then(() => {
+        this.playlistsByWordId.push(Object.assign({ checked: false }, playlist));
+        this.playlistsByWordIdSubject.next(this.playlistsByWordId);
+      })
+    .catch(utils.errorHandler('Error_database'));
+  }
 
   // deletePlaylist(playlist) {
   //   this.db.remove(playlist)
@@ -244,4 +274,13 @@ export class DbService {
   //     utils.errorHandler('Error get game data')
   //   );
   // }
+
+  updateWord(word) {
+    return this.db.executeSql('UPDATE `word` SET `lastPlayed` = ?, `timesPlayed` = ? WHERE `id` = ?',
+      [
+        word.id,
+        word.lastPlayed,
+        word.timesPlayed
+      ]).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
 }

@@ -7,11 +7,13 @@ import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { LoginPage } from '../pages';
 import { LocalStorageService, SettingService, SliderService, DbService } from '../services';
+import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords } from '../components';
 
 @NgModule({
   declarations: [
     MyApp,
-    LoginPage
+    LoginPage,
+    AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -31,10 +33,7 @@ import { LocalStorageService, SettingService, SliderService, DbService } from '.
       provide: ErrorHandler,
       useClass: IonicErrorHandler
     },
-    LocalStorageService,
-    SettingService,
-    SliderService,
-    DbService,
+    LocalStorageService, SettingService, SliderService, DbService,
     {
       provide: Storage,
       useFactory: () => new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'io.techybrain.minagoi' }),

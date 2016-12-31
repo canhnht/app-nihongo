@@ -1,0 +1,22 @@
+<ion-navbar *navbar primary>
+  <ion-title>{{'Selected_words' | translate}}</ion-title>
+  <ion-buttons end>
+    <button (click)="close()">
+      {{'Close' | translate}}
+    </button>
+  </ion-buttons>
+</ion-navbar>
+
+<ion-content>
+  <ion-list [virtualScroll]="selectedWords">
+    <ion-item button-primary text-wrap *virtualItem="let word">
+      <ion-label class="word-item">
+        <h1>{{word.kanji}}</h1>
+      </ion-label>
+      <button item-right clear danger large
+        (click)="removeWord(word)">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,4 +1,4 @@
-import {Toast} from 'ionic-native';
+import { Toast } from 'ionic-native';
 
 export const errorHandler = (message: string) => {
   return err => {

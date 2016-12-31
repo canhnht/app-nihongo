@@ -53,3 +53,9 @@ adb pull /sdcard/filename.sqlite
 
 6. Access database in device
 Run `./access_database.sh`
+
+
+## Helpful references
+
+### Install npm library
+http://ionicframework.com/docs/v2/resources/third-party-libs/
