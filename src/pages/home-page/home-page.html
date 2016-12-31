@@ -1,34 +1,32 @@
-<ion-header>
-  <ion-navbar primary>
-    <button menuToggle left>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>MINAGOI</ion-title>
-  </ion-navbar>
-</ion-header>
+<ion-navbar *navbar primary>
+  <button menuToggle left>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>MINOGOI</ion-title>
+</ion-navbar>
 
 <ion-content class="home-page">
   <ion-card>
     <ion-item>
       {{'Newest_NHK' | translate}}
     </ion-item>
-    <button class="btn-load-news" *ngIf="false"
+    <button class="btn-load-news" *ngIf="!latestNews && !loadingNews"
       (click)="downloadNews()">
       {{'Download_news' | translate}}
     </button>
     <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading"
-      *ngIf="false">
+      *ngIf="loadingNews">
     </i>
-    <div class="card-news" *ngIf="true">
-      <img src="assets/images/bg_newstitle.gif" class="img-news" />
+    <div class="card-news" *ngIf="!loadingNews && !!latestNews">
+      <img src="images/bg_newstitle.gif" class="img-news" />
       <div class="title">
-        <span [innerHTML]="titleWithRuby"></span>
+        <span [innerHTML]="latestNews.titleWithRuby"></span>
         <div class="date">
-          latestNews.dateText
+          {{latestNews.dateText}}
         </div>
       </div>
     </div>
-    <ion-row *ngIf="true">
+    <ion-row *ngIf="!loadingNews && !!latestNews">
       <ion-col text-center>
         <button primary clear full small (click)="goToDetail()">
           {{'Detail' | translate}}
@@ -41,17 +39,17 @@
       </ion-col>
     </ion-row>
   </ion-card>
-  <ion-card>
+  <ion-card *ngFor="let course of courses; let i = index">
     <div class="card-course">
       <div class="left-side">
-        <div class="course-title">course.name</div>
+        <div class="course-title">{{course.name}}</div>
       </div>
       <div class="right-side">
         <div class="number-units">
-          0 {{'Unit' | translate}}
+          {{course.units.length}} {{'Unit' | translate}}
         </div>
         <div class="number-words">
-          0 {{'Word' | translate}}
+          {{course.noWords}} {{'Word' | translate}}
         </div>
         <div class="number-comments">
           0 {{'Comment' | translate}} <i class="fa fa-comment"></i>
@@ -63,20 +61,20 @@
           <span>☆</span>
           <span>☆</span>
         </div>
-        <button primary class="btn-start" *ngIf="true"
+        <button primary class="btn-start" *ngIf="course.downloaded"
           (click)="goToCourse(course)">
           <ion-icon name="navigate"></ion-icon>
           {{'Start' | translate}}
         </button>
-        <button primary class="btn-download" *ngIf="false"
-          (click)="downloadCourse(course, i)" [disabled]="false">
+        <button primary class="btn-download" *ngIf="!course.downloaded"
+          (click)="downloadCourse(course, i)" [disabled]="course.downloading">
           <ion-icon name="download"></ion-icon>
           {{'Download' | translate}}
         </button>
         <i class="fa fa-spinner fa-spin progress" primary
-          *ngIf="true"></i>
+          *ngIf="!course.downloaded && course.downloading"></i>
         <button danger clear round class="btn-delete"
-          *ngIf="false" (click)="deleteCourse(course)">
+          *ngIf="course.downloaded" (click)="deleteCourse(course)">
           <i class="fa fa-trash"></i>
         </button>
       </div>

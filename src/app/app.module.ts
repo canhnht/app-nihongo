@@ -5,15 +5,17 @@ import { TranslateModule, TranslateLoader,
   TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
-import { LoginPage } from '../pages';
+import { LoginPage, HomePage } from '../pages';
 import { LocalStorageService, SettingService, SliderService, DbService } from '../services';
 import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords } from '../components';
+import { CustomDatePipe } from '../custom-date.pipe';
 
 @NgModule({
   declarations: [
     MyApp,
-    LoginPage,
-    AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords
+    LoginPage, HomePage,
+    AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords,
+    CustomDatePipe
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -26,7 +28,8 @@ import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, S
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage
+    LoginPage,
+    HomePage
   ],
   providers: [
     {

@@ -12,6 +12,37 @@ $font-path: "../assets/fonts";
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
+@font-face {
+  font-family: 'Taviraj';
+  src: url('../assets/fonts/Taviraj/Taviraj-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
+}
+@font-face {
+  font-family: 'Risque';
+  src: url('../assets/fonts/Risque/Risque-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
+}
+@font-face {
+  font-family: 'Patrick_Hand';
+  src: url('../assets/fonts/Patrick_Hand/PatrickHand-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
+}
+@font-face {
+  font-family: 'Lobster';
+  src: url('../assets/fonts/Lobster/Lobster-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
+}
+@font-face {
+  font-family: 'Effra';
+  src: url('../assets/fonts/Effra/iCielEffra-Regular.otf') format('truetype'); /* Safari, Android, iOS */
+}
+@font-face {
+  font-family: 'Linotte';
+  src: url('../assets/fonts/Linotte/r0c0i - Linotte Bold.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../assets/fonts/Linotte/r0c0i - Linotte Heavy.ttf') format('truetype'),
+       url('../assets/fonts/Linotte/r0c0i - Linotte Light.ttf') format('truetype'),
+       url('../assets/fonts/Linotte/r0c0i - Linotte Regular.ttf') format('truetype'),
+       url('../assets/fonts/Linotte/r0c0i - Linotte Semi Bold.ttf') format('truetype');
+}
+* {
+  font-family: 'Taviraj', Fallback, sans-serif;
+}
 
 
 

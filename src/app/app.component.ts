@@ -2,9 +2,13 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
 import { StatusBar, Splashscreen, NativeAudio } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { LoginPage } from '../pages';
+import { LoginPage, HomePage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
 import { ASSETS_BASE_URL } from '../constants';
+import { firebaseConfig } from './config-local';
+
+declare var require: any;
+let firebase = require('firebase');
 
 @Component({
   templateUrl: 'app.html',
@@ -20,6 +24,7 @@ export class MyApp {
 
   initializeApp() {
     this.initializeI18n();
+    firebase.initializeApp(firebaseConfig);
 
     this.platform.ready().then(() => {
       return this.storageService.init();

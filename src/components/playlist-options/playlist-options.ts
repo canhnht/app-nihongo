@@ -11,15 +11,16 @@ import { DbService } from '../../services';
 export class PlaylistOptions {
   playlists: any[] = [];
   playlistsSubscription: Subscription;
+  currentWord: any;
 
   constructor(private viewCtrl: ViewController, private dbService: DbService,
     private alertCtrl: AlertController, private navParams: NavParams,
     private translate: TranslateService) {
-    let currentWord = this.navParams.data.currentWord;
-    this.dbService.getPlaylistsByWordId(currentWord.id);
+    this.currentWord = this.navParams.data.currentWord;
   }
 
   ionViewWillEnter() {
+    this.dbService.getPlaylistsByWordId(this.currentWord.id);
     this.playlistsSubscription = this.dbService.playlistsByWordIdSubject.subscribe(
       (playlists) => this.playlists = playlists
     );

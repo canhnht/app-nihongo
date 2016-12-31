@@ -22,8 +22,10 @@ export class DbService {
   allCoursesSubject: Subject<any[]> = new Subject<any[]>();
   gameMultipleChoiceSubject: Subject<any> = new Subject<any>();
   gameExploreJapanSubject: Subject<any> = new Subject<any>();
-  playlistsByWordId: any[];
+  playlistsByWordId: any[] = [];
   playlistsByWordIdSubject: Subject<any[]> = new Subject<any[]>();
+  courses: any[] = [];
+  coursesSubject: Subject<any[]> = new Subject<any[]>();
 
 
   constructor(private translate: TranslateService) {
@@ -39,102 +41,47 @@ export class DbService {
   private initDatabase() {
     return File.readAsText(`${cordova.file.applicationDirectory}www/assets`, 'minagoi.sql')
       .then(sqlText => {
-        let listSQL = sqlText.toString().split(';').slice(0, -1);
-        return this.db.sqlBatch(listSQL)
-          .then(() => {
-            return this.db.executeSql('INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`) VALUES (?,?,?,?,?,?,?)',
-              [
-                'word1',
-                '渇く',
-                '{"content":"のどが渇いた。","meaning":"Khát nước."}',
-                '[{"kind":"v5k, vi","mean":"khát; khát khô cổ"},{"kind":"v5k, vi","mean":"khô; bị khô"}]',
-                '[{"content":"手（のひら）が汗でじっとりとしのどが渇くのを感じる","meaning":"Cảm thấy lòng bàn tày ướt đẫm mồ hôi và khát khô cả cổ","phonetic":"て（のひら）があせでじっとりとしのどがかわくのをかんじる"}]',
-                '["かわく"]',
-                'unit1'
-              ]);
-          });
-      }).then(this.getListCourse.bind(this));
+        let listSQL = sqlText.toString().split('----').slice(0, -1);
+        return this.db.sqlBatch(listSQL);
+      });
   }
 
-  // private listenForChange() {
-  //   const onDatabaseChange = (change) => {
-  //     if (change.deleted) return;
-  //     let doc = change.doc;
-  //     if (doc._id.startsWith('course')) {
-  //       this.currentCourse = doc;
-  //       this.currentCourseSubject.next(doc);
-  //       this.allCourses[doc._id] = doc;
-  //       this.allCoursesSubject.next(this.allCourses);
-  //       let courseIndex = this.listCourse.findIndex(course => course._id === doc._id);
-  //       this.listCourse[courseIndex] = doc;
-  //       this.listCourseSubject.next(this.listCourse);
-  //     } else if (doc._id.startsWith('playlist')) {
-  //       this.playlistSubject.next(doc);
-  //       if (doc._id === this.currentPlaylist._id)
-  //         this.currentPlaylistSubject.next(doc);
-  //     } else if (doc._id.startsWith('news')) {
-  //       this.listNews.push(doc);
-  //       this.listNews = this.listNews.sort((n1, n2) => {
-  //         let d1 = new Date(n1.date);
-  //         let d2 = new Date(n2.date);
-  //         return d2.getTime() - d1.getTime();
-  //       });
-  //       this.listNewsSubject.next(this.listNews);
-  //     } else if (doc._id == 'gameMultipleChoice') {
-  //       this.gameMultipleChoiceSubject.next(doc);
-  //     } else if (doc._id == 'gameExploreJapan') {
-  //       this.gameExploreJapanSubject.next(doc);
-  //     }
-  //   };
-  //   this.db.changes({ live: true, since: 'now', include_docs: true })
-  //     .on('change', onDatabaseChange);
-  // }
-
-  getListCourse() {
-    return this.db.executeSql('SELECT * FROM `course`', []).then((res) => {
+  getCourses() {
+    let sql = 'SELECT * FROM `course`';
+    return this.db.executeSql(sql, []).then((resultSet) => {
+      let data = this.convertResultSetToArray(resultSet);
+      this.courses = data;
+      this.coursesSubject.next(data);
+      return data;
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
-    // return Promise.resolve(this.db.allDocs({
-    //   include_docs: true,
-    //   startkey: 'course',
-    //   endkey: 'course\uffff'
-    // })).then(docs => {
-    //   this.listCourse = docs.rows.map(row => {
-    //     let course = row.doc;
-    //     return course;
-    //   });
-    //   return this.listCourse;
-    // }).catch(utils.errorHandler('Error get list course'));
   }
 
-  // getAllCourses() {
-  //   return Promise.resolve(this.db.allDocs({
-  //     include_docs: true,
-  //     startkey: 'course',
-  //     endkey: 'course\uffff'
-  //   })).then(docs => {
-  //     this.allCourses = docs.rows.reduce((res, row) => {
-  //       res[row.doc._id] = row.doc;
-  //       return res;
-  //     }, {});
-  //     return this.allCourses;
-  //   }).catch(utils.errorHandler('Error get all courses'));
-  // }
+  deleteCourse(courseId) {
+    let sql = 'UPDATE `course` SET `noWords` = 0, `noUnits` = 0, `downloaded` = 0 WHERE `id` = ?';
+    return this.db.executeSql(sql, [ courseId ])
+      .then(this.getCourses.bind(this))
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
 
-  // getCourse(courseId) {
-  //   if (!this.currentCourse || this.currentCourse._id !== courseId) {
-  //     return Promise.resolve(this.db.get(courseId))
-  //       .then(course => {
-  //         this.currentCourse = course;
-  //         return course;
-  //       })
-  //       .catch(utils.errorHandler(`Error get course by id ${courseId}`));
-  //   } else {
-  //     return Promise.resolve(this.currentCourse);
-  //   }
-  // }
+  addUnit(unit) {
+    let sql = 'INSERT INTO `unit` (`id`, `name`, `number`, `locked`, `noWords`, `courseId`) VALUES (?,?,?,?,?,?)';
+    return this.db.executeSql(sql, [ unit.id, unit.name, unit.number, unit.locked, unit.noWords, unit.courseId ])
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  addWords(words, unitId) {
+    let sql = 'INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`, `audioFile`, `audioDuration`) VALUES (?,?,?,?,?,?,?,?,?)';
+    let listSql = words.map((word) => {
+      return [
+        sql, [ word._id, word.kanji, word.mainExample, word.meaning, word.otherExamples, word.phonetic, unitId, word.audioFile, word.audioDuration ]
+      ];
+    });
+    return this.db.sqlBatch(listSql).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
   getPlaylistsByWordId(wordId: string) {
-    return this.db.executeSql('SELECT `playlist`.*, `word_playlist`.`wordId` FROM `playlist` LEFT JOIN `word_playlist` ON `playlist`.`id` = `word_playlist`.`playlistId` AND `word_playlist`.`wordId` = ?',
-      [ wordId ]).then((resultSet) => {
+    let sql = 'SELECT `playlist`.*, `word_playlist`.`wordId` FROM `playlist` LEFT JOIN `word_playlist` ON `playlist`.`id` = `word_playlist`.`playlistId` AND `word_playlist`.`wordId` = ?';
+    return this.db.executeSql(sql, [ wordId ]).then((resultSet) => {
         let data = this.convertResultSetToArray(resultSet);
         alert(`getAllPlaylistsByWordId ${JSON.stringify(data)}`);
         data.forEach((item) => {
@@ -148,7 +95,8 @@ export class DbService {
   }
 
   getAllPlaylists() {
-    return this.db.executeSql('SELECT * FROM `playlist`', []).then((resultSet) => {
+    let sql = 'SELECT * FROM `playlist`';
+    return this.db.executeSql(sql, []).then((resultSet) => {
       return this.convertResultSetToArray(resultSet);
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
@@ -211,29 +159,32 @@ export class DbService {
   //   );
   // }
 
-  // addOrUpdateNews(listNews) {
-  //   this.db.bulkDocs(listNews).then(resp => {}).catch(
-  //     utils.errorHandler('Error update news')
-  //   );
-  // }
+  addOrUpdateNews(listNews) {
+    let sql = 'INSERT OR REPLACE INTO `news` (`id`, `title`, `titleWithRuby`, `outlineWithRuby`, `contentWithRuby`, `imageUrl`, `voiceUrl`, `date`, `dateText`) VALUES (?,?,?,?,?,?,?,?,?)';
+    let listSql = listNews.map((news) => {
+      return [
+        sql, [ news.id, news.title, news.titleWithRuby, news.outlineWithRuby, news.contentWithRuby, news.imageUrl, news.voiceUrl, news.date, news.dateText ]
+      ];
+    });
+    return this.db.sqlBatch(listSql)
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
 
-  // getAllNews() {
-  //   return Promise.resolve(this.db.allDocs({
-  //       include_docs: true,
-  //       startkey: 'news',
-  //       endkey: 'news\uffff'
-  //     }))
-  //     .then(docs => {
-  //       this.listNews = docs.rows.map(row => row.doc);
-  //       this.listNews = this.listNews.sort((n1, n2) => {
-  //         let d1 = new Date(n1.date);
-  //         let d2 = new Date(n2.date);
-  //         return d2.getTime() - d1.getTime();
-  //       });
-  //       return this.listNews;
-  //     })
-  //     .catch(utils.errorHandler('Error get all news'));
-  // }
+  getAllNews() {
+    let sql = 'SELECT * FROM `news` ORDER BY `news`.`date` DESC';
+    return this.db.executeSql(sql, []).then((resultSet) => {
+      let data = this.convertResultSetToArray(resultSet);
+      return data;
+    }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  getLatestNews() {
+    let sql = 'SELECT * FROM `news` ORDER BY `news`.`date` DESC LIMIT 1';
+    return this.db.executeSql(sql, []).then((resultSet) => {
+      let data = this.convertResultSetToArray(resultSet);
+      return data[0];
+    }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
 
   // getWordsOfAllCourses() {
   //   let listWord = this.listCourse.reduce((arr, course) => {
