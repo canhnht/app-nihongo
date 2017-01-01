@@ -55,7 +55,6 @@ export class AudioBar implements OnInit, OnDestroy {
       let duration = this.media.getDuration();
       this.duration = this.convertText(Math.max(duration, 0));
       this.media.getCurrentPosition().then(position => {
-        Toast.showShortBottom(`media ${duration} -- ${position}`).subscribe(() => {});
         if (position >= 0) {
           checkError = false;
           this.currentTime = this.convertText(Math.max(position, 0));

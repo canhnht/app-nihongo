@@ -85,10 +85,7 @@ export class DbService {
       ];
     });
     return this.db.sqlBatch(listSql)
-      // .catch(utils.errorHandler(this.translate.instant('Error_database')));
-      .catch((err) => {
-        alert(`addWords ${err.code} - ${err.message}`);
-      });
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
   updateAudioFile(wordId, audioFile) {

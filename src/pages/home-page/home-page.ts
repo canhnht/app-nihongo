@@ -6,9 +6,10 @@ import { NavController, AlertController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 // import {UnitsPage} from '../units-page/units-page';
 // import {WordSlides} from '../word-slides/word-slides';
-// import {NewsPage} from '../news-page/news-page';
-// import {NewsDetail} from '../news-detail/news-detail';
+import { NewsPage } from '../news-page/news-page';
+import { NewsDetail } from '../news-detail/news-detail';
 import { DbService, SettingService } from '../../services';
+import { NHK_URL } from '../../constants';
 declare var require: any;
 let firebase = require('firebase');
 import * as utils from '../../utils';
@@ -151,16 +152,16 @@ export class HomePage {
   }
 
   goToDetail() {
-    // this.navCtrl.push(NewsDetail, { selectedNews: this.latestNews });
+    this.navCtrl.push(NewsDetail, { selectedNews: this.latestNews });
   }
 
   listAllNews() {
-    // this.navCtrl.push(NewsPage);
+    this.navCtrl.push(NewsPage);
   }
 
   downloadNews() {
     this.loadingNews = true;
-    this.downloadNewsSubscription = this.http.get('http://52.32.158.240/nihongo/nhk')
+    this.downloadNewsSubscription = this.http.get(NHK_URL)
       .map(res => res.json())
       .subscribe(listNews => {
         this.loadingNews = false;

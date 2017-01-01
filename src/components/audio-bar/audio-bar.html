@@ -1,12 +1,11 @@
 <div class="audio-bar">
-  <button secondary class="btn-play" (click)="play()" *ngIf="!playing">
+  <button ion-button color="secondary" class="btn-play" (click)="play()" *ngIf="!playing" icon-only>
     <ion-icon name="play"></ion-icon>
   </button>
-  <button secondary class="btn-play" (click)="pause()" *ngIf="playing">
+  <button ion-button color="secondary" class="btn-play" (click)="pause()" *ngIf="playing" icon-only>
     <ion-icon name="pause"></ion-icon>
   </button>
-  <ion-range class="time-segment" secondary
-    [(ngModel)]="playedPercent">
+  <ion-range class="time-segment" color="secondary" [(ngModel)]="playedPercent">
   </ion-range>
   <div class="time">
     {{currentTime}}/{{duration}}

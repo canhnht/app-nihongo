@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{'NHK_News' | translate}}</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="refreshNews()" icon-only>
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="news-page">
+  <ion-card *ngFor="let news of listNews">
+    <div class="card-news">
+      <img src="assets/images/bg_newstitle.gif" class="img-news" />
+      <div class="title">
+        <span [innerHTML]="news.titleWithRuby"></span>
+        <div class="date" [innerHTML]="news.dateText">
+        </div>
+      </div>
+    </div>
+    <ion-row>
+      <ion-col text-center>
+        <button ion-button color="primary" clear small full (click)="newsDetail(news)">
+          {{'Detail' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+</ion-content>
