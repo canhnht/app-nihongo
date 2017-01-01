@@ -59,9 +59,9 @@
   "Vietnamese": "Tiếng Việt",
   "Japanese": "Tiếng Nhật",
   "Game": "Trò chơi",
-  "Error_database": "Xảy ra lỗi",
-  "Error_audio": "Xảy ra lỗi",
-  "Error_delete_course": "Xảy ra lỗi",
-  "Error_download_course": "Xảy ra lỗi",
+  "Error_database": "Xảy ra lỗi database",
+  "Error_audio": "Xảy ra lỗi audio",
+  "Error_delete_course": "Xảy ra lỗi khi xóa khóa học",
+  "Error_download_course": "Xảy ra lỗi khi tải khóa học",
   "Next_word_countdown": "Từ tiếp theo trong {{seconds}} giây"
 }

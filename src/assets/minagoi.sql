@@ -37,13 +37,6 @@ CREATE TABLE IF NOT EXISTS `unit` (
 );
 ----
 
--- Data for table `unit`
-INSERT INTO `unit` (`id`, `name`, `number`, `locked`, `noWords`, `courseId`) VALUES
-  ('unit1', 'Unit 1', 1, 0, 0, 'course1'),
-  ('unit2', 'Unit 2', 2, 0, 0, 'course1'),
-  ('unit3', 'Unit 3', 3, 0, 0, 'course1');
-----
-
 
 
 -- Create table `playlist`
@@ -72,9 +65,9 @@ CREATE TABLE IF NOT EXISTS `word` (
   `id` VARCHAR(50) NOT NULL,
   `kanji` NVARCHAR(100) NOT NULL,
   `mainExample` TEXT NOT NULL DEFAULT 'null',
-  `meaning` TEXT NOT NULL DEFAULT '[]',
-  `otherExamples` TEXT NOT NULL DEFAULT '[]',
-  `phonetic` TEXT NOT NULL DEFAULT '[]',
+  `meaning` TEXT DEFAULT '[]',
+  `otherExamples` TEXT DEFAULT '[]',
+  `phonetic` TEXT DEFAULT '[]',
   `audioFile` VARCHAR(255),
   `audioDuration` DOUBLE DEFAULT 0,
   `unitId` VARCHAR(50) NOT NULL,

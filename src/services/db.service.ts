@@ -3,6 +3,7 @@ import { SQLite, Toast, File } from 'ionic-native';
 import { Subject } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import * as utils from '../utils';
+import { LocalStorageService } from './local-storage.service';
 
 declare var cordova: any;
 
@@ -22,28 +23,35 @@ export class DbService {
   allCoursesSubject: Subject<any[]> = new Subject<any[]>();
   gameMultipleChoiceSubject: Subject<any> = new Subject<any>();
   gameExploreJapanSubject: Subject<any> = new Subject<any>();
+
   playlistsByWordId: any[] = [];
   playlistsByWordIdSubject: Subject<any[]> = new Subject<any[]>();
   courses: any[] = [];
   coursesSubject: Subject<any[]> = new Subject<any[]>();
+  latestNews: any;
+  latestNewsSubject: Subject<any> = new Subject<any>();
 
-
-  constructor(private translate: TranslateService) {
+  constructor(private translate: TranslateService, private storageService: LocalStorageService) {
     this.db = new SQLite();
     this.db.openDatabase({
       name: 'minagoi.db',
       location: 'default',
-    }).then(this.initDatabase.bind(this)).catch((err) => {
-      Toast.showShortBottom(`Error init database ${JSON.stringify(err)}`).subscribe(() => {});
-    });
+    }).then(this.initDatabase.bind(this)).then(this.getCourses.bind(this))
+      .catch((err) => {
+        Toast.showShortBottom(`Error init database ${JSON.stringify(err)}`).subscribe(() => {});
+      });
   }
 
   private initDatabase() {
-    return File.readAsText(`${cordova.file.applicationDirectory}www/assets`, 'minagoi.sql')
-      .then(sqlText => {
-        let listSQL = sqlText.toString().split('----').slice(0, -1);
-        return this.db.sqlBatch(listSQL);
-      });
+    return this.storageService.get('init_db').then((res) => {
+      if (!res) return File.readAsText(`${cordova.file.applicationDirectory}www/assets`, 'minagoi.sql')
+        .then(sqlText => {
+          let listSQL = sqlText.toString().split('----').slice(0, -1);
+          return this.db.sqlBatch(listSQL);
+        });
+    }).then(() => {
+      this.storageService.set('init_db', true);
+    });
   }
 
   getCourses() {
@@ -73,10 +81,20 @@ export class DbService {
     let sql = 'INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`, `audioFile`, `audioDuration`) VALUES (?,?,?,?,?,?,?,?,?)';
     let listSql = words.map((word) => {
       return [
-        sql, [ word._id, word.kanji, word.mainExample, word.meaning, word.otherExamples, word.phonetic, unitId, word.audioFile, word.audioDuration ]
+        sql, [ word.id, word.kanji, word.mainExample, word.meaning, word.otherExamples, word.phonetic, unitId, word.audioFile, word.audioDuration ]
       ];
     });
-    return this.db.sqlBatch(listSql).catch(utils.errorHandler(this.translate.instant('Error_database')));
+    return this.db.sqlBatch(listSql)
+      // .catch(utils.errorHandler(this.translate.instant('Error_database')));
+      .catch((err) => {
+        alert(`addWords ${err.code} - ${err.message}`);
+      });
+  }
+
+  updateAudioFile(wordId, audioFile) {
+    let sql = 'UPDATE `word` SET `audioFile` = ? WHERE `id` = ?';
+    return this.db.executeSql(sql, [ audioFile, wordId ])
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
   getPlaylistsByWordId(wordId: string) {
@@ -128,11 +146,11 @@ export class DbService {
   //     .catch(utils.errorHandler('Error update playlists'));
   // }
 
-  // updateCourse(course) {
-  //   return this.db.put(course)
-  //     .then(resp => {})
-  //     .catch(utils.errorHandler('Error update course'));
-  // }
+  updateCourse(course) {
+    let sql = 'UPDATE `course` SET `noWords` = ?, `noUnits` = ?, `downloaded` = ?';
+    return this.db.executeSql(sql, [ course.noWords, course.noUnits, course.downloaded ])
+      .catch(utils.errorHandler('Error_database'));
+  }
 
   addPlaylist(playlist) {
     return this.db.executeSql('INSERT INTO `playlist` (`id`, `name`, `noWords`) VALUES (?,?,?)',
@@ -166,7 +184,7 @@ export class DbService {
         sql, [ news.id, news.title, news.titleWithRuby, news.outlineWithRuby, news.contentWithRuby, news.imageUrl, news.voiceUrl, news.date, news.dateText ]
       ];
     });
-    return this.db.sqlBatch(listSql)
+    return this.db.sqlBatch(listSql).then(this.getLatestNews.bind(this))
       .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
@@ -182,6 +200,8 @@ export class DbService {
     let sql = 'SELECT * FROM `news` ORDER BY `news`.`date` DESC LIMIT 1';
     return this.db.executeSql(sql, []).then((resultSet) => {
       let data = this.convertResultSetToArray(resultSet);
+      this.latestNews = data[0];
+      this.latestNewsSubject.next(this.latestNews);
       return data[0];
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
   }

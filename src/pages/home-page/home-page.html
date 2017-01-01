@@ -1,16 +1,18 @@
-<ion-navbar *navbar primary>
-  <button menuToggle left>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>MINOGOI</ion-title>
-</ion-navbar>
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle left>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>MINAGOI</ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content class="home-page">
   <ion-card>
-    <ion-item>
+    <ion-card-header>
       {{'Newest_NHK' | translate}}
-    </ion-item>
-    <button class="btn-load-news" *ngIf="!latestNews && !loadingNews"
+    </ion-card-header>
+    <button ion-button class="btn-load-news" *ngIf="!latestNews && !loadingNews"
       (click)="downloadNews()">
       {{'Download_news' | translate}}
     </button>
@@ -18,7 +20,7 @@
       *ngIf="loadingNews">
     </i>
     <div class="card-news" *ngIf="!loadingNews && !!latestNews">
-      <img src="images/bg_newstitle.gif" class="img-news" />
+      <img src="assets/images/bg_newstitle.gif" class="img-news" />
       <div class="title">
         <span [innerHTML]="latestNews.titleWithRuby"></span>
         <div class="date">
@@ -28,12 +30,12 @@
     </div>
     <ion-row *ngIf="!loadingNews && !!latestNews">
       <ion-col text-center>
-        <button primary clear full small (click)="goToDetail()">
+        <button ion-button color="primary" clear full small (click)="goToDetail()">
           {{'Detail' | translate}}
         </button>
       </ion-col>
       <ion-col text-center>
-        <button primary clear full small (click)="listAllNews()">
+        <button ion-button color="primary" clear full small (click)="listAllNews()">
           {{'List_all' | translate}}
         </button>
       </ion-col>
@@ -46,7 +48,7 @@
       </div>
       <div class="right-side">
         <div class="number-units">
-          {{course.units.length}} {{'Unit' | translate}}
+          {{course.noUnits}} {{'Unit' | translate}}
         </div>
         <div class="number-words">
           {{course.noWords}} {{'Word' | translate}}
@@ -61,20 +63,18 @@
           <span>☆</span>
           <span>☆</span>
         </div>
-        <button primary class="btn-start" *ngIf="course.downloaded"
-          (click)="goToCourse(course)">
+        <button ion-button color="primary" class="btn-start" *ngIf="course.downloaded" (click)="goToCourse(course)" icon-left>
           <ion-icon name="navigate"></ion-icon>
           {{'Start' | translate}}
         </button>
-        <button primary class="btn-download" *ngIf="!course.downloaded"
-          (click)="downloadCourse(course, i)" [disabled]="course.downloading">
+        <button ion-button color="primary" class="btn-download" *ngIf="!course.downloaded" (click)="downloadCourse(course, i)" [disabled]="course.downloading" icon-left>
           <ion-icon name="download"></ion-icon>
           {{'Download' | translate}}
         </button>
-        <i class="fa fa-spinner fa-spin progress" primary
+        <i class="fa fa-spinner fa-spin progress" color="primary"
           *ngIf="!course.downloaded && course.downloading"></i>
-        <button danger clear round class="btn-delete"
-          *ngIf="course.downloaded" (click)="deleteCourse(course)">
+        <button ion-button color="danger" clear round class="btn-delete"
+          *ngIf="course.downloaded" (click)="deleteCourse(course)" icon-only>
           <i class="fa fa-trash"></i>
         </button>
       </div>

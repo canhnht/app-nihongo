@@ -1,6 +1,6 @@
 <ion-header>
-  <ion-navbar primary>
-    <button menuToggle left>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle left>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>MINAGOI</ion-title>
@@ -9,17 +9,17 @@
 
 <ion-content class="home-page">
   <ion-card>
-    <ion-item>
+    <ion-card-header>
       {{'Newest_NHK' | translate}}
-    </ion-item>
-    <button class="btn-load-news" *ngIf="false"
+    </ion-card-header>
+    <button ion-button class="btn-load-news" *ngIf="true"
       (click)="downloadNews()">
       {{'Download_news' | translate}}
     </button>
     <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading"
-      *ngIf="false">
+      *ngIf="true">
     </i>
-    <div class="card-news" *ngIf="true">
+    <div class="card-news" *ngIf="false">
       <img src="assets/images/bg_newstitle.gif" class="img-news" />
       <div class="title">
         <span [innerHTML]="titleWithRuby"></span>
@@ -28,14 +28,14 @@
         </div>
       </div>
     </div>
-    <ion-row *ngIf="true">
+    <ion-row *ngIf="false">
       <ion-col text-center>
-        <button primary clear full small (click)="goToDetail()">
+        <button ion-button color="primary" clear full small (click)="goToDetail()">
           {{'Detail' | translate}}
         </button>
       </ion-col>
       <ion-col text-center>
-        <button primary clear full small (click)="listAllNews()">
+        <button ion-button color="primary" clear full small (click)="listAllNews()">
           {{'List_all' | translate}}
         </button>
       </ion-col>
@@ -44,7 +44,7 @@
   <ion-card>
     <div class="card-course">
       <div class="left-side">
-        <div class="course-title">course.name</div>
+        <div class="course-title">N3</div>
       </div>
       <div class="right-side">
         <div class="number-units">
@@ -63,20 +63,20 @@
           <span>☆</span>
           <span>☆</span>
         </div>
-        <button primary class="btn-start" *ngIf="true"
-          (click)="goToCourse(course)">
+        <button ion-button color="primary" class="btn-start" *ngIf="true"
+          (click)="goToCourse(course)" icon-left>
           <ion-icon name="navigate"></ion-icon>
           {{'Start' | translate}}
         </button>
-        <button primary class="btn-download" *ngIf="false"
-          (click)="downloadCourse(course, i)" [disabled]="false">
+        <button ion-button color="primary" class="btn-download" *ngIf="false"
+          (click)="downloadCourse(course, i)" [disabled]="false" icon-left>
           <ion-icon name="download"></ion-icon>
           {{'Download' | translate}}
         </button>
-        <i class="fa fa-spinner fa-spin progress" primary
-          *ngIf="true"></i>
-        <button danger clear round class="btn-delete"
-          *ngIf="false" (click)="deleteCourse(course)">
+        <i class="fa fa-spinner fa-spin progress" color="primary"
+          *ngIf="false"></i>
+        <button ion-button color="danger" clear round class="btn-delete"
+          *ngIf="true" (click)="deleteCourse(course)" icon-only>
           <i class="fa fa-trash"></i>
         </button>
       </div>

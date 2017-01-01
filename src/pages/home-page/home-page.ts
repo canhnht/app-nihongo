@@ -25,6 +25,7 @@ export class HomePage {
   listNewsSubscription: Subscription;
   downloadNewsSubscription: Subscription;
   latestNews: any = null;
+  latestNewsSubscription: Subscription;
   loadingNews: boolean = true;
 
   constructor(private navCtrl: NavController, private dbService: DbService,
@@ -39,15 +40,16 @@ export class HomePage {
       courses => this.courses = courses
     );
 
-    this.dbService.getLatestNews().then(latestNews => this.latestNews = latestNews);
-    // this.listNewsSubscription = this.dbService.listNewsSubject.subscribe(
-    //   listNews => this.latestNews = listNews[0]
-    // );
+    this.dbService.getLatestNews();
+    this.latestNewsSubscription = this.dbService.latestNewsSubject.subscribe(
+      latestNews => this.latestNews = latestNews
+    );
   }
 
   ionViewWillLeave() {
     this.coursesSubscription.unsubscribe();
     this.downloadNewsSubscription.unsubscribe();
+    this.latestNewsSubscription.unsubscribe();
   }
 
   goToCourse(course) {
@@ -57,7 +59,6 @@ export class HomePage {
 
   deleteCourse(course) {
     let folderPath = cordova.file.dataDirectory;
-    alert(`deleteCourse ${folderPath}`);
     File.removeRecursively(folderPath, course.id).then(res => {
       Toast.showLongCenter(this.translate.instant('Delete_course_successfully', {
         courseName: course.courseName
@@ -79,9 +80,10 @@ export class HomePage {
     }
     course.downloading = true;
     let courseRef = firebase.database().ref(`${course.id}`);
-    courseRef.once('value').then(snapshot => {
-      snapshot = snapshot.val();
-      let downloadPromise = Object.keys(snapshot.units).map(unitId => {
+    let snapshot;
+    courseRef.once('value').then(snapshotResponse => {
+      snapshot = snapshotResponse.val();
+      let downloadPromise = Object.keys(snapshot.units).map((unitId) => {
         let unit = {
           id: unitId,
           name: snapshot.units[unitId].unitName,
@@ -90,7 +92,6 @@ export class HomePage {
           locked: 1,
           courseId: course.id,
         };
-
         let words = snapshot.units[unitId].words;
         words.forEach((word) => {
           word.id = word._id;
@@ -99,7 +100,7 @@ export class HomePage {
           word.meaning = JSON.stringify(word.meaning);
           word.otherExamples = JSON.stringify(word.otherExamples);
           word.phonetic = JSON.stringify(word.phonetic);
-        })
+        });
 
         let unitAndWordsPromise = this.dbService.addUnit(unit).then(() => {
           return this.dbService.addWords(words, unitId);
@@ -112,15 +113,11 @@ export class HomePage {
       Toast.showLongCenter(this.translate.instant('Download_course_successfully', {
         courseName: course.name
       })).subscribe(() => {});
-      // course = this.courses[index];
       course.downloading = false;
-      // course.downloaded = true;
-      // course.units.forEach(unit => {
-      //   unit.words.forEach(word => {
-      //     word.audioFile = `${course._id}/${unit._id}/${word.audioFile}.mp3`;
-      //   });
-      // });
-      // return this.dbService.updateCourse(course);
+      course.downloaded = true;
+      course.noWords = snapshot.noWords;
+      course.noUnits = Object.keys(snapshot.units).length;
+      return this.dbService.updateCourse(course);
     })
     .catch(err => {
       course.downloading = false;
@@ -135,16 +132,19 @@ export class HomePage {
       let pathReference = storage.ref(`${courseId}/${unitId}/${word.audioFile}.mp3`);
       return Promise.resolve(pathReference.getDownloadURL()).then(url => ({
         url,
+        wordId: word.id,
         unitId: unitId,
         audioFile: word.audioFile,
       }));
     });
     return Promise.all(urlsPromise).then((listUrl) => {
       let downloadPromise = listUrl.map((item: any) => {
-        let folderPath = `${cordova.file.dataDirectory}/${courseId}/${unitId}`;
+        let folderPath = `${cordova.file.dataDirectory}${courseId}/${unitId}`;
         const fileTransfer = new Transfer();
         return Promise.resolve(fileTransfer.download(item.url,
-          `${folderPath}/${item.audioFile}.mp3`));
+          `${folderPath}/${item.audioFile}.mp3`)).then(() => {
+            return this.dbService.updateAudioFile(item.wordId, `${courseId}/${unitId}/${item.audioFile}.mp3`);
+          });
       });
       return Promise.all(downloadPromise);
     });

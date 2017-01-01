@@ -54,13 +54,23 @@ $font-path: "../assets/fonts";
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
 
+// $colors: (
+//   primary:    #387ef5,
+//   secondary:  #32db64,
+//   danger:     #f53d3d,
+//   light:      #f4f4f4,
+//   dark:       #222
+// );
+
 $colors: (
-  primary:    #387ef5,
-  secondary:  #32db64,
+  primary:    #E61770,
+  secondary:  #FF847C,
   danger:     #f53d3d,
-  light:      #f4f4f4,
-  dark:       #222
+  light:      #FECEA8,
+  dark:       #2A363B,
+  favorite:   #99B898
 );
+
 
 
 // App iOS Variables
