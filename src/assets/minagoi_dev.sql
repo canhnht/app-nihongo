@@ -75,21 +75,23 @@ CREATE TABLE IF NOT EXISTS `word` (
 );
 
 -- Data for table `word`
-INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`) VALUES
+INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`, `lastPlayed`, `timesPlayed`) VALUES
   ('word1',
     '渇く',
     '{"content":"のどが渇いた。","meaning":"Khát nước."}',
     '[{"kind":"v5k, vi","mean":"khát; khát khô cổ"},{"kind":"v5k, vi","mean":"khô; bị khô"}]',
     '[{"content":"手（のひら）が汗でじっとりとしのどが渇くのを感じる","meaning":"Cảm thấy lòng bàn tày ướt đẫm mồ hôi và khát khô cả cổ","phonetic":"て（のひら）があせでじっとりとしのどがかわくのをかんじる"}]',
     '["かわく"]',
-    'unit1'),
+    'unit1',
+    1, 2),
   ('word2',
     '渇く',
     '{"content":"のどが渇いた。","meaning":"Khát nước."}',
     '[{"kind":"v5k, vi","mean":"khát; khát khô cổ"},{"kind":"v5k, vi","mean":"khô; bị khô"}]',
     '[{"content":"手（のひら）が汗でじっとりとしのどが渇くのを感じる","meaning":"Cảm thấy lòng bàn tày ướt đẫm mồ hôi và khát khô cả cổ","phonetic":"て（のひら）があせでじっとりとしのどがかわくのをかんじる"}]',
     '["かわく"]',
-    'unit2');
+    'unit2',
+    2, 1);
 
 
 
@@ -105,7 +107,9 @@ CREATE TABLE IF NOT EXISTS `word_playlist` (
 
 -- Data for table `word_playlist`
 INSERT INTO `word_playlist` (`wordId`, `playlistId`) VALUES
-  ('word2', 'playlist2'),
+  -- ('word1', 'playlist1'),
+  -- ('word2', 'playlist1'),
+  -- ('word2', 'playlist2'),
   ('word1', 'playlist2');
 
 
@@ -168,4 +172,9 @@ CREATE TRIGGER IF NOT EXISTS `delete_course` AFTER UPDATE OF `noWords` ON `cours
 
 
 -- .read src/assets/minagoi_dev.sql
-INSERT OR REPLACE INTO `word` (`id`, `kanji`, `audioFile`, `unitId`) VALUES ('word3', 'kj', 'BOB', 'unit1');
+-- INSERT OR REPLACE INTO `word` (`id`, `kanji`, `audioFile`, `unitId`) VALUES ('word3', 'kj', 'BOB', 'unit1');
+SELECT `word`.*, `playlistId`
+FROM `word` LEFT JOIN `word_playlist` ON `word`.`id` = `word_playlist`.`wordId`
+WHERE `unitId` = 'unit2'
+GROUP BY `word`.`id`
+ORDER BY `lastPlayed` DESC, `timesPlayed` DESC;

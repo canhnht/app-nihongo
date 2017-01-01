@@ -22,7 +22,9 @@ export class PlaylistOptions {
   ionViewWillEnter() {
     this.dbService.getPlaylistsByWordId(this.currentWord.id);
     this.playlistsSubscription = this.dbService.playlistsByWordIdSubject.subscribe(
-      (playlists) => this.playlists = playlists
+      (playlists) => this.playlists = playlists.map((item) => Object.assign({
+        selected: item.checked
+      }, item))
     );
   }
 
@@ -70,12 +72,12 @@ export class PlaylistOptions {
   }
 
   save() {
-    let data = this.playlists.map((playlist, index) => index)
-      .filter(index => this.playlists[index].checked);
-    this.viewCtrl.dismiss({
-      data: data,
-      playlists: this.playlists,
+    let isBookmarked = false;
+    let diffPlaylists = this.playlists.filter((item) => {
+      if (item.selected) isBookmarked = true;
+      return item.checked !== item.selected;
     });
+    this.viewCtrl.dismiss({ diffPlaylists, isBookmarked });
   }
 
   togglePlaylist(playlist) {

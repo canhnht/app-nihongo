@@ -244,11 +244,42 @@ export class DbService {
   // }
 
   updateWord(word) {
-    return this.db.executeSql('UPDATE `word` SET `lastPlayed` = ?, `timesPlayed` = ? WHERE `id` = ?',
-      [
-        word.id,
-        word.lastPlayed,
-        word.timesPlayed
-      ]).catch(utils.errorHandler(this.translate.instant('Error_database')));
+    let sql = 'UPDATE `word` SET `lastPlayed` = ?, `timesPlayed` = ? WHERE `id` = ?';
+    return this.db.executeSql(sql, [ word.id, word.lastPlayed, word.timesPlayed ])
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  getWordsByUnitId(unitId) {
+    let sql = 'SELECT `word`.*, `playlistId` FROM `word` LEFT JOIN `word_playlist` ON `word`.`id` = `word_playlist`.`wordId` WHERE `unitId` = ? GROUP BY `word`.`id` ORDER BY `lastPlayed` DESC, `timesPlayed` DESC';
+    return this.db.executeSql(sql, [ unitId ]).then((resultSet) => {
+      let data = this.convertResultSetToArray(resultSet);
+      alert(`getWordsByUnitId ${JSON.stringify(data[0])}`)
+      data.forEach((word) => {
+        word.bookmarked = !!word.playlistId;
+        delete word.playlistId;
+      });
+      return data;
+    }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  getUnitsByCourseId(courseId) {
+    let sql = 'SELECT * FROM `unit` WHERE `courseId` = ?';
+    return this.db.executeSql(sql, [ courseId ]).then((resultSet) => {
+      return this.convertResultSetToArray(resultSet);
+    }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  updateWordPlaylist(wordId, diffPlaylists) {
+    let insertSql = 'INSERT INTO `word_playlist` (`wordId`, `playlistId`) VALUES (?,?)';
+    let deleteSql = 'DELETE FROM `word_playlist` WHERE `wordId` = ? AND `playlistId` = ?';
+    let listSql = diffPlaylists.map((playlist) => {
+      if (!playlist.checked && playlist.selected) return [
+        insertSql, [ wordId, playlist.id ]
+      ]; else if (playlist.checked && !playlist.selected) return [
+        deleteSql, [ wordId, playlist.id ]
+      ];
+    });
+    return this.db.sqlBatch(listSql)
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 }

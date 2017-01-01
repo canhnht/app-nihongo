@@ -8,6 +8,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 // import {WordSlides} from '../word-slides/word-slides';
 import { NewsPage } from '../news-page/news-page';
 import { NewsDetail } from '../news-detail/news-detail';
+import { UnitsPage } from '../units-page/units-page';
 import { DbService, SettingService } from '../../services';
 import { NHK_URL } from '../../constants';
 declare var require: any;
@@ -55,7 +56,7 @@ export class HomePage {
 
   goToCourse(course) {
     this.settingService.reset(true);
-    // this.navCtrl.push(UnitsPage, {selectedCourseId: course.id});
+    this.navCtrl.push(UnitsPage, { selectedCourse: course });
   }
 
   deleteCourse(course) {
