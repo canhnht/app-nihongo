@@ -5,13 +5,19 @@ import { TranslateModule, TranslateLoader,
   TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
-import { LoginPage } from '../pages';
+import { HomePage } from '../pages/home-page/home-page';
+import { TabHomePage } from '../pages/tab-home-page/tab-home-page';
+import { TabUserPage } from '../pages/tab-user-page/tab-user-page';
+import { WordPage } from '../pages/word-page/word-page';
 import { LocalStorageService, SettingService, SliderService, DbService } from '../services';
 
 @NgModule({
   declarations: [
     MyApp,
-    LoginPage
+    HomePage,
+    TabHomePage,
+    TabUserPage,
+    WordPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -24,7 +30,10 @@ import { LocalStorageService, SettingService, SliderService, DbService } from '.
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage
+    HomePage,
+    TabHomePage,
+    TabUserPage,
+    WordPage
   ],
   providers: [
     {
