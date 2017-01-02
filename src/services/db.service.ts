@@ -94,11 +94,10 @@ export class DbService {
       .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
-  getPlaylistsByWordId(wordId: string) {
+  getPlaylistsByWordId(wordId) {
     let sql = 'SELECT `playlist`.*, `word_playlist`.`wordId` FROM `playlist` LEFT JOIN `word_playlist` ON `playlist`.`id` = `word_playlist`.`playlistId` AND `word_playlist`.`wordId` = ?';
     return this.db.executeSql(sql, [ wordId ]).then((resultSet) => {
         let data = this.convertResultSetToArray(resultSet);
-        alert(`getAllPlaylistsByWordId ${JSON.stringify(data)}`);
         data.forEach((item) => {
           item.checked = !!item.wordId;
           delete item.wordId;
@@ -150,15 +149,11 @@ export class DbService {
   }
 
   addPlaylist(playlist) {
-    return this.db.executeSql('INSERT INTO `playlist` (`id`, `name`, `noWords`) VALUES (?,?,?)',
-      [
-        playlist.id,
-        playlist.name,
-        playlist.noWords
-      ]).then(() => {
-        this.playlistsByWordId.push(Object.assign({ checked: false }, playlist));
-        this.playlistsByWordIdSubject.next(this.playlistsByWordId);
-      })
+    let sql = 'INSERT INTO `playlist` (`id`, `name`, `noWords`) VALUES (?,?,?)';
+    return this.db.executeSql(sql, [ playlist.id, playlist.name, playlist.noWords ]).then(() => {
+      this.playlistsByWordId.push(Object.assign({ checked: false }, playlist));
+      this.playlistsByWordIdSubject.next(this.playlistsByWordId);
+    })
     .catch(utils.errorHandler('Error_database'));
   }
 

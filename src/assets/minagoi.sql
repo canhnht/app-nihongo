@@ -138,6 +138,20 @@ CREATE TRIGGER IF NOT EXISTS `delete_course` AFTER UPDATE OF `noWords` ON `cours
   END;
 ----
 
+DROP TRIGGER IF EXISTS `update_noWords_playlist_after_delete`;
+CREATE TRIGGER IF NOT EXISTS `update_noWords_playlist_after_delete` AFTER DELETE ON `word_playlist`
+  BEGIN
+    UPDATE `playlist` SET `noWords` = `noWords` - 1 WHERE `id` = old.playlistId;
+  END;
+----
+
+DROP TRIGGER IF EXISTS `update_noWords_playlist_after_insert`;
+CREATE TRIGGER IF NOT EXISTS `update_noWords_playlist_after_insert` AFTER INSERT ON `word_playlist`
+  BEGIN
+    UPDATE `playlist` SET `noWords` = `noWords` + 1 WHERE `id` = new.playlistId;
+  END;
+----
+
 
 
 -- .read src/assets/minagoi.sql

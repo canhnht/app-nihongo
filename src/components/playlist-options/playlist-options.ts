@@ -52,7 +52,7 @@ export class PlaylistOptions {
             if (searchIndex >= 0)
               Toast.showShortCenter(this.translate.instant('Duplicate_playlist_message')).subscribe(() => {});
             else {
-              let lastId = parseInt(this.playlists[this.playlists.length - 1]._id.substring(8));
+              let lastId = parseInt(this.playlists[this.playlists.length - 1].id.substring(8));
               let newPlaylist = {
                 id: `playlist${lastId + 1}`,
                 name: data.title,
@@ -81,6 +81,6 @@ export class PlaylistOptions {
   }
 
   togglePlaylist(playlist) {
-    playlist.checked = !playlist.checked;
+    playlist.selected = !playlist.selected;
   }
 }

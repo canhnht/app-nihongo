@@ -28,7 +28,7 @@ import { CustomDatePipe } from '../custom-date.pipe';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage
+    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, PlaylistOptions, SelectedWords
   ],
   providers: [
     {

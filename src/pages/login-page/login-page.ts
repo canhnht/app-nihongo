@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ModalController } from 'ionic-angular';
+import { PlaylistOptions } from '../../components';
 
 @Component({
   templateUrl: 'login-page.html',
 })
 export class LoginPage {
-  constructor(private navCtrl: NavController) {
+  constructor(private navCtrl: NavController,
+    private modalCtrl: ModalController) {
+    let modal = this.modalCtrl.create(PlaylistOptions);
+    modal.present();
   }
 }

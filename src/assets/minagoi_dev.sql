@@ -50,9 +50,9 @@ CREATE TABLE IF NOT EXISTS `playlist` (
 );
 
 -- Data for table `playlist`
-INSERT INTO `playlist` (`id`, `name`) VALUES
-  ('playlist1', 'My favorites'),
-  ('playlist2', 'My list');
+INSERT INTO `playlist` (`id`, `name`, `noWords`) VALUES
+  ('playlist1', 'My favorites', 0),
+  ('playlist2', 'My list', 1);
 
 
 
@@ -169,12 +169,22 @@ CREATE TRIGGER IF NOT EXISTS `delete_course` AFTER UPDATE OF `noWords` ON `cours
     DELETE FROM `unit` WHERE `courseId` = (CASE new.noWords WHEN 0 THEN new.id ELSE '' END);
   END;
 
+DROP TRIGGER IF EXISTS `update_noWords_playlist_after_delete`;
+CREATE TRIGGER IF NOT EXISTS `update_noWords_playlist_after_delete` AFTER DELETE ON `word_playlist`
+  BEGIN
+    UPDATE `playlist` SET `noWords` = `noWords` - 1 WHERE `id` = old.playlistId;
+  END;
+
+DROP TRIGGER IF EXISTS `update_noWords_playlist_after_insert`;
+CREATE TRIGGER IF NOT EXISTS `update_noWords_playlist_after_insert` AFTER INSERT ON `word_playlist`
+  BEGIN
+    UPDATE `playlist` SET `noWords` = `noWords` + 1 WHERE `id` = new.playlistId;
+  END;
 
 
 -- .read src/assets/minagoi_dev.sql
--- INSERT OR REPLACE INTO `word` (`id`, `kanji`, `audioFile`, `unitId`) VALUES ('word3', 'kj', 'BOB', 'unit1');
-SELECT `word`.*, `playlistId`
-FROM `word` LEFT JOIN `word_playlist` ON `word`.`id` = `word_playlist`.`wordId`
-WHERE `unitId` = 'unit2'
-GROUP BY `word`.`id`
-ORDER BY `lastPlayed` DESC, `timesPlayed` DESC;
+SELECT * FROM `playlist`;
+INSERT INTO `word_playlist` (`wordId`, `playlistId`) VALUES ('word1', 'playlist1');
+SELECT * FROM `playlist`;
+DELETE FROM `word_playlist` WHERE `wordId` = 'word1' AND `playlistId` = 'playlist1';
+SELECT * FROM `playlist`;

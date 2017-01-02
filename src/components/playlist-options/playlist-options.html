@@ -19,9 +19,9 @@
     </button>
   </ion-buttons>
   <ion-list>
-    <button ion-item text-wrap *ngFor="let playlist of playlists">
+    <ion-item text-wrap *ngFor="let playlist of playlists">
       <ion-label class="playlist-item">
-        <ion-checkbox [(ngModel)]="playlist.selected"
+        <ion-checkbox [checked]="playlist.selected"
           (click)="togglePlaylist(playlist)">
         </ion-checkbox>
         <ion-badge class="playlist-icon">
@@ -29,9 +29,9 @@
         </ion-badge>
         <div>
           <h2>{{playlist.name}}</h2>
-          <p>{{playlist.words.length}} {{'word' | translate}}</p>
+          <p>{{playlist.noWords}} {{'word' | translate}}</p>
         </div>
       </ion-label>
-    </button>
+    </ion-item>
   </ion-list>
 </ion-content>

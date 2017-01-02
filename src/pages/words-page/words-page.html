@@ -16,7 +16,8 @@
 
 <ion-content class="words-page">
   <ion-list [virtualScroll]="searchedWords">
-    <button ion-item text-wrap *virtualItem="let word">
+    <ion-item text-wrap *virtualItem="let word"
+      (click)="selectWord($event, word)">
       <ion-label class="word-item">
         <button ion-button clear large class="word-bookmark" [class.hidden]="!word.bookmarked" (click)="addToPlaylist($event, word)" icon-only>
           <i class="fa fa-bookmark icon-bookmark"></i>
@@ -34,7 +35,7 @@
       <custom-checkbox item-right (onClick)="checkWord($event, word)"
         [checked]="selectedWords.indexOf(word.id) >= 0">
       </custom-checkbox>
-    </button>
+    </ion-item>
   </ion-list>
 </ion-content>
 <audio-setting></audio-setting>

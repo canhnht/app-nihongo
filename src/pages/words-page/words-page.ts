@@ -77,16 +77,15 @@ export class WordsPage {
   }
 
   addToPlaylist($event, word) {
-    $event.stopPropagation();
     let modal = this.modalCtrl.create(PlaylistOptions, { currentWord: word });
     modal.onDidDismiss((res) => {
       if (!res) return;
       let { diffPlaylists, isBookmarked } = res;
-
       word.bookmarked = isBookmarked;
       this.dbService.updateWordPlaylist(word.id, diffPlaylists);
     });
     modal.present();
+    $event.stopPropagation();
   }
 
   toggleSelectAll() {
