@@ -1,5 +1,5 @@
-import {Pipe, PipeTransform} from '@angular/core';
-import {DatePipe} from '@angular/common';
+import { Pipe, PipeTransform } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 const MILLIS_IN_DAY: number = 24 * 60 * 60 * 1000;
 const MILLIS_IN_WEEK: number = 7 * 24 * 60 * 60 * 1000;

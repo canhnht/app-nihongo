@@ -23,7 +23,6 @@ export class AudioService {
   isLoop: boolean = false;
   isShuffle: boolean = false;
   singleWordIndex: number;
-  basePath: string = cordova.file.dataDirectory;
   repeatEachWord: any = 1;
   timeBetweenWords: any = 0;
 
@@ -95,7 +94,7 @@ export class AudioService {
     this.listTrack = [];
     this.listWordOrder.forEach((wordIndex, index) => {
       let word = this.listWord[wordIndex];
-      this.listTrack.push(new MediaPlugin(`${this.basePath}/${word.audioFile}`));
+      this.listTrack.push(new MediaPlugin(`${cordova.file.dataDirectory}${word.audioFile}`));
     });
   }
 

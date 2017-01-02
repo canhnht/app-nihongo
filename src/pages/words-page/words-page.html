@@ -1,10 +1,10 @@
 <ion-header>
   <ion-navbar color="primary" class="words-navbar">
     <ion-title>
-      {{course.courseName}} - {{unit.unitName}}
+      {{course.name}} - {{unit.name}}
     </ion-title>
     <ion-buttons end>
-      <custom-checkbox [checked]="selectedWords.length == words.length"
+      <custom-checkbox [checked]="selectedWords.length == words.length && words.length > 0"
         (onClick)="toggleSelectAll()">
       </custom-checkbox>
     </ion-buttons>
@@ -16,8 +16,7 @@
 
 <ion-content class="words-page">
   <ion-list [virtualScroll]="searchedWords">
-    <button ion-item text-wrap *virtualItem="let word"
-      (click)="selectWord($event, word)">
+    <button ion-item text-wrap *virtualItem="let word">
       <ion-label class="word-item">
         <button ion-button clear large class="word-bookmark" [class.hidden]="!word.bookmarked" (click)="addToPlaylist($event, word)" icon-only>
           <i class="fa fa-bookmark icon-bookmark"></i>
@@ -39,3 +38,4 @@
   </ion-list>
 </ion-content>
 <audio-setting></audio-setting>
+

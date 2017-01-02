@@ -58,7 +58,7 @@ export class SettingService {
   }
 
   private addWord(word) {
-    this.selectedList.push(word._id);
+    this.selectedList.push(word.id);
     this.selectedWords.push(word);
     this.status = SettingStatus.Selecting;
   }
@@ -66,7 +66,7 @@ export class SettingService {
   toggleWordInUnit(unitId, word) {
     if (this.selectedType !== unitId) this.reset(true);
     this.selectedType = unitId;
-    let searchIndex = this.selectedList.indexOf(word._id);
+    let searchIndex = this.selectedList.indexOf(word.id);
     if (searchIndex >= 0) this.removeWord(searchIndex);
     else this.addWord(word);
     this.pushState();
@@ -74,7 +74,7 @@ export class SettingService {
 
   selectWordsInUnit(unitId, words) {
     this.selectedType = unitId;
-    this.selectedList = words.map(word => word._id);
+    this.selectedList = words.map(word => word.id);
     this.selectedWords = [...words];
     if (this.selectedList.length === 0) this.status = SettingStatus.None;
     else this.status = SettingStatus.Selecting;
@@ -85,7 +85,7 @@ export class SettingService {
     this.status = SettingStatus.Selecting;
     if (this.selectedType !== playlistId) this.reset(true);
     this.selectedType = playlistId;
-    let searchIndex = this.selectedList.indexOf(word._id);
+    let searchIndex = this.selectedList.indexOf(word.id);
     if (searchIndex >= 0) this.removeWord(searchIndex);
     else this.addWord(word);
     this.pushState();
@@ -93,20 +93,10 @@ export class SettingService {
 
   selectWordsInPlaylist(playlistId, words) {
     this.selectedType = playlistId;
-    this.selectedList = words.map(word => word._id);
+    this.selectedList = words.map(word => word.id);
     this.selectedWords = [...words];
     if (this.selectedList.length === 0) this.status = SettingStatus.None;
     else this.status = SettingStatus.Selecting;
-    this.pushState();
-  }
-
-  toggleWordInSearch(word) {
-    this.status = SettingStatus.Selecting;
-    if (this.selectedType !== 'search') this.reset(true);
-    this.selectedType = 'search';
-    let searchIndex = this.selectedList.indexOf(word._id);
-    if (searchIndex >= 0) this.removeWord(searchIndex);
-    else this.addWord(word);
     this.pushState();
   }
 }

@@ -1,85 +1,42 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <button ion-button menuToggle left>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>MINAGOI</ion-title>
+  <ion-navbar color="primary" class="words-navbar">
+    <ion-title>
+      course.name - unit.name
+    </ion-title>
+    <ion-buttons end>
+      <custom-checkbox [checked]="false"
+        (onClick)="toggleSelectAll()">
+      </custom-checkbox>
+    </ion-buttons>
   </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content class="home-page">
-  <ion-card>
-    <ion-card-header>
-      {{'Newest_NHK' | translate}}
-    </ion-card-header>
-    <button ion-button class="btn-load-news" *ngIf="true"
-      (click)="downloadNews()">
-      {{'Download_news' | translate}}
+<ion-content class="words-page">
+  <ion-list>
+    <button ion-item text-wrap
+      (click)="selectWord($event, word)">
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" (click)="addToPlaylist($event, word)" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" (click)="addToPlaylist($event, word)" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+          <p>word.timesPlayed > 0 ? '(' + word.timesPlayed + ') - ' : ''
+            word.timesPlayed > 0 ? (word.lastPlayed | customDate) : ''
+          </p>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right (onClick)="checkWord($event, word)"
+        [checked]="false">
+      </custom-checkbox>
     </button>
-    <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading"
-      *ngIf="true">
-    </i>
-    <div class="card-news" *ngIf="false">
-      <img src="assets/images/bg_newstitle.gif" class="img-news" />
-      <div class="title">
-        <span [innerHTML]="titleWithRuby"></span>
-        <div class="date">
-          latestNews.dateText
-        </div>
-      </div>
-    </div>
-    <ion-row *ngIf="false">
-      <ion-col text-center>
-        <button ion-button color="primary" clear full small (click)="goToDetail()">
-          {{'Detail' | translate}}
-        </button>
-      </ion-col>
-      <ion-col text-center>
-        <button ion-button color="primary" clear full small (click)="listAllNews()">
-          {{'List_all' | translate}}
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-card>
-  <ion-card>
-    <div class="card-course">
-      <div class="left-side">
-        <div class="course-title">N3</div>
-      </div>
-      <div class="right-side">
-        <div class="number-units">
-          0 {{'Unit' | translate}}
-        </div>
-        <div class="number-words">
-          0 {{'Word' | translate}}
-        </div>
-        <div class="number-comments">
-          0 {{'Comment' | translate}} <i class="fa fa-comment"></i>
-        </div>
-        <div class="rating">
-          <span>☆</span>
-          <span class="focus">☆</span>
-          <span>☆</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-        <button ion-button color="primary" class="btn-start" *ngIf="true"
-          (click)="goToCourse(course)" icon-left>
-          <ion-icon name="navigate"></ion-icon>
-          {{'Start' | translate}}
-        </button>
-        <button ion-button color="primary" class="btn-download" *ngIf="false"
-          (click)="downloadCourse(course, i)" [disabled]="false" icon-left>
-          <ion-icon name="download"></ion-icon>
-          {{'Download' | translate}}
-        </button>
-        <i class="fa fa-spinner fa-spin progress" color="primary"
-          *ngIf="false"></i>
-        <button ion-button color="danger" clear round class="btn-delete"
-          *ngIf="true" (click)="deleteCourse(course)" icon-only>
-          <i class="fa fa-trash"></i>
-        </button>
-      </div>
-    </div>
-  </ion-card>
+  </ion-list>
 </ion-content>
+<audio-setting></audio-setting>
+

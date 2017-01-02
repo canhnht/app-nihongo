@@ -10,7 +10,7 @@ export class UnitsPage {
   units: any[] = [];
   course: any = {};
 
-  constructor(private navController: NavController, private navParams: NavParams,
+  constructor(private navCtrl: NavController, private navParams: NavParams,
     private dbService: DbService) {
     this.course = this.navParams.data.selectedCourse;
   }
@@ -20,11 +20,10 @@ export class UnitsPage {
       .then(units => this.units = units);
   }
 
-  goToUnit($event, unit) {
-    if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
-    this.navController.push(WordsPage, {
+  goToUnit(unit) {
+    this.navCtrl.push(WordsPage, {
       selectedUnit: unit,
-      selectedCourse: course,
+      selectedCourse: this.course,
     });
   }
 }

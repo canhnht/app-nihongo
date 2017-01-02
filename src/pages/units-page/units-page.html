@@ -9,7 +9,7 @@
 <ion-content class="units-page">
   <ion-list [virtualScroll]="units">
     <button ion-item text-wrap *virtualItem="let unit"
-      (click)="goToUnit($event, unit)">
+      (click)="goToUnit(unit)">
       <ion-label class="unit-item">
         <ion-badge class="unit-number">U{{unit.number}}</ion-badge>
         <div>

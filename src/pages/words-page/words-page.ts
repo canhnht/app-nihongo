@@ -3,7 +3,7 @@ import { NavController, NavParams, ModalController } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { SpinnerDialog } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { AudioService, SliderService, DbService, SettingService, SettingStatus } from '../../services';
+import { AudioService, SliderService, DbService, SettingService } from '../../services';
 // import {WordSlides} from '../word-slides/word-slides';
 import { PlaylistOptions } from '../../components';
 
@@ -39,9 +39,8 @@ export class WordsPage {
     this.course = this.navParams.data.selectedCourse;
     this.dbService.getWordsByUnitId(this.unit.id).then((words) => {
       this.words = words;
-      // this.sortWordsByAnalytic();
       this.searchedWords = this.words.filter(word => {
-        return word.kanji.startsWith(this.value) || word.hira_kata.startsWith(this.value);
+        return word.kanji.startsWith(this.value);
       });
     });
 
@@ -64,7 +63,7 @@ export class WordsPage {
     if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
     SpinnerDialog.show(this.translate.instant('Processing'),
       this.translate.instant('Please_wait'), false);
-    let wordIndex = this.words.findIndex(item => item.id === word.id);
+    // let wordIndex = this.words.findIndex(item => item.id === word.id);
     // this.navController.push(WordSlides, {
     //   playSingleWord: true,
     //   listWord: this.words,
@@ -78,8 +77,9 @@ export class WordsPage {
   }
 
   addToPlaylist($event, word) {
+    $event.stopPropagation();
     let modal = this.modalCtrl.create(PlaylistOptions, { currentWord: word });
-    modal.onDismiss((res) => {
+    modal.onDidDismiss((res) => {
       if (!res) return;
       let { diffPlaylists, isBookmarked } = res;
 
@@ -87,21 +87,20 @@ export class WordsPage {
       this.dbService.updateWordPlaylist(word.id, diffPlaylists);
     });
     modal.present();
-    $event.stopPropagation();
   }
 
   toggleSelectAll() {
-    if (this.selectedWords.length == this.words.length) {
-      this.settingService.selectWordsInUnit(this.unit._id, []);
+    if (this.selectedWords.length === this.words.length) {
+      this.settingService.selectWordsInUnit(this.unit.id, []);
     } else {
-      this.settingService.selectWordsInUnit(this.unit._id, this.words);
+      this.settingService.selectWordsInUnit(this.unit.id, this.words);
     }
   }
 
   search($event) {
     this.value = $event.value;
     this.searchedWords = this.words.filter(word => {
-      return word.kanji.startsWith(this.value) || word.hira_kata.startsWith(this.value);
+      return word.kanji.startsWith(this.value);
     });
   }
 }

@@ -253,7 +253,6 @@ export class DbService {
     let sql = 'SELECT `word`.*, `playlistId` FROM `word` LEFT JOIN `word_playlist` ON `word`.`id` = `word_playlist`.`wordId` WHERE `unitId` = ? GROUP BY `word`.`id` ORDER BY `lastPlayed` DESC, `timesPlayed` DESC';
     return this.db.executeSql(sql, [ unitId ]).then((resultSet) => {
       let data = this.convertResultSetToArray(resultSet);
-      alert(`getWordsByUnitId ${JSON.stringify(data[0])}`)
       data.forEach((word) => {
         word.bookmarked = !!word.playlistId;
         delete word.playlistId;

@@ -6,7 +6,7 @@ import { TranslateModule, TranslateLoader,
 import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage } from '../pages';
-import { LocalStorageService, SettingService, SliderService, DbService } from '../services';
+import { LocalStorageService, SettingService, SliderService, DbService, AudioService } from '../services';
 import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords } from '../components';
 import { CustomDatePipe } from '../custom-date.pipe';
 
@@ -35,7 +35,7 @@ import { CustomDatePipe } from '../custom-date.pipe';
       provide: ErrorHandler,
       useClass: IonicErrorHandler
     },
-    LocalStorageService, SettingService, SliderService, DbService,
+    LocalStorageService, SettingService, SliderService, DbService, AudioService,
     {
       provide: Storage,
       useFactory: () => new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'io.techybrain.minagoi' }),
