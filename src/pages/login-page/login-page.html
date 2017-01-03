@@ -1,41 +1,45 @@
-<ion-header>
-  <ion-navbar color="primary" class="words-navbar">
-    <ion-title>
-      course.name - unit.name
-    </ion-title>
-    <ion-buttons end>
-      <custom-checkbox [checked]="false"
-        (onClick)="toggleSelectAll()">
-      </custom-checkbox>
-    </ion-buttons>
-  </ion-navbar>
-  <ion-toolbar>
-    <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content class="words-page">
-  <ion-list>
-    <button ion-item text-wrap
-      (click)="selectWord($event, word)">
-      <ion-label class="word-item">
-        <button ion-button clear large class="word-bookmark" [class.hidden]="true" (click)="addToPlaylist($event, word)" icon-only>
-          <i class="fa fa-bookmark icon-bookmark"></i>
-        </button>
-        <button ion-button clear large class="word-bookmark" [class.hidden]="true" (click)="addToPlaylist($event, word)" icon-only>
-          <i class="fa fa-bookmark-o icon-bookmark"></i>
-        </button>
-        <div>
-          <h1>word.kanji</h1>
-          <p>word.timesPlayed
+<ion-content>
+  <button ion-button clear color="danger" round large class="btn-close" (click)="closeSlide()" icon-only>
+    <ion-icon name="close"></ion-icon>
+  </button>
+  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
+  </ion-icon>
+  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
+  </ion-icon>
+  <ion-slides #vocabSlider [options]="sliderOptions"
+    (ionDidChange)="onSlideChanged($event)">
+    <ion-slide class="word-slide" [class.odd]="false"
+      [class.even]="true">
+      <div class="card" (click)="flipCard()" [class.flipped]="false">
+        <div class="face front">
+          <strong class="kanji">word.kanji</strong>
+        </div>
+        <div class="face back">
+          <strong class="kanji">word.kanji</strong>
+          <h2>phonetic</h2>
+          <h3>meaning.kind - meaning.mean</h3>
+          <p class="example">
+            <strong>word.mainExample.content</strong><br/>
+            word.mainExample.meaning
+          </p>
+          <p class="example">
+            <strong>example.content</strong><br/>
+            example.phonetic<br/>
+            example.meaning
           </p>
         </div>
-      </ion-label>
-      <custom-checkbox item-right (onClick)="checkWord($event, word)"
-        [checked]="false">
-      </custom-checkbox>
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <div class="btn-group">
+    <button ion-button color="secondary" round class="btn-repeat"
+      (click)="repeatCurrentVocabulary($event)" icon-only>
+      <ion-icon name="volume-up"></ion-icon>
     </button>
-  </ion-list>
+    <button ion-button *ngIf="true" color="danger" round   class="btn-bookmark" (click)="addToPlaylist($event)" icon-only>
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </div>
 </ion-content>
-<audio-setting></audio-setting>
-
+<audio-player *ngIf="false"></audio-player>

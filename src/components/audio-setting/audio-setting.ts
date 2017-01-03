@@ -5,7 +5,7 @@ import { AudioService, SliderService, SettingService, SettingStatus  } from '../
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { SelectedWords } from '../selected-words/selected-words';
-// import { WordSlides } from '../../pages';
+import { WordSlides } from '../../pages';
 
 @Component({
   selector: 'audio-setting',
@@ -49,12 +49,12 @@ export class AudioSetting implements OnInit, OnDestroy {
     if (this.isContinue) {
       this.audioService.generateListWordOrder();
       this.audioService.playCurrentTrack();
-      // this.navCtrl.push(WordSlides);
+      this.navCtrl.push(WordSlides);
     } else {
       this.settingService.playAudio();
       this.sliderService.resetSlider();
       this.audioService.playSetting().then(() => {
-        // this.navCtrl.push(WordSlides);
+        this.navCtrl.push(WordSlides);
       });
     }
   }
