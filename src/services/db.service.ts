@@ -251,6 +251,10 @@ export class DbService {
       data.forEach((word) => {
         word.bookmarked = !!word.playlistId;
         delete word.playlistId;
+        word.mainExample = JSON.parse(word.mainExample);
+        word.meaning = JSON.parse(word.meaning);
+        word.otherExamples = JSON.parse(word.otherExamples);
+        word.phonetic = JSON.parse(word.phonetic);
       });
       return data;
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
@@ -274,6 +278,12 @@ export class DbService {
       ];
     });
     return this.db.sqlBatch(listSql)
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  updateAnalytic(word) {
+    let sql = 'UPDATE `word` SET `lastPlayed` = ? AND `timesPlayed` = `timesPlayed` + 1 WHERE `id` = ?';
+    return this.db.executeSql(sql, [ Date.now(), word.id ])
       .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 }

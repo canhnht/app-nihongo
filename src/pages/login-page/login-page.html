@@ -11,7 +11,7 @@
     (ionDidChange)="onSlideChanged($event)">
     <ion-slide class="word-slide" [class.odd]="false"
       [class.even]="true">
-      <div class="card" (click)="flipCard()" [class.flipped]="false">
+      <div class="card" (click)="flipCard()" [class.flipped]="flipped">
         <div class="face front">
           <strong class="kanji">word.kanji</strong>
         </div>
@@ -42,4 +42,6 @@
     </button>
   </div>
 </ion-content>
-<audio-player *ngIf="false"></audio-player>
+<ion-footer>
+  <audio-player *ngIf="true"></audio-player>
+</ion-footer>

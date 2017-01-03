@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { SpinnerDialog } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { AudioService, SliderService, DbService, SettingService } from '../../services';
-// import {WordSlides} from '../word-slides/word-slides';
+import { WordSlides } from '../word-slides/word-slides';
 import { PlaylistOptions } from '../../components';
 
 @Component({
@@ -20,19 +20,11 @@ export class WordsPage {
   currentCourseSubscription: Subscription;
   value: string = '';
 
-  constructor(private navController: NavController, private navParams: NavParams,
+  constructor(private navCtrl: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
     private dbService: DbService, private settingService: SettingService,
     private translate: TranslateService, private modalCtrl: ModalController) {
   }
-
-  // sortWordsByAnalytic() {
-  //   this.words = this.words.sort((w1, w2) => {
-  //     if (w1.lastPlayed && w2.lastPlayed && w1.lastPlayed !== w2.lastPlayed)
-  //       return w2.lastPlayed - w1.lastPlayed;
-  //     return w2.timesPlayed - w1.timesPlayed;
-  //   });
-  // }
 
   ionViewWillEnter() {
     this.unit = this.navParams.data.selectedUnit;
@@ -63,12 +55,12 @@ export class WordsPage {
     if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
     SpinnerDialog.show(this.translate.instant('Processing'),
       this.translate.instant('Please_wait'), false);
-    // let wordIndex = this.words.findIndex(item => item.id === word.id);
-    // this.navController.push(WordSlides, {
-    //   playSingleWord: true,
-    //   listWord: this.words,
-    //   wordIndex: wordIndex
-    // });
+    let wordIndex = this.words.findIndex(item => item.id === word.id);
+    this.navCtrl.push(WordSlides, {
+      playSingleWord: true,
+      listWord: this.words,
+      wordIndex: wordIndex
+    });
   }
 
   checkWord($event, word) {
@@ -77,6 +69,7 @@ export class WordsPage {
   }
 
   addToPlaylist($event, word) {
+    $event.stopPropagation();
     let modal = this.modalCtrl.create(PlaylistOptions, { currentWord: word });
     modal.onDidDismiss((res) => {
       if (!res) return;
@@ -85,7 +78,6 @@ export class WordsPage {
       this.dbService.updateWordPlaylist(word.id, diffPlaylists);
     });
     modal.present();
-    $event.stopPropagation();
   }
 
   toggleSelectAll() {

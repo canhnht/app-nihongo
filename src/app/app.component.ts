@@ -15,7 +15,7 @@ let firebase = require('firebase');
 })
 export class MyApp {
   @ViewChild('content') nav: NavController;
-  rootPage = LoginPage;
+  rootPage = HomePage;
   homePage = HomePage;
 
   constructor(private platform: Platform, private translate: TranslateService,

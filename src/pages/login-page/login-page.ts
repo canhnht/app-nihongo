@@ -6,9 +6,13 @@ import { PlaylistOptions } from '../../components';
   templateUrl: 'login-page.html',
 })
 export class LoginPage {
+  flipped: boolean = false;
+
   constructor(private navCtrl: NavController,
     private modalCtrl: ModalController) {
-    let modal = this.modalCtrl.create(PlaylistOptions);
-    modal.present();
+  }
+
+  flipCard() {
+    this.flipped = !this.flipped;
   }
 }

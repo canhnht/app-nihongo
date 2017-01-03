@@ -79,15 +79,9 @@ export class AudioService {
       this.stopListTrack();
       this.generateListTrack();
       this.currentTrack.index = 0;
-      this.updateAnalytic(this.listWord[this.listWordOrder[0]]);
+      this.dbService.updateAnalytic(this.listWord[this.listWordOrder[0]]);
       this.playCurrentTrack();
     });
-  }
-
-  private updateAnalytic(word) {
-    word.lastPlayed = Date.now();
-    word.timesPlayed += 1;
-    this.dbService.updateWord(word);
   }
 
   private generateListTrack() {
@@ -124,7 +118,7 @@ export class AudioService {
       this.currentTrack.seekTime = this.convertText(this.getTotalDuration());
       this.currentTrack.index = 0;
       if (this.isLoop) {
-        this.updateAnalytic(this.listWord[this.listWordOrder[this.currentTrack.index]]);
+        this.dbService.updateAnalytic(this.listWord[this.listWordOrder[this.currentTrack.index]]);
         this.startCountDown(this.timeBetweenWords, () => {
           this.trackIndexSubject.next(this.currentTrack.index);
           this.playCurrentTrack();
@@ -138,7 +132,7 @@ export class AudioService {
         this.pauseCurrentTrack();
       }
     } else {
-      this.updateAnalytic(this.listWord[this.listWordOrder[this.currentTrack.index]]);
+      this.dbService.updateAnalytic(this.listWord[this.listWordOrder[this.currentTrack.index]]);
       this.startCountDown(this.timeBetweenWords, () => {
         this.trackIndexSubject.next(this.currentTrack.index);
         this.playCurrentTrack();

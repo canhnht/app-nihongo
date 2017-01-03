@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, Slides, AlertController, NavParams } from 'ionic-angular';
-import { Toast, SpinnerDialog, MediaPlugin } from 'ionic-native';
+import { NavController, Slides, ModalController, NavParams } from 'ionic-angular';
+import { SpinnerDialog, MediaPlugin } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { AudioPlayer } from '../../components';
+import { PlaylistOptions } from '../../components';
 import { AudioService, SliderService, DbService } from '../../services';
 
 declare var cordova: any;
@@ -32,7 +32,7 @@ export class WordSlides {
   constructor(private navCtrl: NavController, private audioService: AudioService,
     private sliderService: SliderService, private dbService: DbService,
     private navParams: NavParams, private translate: TranslateService,
-    private alertCtrl: AlertController) {
+    private modalCtrl: ModalController) {
     let params = this.navParams.data;
     this.hideBookmark = params.hideBookmark;
     if (params.playSingleWord) {
@@ -43,6 +43,7 @@ export class WordSlides {
       this.words = this.audioService.listWordOrder.map(
         wordIndex => this.audioService.listWord[wordIndex]
       );
+      this.words = this.words.map((word) => Object.assign({ flipped: false }, word));
       if (this.sliderService.currentSlide >= 0)
         this.sliderOptions.initialSlide = this.sliderService.currentSlide - 1;
     }
@@ -53,23 +54,6 @@ export class WordSlides {
   }
 
   ionViewWillEnter() {
-    this.dbService.getAllPlaylists()
-      .then(allPlaylists => {
-        this.playlists = allPlaylists;
-      });
-    this.playlistSubscription = this.dbService.playlistSubject.subscribe(
-      playlist => {
-        this.playlists = this.playlists.map(item => {
-          if (item._id == playlist._id) return playlist;
-          else return item;
-        });
-      }
-    );
-
-    this.dbService.getAllCourses().then(courses => this.courses = courses);
-    this.allCoursesSubscription = this.dbService.allCoursesSubject.subscribe(
-      courses => this.courses = courses);
-
     if (!this.playSingleWord)
       this.trackIndexSubscription = this.audioService.trackIndexSubject.subscribe(
         trackIndex => this.vocabSlider.slideTo(trackIndex + 1)
@@ -77,8 +61,6 @@ export class WordSlides {
   }
 
   ionViewWillLeave() {
-    this.playlistSubscription.unsubscribe();
-    this.allCoursesSubscription.unsubscribe();
     if (this.playSingleWord) return this.singleTrack.release();
     this.trackIndexSubscription.unsubscribe();
     this.audioService.stopCountDown();
@@ -94,16 +76,9 @@ export class WordSlides {
   }
 
   private getWordIndex(activeIndex: number) {
-    if (activeIndex == 1 || activeIndex == this.words.length + 1) return 0;
-    if (activeIndex == this.words.length || activeIndex == 0) return this.words.length - 1;
+    if (activeIndex === 1 || activeIndex === this.words.length + 1) return 0;
+    if (activeIndex === this.words.length || activeIndex === 0) return this.words.length - 1;
     return activeIndex - 1;
-  }
-
-  private updateAnalytic(word) {
-    let course = this.courses[word.courseId];
-    course.units[word.unitIndex].words[word.wordIndex].lastPlayed = Date.now();
-    course.units[word.unitIndex].words[word.wordIndex].timesPlayed += 1;
-    this.dbService.updateCourse(course);
   }
 
   onSlideChanged($event) {
@@ -114,7 +89,7 @@ export class WordSlides {
       }
       this.singleTrack = new MediaPlugin(`${cordova.file.dataDirectory}${this.words[this.currentIndex].audioFile}`);
       this.singleTrack.play();
-      this.updateAnalytic(this.words[this.currentIndex]);
+      this.dbService.updateAnalytic(this.words[this.currentIndex]);
     } else {
       this.currentIndex = this.getWordIndex($event.activeIndex);
       if (this.sliderService.currentSlide < 0 && this.sliderService.firstTime)
@@ -145,43 +120,21 @@ export class WordSlides {
   addToPlaylist($event) {
     $event.stopPropagation();
     let word = this.words[this.currentIndex];
-    let alert = this.alertCtrl.create();
-    alert.setTitle(this.translate.instant('Add_word'));
-    this.playlists.forEach((playlist, index) => {
-      alert.addInput({
-        type: 'checkbox',
-        label: playlist.name,
-        value: index + '',
-        checked: playlist.words.findIndex(e => e._id === word._id) >= 0
-      });
+    let modal = this.modalCtrl.create(PlaylistOptions, { currentWord: word });
+    modal.onDidDismiss((res) => {
+      if (!res) return;
+      let { diffPlaylists, isBookmarked } = res;
+      word.bookmarked = isBookmarked;
+      this.dbService.updateWordPlaylist(word.id, diffPlaylists);
     });
-    alert.addButton(this.translate.instant('Cancel'));
-    alert.addButton({
-      text: this.translate.instant('OK'),
-      handler: data => {
-        data = data.map(e => parseInt(e));
-        data.forEach(index => {
-          if (this.playlists[index].words.findIndex(e => e._id === word._id) === -1)
-            this.playlists[index].words.push({
-              _id: word._id,
-              courseId: word.courseId,
-              unitIndex: word.unitIndex,
-              wordIndex: word.wordIndex,
-            });
-        });
-        this.playlists.forEach((playlist, index) => {
-          let searchIndex = playlist.words.findIndex(e => e._id === word._id);
-          if (searchIndex >= 0 && data.indexOf(index) == -1) {
-            playlist.words.splice(searchIndex, 1);
-          }
-        });
-        this.dbService.updateMultiplePlaylists(this.playlists);
-      }
-    });
-    alert.present();
+    modal.present();
   }
 
   closeSlide() {
     this.navCtrl.pop();
+  }
+
+  flipCard(word) {
+    word.flipped = !word.flipped;
   }
 }
