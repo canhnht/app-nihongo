@@ -7,7 +7,22 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>N3 - Unit 1</ion-title>
+    
+    <!--<button ion-button icon-only end>
+        <ion-icon name="menu"></ion-icon>
+    </button>-->
+    <!--<ion-row>
+      <ion-col width-80>
+        <ion-title>N3 - Unit 1</ion-title>
+      </ion-col>
+      <ion-col item-right >
+        <button ion-button item-right>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>-->
+    
+  <ion-title>N3 - Unit 1</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -80,26 +95,40 @@
     <ion-checkbox [(ngModel)]="x3" item-right></ion-checkbox>
   </ion-item>
 </ion-list>
-<ion-fab right bottom>
-      <ion-row>
-         <ion-col>
-           <button ion-button full block round>
-             <ion-icon name="play"></ion-icon>
-             <div>LISTEN</div>
-            </button>
-         </ion-col>
-        <ion-col>
-            <button ion-fab>
-              <ion-icon name="add"></ion-icon>
-            </button>
-            <ion-fab-list side="top">
-              <button ion-fab><ion-icon name="logo-facebook"></ion-icon></button>
-              <button ion-fab><ion-icon name="logo-twitter"></ion-icon></button>
-              <button ion-fab><ion-icon name="logo-vimeo"></ion-icon></button>
-              <button ion-fab><ion-icon name="logo-googleplus"></ion-icon></button>
-            </ion-fab-list>
-        </ion-col>
-       
-      </ion-row>
-</ion-fab>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
+  </ion-icon>
+  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
+  </ion-icon>
+  <ion-slides #modControl pager [options]="mySlideOptions">
+  <ion-slide>
+    <button ion-button outline color="light" round icon-right>
+      Learn
+      <ion-icon name="book"></ion-icon>
+    </button>
+  </ion-slide>
+
+  <ion-slide>
+    <button ion-button round icon-right>
+      Listen
+      <ion-icon name="play"></ion-icon>
+    </button>
+  </ion-slide>
+
+  <ion-slide>
+    <button ion-button outline color="light" round icon-right>
+      Game
+      <ion-icon name="game-controller-b"></ion-icon>
+    </button>
+  </ion-slide>
+
+  <ion-slide>
+    <button ion-button outline>Writing</button>
+  </ion-slide>
+ 
+</ion-slides>
+  </ion-toolbar>
+</ion-footer>
+
