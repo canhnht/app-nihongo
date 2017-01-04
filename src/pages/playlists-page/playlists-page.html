@@ -6,7 +6,7 @@
     <ion-title>{{'My_playlist' | translate}}</ion-title>
     <ion-buttons end>
       <button ion-button (click)="addNewPlaylist()">
-        <ion-icon name="add"></ion-icon>
+        <ion-icon large name="add"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -14,7 +14,7 @@
 
 <ion-content class="playlists-page">
   <ion-list>
-    <ion-item-sliding>
+    <ion-item-sliding *ngFor="let playlist of playlists">
       <button ion-item text-wrap
         (click)="goToPlaylistDetail($event, playlist)">
         <ion-label class="playlist-item">
@@ -22,8 +22,8 @@
             <ion-icon large name="musical-notes"></ion-icon>
           </ion-badge>
           <div>
-            <h1>playlist.name</h1>
-            <p>playlist.noWords {{'word' | translate}}</p>
+            <h1>{{playlist.name}}</h1>
+            <p>{{playlist.noWords}} {{'word' | translate}}</p>
           </div>
         </ion-label>
       </button>

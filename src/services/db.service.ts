@@ -30,6 +30,8 @@ export class DbService {
   coursesSubject: Subject<any[]> = new Subject<any[]>();
   latestNews: any;
   latestNewsSubject: Subject<any> = new Subject<any>();
+  playlists: any[] = [];
+  playlistsSubject: Subject<any[]> = new Subject<any[]>();
 
   constructor(private translate: TranslateService, private storageService: LocalStorageService) {
     this.db = new SQLite();
@@ -111,8 +113,32 @@ export class DbService {
   getAllPlaylists() {
     let sql = 'SELECT * FROM `playlist`';
     return this.db.executeSql(sql, []).then((resultSet) => {
-      return this.convertResultSetToArray(resultSet);
+      let data = this.convertResultSetToArray(resultSet);
+      this.playlists = data;
+      this.playlistsSubject.next(data);
+      return data;
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  addPlaylist(playlist) {
+    let sql = 'INSERT INTO `playlist` (`id`, `name`, `noWords`) VALUES (?,?,?)';
+    return this.db.executeSql(sql, [ playlist.id, playlist.name, playlist.noWords ]).then(() => {
+      this.playlistsByWordId.push(Object.assign({ checked: false }, playlist));
+      this.playlistsByWordIdSubject.next(this.playlistsByWordId);
+    })
+    .catch(utils.errorHandler('Error_database'));
+  }
+
+  deletePlaylist(playlist) {
+    let sql = 'DELETE FROM `playlist` WHERE `id` = ?';
+    return this.db.executeSql(sql, [ playlist.id ]).then(this.getAllPlaylists.bind(this))
+      .catch(utils.errorHandler('Error_database'));
+  }
+
+  updatePlaylist(playlist) {
+    let sql = 'UPDATE `playlist` SET `name` = ? WHERE `id` = ?';
+    return this.db.executeSql(sql, [ playlist.name, playlist.id ])
+      .catch(utils.errorHandler('Error_database'));
   }
 
   private convertResultSetToArray(resultSet) {
@@ -147,27 +173,6 @@ export class DbService {
     return this.db.executeSql(sql, [ course.noWords, course.noUnits, course.downloaded ])
       .catch(utils.errorHandler('Error_database'));
   }
-
-  addPlaylist(playlist) {
-    let sql = 'INSERT INTO `playlist` (`id`, `name`, `noWords`) VALUES (?,?,?)';
-    return this.db.executeSql(sql, [ playlist.id, playlist.name, playlist.noWords ]).then(() => {
-      this.playlistsByWordId.push(Object.assign({ checked: false }, playlist));
-      this.playlistsByWordIdSubject.next(this.playlistsByWordId);
-    })
-    .catch(utils.errorHandler('Error_database'));
-  }
-
-  // deletePlaylist(playlist) {
-  //   this.db.remove(playlist)
-  //     .then(resp => {})
-  //     .catch(utils.errorHandler('Error delete playlist'));
-  // }
-
-  // updatePlaylist(playlist) {
-  //   this.db.put(playlist).then(resp => {}).catch(
-  //     utils.errorHandler('Error update playlist')
-  //   );
-  // }
 
   addOrUpdateNews(listNews) {
     let sql = 'INSERT OR REPLACE INTO `news` (`id`, `title`, `titleWithRuby`, `outlineWithRuby`, `contentWithRuby`, `imageUrl`, `voiceUrl`, `date`, `dateText`) VALUES (?,?,?,?,?,?,?,?,?)';
@@ -260,6 +265,20 @@ export class DbService {
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
+  getWordsByPlaylistId(playlistId) {
+    let sql = 'SELECT `word`.* FROM `word` JOIN `word_playlist` ON `word`.`id` = `word_playlist`.`wordId` AND `word_playlist`.`playlistId` = ? ORDER BY `lastPlayed` DESC, `timesPlayed` DESC';
+    return this.db.executeSql(sql, [ playlistId ]).then((resultSet) => {
+      let data = this.convertResultSetToArray(resultSet);
+      data.forEach((word) => {
+        word.mainExample = JSON.parse(word.mainExample);
+        word.meaning = JSON.parse(word.meaning);
+        word.otherExamples = JSON.parse(word.otherExamples);
+        word.phonetic = JSON.parse(word.phonetic);
+      });
+      return data;
+    }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
   getUnitsByCourseId(courseId) {
     let sql = 'SELECT * FROM `unit` WHERE `courseId` = ?';
     return this.db.executeSql(sql, [ courseId ]).then((resultSet) => {
@@ -278,6 +297,12 @@ export class DbService {
       ];
     });
     return this.db.sqlBatch(listSql)
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  deleteWordPlaylist(wordId, playlistId) {
+    let sql = 'DELETE FROM `word_playlist` WHERE `wordId` = ? AND `playlistId` = ?';
+    return this.db.executeSql(sql, [ wordId, playlistId ])
       .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
