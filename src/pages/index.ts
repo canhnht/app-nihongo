@@ -8,3 +8,5 @@ export { WordsPage } from './words-page/words-page';
 export { WordSlides } from './word-slides/word-slides';
 export { PlaylistsPage } from './playlists-page/playlists-page';
 export { PlaylistDetail } from './playlist-detail/playlist-detail';
+export { FeedbackPage } from './feedback-page/feedback-page';
+export { SettingPage } from './setting-page/setting-page';

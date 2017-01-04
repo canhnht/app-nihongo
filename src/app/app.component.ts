@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
 import { StatusBar, Splashscreen, NativeAudio } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { LoginPage, HomePage, PlaylistsPage } from '../pages';
+import { LoginPage, HomePage, PlaylistsPage, FeedbackPage, SettingPage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
 import { ASSETS_BASE_URL } from '../constants';
 import { firebaseConfig } from './config-local';
@@ -18,6 +18,8 @@ export class MyApp {
   rootPage = HomePage;
   homePage = HomePage;
   playlistsPage = PlaylistsPage;
+  feedbackPage = FeedbackPage;
+  settingPage = SettingPage;
 
   constructor(private platform: Platform, private translate: TranslateService,
     private storageService: LocalStorageService, private dbService: DbService) {
@@ -52,10 +54,8 @@ export class MyApp {
     let lastView = this.nav.last();
     while (lastView.component !== HomePage
       && lastView.component !== PlaylistsPage
-      // && lastView.component !== FeedbackPage
-      // && lastView.component !== SettingPage
-      // && lastView.component !== LoginPage
-      // && lastView.component !== GamePage
+      && lastView.component !== FeedbackPage
+      && lastView.component !== SettingPage
       ) {
       lastView = this.nav.getPrevious(lastView);
     }

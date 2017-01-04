@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle left icon-only>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{'Setting' | translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <button ion-item text-wrap (click)="selectLanguage()">
+      <ion-label class="setting-item">
+        <ion-icon color="primary" name="globe" class="setting-icon"></ion-icon>
+        {{'Language' | translate}}
+      </ion-label>
+    </button>
+    <button ion-item text-wrap>
+      <ion-label class="setting-item">
+        <ion-icon color="primary" name="star-half" class="setting-icon"></ion-icon>
+        {{'Rate_app' | translate}}
+      </ion-label>
+    </button>
+    <button ion-item text-wrap>
+      <ion-label class="setting-item">
+        <ion-icon color="primary" name="timer" class="setting-icon"></ion-icon>
+        {{'Break_between_words' | translate}}
+      </ion-label>
+      <ion-select [(ngModel)]="timeBetweenWords" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}" (ionChange)="setTimeBetweenWords()">
+        <ion-option value="0">0 {{'second' | translate}}</ion-option>
+        <ion-option value="3">3 {{'second' | translate}}</ion-option>
+        <ion-option value="5">5 {{'second' | translate}}</ion-option>
+        <ion-option value="10">10 {{'second' | translate}}</ion-option>
+        <ion-option value="15">15 {{'second' | translate}}</ion-option>
+      </ion-select>
+    </button>
+    <button ion-item text-wrap>
+      <ion-label class="setting-item">
+        <ion-icon color="primary" name="repeat" class="setting-icon"></ion-icon>
+        {{'Repeat_times' | translate}}
+      </ion-label>
+      <ion-select [(ngModel)]="repeatEachWord" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}" (ionChange)="setRepeatEachWord()">
+        <ion-option value="1">1 {{'time' | translate}}</ion-option>
+        <ion-option value="2">2 {{'time' | translate}}</ion-option>
+        <ion-option value="3">3 {{'time' | translate}}</ion-option>
+        <ion-option value="5">5 {{'time' | translate}}</ion-option>
+        <ion-option value="10">10 {{'time' | translate}}</ion-option>
+      </ion-select>
+    </button>
+  </ion-list>
+</ion-content>
