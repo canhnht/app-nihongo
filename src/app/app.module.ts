@@ -9,6 +9,8 @@ import { HomePage } from '../pages/home-page/home-page';
 import { TabHomePage } from '../pages/tab-home-page/tab-home-page';
 import { TabUserPage } from '../pages/tab-user-page/tab-user-page';
 import { WordPage } from '../pages/word-page/word-page';
+import { SettingWordPage } from '../pages/setting-word-page/setting-word-page';
+import { PopoverWordPage } from '../pages/word-page/word-page';
 import { LocalStorageService, SettingService, SliderService, DbService } from '../services';
 
 @NgModule({
@@ -17,7 +19,9 @@ import { LocalStorageService, SettingService, SliderService, DbService } from '.
     HomePage,
     TabHomePage,
     TabUserPage,
-    WordPage
+    WordPage,
+    SettingWordPage,
+    PopoverWordPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -33,7 +37,9 @@ import { LocalStorageService, SettingService, SliderService, DbService } from '.
     HomePage,
     TabHomePage,
     TabUserPage,
-    WordPage
+    WordPage,
+    SettingWordPage,
+    PopoverWordPage
   ],
   providers: [
     {

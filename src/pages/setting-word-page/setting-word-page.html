@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Settings Word</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+<ion-list>
+  <ion-list-header>
+    <ion-badge>Listen Mode</ion-badge>
+    <!--<ion-label>Listen Mode</ion-label>-->
+  </ion-list-header>
+  <ion-item text-wrap>
+    <ion-label>
+      <ion-icon name="timer"></ion-icon>
+      Time between words
+    </ion-label>
+    <ion-select [(ngModel)]="timeBetweenWords" cancelText="Cancel"
+      okText="OK" (ionChange)="setTimeBetweenWords()">
+      <ion-option value="0">0s</ion-option>
+      <ion-option value="3">3s</ion-option>
+      <ion-option value="5">5s</ion-option>
+      <ion-option value="10">10s</ion-option>
+      <ion-option value="15">15s</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item text-wrap>
+    <ion-label>
+      <ion-icon name="repeat"></ion-icon>
+      Repeat times
+    </ion-label>
+    <ion-select [(ngModel)]="repeatEachWord" cancelText="Cancel"
+      okText="OK" (ionChange)="setRepeatEachWord()">
+      <ion-option value="1">1 </ion-option>
+      <ion-option value="2">2 </ion-option>
+      <ion-option value="3">3 </ion-option>
+      <ion-option value="5">5 </ion-option>
+      <ion-option value="10">10 </ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-list-header>
+    <ion-badge>Learn Mode</ion-badge>
+  </ion-list-header>
+  
+  <ion-list-header>
+    <ion-badge>Others</ion-badge>
+  </ion-list-header>
+  <ion-item text-wrap>
+    <ion-label>
+      <ion-icon name="photos"></ion-icon>
+      Display
+    </ion-label>
+    <ion-select [(ngModel)]="modeDisplay" multiple="true" okText="Ok" cancelText="Cancel">
+      <ion-option value="kanji" selected="true">Kanji</ion-option>
+      <ion-option value="hiragana">Hiragana</ion-option>
+      <ion-option value="meaning">Meaning</ion-option>
+    </ion-select>
+  </ion-item>
+</ion-list>
+</ion-content>
