@@ -92,40 +92,40 @@
 </ion-content>
 <ion-footer>
   <ion-toolbar>
-  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
-  </ion-icon>
-  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
-  </ion-icon>
-  <ion-slides #modControl pager [options]="mySlideOptions">
+    <!--<ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
+    </ion-icon>
+    <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
+    </ion-icon>-->
+    <ion-slides #modControl pager [options]="mySlideOptions">
 
-  <ion-slide>
-    <button ion-button icon-only outline>
-      <ion-icon name="shuffle"></ion-icon>
-    </button>
-    <button ion-button round icon-right margin>
-      Listen
-      <ion-icon name="play"></ion-icon>
-    </button>
-    <button ion-button icon-only outline>
-      <ion-icon name="repeat"></ion-icon>
-    </button>
-  </ion-slide>
+      <ion-slide>
+        <button ion-button icon-only outline>
+          <ion-icon name="shuffle"></ion-icon>
+        </button>
+        <button ion-button round icon-right margin>
+          Listen
+          <ion-icon name="play"></ion-icon>
+        </button>
+        <button ion-button icon-only outline>
+          <ion-icon name="repeat"></ion-icon>
+        </button>
+      </ion-slide>
 
-  <ion-slide>
-    <button ion-button round icon-right>
-      Game
-      <ion-icon name="game-controller-b"></ion-icon>
-    </button>
-  </ion-slide>
+      <ion-slide>
+        <button ion-button round icon-right>
+          Game
+          <ion-icon name="game-controller-b"></ion-icon>
+        </button>
+      </ion-slide>
 
-  <ion-slide>
-    <button ion-button round icon-right>
-      Learn
-      <ion-icon name="book"></ion-icon>
-    </button>
-  </ion-slide>
+      <ion-slide>
+        <button ion-button round icon-right>
+          Learn
+          <ion-icon name="book"></ion-icon>
+        </button>
+      </ion-slide>
 
-</ion-slides>
+    </ion-slides>
   </ion-toolbar>
 </ion-footer>
 

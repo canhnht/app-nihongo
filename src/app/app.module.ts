@@ -11,6 +11,7 @@ import { TabUserPage } from '../pages/tab-user-page/tab-user-page';
 import { WordPage } from '../pages/word-page/word-page';
 import { SettingWordPage } from '../pages/setting-word-page/setting-word-page';
 import { PopoverWordPage } from '../pages/word-page/word-page';
+import { UnitPage } from '../pages/unit-page/unit-page';
 import { LocalStorageService, SettingService, SliderService, DbService } from '../services';
 
 @NgModule({
@@ -21,7 +22,8 @@ import { LocalStorageService, SettingService, SliderService, DbService } from '.
     TabUserPage,
     WordPage,
     SettingWordPage,
-    PopoverWordPage
+    PopoverWordPage,
+    UnitPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -39,7 +41,8 @@ import { LocalStorageService, SettingService, SliderService, DbService } from '.
     TabUserPage,
     WordPage,
     SettingWordPage,
-    PopoverWordPage
+    PopoverWordPage,
+    UnitPage
   ],
   providers: [
     {

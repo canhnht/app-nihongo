@@ -4,6 +4,7 @@ import { StatusBar, Splashscreen, NativeAudio } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { HomePage } from '../pages/home-page/home-page';
 import { WordPage } from '../pages/word-page/word-page';
+import { UnitPage } from '../pages/unit-page/unit-page';
 import { LocalStorageService, DbService } from '../services';
 import { ASSETS_BASE_URL } from '../constants';
 
@@ -12,7 +13,7 @@ import { ASSETS_BASE_URL } from '../constants';
 })
 export class MyApp {
   @ViewChild('content') nav: NavController;
-  rootPage = WordPage;
+  rootPage = UnitPage;
 
   constructor(private platform: Platform, private translate: TranslateService,
     private storageService: LocalStorageService, private dbService: DbService) {
