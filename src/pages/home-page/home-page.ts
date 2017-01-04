@@ -63,11 +63,11 @@ export class HomePage {
     let folderPath = cordova.file.dataDirectory;
     File.removeRecursively(folderPath, course.id).then(res => {
       Toast.showLongCenter(this.translate.instant('Delete_course_successfully', {
-        courseName: course.courseName
+        courseName: course.name
       })).subscribe(() => {});
     }).catch(utils.errorHandler(this.translate.instant('Error_delete_course')));
 
-    this.dbService.deleteCourse(course);
+    this.dbService.deleteCourse(course.id);
   }
 
   downloadCourse(course, index) {

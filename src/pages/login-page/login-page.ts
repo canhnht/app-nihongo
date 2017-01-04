@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
-import { PlaylistOptions } from '../../components';
 
 @Component({
   templateUrl: 'login-page.html',
