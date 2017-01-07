@@ -40,6 +40,10 @@ $font-path: "../assets/fonts";
        url('../assets/fonts/Linotte/r0c0i - Linotte Regular.ttf') format('truetype'),
        url('../assets/fonts/Linotte/r0c0i - Linotte Semi Bold.ttf') format('truetype');
 }
+@font-face {
+  font-family: 'NovaMono';
+  src: url('../assets/fonts/Nova_Mono/NovaMono.ttf') format('truetype'); /* Safari, Android, iOS */
+}
 * {
   font-family: 'Taviraj', Fallback, sans-serif;
 }

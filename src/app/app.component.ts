@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
 import { StatusBar, Splashscreen, NativeAudio } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { LoginPage, HomePage, PlaylistsPage, FeedbackPage, SettingPage } from '../pages';
+import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage, LoginPage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
 import { ASSETS_BASE_URL } from '../constants';
 import { firebaseConfig } from './config-local';

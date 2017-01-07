@@ -63,5 +63,6 @@
   "Error_audio": "Xảy ra lỗi audio",
   "Error_delete_course": "Xảy ra lỗi khi xóa khóa học",
   "Error_download_course": "Xảy ra lỗi khi tải khóa học",
+  "Error_login_facebook": "Xảy ra lỗi khi đăng nhập với Facebook",
   "Next_word_countdown": "Từ tiếp theo trong {{seconds}} giây"
 }
