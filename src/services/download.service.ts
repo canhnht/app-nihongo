@@ -1,71 +1,18 @@
-import { Component } from '@angular/core';
-import { Http } from '@angular/http';
-import { Subscription } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Toast, Transfer, File, Network } from 'ionic-native';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, LoadingController, ModalController } from 'ionic-angular';
+import { DbService } from '../services';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { NewsPage } from '../news-page/news-page';
-import { NewsDetail } from '../news-detail/news-detail';
-import { UnitsPage } from '../units-page/units-page';
-import { DbService, SettingService } from '../../services';
-import { NHK_URL } from '../../constants';
-declare var require: any;
 let firebase = require('firebase');
-import * as utils from '../../utils';
-
 declare var cordova: any;
 
-@Component({
-  templateUrl: 'home-page.html',
-})
-export class HomePage {
-  courses: any[] = [];
-  coursesSubscription: Subscription;
-  settingSubscription: Subscription;
-  listNewsSubscription: Subscription;
-  downloadNewsSubscription: Subscription;
-  latestNews: any = null;
-  latestNewsSubscription: Subscription;
-  loadingNews: boolean = true;
+@Injectable()
+export class DownloadService {
+  
+  percDownloadedSubject: Subject<any> = new Subject<any>();
 
-  constructor(private navCtrl: NavController, private dbService: DbService,
-    private settingService: SettingService, private http: Http,
-    private translate: TranslateService, private alertCtrl: AlertController) {
-    this.downloadNews();
-  }
-
-  ionViewWillEnter() {
-    this.dbService.getCourses();
-    this.coursesSubscription = this.dbService.coursesSubject.subscribe(
-      courses => this.courses = courses
-    );
-
-    this.dbService.getLatestNews();
-    this.latestNewsSubscription = this.dbService.latestNewsSubject.subscribe(
-      latestNews => this.latestNews = latestNews
-    );
-  }
-
-  ionViewWillLeave() {
-    this.coursesSubscription.unsubscribe();
-    this.downloadNewsSubscription.unsubscribe();
-    this.latestNewsSubscription.unsubscribe();
-  }
-
-  goToCourse(course) {
-    this.settingService.reset(true);
-    this.navCtrl.push(UnitsPage, { selectedCourse: course });
-  }
-
-  deleteCourse(course) {
-    let folderPath = cordova.file.dataDirectory;
-    File.removeRecursively(folderPath, course.id).then(res => {
-      Toast.showLongCenter(this.translate.instant('Delete_course_successfully', {
-        courseName: course.courseName
-      })).subscribe(() => {});
-    }).catch(utils.errorHandler(this.translate.instant('Error_delete_course')));
-
-    this.dbService.deleteCourse(course);
+  constructor(private alertCtrl: AlertController, private dbService: DbService, private translate: TranslateService) {
   }
 
   downloadCourse(course, index) {
@@ -81,7 +28,7 @@ export class HomePage {
     course.downloading = true;
     let courseRef = firebase.database().ref(`${course.id}`);
     let snapshot;
-    courseRef.once('value').then(snapshotResponse => {
+    return courseRef.once('value').then(snapshotResponse => {
       snapshot = snapshotResponse.val();
       let downloadPromise = Object.keys(snapshot.units).map((unitId) => {
         let unit = {
@@ -105,19 +52,34 @@ export class HomePage {
         let unitAndWordsPromise = this.dbService.addUnit(unit).then(() => {
           return this.dbService.addWords(words, unitId);
         });
+
         let audioPromise = this.downloadAudio(course.id, unitId, words);
+
         return Promise.all([unitAndWordsPromise, audioPromise]);
+
       });
-      return Promise.all(downloadPromise);
-    }).then(res => {
+      downloadPromise =  downloadPromise.concat(downloadPromise);
+      let count = 0;
+      let numOfUnits = downloadPromise.length;
+      return downloadPromise.reduce((p, item) => {
+        return p.then((res) => {
+          count++;
+          this.percDownloadedSubject.next({
+            percDownloaded: (count / numOfUnits) * 100
+          })
+        })
+      }, Promise.resolve())
+    })
+    .then(res => {
       Toast.showLongCenter(this.translate.instant('Download_course_successfully', {
         courseName: course.name
       })).subscribe(() => {});
       course.downloading = false;
       course.downloaded = true;
       course.noWords = snapshot.noWords;
-      course.noUnits = Object.keys(snapshot.units).length;
-      return this.dbService.updateCourse(course);
+      course.noUnits = Object.keys(snapshot.units).length;      
+      this.dbService.updateCourse(course);
+      return true;
     })
     .catch(err => {
       course.downloading = false;
@@ -150,24 +112,5 @@ export class HomePage {
     });
   }
 
-  goToDetail() {
-    this.navCtrl.push(NewsDetail, { selectedNews: this.latestNews });
-  }
-
-  listAllNews() {
-    this.navCtrl.push(NewsPage);
-  }
-
-  downloadNews() {
-    this.loadingNews = true;
-    this.downloadNewsSubscription = this.http.get(NHK_URL)
-      .map(res => res.json())
-      .subscribe(listNews => {
-        this.loadingNews = false;
-        this.dbService.addOrUpdateNews(listNews);
-      }, err => {
-        this.loadingNews = false;
-        Toast.showShortBottom(this.translate.instant('Download_news_error')).subscribe(() => {});
-      });
-  }
 }
+

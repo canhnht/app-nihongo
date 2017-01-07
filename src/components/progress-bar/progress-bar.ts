@@ -1,0 +1,22 @@
+import { Component, Input } from '@angular/core';
+import {IONIC_DIRECTIVES} from 'ionic-angular';
+/*
+  Generated class for the ProgressBar component.
+
+  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
+  for more info on Angular 2 Components.
+*/
+@Component({
+  selector: 'progress-bar',
+  templateUrl: 'progress-bar.html' 
+})
+export class ProgressBarComponent {
+
+  @Input('progress') progress;
+
+  constructor() {
+    console.log('Hello ProgressBar Component');
+    
+  }
+
+}
