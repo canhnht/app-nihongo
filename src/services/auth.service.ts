@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Facebook, Toast } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
+import { Subject } from 'rxjs';
 import * as utils from '../utils';
 
 declare var require: any;
@@ -10,6 +11,8 @@ let firebase = require('firebase');
 @Injectable()
 export class AuthService {
   isLoggedIn: boolean = false;
+  currentUser: any = {};
+  authSubject: Subject<any> = new Subject<any>();
 
   constructor(private storage: Storage, private translate: TranslateService) {
     this.checkLoginState();
@@ -23,12 +26,25 @@ export class AuthService {
       } else {
         this.isLoggedIn = false;
       }
+      this.pushState();
+    });
+  }
+
+  private pushState() {
+    this.authSubject.next({
+      isLoggedIn: this.isLoggedIn,
+      currentUser: this.currentUser
     });
   }
 
   private saveUser(user) {
-    let { displayName, email, photoUrl, uid } = user;
-    return this.storage.set('user', { displayName, email, photoUrl, uid });
+    if (user) {
+      let { displayName, email, photoUrl, uid } = user;
+      this.currentUser = { displayName, email, photoUrl, uid };
+      return this.storage.set('user', { displayName, email, photoUrl, uid });
+    } else {
+      return this.storage.set('user', null);
+    }
   }
 
   loginWithFacebook() {
@@ -37,7 +53,6 @@ export class AuthService {
       let signInPromise = Promise.resolve(firebase.auth().signInWithCredential(facebookCredential));
       return signInPromise.then((user) => {
         this.isLoggedIn = true;
-        return this.saveUser(user);
       }).catch(this.handleLoginError);
     }).catch(utils.errorHandler(this.translate.instant('Error_login_facebook')));
   }
@@ -67,5 +82,9 @@ export class AuthService {
         Toast.showShortBottom('Wrong password').subscribe(() => {});
         break;
     }
+  }
+
+  logoutFacebook() {
+    return firebase.auth().signOut().catch(utils.errorHandler(this.translate.instant('Error_logout_facebook')));
   }
 }
