@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Toast, Transfer, File, Network } from 'ionic-native';
-import { NavController, AlertController, LoadingController, ModalController } from 'ionic-angular';
+import { Toast, Transfer, Network } from 'ionic-native';
+import { AlertController } from 'ionic-angular';
 import { DbService } from '../services';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 let firebase = require('firebase');
@@ -9,7 +9,7 @@ declare var cordova: any;
 
 @Injectable()
 export class DownloadService {
-  
+
   percDownloadedSubject: Subject<any> = new Subject<any>();
 
   constructor(private alertCtrl: AlertController, private dbService: DbService, private translate: TranslateService) {
@@ -26,66 +26,62 @@ export class DownloadService {
       return;
     }
     course.downloading = true;
-    let courseRef = firebase.database().ref(`${course.id}`);
-    let snapshot;
-    return courseRef.once('value').then(snapshotResponse => {
-      snapshot = snapshotResponse.val();
-      let downloadPromise = Object.keys(snapshot.units).map((unitId) => {
-        let unit = {
-          id: unitId,
-          name: snapshot.units[unitId].unitName,
-          number: snapshot.units[unitId].number,
-          noWords: snapshot.units[unitId].noWords,
-          locked: 1,
-          courseId: course.id,
-        };
-        let words = snapshot.units[unitId].words;
-        words.forEach((word) => {
-          word.id = word._id;
-          delete word._id;
-          word.mainExample = JSON.stringify(word.mainExample);
-          word.meaning = JSON.stringify(word.meaning);
-          word.otherExamples = JSON.stringify(word.otherExamples);
-          word.phonetic = JSON.stringify(word.phonetic);
-        });
-
-        let unitAndWordsPromise = this.dbService.addUnit(unit).then(() => {
-          return this.dbService.addWords(words, unitId);
-        });
-
-        let audioPromise = this.downloadAudio(course.id, unitId, words);
-
-        return Promise.all([unitAndWordsPromise, audioPromise]);
-
+    let remainingPercent = 100;
+    return this.downloadCourseInfo(course.id).then((course) => {
+      this.percDownloadedSubject.next({
+        percDownloaded: 1
       });
-      // downloadPromise =  downloadPromise.concat(downloadPromise);
-      let count = 0;
-      let numOfUnits = downloadPromise.length;
-      return downloadPromise.reduce((p, item) => {
-        return p.then((res) => {
-          count++;
-          this.percDownloadedSubject.next({
-            percDownloaded: (count / numOfUnits) * 100
-          });
-          return item.then(()=>{});
-        })
-        .catch(err => {
-          course.downloading = false;
-          Toast.showLongBottom(this.translate.instant('Error_download_course')).subscribe(() => {});
-    });
-      }, Promise.resolve())
+      remainingPercent -= 1;
 
-    })
-    .then(res => {
+      let listUnitId = Object.keys(course.units).filter((unitId) => course.units[unitId]);
+      return this.downloadUnits(listUnitId);
+    }).then((listUnit) => {
+      this.percDownloadedSubject.next({
+        percDownloaded: 2
+      });
+      remainingPercent -= 1;
+
+      let listWord = listUnit.reduce((result, unit) => {
+        return result.concat(Object.keys(unit.words)
+          .filter((wordId) => unit.words[wordId])
+          .map((wordId) => ({
+            id: wordId,
+            unitId: unit.id,
+            courseId: course.id,
+          })));
+      }, []);
+      listUnit = listUnit.map((unit) => ({
+        id: unit.id,
+        name: unit.name,
+        number: unit.number,
+        courseId: course.id
+      }));
+      return this.dbService.addUnits(listUnit).then(() => {
+        this.percDownloadedSubject.next({
+          percDownloaded: 3
+        });
+        remainingPercent -= 1;
+
+        let percentPerWord = remainingPercent / listWord.length;
+        let downloadedPercent = 3;
+        let wordsPromise = listWord.map((word) => this.downloadWord(word));
+        return wordsPromise.reduce((p, e) => {
+          return p.then(() => {
+            downloadedPercent += percentPerWord;
+            this.percDownloadedSubject.next({
+              percDownloaded: downloadedPercent
+            });
+            return e;
+          });
+        }, Promise.resolve());
+      });
+    }).then(res => {
       Toast.showLongCenter(this.translate.instant('Download_course_successfully', {
         courseName: course.name
       })).subscribe(() => {});
       course.downloading = false;
       course.downloaded = true;
-      course.noWords = snapshot.noWords;
-      course.noUnits = Object.keys(snapshot.units).length;      
-      this.dbService.updateCourse(course);
-      return true;
+      return this.dbService.updateCourse(course);
     })
     .catch(err => {
       course.downloading = false;
@@ -93,30 +89,52 @@ export class DownloadService {
     });
   }
 
-  private downloadAudio(courseId, unitId, words) {
-    let storage = firebase.storage();
-    words = words.filter((word) => !!word.audioFile);
-    let urlsPromise = words.map(word => {
-      let pathReference = storage.ref(`${courseId}/${unitId}/${word.audioFile}.mp3`);
-      return Promise.resolve(pathReference.getDownloadURL()).then(url => ({
-        url,
-        wordId: word.id,
-        unitId: unitId,
-        audioFile: word.audioFile,
-      }));
+  private downloadCourseInfo(courseId) {
+    let courseRef = firebase.database().ref(`/courses/${courseId}`);
+    return courseRef.once('value').then((res) => res.val())
+      .then((course) => Object.assign({ id: courseId }, course));
+  }
+
+  private downloadUnits(listUnitId) {
+    let unitsPromise = listUnitId.map((unitId) => {
+      let unitRef = firebase.database().ref(`/units/${unitId}`);
+      return unitRef.once('value').then((res) => res.val())
+        .then((unit) => Object.assign({ id: unitId }, unit));
     });
-    return Promise.all(urlsPromise).then((listUrl) => {
-      let downloadPromise = listUrl.map((item: any) => {
-        let folderPath = `${cordova.file.dataDirectory}${courseId}/${unitId}`;
-        const fileTransfer = new Transfer();
-        return Promise.resolve(fileTransfer.download(item.url,
-          `${folderPath}/${item.audioFile}.mp3`)).then(() => {
-            return this.dbService.updateAudioFile(item.wordId, `${courseId}/${unitId}/${item.audioFile}.mp3`);
-          });
-      });
-      return Promise.all(downloadPromise);
+    return Promise.all(unitsPromise);
+  }
+
+  private downloadWord({ id, unitId, courseId }) {
+    let wordRef = firebase.database().ref(`/words/${id}`);
+    let wordPromise = wordRef.once('value').then((res) => res.val());
+    return wordPromise.then((word) => {
+      return this.dbService.addWord({
+        id, unitId,
+        kanji: word.kanji,
+        audioFile: word.audioFile,
+        audioDuration: word.audioDuration,
+        mainExample: JSON.stringify(word.mainExample),
+        meaning: JSON.stringify(word.meaning),
+        otherExamples: JSON.stringify(word.otherExamples),
+        phonetic: JSON.stringify(word.phonetic),
+      }).then(() => this.downloadAudio(courseId, unitId, word));
     });
   }
 
+  private downloadAudio(courseId, unitId, word) {
+    let storage = firebase.storage();
+    if (!word.audioFile) return Promise.resolve();
+    else {
+      let pathReference = storage.ref(`${courseId}/${unitId}/${word.audioFile}.mp3`);
+      return Promise.resolve(pathReference.getDownloadURL()).then((url) => {
+        let folderPath = `${cordova.file.dataDirectory}${courseId}/${unitId}`;
+        const fileTransfer = new Transfer();
+        return Promise.resolve(fileTransfer.download(url,
+          `${folderPath}/${word.audioFile}.mp3`)).then(() => {
+            return this.dbService.updateAudioFile(word.id, `${courseId}/${unitId}/${word.audioFile}.mp3`);
+          });
+      });
+    }
+  }
 }
 

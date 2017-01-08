@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavParams, ViewController } from 'ionic-angular';
 import { DownloadService } from '../../services';
 import { Subscription } from 'rxjs';
 
@@ -8,15 +8,13 @@ import { Subscription } from 'rxjs';
   templateUrl: 'modal-download-page.html'
 })
 export class ModalDownloadPage {
-  
+
   perDownloading: any = 0;
   percDownloadedSubscription: Subscription;
   course: any;
   constructor(public viewCtrl: ViewController, private downloadService: DownloadService, public params: NavParams) {
-  
     this.course = this.params.get('course');
     this.course.image = "assets/images/courses/N3Logo.png";
-    
   }
 
   ionViewWillEnter(){

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs';
-import { Toast, Transfer, File, Network } from 'ionic-native';
+import { Toast, File } from 'ionic-native';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { NewsPage } from '../news-page/news-page';
@@ -10,8 +10,6 @@ import { UnitsPage } from '../units-page/units-page';
 import { ModalDownloadPage } from '../modal-download-page/modal-download-page';
 import { DbService, SettingService, DownloadService } from '../../services';
 import { NHK_URL } from '../../constants';
-declare var require: any;
-let firebase = require('firebase');
 import * as utils from '../../utils';
 
 declare var cordova: any;
@@ -31,15 +29,15 @@ export class TabHomePage {
   latestNewsSubscription: Subscription;
   loadingNews: boolean = true;
   modalDownloadCourse: any;
- 
- 
+
+
   constructor(private navCtrl: NavController, private dbService: DbService,
     private settingService: SettingService, private http: Http,
     private translate: TranslateService, private downloadService: DownloadService, private alertCtrl: AlertController, public modalCtrl: ModalController) {
     this.downloadNews();
-    
+
   }
-  
+
   ionViewWillEnter() {
     this.dbService.getCourses();
     this.coursesSubscription = this.dbService.coursesSubject.subscribe(
@@ -62,11 +60,11 @@ export class TabHomePage {
     if(course.downloaded) {
       this.goToCourse(course);
     }else{
-      this.openModalDownload(course); 
+      this.openModalDownload(course);
       this.downloadService.downloadCourse(course, index).then((rs) => {
           this.modalDownloadCourse.dismiss();
           this.goToCourse(course);
-      });    
+      });
     }
   }
 
