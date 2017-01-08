@@ -58,7 +58,7 @@ export class DownloadService {
         return Promise.all([unitAndWordsPromise, audioPromise]);
 
       });
-      downloadPromise =  downloadPromise.concat(downloadPromise);
+      // downloadPromise =  downloadPromise.concat(downloadPromise);
       let count = 0;
       let numOfUnits = downloadPromise.length;
       return downloadPromise.reduce((p, item) => {
@@ -66,9 +66,15 @@ export class DownloadService {
           count++;
           this.percDownloadedSubject.next({
             percDownloaded: (count / numOfUnits) * 100
-          })
+          });
+          return item.then(()=>{});
         })
+        .catch(err => {
+          course.downloading = false;
+          Toast.showLongBottom(this.translate.instant('Error_download_course')).subscribe(() => {});
+    });
       }, Promise.resolve())
+
     })
     .then(res => {
       Toast.showLongCenter(this.translate.instant('Download_course_successfully', {
