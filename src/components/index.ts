@@ -5,3 +5,4 @@ export { AudioSetting } from './audio-setting/audio-setting';
 export { CustomCheckbox } from './custom-checkbox/custom-checkbox';
 export { PlaylistOptions } from './playlist-options/playlist-options';
 export { SelectedWords } from './selected-words/selected-words';
+export { ProgressBarComponent } from './progress-bar/progress-bar';

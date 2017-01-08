@@ -69,5 +69,6 @@
   "Login_facebook": "Đăng nhập với Facebook",
   "Logout_facebook": "Đăng xuất ({{email}})",
   "Login_facebook_success": "Đăng nhập Facebook thành công",
-  "Logout_facebook_success": "Đăng xuất Facebook thành công"
+  "Logout_facebook_success": "Đăng xuất Facebook thành công",
+  "Downloading_course": "Đang tải khoá học"
 }

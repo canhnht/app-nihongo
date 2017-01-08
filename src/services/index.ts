@@ -4,3 +4,4 @@ export { SliderService } from './slider.service';
 export { DbService } from './db.service';
 export { AudioService } from './audio.service';
 export { AuthService } from './auth.service';
+export { DownloadService } from './download.service';

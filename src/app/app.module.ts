@@ -5,16 +5,16 @@ import { TranslateModule, TranslateLoader,
   TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
-import { LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage } from '../pages';
-import { LocalStorageService, SettingService, SliderService, DbService, AudioService, AuthService } from '../services';
-import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords } from '../components';
+import { LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, HomeTmpPage, TabHomePage, TabUserPage,  ModalDownloadPage } from '../pages';
+import { LocalStorageService, SettingService, SliderService, DbService, AudioService, AuthService, DownloadService } from '../services';
+import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent } from '../components';
 import { CustomDatePipe } from '../custom-date.pipe';
 
 @NgModule({
   declarations: [
     MyApp,
-    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage,
-    AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords,
+    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, HomeTmpPage, TabHomePage, TabUserPage, ModalDownloadPage,
+    AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent,
     CustomDatePipe
   ],
   imports: [
@@ -28,14 +28,14 @@ import { CustomDatePipe } from '../custom-date.pipe';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, PlaylistOptions, SelectedWords, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage
+    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, PlaylistOptions, SelectedWords, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, HomeTmpPage, TabHomePage, TabUserPage, ModalDownloadPage
   ],
   providers: [
     {
       provide: ErrorHandler,
       useClass: IonicErrorHandler
     },
-    LocalStorageService, SettingService, SliderService, DbService, AudioService, AuthService,
+    LocalStorageService, SettingService, SliderService, DbService, AudioService, AuthService, DownloadService,
     {
       provide: Storage,
       useFactory: () => new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'io.techybrain.minagoi' }),
