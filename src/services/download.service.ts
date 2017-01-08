@@ -9,7 +9,8 @@ declare var cordova: any;
 
 @Injectable()
 export class DownloadService {
-
+  percentPerWord: number;
+  downloadedPercent: number;
   percDownloadedSubject: Subject<any> = new Subject<any>();
 
   constructor(private alertCtrl: AlertController, private dbService: DbService, private translate: TranslateService) {
@@ -62,18 +63,10 @@ export class DownloadService {
         });
         remainingPercent -= 1;
 
-        let percentPerWord = remainingPercent / listWord.length;
-        let downloadedPercent = 3;
+        this.percentPerWord = remainingPercent / listWord.length;
+        this.downloadedPercent = 3;
         let wordsPromise = listWord.map((word) => this.downloadWord(word));
-        return wordsPromise.reduce((p, e) => {
-          return p.then(() => {
-            downloadedPercent += percentPerWord;
-            this.percDownloadedSubject.next({
-              percDownloaded: downloadedPercent
-            });
-            return e;
-          });
-        }, Promise.resolve());
+        return Promise.all(wordsPromise);
       });
     }).then(res => {
       Toast.showLongCenter(this.translate.instant('Download_course_successfully', {
@@ -117,7 +110,12 @@ export class DownloadService {
         meaning: JSON.stringify(word.meaning),
         otherExamples: JSON.stringify(word.otherExamples),
         phonetic: JSON.stringify(word.phonetic),
-      }).then(() => this.downloadAudio(courseId, unitId, word));
+      }).then(() => this.downloadAudio(courseId, unitId, word)).then(() => {
+        this.downloadedPercent += this.percentPerWord;
+        this.percDownloadedSubject.next({
+          percDownloaded: this.downloadedPercent
+        });
+      })
     });
   }
 
@@ -130,10 +128,8 @@ export class DownloadService {
         let folderPath = `${cordova.file.dataDirectory}${courseId}/${unitId}`;
         const fileTransfer = new Transfer();
         return Promise.resolve(fileTransfer.download(url,
-          `${folderPath}/${word.audioFile}.mp3`)).then(() => {
-            return this.dbService.updateAudioFile(word.id, `${courseId}/${unitId}/${word.audioFile}.mp3`);
-          });
-      });
+          `${folderPath}/${word.audioFile}.mp3`));
+      }).then(() => this.dbService.updateAudioFile(word.id, `${courseId}/${unitId}/${word.audioFile}.mp3`));
     }
   }
 }

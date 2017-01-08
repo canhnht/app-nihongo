@@ -20,7 +20,7 @@ export class ModalDownloadPage {
   ionViewWillEnter(){
     this.percDownloadedSubscription = this.downloadService.percDownloadedSubject.subscribe(
       download => {
-        this.perDownloading = download.percDownloaded;
+        this.perDownloading = parseInt(download.percDownloaded);
     })
   }
 
