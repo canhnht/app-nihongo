@@ -7,6 +7,8 @@ DROP TABLE IF EXISTS `course`;
 CREATE TABLE IF NOT EXISTS `course` (
   `id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
+  `level` INTEGER DEFAULT 0,
+  `imageUrl` VARCHAR(255) DEFAULT NULL,
   `free` BOOLEAN NOT NULL DEFAULT 1,
   `downloaded` BOOLEAN NOT NULL DEFAULT 0,
   `noWords` INTEGER NOT NULL DEFAULT 0,
@@ -28,8 +30,9 @@ DROP TABLE IF EXISTS `unit`;
 CREATE TABLE IF NOT EXISTS `unit` (
   `id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
+  `imageUrl` VARCHAR(255) DEFAULT NULL,
   `number` INTEGER NOT NULL DEFAULT 0,
-  `locked` BOOLEAN NOT NULL DEFAULT 1,
+  `state` BOOLEAN NOT NULL DEFAULT 0,
   `noWords` INTEGER NOT NULL DEFAULT 0,
   `courseId` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`),
@@ -114,11 +117,19 @@ CREATE TABLE IF NOT EXISTS `news` (
 
 
 -- Create triggers
-DROP TRIGGER IF EXISTS `update_noWords_unit`;
+DROP TRIGGER IF EXISTS `increase_noWords_unit`;
 ----
-CREATE TRIGGER IF NOT EXISTS `update_noWords_unit` AFTER DELETE ON `word`
+CREATE TRIGGER IF NOT EXISTS `increase_noWords_unit` AFTER DELETE ON `word`
   BEGIN
     UPDATE `unit` SET `noWords` = `noWords` - 1 WHERE `id` = old.unitId;
+  END;
+----
+
+DROP TRIGGER IF EXISTS `decrease_noWords_unit`;
+----
+CREATE TRIGGER IF NOT EXISTS `decrease_noWords_unit` AFTER INSERT ON `word`
+  BEGIN
+    UPDATE `unit` SET `noWords` = `noWords` + 1 WHERE `id` = new.unitId;
   END;
 ----
 
@@ -130,6 +141,14 @@ CREATE TRIGGER IF NOT EXISTS `update_noWords_course` AFTER UPDATE OF `noWords` O
   END;
 ----
 
+DROP TRIGGER IF EXISTS `increase_noUnits_course`;
+----
+CREATE TRIGGER IF NOT EXISTS `increase_noUnits_course` AFTER INSERT ON `unit`
+  BEGIN
+    UPDATE `course` SET `noUnits` = `noUnits` + 1 WHERE `id` = new.courseId;
+  END;
+----
+
 DROP TRIGGER IF EXISTS `delete_course`;
 ----
 CREATE TRIGGER IF NOT EXISTS `delete_course` AFTER UPDATE OF `noWords` ON `course`
@@ -138,15 +157,17 @@ CREATE TRIGGER IF NOT EXISTS `delete_course` AFTER UPDATE OF `noWords` ON `cours
   END;
 ----
 
-DROP TRIGGER IF EXISTS `update_noWords_playlist_after_delete`;
-CREATE TRIGGER IF NOT EXISTS `update_noWords_playlist_after_delete` AFTER DELETE ON `word_playlist`
+DROP TRIGGER IF EXISTS `decrease_noWords_playlist`;
+----
+CREATE TRIGGER IF NOT EXISTS `decrease_noWords_playlist` AFTER DELETE ON `word_playlist`
   BEGIN
     UPDATE `playlist` SET `noWords` = `noWords` - 1 WHERE `id` = old.playlistId;
   END;
 ----
 
-DROP TRIGGER IF EXISTS `update_noWords_playlist_after_insert`;
-CREATE TRIGGER IF NOT EXISTS `update_noWords_playlist_after_insert` AFTER INSERT ON `word_playlist`
+DROP TRIGGER IF EXISTS `increase_noWords_playlist`;
+----
+CREATE TRIGGER IF NOT EXISTS `increase_noWords_playlist` AFTER INSERT ON `word_playlist`
   BEGIN
     UPDATE `playlist` SET `noWords` = `noWords` + 1 WHERE `id` = new.playlistId;
   END;

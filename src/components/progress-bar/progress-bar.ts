@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import {IONIC_DIRECTIVES} from 'ionic-angular';
 /*
   Generated class for the ProgressBar component.
 
@@ -8,7 +7,7 @@ import {IONIC_DIRECTIVES} from 'ionic-angular';
 */
 @Component({
   selector: 'progress-bar',
-  templateUrl: 'progress-bar.html' 
+  templateUrl: 'progress-bar.html'
 })
 export class ProgressBarComponent {
 
@@ -16,7 +15,7 @@ export class ProgressBarComponent {
 
   constructor() {
     console.log('Hello ProgressBar Component');
-    
+
   }
 
 }

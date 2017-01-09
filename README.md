@@ -54,6 +54,9 @@ adb pull /sdcard/filename.sqlite
 6. Access database in device
 Run `./access_database.sh`
 
+### Clear proxy in terminal
+- Run `env | grep -i proxy` to get all proxy settings
+- Remove all *proxy* variables. `unset http_proxy ftp_proxy all_proxy ALL_PROXY socks_proxy https_proxy`
 
 ## Helpful references
 

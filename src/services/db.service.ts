@@ -73,22 +73,35 @@ export class DbService {
       .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
-  addUnit(unit) {
-    let sql = 'INSERT INTO `unit` (`id`, `name`, `number`, `locked`, `noWords`, `courseId`) VALUES (?,?,?,?,?,?)';
-    return this.db.executeSql(sql, [ unit.id, unit.name, unit.number, unit.locked, unit.noWords, unit.courseId ])
-      .catch(utils.errorHandler(this.translate.instant('Error_database')));
-  }
-
-  addWords(words, unitId) {
-    let sql = 'INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`, `audioFile`, `audioDuration`) VALUES (?,?,?,?,?,?,?,?,?)';
-    let listSql = words.map((word) => {
+  addUnits(units) {
+    let sql = 'INSERT INTO `unit` (`id`, `name`, `number`, `courseId`) VALUES (?,?,?,?)';
+    let listSql = units.map((unit) => {
       return [
-        sql, [ word.id, word.kanji, word.mainExample, word.meaning, word.otherExamples, word.phonetic, unitId, word.audioFile, word.audioDuration ]
+        sql, [ unit.id, unit.name, unit.number, unit.courseId ]
       ];
     });
     return this.db.sqlBatch(listSql)
-      .catch(utils.errorHandler(this.translate.instant('Error_database')));
+      .catch((err) => alert(`addUnits error ${err.message}`));
+      // .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
+
+  addWord(word) {
+    let sql = 'INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`, `audioFile`, `audioDuration`) VALUES (?,?,?,?,?,?,?,?,?)';
+    return this.db.executeSql(sql, [ word.id, word.kanji, word.mainExample, word.meaning, word.otherExamples, word.phonetic, word.unitId, word.audioFile, word.audioDuration ])
+      .catch((err) => alert(`addWord error ${err.message}`));
+      // .catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  // addWords(words, unitId) {
+  //   let sql = 'INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`, `audioFile`, `audioDuration`) VALUES (?,?,?,?,?,?,?,?,?)';
+  //   let listSql = words.map((word) => {
+  //     return [
+  //       sql, [ word.id, word.kanji, word.mainExample, word.meaning, word.otherExamples, word.phonetic, unitId, word.audioFile, word.audioDuration ]
+  //     ];
+  //   });
+  //   return this.db.sqlBatch(listSql)
+  //     .catch(utils.errorHandler(this.translate.instant('Error_database')));
+  // }
 
   updateAudioFile(wordId, audioFile) {
     let sql = 'UPDATE `word` SET `audioFile` = ? WHERE `id` = ?';
@@ -169,8 +182,8 @@ export class DbService {
   // }
 
   updateCourse(course) {
-    let sql = 'UPDATE `course` SET `noWords` = ?, `noUnits` = ?, `downloaded` = ?';
-    return this.db.executeSql(sql, [ course.noWords, course.noUnits, course.downloaded ])
+    let sql = 'UPDATE `course` SET `downloaded` = ?';
+    return this.db.executeSql(sql, [ course.downloaded ])
       .catch(utils.errorHandler('Error_database'));
   }
 

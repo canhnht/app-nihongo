@@ -63,6 +63,12 @@
   "Error_audio": "Xảy ra lỗi audio",
   "Error_delete_course": "Xảy ra lỗi khi xóa khóa học",
   "Error_download_course": "Xảy ra lỗi khi tải khóa học",
+  "Error_login_facebook": "Xảy ra lỗi khi đăng nhập với Facebook",
+  "Error_logout_facebook": "Xảy ra lỗi khi đăng xuất Facebook",
   "Next_word_countdown": "Từ tiếp theo trong {{seconds}} giây",
+  "Login_facebook": "Đăng nhập với Facebook",
+  "Logout_facebook": "Đăng xuất ({{email}})",
+  "Login_facebook_success": "Đăng nhập Facebook thành công",
+  "Logout_facebook_success": "Đăng xuất Facebook thành công",
   "Downloading_course": "Đang tải khoá học"
 }

@@ -1,44 +1,32 @@
-<ion-header>
-  <ion-navbar color="primary" class="playlists-navbar">
-    <button ion-button menuToggle left icon-only>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>{{'My_playlist' | translate}}</ion-title>
-    <ion-buttons end>
-      <button ion-button (click)="addNewPlaylist()">
-        <ion-icon name="add"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-navbar>
-</ion-header>
 
-<ion-content class="playlists-page">
-  <ion-list>
-    <ion-item-sliding>
-      <button ion-item text-wrap
-        (click)="goToPlaylistDetail($event, playlist)">
-        <ion-label class="playlist-item">
-          <ion-badge class="playlist-icon">
-            <ion-icon large name="musical-notes"></ion-icon>
-          </ion-badge>
-          <div>
-            <h1>playlist.name</h1>
-            <p>playlist.noWords {{'word' | translate}}</p>
-          </div>
-        </ion-label>
+<ion-content class="login-page">
+  <button ion-button clear color="primary" round large class="btn-close" icon-only>
+    <ion-icon name="close"></ion-icon>
+  </button>
+  <div class="login-content" padding>
+    <div class="app-name">MINAGOI</div>
+    <div class="input-email">
+      <ion-item>
+        <ion-label floating>Email</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+    </div>
+    <div class="input-password">
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input type="password"></ion-input>
+      </ion-item>
+    </div>
+    <div class="btn-login">
+      <button ion-button block (click)="login()">Log In</button>
+    </div>
+    <div class="or">
+      <hr class="or-line" /> <div class="or-text">or</div>
+    </div>
+    <div class="btn-login-facebook">
+      <button ion-button block (click)="loginWithFacebook()">
+        <i class="fa fa-facebook-f fa-lg"></i> Log In With Facebook
       </button>
-      <ion-item-options>
-        <button ion-button color="primary"
-          (click)="editPlaylist(playlist)">
-          <ion-icon name="create" large></ion-icon><br />
-          {{'Edit' | translate}}
-        </button>
-        <button ion-button color="danger"
-          (click)="deletePlaylist(playlist)">
-          <ion-icon name="trash" large></ion-icon><br />
-          {{'Delete' | translate}}
-        </button>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
+    </div>
+  </div>
 </ion-content>
