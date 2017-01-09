@@ -5,7 +5,7 @@ import { TranslateModule, TranslateLoader,
   TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
-import { LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, HomeTmpPage, TabHomePage, TabUserPage,  ModalDownloadPage } from '../pages';
+import { LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, HomeTmpPage, TabHomePage, TabUserPage,  ModalDownloadPage, UnitsTmpPage } from '../pages';
 import { LocalStorageService, SettingService, SliderService, DbService, AudioService, DownloadService } from '../services';
 import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent } from '../components';
 import { CustomDatePipe } from '../custom-date.pipe';
@@ -15,7 +15,7 @@ import { CustomDatePipe } from '../custom-date.pipe';
     MyApp,
     LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail,
     AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent,
-    CustomDatePipe, HomeTmpPage, TabHomePage, TabUserPage, ModalDownloadPage
+    CustomDatePipe, HomeTmpPage, TabHomePage, TabUserPage, ModalDownloadPage, UnitsTmpPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -28,7 +28,7 @@ import { CustomDatePipe } from '../custom-date.pipe';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, PlaylistOptions, SelectedWords, WordSlides, PlaylistsPage, PlaylistDetail, HomeTmpPage, TabHomePage, TabUserPage, ModalDownloadPage
+    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, PlaylistOptions, SelectedWords, WordSlides, PlaylistsPage, PlaylistDetail, HomeTmpPage, TabHomePage, TabUserPage, ModalDownloadPage, UnitsTmpPage
   ],
   providers: [
     {

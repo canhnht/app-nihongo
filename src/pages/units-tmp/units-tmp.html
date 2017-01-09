@@ -1,0 +1,67 @@
+<!--
+  Generated template for the UnitPage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+  <!--<ion-title>{{course.name}}</ion-title>-->
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  
+     <ion-card *ngFor="let unit of units;">
+      <button ion-item>
+          <ion-avatar item-left>
+            <img src="assets/images/tmp/unit.jpg">
+          </ion-avatar>
+          <h2>Unit{{unit.number}}: {{unit.name}}</h2>
+          <p>{{unit.noWords}} {{'word' | translate}}</p>
+          <ion-icon name="lock"  item-right *ngIf='isLock(unit.status)'></ion-icon>
+          <ion-icon name="checkmark-circle" color="success" item-right *ngIf="isPass(unit.status)"></ion-icon>
+          <ion-badge item-right *ngIf="isCurrent(unit.status)">Current</ion-badge>
+          <ion-icon name="add" item-right *ngIf="isOpen(unit.status)"></ion-icon>
+       </button>
+    </ion-card>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
+    </ion-icon>
+    <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
+    </ion-icon>
+    <ion-slides #modControl pager [options]="mySlideOptions">
+      <ion-slide>
+        <button ion-button round icon-right>
+          Learn
+          <ion-icon name="book"></ion-icon>
+        </button>
+      </ion-slide>
+      <ion-slide>
+        <button ion-button icon-only outline>
+          <ion-icon name="shuffle"></ion-icon>
+        </button>
+        <button ion-button round icon-right margin>
+          Listen
+          <ion-icon name="play"></ion-icon>
+        </button>
+        <button ion-button icon-only outline>
+          <ion-icon name="repeat"></ion-icon>
+        </button>
+      </ion-slide>
+      <ion-slide>
+        <button ion-button round icon-right>
+          Game
+          <ion-icon name="game-controller-b"></ion-icon>
+        </button>
+      </ion-slide>
+
+      
+    </ion-slides>
+  </ion-toolbar>
+</ion-footer>
