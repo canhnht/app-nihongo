@@ -25,4 +25,8 @@ export class HomeTmpPage {
     console.log('ionViewDidLoad HomeTmpPage');
   }
 
+   checkCall() {
+    console.log("ok....");
+  }
+
 }
