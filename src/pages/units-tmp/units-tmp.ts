@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { DbService } from '../../services';
 import { WordsPage } from '../words-page/words-page';
 
@@ -11,58 +11,107 @@ export class UnitsTmpPage {
 
   units: any[] = [];
   course: any = {};
+  currentUnit: any = {};
   sttUnit = {
-    LOCK: 'lock',
-    OPEN: 'open',
-    CURRENT: 'current',
-    PASS: 'passed'
+    OPEN: 0,
+    LOCK: 1,
+    CURRENT: 2,
+    PASS: 3
   }
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
-    private dbService: DbService) {
-    // this.course = this.navParams.data.selectedCourse;
-    this.units = [
-      {
-        status: 'open'
-      },
-      {
-        status: 'lock'
-      },
-      {
-        status: 'passed'
-      },
-      {
-        status: 'current'
-      }
-    ]
+    private dbService: DbService, private alertCtrl: AlertController) {
+    this.course = this.navParams.data.selectedCourse;
   }
 
   ionViewWillEnter() {
-    // this.dbService.getUnitsByCourseId(this.course.id)
-    //   .then(units => this.units = units);
+    this.loadUnitPage();
+    this.currentUnit
   }
 
   checkStatus(unit){
-    let stt = unit.status;
-    if(stt == 'open'){
-      this.updateStatusUnit(unit).then(()=>{
-        this.dbService.getUnitsByCourseId(this.course.id)
-        .then(units => this.units = units);
-      })
-      return;
-    }
-    if(stt == 'lock'){
+    let stt = unit.state;
+
+    if(this.isOpen(stt)){
       
+      let listUpdateUnits = this.units.filter((item) => item.id !== unit.id);
+
+      let promiseUpdateUnit =  this.updateStateUnit(unit.id, this.sttUnit.CURRENT);
+      let promiseUpdateListUnits = listUpdateUnits.map((unit) => {
+        return this.updateStateUnit(unit.id, this.sttUnit.LOCK);
+      })
+
+      Promise.all([promiseUpdateUnit, promiseUpdateListUnits])
+      .then(()=>{
+        this.loadUnitPage();
+      })
+
       return;
     }
-    if(stt == 'passed' || stt == 'current'){
+
+    if(this.isLock(stt)){
+      
+      let alert = this.alertCtrl.create({
+      title: 'Kiểm tra',
+      subTitle: 'Hãy làm bài test để chắc chắn bạn đã sẵn sàng cho Unit mới!',
+      buttons: [
+        {
+          text: 'Huỷ bỏ',
+          handler: () => {}
+        },
+        {
+          text: 'Đồng ý',
+          handler: () => {
+            if(this.isPassedExam()){
+              let promiseUpdateNewUnit = this.updateStateUnit(unit.id, this.sttUnit.CURRENT);
+              let promiseUpdateOldUnit = this.updateStateUnit(this.currentUnit.id, this.sttUnit.PASS);
+              
+              Promise.all([promiseUpdateNewUnit, promiseUpdateOldUnit])
+              .then(()=>{
+                this.loadUnitPage();
+              })
+            }
+          }
+        }
+      ]
+      })
+
+      alert.present();
+      return;
+    }
+
+    if(this.isPass(stt) || this.isCurrent(stt)){
       this.goToUnit(unit);
       return;
     }
   }
 
-  private updateStatusUnit(unit){
-    return Promise.resolve();
+  private loadUnitPage(){
+    this.dbService.getUnitsByCourseId(this.course.id).then(units => {
+      this.units = units;
+      let currentUnit = units.filter((item) => item.state == this.sttUnit.CURRENT);
+      this.currentUnit =  currentUnit ? currentUnit[0] : null;
+      if(!this.currentUnit) {
+         let alert = this.alertCtrl.create({
+            title: 'Hướng dẫn:',
+            subTitle: 'Vui lòng chọn một unit bạn muốn bắt đầu!',
+            buttons: [
+              {
+                text: 'Đã hiểu',
+              }
+            ]
+          })
+          alert.present();
+      }
+    })
+  }
+
+  private updateStateUnit(unitId, state){
+    let unit = {
+      id : unitId,
+      state: state
+    }
+    return this.dbService.updateStateOfUnit(unit);
   }
 
   private goToUnit(unit) {
@@ -72,7 +121,10 @@ export class UnitsTmpPage {
     });
   }
 
-  
+  private isPassedExam(){
+    return true;
+  }
+
   isPass(stt){
     return stt == this.sttUnit.PASS;
   }

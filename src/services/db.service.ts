@@ -328,4 +328,11 @@ export class DbService {
     return this.db.executeSql(sql, [ Date.now(), word.id ])
       .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
+
+  updateStateOfUnit(unit){
+    let sql = 'UPDATE `unit` SET `state` = ? WHERE `id` = ?';
+    return this.db.executeSql(sql, [ unit.state, unit.id ])
+      .catch(utils.errorHandler('Error_database'));
+  }
+
 }
