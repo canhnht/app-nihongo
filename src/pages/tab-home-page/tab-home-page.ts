@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs';
 import { Toast, File } from 'ionic-native';
-import { NavController, AlertController, ModalController } from 'ionic-angular';
+import { App, NavController, AlertController, ModalController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { NewsPage } from '../news-page/news-page';
 import { NewsDetail } from '../news-detail/news-detail';
 import { UnitsPage } from '../units-page/units-page';
+import { UnitsTmpPage } from '../units-tmp/units-tmp';
 import { ModalDownloadPage } from '../modal-download-page/modal-download-page';
 import { DbService, SettingService, DownloadService } from '../../services';
 import { NHK_URL } from '../../constants';
@@ -31,7 +32,7 @@ export class TabHomePage {
   modalDownloadCourse: any;
 
 
-  constructor(private navCtrl: NavController, private dbService: DbService,
+  constructor(private app: App, private navCtrl: NavController, private dbService: DbService,
     private settingService: SettingService, private http: Http,
     private translate: TranslateService, private downloadService: DownloadService, private alertCtrl: AlertController, public modalCtrl: ModalController) {
     this.downloadNews();
@@ -75,7 +76,7 @@ export class TabHomePage {
 
   private goToCourse(course) {
     this.settingService.reset(true);
-    this.navCtrl.push(UnitsPage, { selectedCourse: course });
+    this.app.getRootNav().push(UnitsTmpPage,{selectedCourse: course});
   }
 
   deleteCourse(course) {
