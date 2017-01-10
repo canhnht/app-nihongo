@@ -63,6 +63,7 @@ export class TabHomePage {
     }else{
       this.openModalDownload(course);
       this.downloadService.downloadCourse(course, index).then((rs) => {
+          this.dbService.getCourses();
           this.modalDownloadCourse.dismiss();
           this.goToCourse(course);
       });
