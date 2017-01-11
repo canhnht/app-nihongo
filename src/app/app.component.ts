@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
 import { StatusBar, Splashscreen, NativeAudio } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, HomeTmpPage } from '../pages';
+import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, HomeTmpPage, PlaygroundPage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
 import { ASSETS_BASE_URL } from '../constants';
 import { firebaseConfig } from './config-local';
@@ -16,7 +16,7 @@ let firebase = require('firebase');
 export class MyApp {
   @ViewChild('content') nav: NavController;
   // rootPage = HomePage;
-  rootPage = HomeTmpPage;
+  rootPage = PlaygroundPage;
   homePage = HomePage;
   playlistsPage = PlaylistsPage;
   feedbackPage = FeedbackPage;
