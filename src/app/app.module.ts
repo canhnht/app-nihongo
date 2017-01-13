@@ -7,14 +7,14 @@ import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, HomeTmpPage, TabHomePage, TabUserPage,  ModalDownloadPage, UnitsTmpPage } from '../pages';
 import { LocalStorageService, SettingService, SliderService, DbService, AudioService, AuthService, DownloadService } from '../services';
-import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent } from '../components';
+import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent, ModControllerComponent } from '../components';
 import { CustomDatePipe } from '../custom-date.pipe';
 
 @NgModule({
   declarations: [
     MyApp,
     LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, HomeTmpPage, TabHomePage, TabUserPage, ModalDownloadPage, UnitsTmpPage,
-    AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent,
+    AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent, ModControllerComponent,
     CustomDatePipe
   ],
   imports: [
