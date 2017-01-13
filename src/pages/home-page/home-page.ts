@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs';
-import { Toast, Transfer, File, Network } from 'ionic-native';
+import { Toast, File } from 'ionic-native';
 import { NavController, AlertController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { NewsPage } from '../news-page/news-page';
@@ -9,9 +9,6 @@ import { NewsDetail } from '../news-detail/news-detail';
 import { UnitsPage } from '../units-page/units-page';
 import { DbService, SettingService } from '../../services';
 import { NHK_URL } from '../../constants';
-
-declare var require: any;
-let firebase = require('firebase');
 import * as utils from '../../utils';
 
 declare var cordova: any;

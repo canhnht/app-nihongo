@@ -13,21 +13,26 @@ declare var cordova: any;
 })
 export class WordSlides {
   @ViewChild('vocabSlider') vocabSlider: Slides;
-
   sliderOptions: any = {
     loop: true,
+    initialSlide: 1
   };
+  default_slides_indexes = [];
+  default_slides = [];
+  slides: any[];
+  head: number;
+  tail: number;
+  direction: number = 0;
+  previousActiveIndex: number = -1;
+
   words: any[] = [];
   currentIndex: number = 0;
   trackIndexSubscription: Subscription;
-  playlistSubscription: Subscription;
-  playlists: any[];
   hideBookmark: boolean = false;
   hideAudioBar: boolean = false;
   playSingleWord: boolean = false;
   singleTrack: MediaPlugin = null;
-  courses: any = {};
-  allCoursesSubscription: Subscription;
+  firstTime: boolean = true;
 
   constructor(private navCtrl: NavController, private audioService: AudioService,
     private sliderService: SliderService, private dbService: DbService,
@@ -38,15 +43,51 @@ export class WordSlides {
     if (params.playSingleWord) {
       this.playSingleWord = this.hideAudioBar = true;
       this.words = params.listWord;
-      this.sliderOptions.initialSlide = params.wordIndex;
+      this.default_slides_indexes = [ this.previousWordIndex(params.wordIndex), params.wordIndex, this.nextWordIndex(params.wordIndex) ];
     } else {
       this.words = this.audioService.listWordOrder.map(
         wordIndex => this.audioService.listWord[wordIndex]
       );
       this.words = this.words.map((word) => Object.assign({ flipped: false }, word));
-      if (this.sliderService.currentSlide >= 0)
-        this.sliderOptions.initialSlide = this.sliderService.currentSlide - 1;
+      if (this.sliderService.currentSlide >= 0) {
+        let wordIndex = this.sliderService.currentSlide;
+        this.default_slides_indexes = [
+          this.previousWordIndex(wordIndex),
+          wordIndex,
+          this.nextWordIndex(wordIndex)
+        ];
+      } else {
+        this.default_slides_indexes = [ this.previousWordIndex(0), 0, this.nextWordIndex(0) ];
+      }
     }
+
+    this.default_slides = this.default_slides_indexes.map((e) => this.makeSlide(e));
+    this.slides = [...this.default_slides];
+    this.head = this.slides[0].nr;
+    this.tail = this.slides[this.slides.length - 1].nr;
+  }
+
+  previousWordIndex(wordIndex) {
+    if (this.words.length === 1) return 0;
+    if (wordIndex === 0) return this.words.length - 1;
+    return wordIndex - 1;
+  }
+
+  nextWordIndex(wordIndex) {
+    if (this.words.length === 1) return 0;
+    if (wordIndex === this.words.length - 1) return 0;
+    return wordIndex + 1;
+  }
+
+  getColor(nr) {
+    return nr % 2 === 0 ? '#59a8f2' : '#51b147';
+  }
+
+  makeSlide(nr) {
+    return {
+      nr: nr,
+      color: this.getColor(nr)
+    };
   }
 
   ionViewDidEnter() {
@@ -56,7 +97,16 @@ export class WordSlides {
   ionViewWillEnter() {
     if (!this.playSingleWord)
       this.trackIndexSubscription = this.audioService.trackIndexSubject.subscribe(
-        trackIndex => this.vocabSlider.slideTo(trackIndex + 1)
+        (trackIndex) => {
+          this.sliderService.currentSlide = trackIndex;
+          let slideIndexes = [ this.previousWordIndex(trackIndex), trackIndex, this.nextWordIndex(trackIndex) ];
+          this.slides = slideIndexes.map((e) => this.makeSlide(e));
+          this.head = this.slides[0].nr;
+          this.tail = this.slides[this.slides.length - 1].nr;
+          this.vocabSlider.slideTo(2, 0, false);
+          this.previousActiveIndex = 2;
+          this.words[trackIndex].flipped = false;
+        }
       );
   }
 
@@ -75,15 +125,36 @@ export class WordSlides {
     this.vocabSlider.slideNext();
   }
 
-  private getWordIndex(activeIndex: number) {
-    if (activeIndex === 1 || activeIndex === this.words.length + 1) return 0;
-    if (activeIndex === this.words.length || activeIndex === 0) return this.words.length - 1;
-    return activeIndex - 1;
+  getSlideIndex(activeIndex) {
+    if (activeIndex === 1 || activeIndex === 4) return 0;
+    if (activeIndex === 3 || activeIndex === 0) return 2;
+    return 1;
   }
 
   onSlideChanged($event) {
+    let i = this.getSlideIndex($event.activeIndex);
+    if (!this.firstTime) {
+      let previousIndex = i === 0 ? 2 : i - 1;
+      let nextIndex = i === 2 ? 0 : i + 1;
+      let newDirection = $event.activeIndex > this.previousActiveIndex ? 1 : -1;
+      this.slides[newDirection > 0 ? nextIndex : previousIndex] = this.createSlideData(newDirection, this.direction);
+      this.direction = newDirection;
+    } else {
+      this.firstTime = false;
+    }
+
+    if ($event.activeIndex === 4) {
+      this.vocabSlider.slideTo(1, 0, false);
+      this.previousActiveIndex = 1;
+    } else if ($event.activeIndex === 0) {
+      this.vocabSlider.slideTo(3, 0, false);
+      this.previousActiveIndex = 3;
+    } else {
+      this.previousActiveIndex = $event.activeIndex;
+    }
+
+    this.currentIndex = this.slides[i].nr;
     if (this.playSingleWord) {
-      this.currentIndex = this.getWordIndex($event.activeIndex);
       if (this.singleTrack) {
         this.singleTrack.release();
       }
@@ -91,21 +162,39 @@ export class WordSlides {
       this.singleTrack.play();
       this.dbService.updateAnalytic(this.words[this.currentIndex]);
     } else {
-      this.currentIndex = this.getWordIndex($event.activeIndex);
-      if (this.sliderService.currentSlide < 0 && this.sliderService.firstTime)
-        this.sliderService.currentSlide = $event.activeIndex;
+      this.sliderService.currentSlide = this.currentIndex;
       if (this.sliderService.firstTime) return this.sliderService.firstTime = false;
-      this.sliderService.currentSlide = $event.activeIndex;
-      let wordIndex: number = -1;
-      let activeIndex = $event.activeIndex;
-      if (activeIndex == 0 || activeIndex == this.words.length)
-        wordIndex = this.words.length - 1;
-      else if (activeIndex == 1 || activeIndex == this.words.length + 1)
-        wordIndex = 0;
-      else
-        wordIndex = activeIndex - 1;
-      this.audioService.seekToWord(wordIndex);
+      this.audioService.seekToWord(this.currentIndex);
     }
+  }
+
+  createSlideData(newDirection, oldDirection) {
+    if (newDirection === 1) {
+      this.tail = oldDirection < 0 ? this.head + 3 : this.tail + 1;
+    } else {
+      this.head = oldDirection > 0 ? this.tail - 3 : this.head - 1;
+    }
+    this.head = (this.head + this.words.length * 3) % this.words.length;
+    this.tail = (this.tail + this.words.length * 3) % this.words.length;
+    let nr = newDirection === 1 ? this.tail : this.head;
+    if (this.default_slides_indexes.indexOf(nr) !== -1) {
+      return this.default_slides[this.default_slides_indexes.indexOf(nr)];
+    }
+    return this.makeSlide(nr);
+  }
+
+  updateDuplicateNode() {
+    let dupStartNodes = document.querySelectorAll(".slide-content-0");
+    let dupEndNodes = document.querySelectorAll(".slide-content-2");
+    if (dupStartNodes.length !== 2 || dupEndNodes.length !== 2) return;
+    dupStartNodes.item(1).innerHTML = dupStartNodes.item(0).innerHTML;
+    // dupStartNodes.item(1).style.backgroundColor = dupStartNodes.item(0).style.backgroundColor;
+    dupEndNodes.item(0).innerHTML = dupEndNodes.item(1).innerHTML;
+    // dupEndNodes.item(0).style.backgroundColor = dupEndNodes.item(1).style.backgroundColor;
+  }
+
+  ngAfterViewChecked() {
+    this.updateDuplicateNode();
   }
 
   repeatCurrentVocabulary($event) {

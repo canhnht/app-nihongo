@@ -263,16 +263,13 @@ export class DbService {
   }
 
   getWordsByUnitId(unitId) {
-    let sql = 'SELECT `word`.*, `playlistId` FROM `word` LEFT JOIN `word_playlist` ON `word`.`id` = `word_playlist`.`wordId` WHERE `unitId` = ? GROUP BY `word`.`id` ORDER BY `lastPlayed` DESC, `timesPlayed` DESC';
+    let sql = 'SELECT `word`.*, `playlistId` FROM `word` LEFT JOIN `word_playlist` ON `word`.`id` = `word_playlist`.`wordId` WHERE `unitId` = ? GROUP BY `word`.`id` ORDER BY `lastPlayed` DESC, `timesPlayed` DESC, `word`.`id` ASC';
     return this.db.executeSql(sql, [ unitId ]).then((resultSet) => {
       let data = this.convertResultSetToArray(resultSet);
       data.forEach((word) => {
         word.bookmarked = !!word.playlistId;
         delete word.playlistId;
-        word.mainExample = JSON.parse(word.mainExample);
-        word.meaning = JSON.parse(word.meaning);
-        word.otherExamples = JSON.parse(word.otherExamples);
-        word.phonetic = JSON.parse(word.phonetic);
+        this.processWord(word);
       });
       return data;
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
@@ -283,13 +280,20 @@ export class DbService {
     return this.db.executeSql(sql, [ playlistId ]).then((resultSet) => {
       let data = this.convertResultSetToArray(resultSet);
       data.forEach((word) => {
-        word.mainExample = JSON.parse(word.mainExample);
-        word.meaning = JSON.parse(word.meaning);
-        word.otherExamples = JSON.parse(word.otherExamples);
-        word.phonetic = JSON.parse(word.phonetic);
+        this.processWord(word);
       });
       return data;
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  private processWord(word) {
+    word.mainExample = JSON.parse(word.mainExample);
+    word.meaning = JSON.parse(word.meaning);
+    word.otherExamples = JSON.parse(word.otherExamples);
+    word.phonetic = JSON.parse(word.phonetic);
+    if (!word.meaning) word.meaning = [];
+    if (!word.otherExamples) word.otherExamples = [];
+    if (!word.phonetic) word.phonetic = [];
   }
 
   getUnitsByCourseId(courseId) {

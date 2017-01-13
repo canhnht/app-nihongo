@@ -101,21 +101,23 @@ export class DownloadService {
     let wordRef = firebase.database().ref(`/words/${id}`);
     let wordPromise = wordRef.once('value').then((res) => res.val());
     return wordPromise.then((word) => {
-      return this.dbService.addWord({
-        id, unitId,
-        kanji: word.kanji,
-        audioFile: word.audioFile,
-        audioDuration: word.audioDuration,
-        mainExample: JSON.stringify(word.mainExample),
-        meaning: JSON.stringify(word.meaning),
-        otherExamples: JSON.stringify(word.otherExamples),
-        phonetic: JSON.stringify(word.phonetic),
-      }).then(() => this.downloadAudio(courseId, unitId, word)).then(() => {
+      return this.downloadAudio(courseId, unitId, word).then(() => {
+        return this.dbService.addWord({
+          id, unitId,
+          kanji: word.kanji,
+          audioFile: (word.audioFile ? `${courseId}/${unitId}/${word.audioFile}.mp3` : ''),
+          audioDuration: word.audioDuration,
+          mainExample: JSON.stringify(word.mainExample),
+          meaning: JSON.stringify(word.meaning),
+          otherExamples: JSON.stringify(word.otherExamples),
+          phonetic: JSON.stringify(word.phonetic),
+        })
+      }).then(() => {
         this.downloadedPercent += this.percentPerWord;
         this.percDownloadedSubject.next({
           percDownloaded: this.downloadedPercent
         });
-      })
+      });
     });
   }
 
@@ -129,7 +131,8 @@ export class DownloadService {
         const fileTransfer = new Transfer();
         return Promise.resolve(fileTransfer.download(url,
           `${folderPath}/${word.audioFile}.mp3`));
-      }).then(() => this.dbService.updateAudioFile(word.id, `${courseId}/${unitId}/${word.audioFile}.mp3`));
+      });
+      // .then(() => this.dbService.updateAudioFile(word.id, `${courseId}/${unitId}/${word.audioFile}.mp3`));
     }
   }
 }

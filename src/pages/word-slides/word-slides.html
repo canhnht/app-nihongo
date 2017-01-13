@@ -9,25 +9,26 @@
   </ion-icon>
   <ion-slides #vocabSlider [options]="sliderOptions"
     (ionDidChange)="onSlideChanged($event)">
-    <ion-slide *ngFor="let word of words; let i = index" class="word-slide"
-      [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
-      <div class="card" (click)="flipCard(word)" [class.flipped]="word.flipped">
-        <div class="face front">
-          <strong class="kanji">{{word.kanji}}</strong>
-        </div>
-        <div class="face back">
-          <strong class="kanji">{{word.kanji}}</strong>
-          <h2 *ngFor="let phonetic of word.phonetic">{{phonetic}}</h2>
-          <div *ngFor="let meaning of word.meaning">{{meaning.mean}}</div>
-          <p class="example">
-            <strong>{{word.mainExample.content}}</strong><br/>
-            {{word.mainExample.meaning}}
-          </p>
-          <p class="example" *ngFor="let example of word.otherExamples">
-            <strong>{{example.content}}</strong><br/>
-            {{example.phonetic}}<br/>
-            {{example.meaning}}
-          </p>
+    <ion-slide *ngFor="let slide of slides; let i = index">
+      <div class="word-slide slide-content-{{i}}" [style.backgroundColor]="slide.color">
+        <div class="card" (click)="flipCard(words[slide.nr])" [class.flipped]="words[slide.nr].flipped">
+          <div class="face front">
+            <strong class="kanji">{{words[slide.nr].kanji}}</strong>
+          </div>
+          <div class="face back">
+            <strong class="kanji">{{words[slide.nr].kanji}}</strong>
+            <h2 *ngFor="let phonetic of words[slide.nr].phonetic">{{phonetic}}</h2>
+            <div *ngFor="let meaning of words[slide.nr].meaning">{{meaning.mean}}</div>
+            <p class="example" *ngIf="!!words[slide.nr].mainExample">
+              <strong>{{words[slide.nr].mainExample.content}}</strong><br/>
+              {{words[slide.nr].mainExample.meaning}}
+            </p>
+            <p class="example" *ngFor="let example of words[slide.nr].otherExamples">
+              <strong>{{example.content}}</strong><br/>
+              {{example.phonetic}}<br/>
+              {{example.meaning}}
+            </p>
+          </div>
         </div>
       </div>
     </ion-slide>

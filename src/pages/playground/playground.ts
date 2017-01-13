@@ -1,46 +1,73 @@
+import { Component, ViewChild } from '@angular/core';
+import { NavController, Slides, ModalController, NavParams } from 'ionic-angular';
+import { SpinnerDialog, MediaPlugin } from 'ionic-native';
+import { Subscription } from 'rxjs';
+import { TranslateService } from 'ng2-translate/ng2-translate';
+import { PlaylistOptions } from '../../components';
+import { AudioService, SliderService, DbService } from '../../services';
 
+declare var cordova: any;
 
-
-import { Component, NgZone, ViewChild } from '@angular/core';
-import { NavController, NavParams, Slides } from 'ionic-angular';
-
-/*
-  Generated class for the Playground page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-playground',
   templateUrl: 'playground.html'
 })
 export class PlaygroundPage {
-  dupStartNodes: any;
-  dupEndNodes: any;
-  sliderOptions = {
-    initialSlide: 1,
-    loop: true
+  @ViewChild('vocabSlider') vocabSlider: Slides;
+  sliderOptions: any = {
+    loop: true,
+    initialSlide: 1
   };
-  slides: any[];
-  default_slides_indexes = [ -1, 0, 1 ];
+  default_slides_indexes = [];
   default_slides = [];
-  direction: number = 0;
+  slides: any[];
   head: number;
   tail: number;
+  direction: number = 0;
+  previousActiveIndex: number = -1;
+
+  words: any[] = [];
+  currentIndex: number = 0;
+  trackIndexSubscription: Subscription;
+  hideBookmark: boolean = false;
+  hideAudioBar: boolean = false;
+  playSingleWord: boolean = false;
+  singleTrack: MediaPlugin = null;
   firstTime: boolean = true;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-    public zone: NgZone) {
-    this.default_slides = this.default_slides_indexes.map((e) => this.makeSlide(e, {
-      title: 'default slide'
-    }));
+  constructor(private navCtrl: NavController, private audioService: AudioService,
+    private sliderService: SliderService, private dbService: DbService,
+    private navParams: NavParams, private translate: TranslateService,
+    private modalCtrl: ModalController) {
+    this.words = [
+      {
+        kanji: 'kanji1',
+      },
+      {
+        kanji: 'kanji2',
+      }
+    ];
+    this.default_slides_indexes = [ this.previousWordIndex(0), 0, this.nextWordIndex(0) ];
+    this.default_slides = this.default_slides_indexes.map((e) => this.makeSlide(e, this.words[e]));
     this.slides = [...this.default_slides];
     this.head = this.slides[0].nr;
     this.tail = this.slides[this.slides.length - 1].nr;
   }
 
+  previousWordIndex(wordIndex) {
+    if (this.words.length === 1) return 0;
+    if (wordIndex === 0) return this.words.length - 1;
+    return wordIndex - 1;
+  }
+
+  nextWordIndex(wordIndex) {
+    if (this.words.length === 1) return 0;
+    if (wordIndex === this.words.length - 1) return 0;
+    return wordIndex + 1;
+  }
+
   getColor(nr) {
-    return nr % 2 === 0 ? '#8080c5' : '#80b280';
+    return nr % 2 === 0 ? '#59a8f2' : '#51b147';
   }
 
   makeSlide(nr, data) {
@@ -50,6 +77,14 @@ export class PlaygroundPage {
     }, data);
   }
 
+  prev() {
+    this.vocabSlider.slidePrev();
+  }
+
+  next() {
+    this.vocabSlider.slideNext();
+  }
+
   getSlideIndex(activeIndex) {
     if (activeIndex === 1 || activeIndex === 4) return 0;
     if (activeIndex === 3 || activeIndex === 0) return 2;
@@ -57,28 +92,35 @@ export class PlaygroundPage {
   }
 
   onSlideChanged($event) {
-    if (this.firstTime) return this.firstTime = false;
-
+    console.log(`event ${$event.activeIndex}`);
     let i = this.getSlideIndex($event.activeIndex);
-    console.log($event.activeIndex, i);
-    let previousIndex = i === 0 ? 2 : i - 1;
-    let nextIndex = i === 2 ? 0 : i + 1;
-    let newDirection = this.slides[i].nr > this.slides[previousIndex].nr ? 1 : -1;
-    console.log(previousIndex, nextIndex);
-    this.slides[newDirection > 0 ? nextIndex : previousIndex] = this.createSlideData(newDirection, this.direction);
-    this.direction = newDirection;
-    console.log(JSON.stringify(this.slides));
-    // this.updateDuplicateNode();
-  }
+    if (!this.firstTime) {
+      let previousIndex = i === 0 ? 2 : i - 1;
+      let nextIndex = i === 2 ? 0 : i + 1;
+      let newDirection = $event.activeIndex > this.previousActiveIndex ? 1 : -1;
+      this.slides[newDirection > 0 ? nextIndex : previousIndex] = this.createSlideData(newDirection, this.direction);
+      this.direction = newDirection;
+    } else {
+      this.firstTime = false;
+    }
 
-  updateDuplicateNode() {
-    this.dupStartNodes = document.querySelectorAll(".slide-content-0");
-    this.dupEndNodes = document.querySelectorAll(".slide-content-2");
-    if (this.dupStartNodes.length !== 2 || this.dupEndNodes.length !== 2) return;
-    this.dupStartNodes.item(1).innerHTML = this.dupStartNodes.item(0).innerHTML;
-    this.dupStartNodes.item(1).style.backgroundColor = this.dupStartNodes.item(0).style.backgroundColor;
-    this.dupEndNodes.item(0).innerHTML = this.dupEndNodes.item(1).innerHTML;
-    this.dupEndNodes.item(0).style.backgroundColor = this.dupEndNodes.item(1).style.backgroundColor;
+    console.log(`onSlideChanged ${JSON.stringify(this.slides)}`);
+    if ($event.activeIndex === 4) {
+      console.log('exception');
+      this.vocabSlider.slideTo(1, 0, false);
+      this.previousActiveIndex = 1;
+      return;
+    } else if ($event.activeIndex === 0) {
+      console.log('exception');
+      this.vocabSlider.slideTo(3, 0, false);
+      this.previousActiveIndex = 3;
+      return;
+    }
+
+    this.previousActiveIndex = $event.activeIndex;
+    this.currentIndex = this.slides[i].nr;
+    this.sliderService.currentSlide = this.currentIndex;
+    if (this.sliderService.firstTime) return this.sliderService.firstTime = false;
   }
 
   createSlideData(newDirection, oldDirection) {
@@ -87,16 +129,37 @@ export class PlaygroundPage {
     } else {
       this.head = oldDirection > 0 ? this.tail - 3 : this.head - 1;
     }
+    console.log(`before ${this.head} ${this.tail}`);
+    this.head = (this.head + this.words.length * 3) % this.words.length;
+    this.tail = (this.tail + this.words.length * 3) % this.words.length;
+    console.log(`after ${this.head} ${this.tail}`);
     let nr = newDirection === 1 ? this.tail : this.head;
     if (this.default_slides_indexes.indexOf(nr) !== -1) {
       return this.default_slides[this.default_slides_indexes.indexOf(nr)];
     }
-    return this.makeSlide(nr, {
-      title: 'generated slide'
-    });
+    return this.makeSlide(nr, this.words[nr]);
+  }
+
+  updateDuplicateNode() {
+    let dupStartNodes = document.querySelectorAll(".slide-content-0");
+    let dupEndNodes = document.querySelectorAll(".slide-content-2");
+    if (dupStartNodes.length !== 2 || dupEndNodes.length !== 2) return;
+    dupStartNodes.item(1).innerHTML = dupStartNodes.item(0).innerHTML;
+    // dupStartNodes.item(1).style.backgroundColor = dupStartNodes.item(0).style.backgroundColor;
+    dupEndNodes.item(0).innerHTML = dupEndNodes.item(1).innerHTML;
+    // dupEndNodes.item(0).style.backgroundColor = dupEndNodes.item(1).style.backgroundColor;
   }
 
   ngAfterViewChecked() {
     this.updateDuplicateNode();
+  }
+
+  closeSlide() {
+    this.navCtrl.pop();
+  }
+
+  flipCard(word) {
+    console.log(`flipCard ${JSON.stringify(word)}`);
+    word.flipped = !word.flipped;
   }
 }

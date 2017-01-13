@@ -1,15 +1,39 @@
 
 
 
-
 <ion-content>
-  <ion-slides #vocabSlider (ionDidChange)="onSlideChanged($event)"
-    [options]="sliderOptions">
-    <ion-slide *ngFor="let slide of slides; let i = index" class="word-slide">
-      <div class="slide-content-{{i}}" [style.backgroundColor]="slide.color">
-      {{slide.title}}
-      {{slide.nr}}
+  <button ion-button clear color="danger" round large class="btn-close" (click)="closeSlide()" icon-only>
+    <ion-icon name="close"></ion-icon>
+  </button>
+  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
+  </ion-icon>
+  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
+  </ion-icon>
+  <ion-slides #vocabSlider [options]="sliderOptions"
+    (ionDidChange)="onSlideChanged($event)">
+    <ion-slide *ngFor="let slide of slides; let i = index">
+      <div class="word-slide slide-content-{{i}}" [style.backgroundColor]="slide.color">
+        <div class="card" (click)="flipCard(slide)" [class.flipped]="slide.flipped">
+          <div class="face front">
+            <strong class="kanji">{{slide.kanji}}</strong>
+          </div>
+          <div class="face back">
+            <strong class="kanji">{{slide.kanji}}</strong>
+          </div>
+        </div>
       </div>
     </ion-slide>
   </ion-slides>
+  <div class="btn-group">
+    <button ion-button color="secondary" round class="btn-repeat"
+      (click)="repeatCurrentVocabulary($event)" icon-only>
+      <ion-icon name="volume-up"></ion-icon>
+    </button>
+    <button ion-button *ngIf="!hideBookmark" color="danger" round   class="btn-bookmark" (click)="addToPlaylist($event)" icon-only>
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </div>
 </ion-content>
+<ion-footer *ngIf="!hideAudioBar">
+  <audio-player></audio-player>
+</ion-footer>
