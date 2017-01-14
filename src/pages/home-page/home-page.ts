@@ -24,27 +24,33 @@ export class HomePage {
   downloadNewsSubscription: Subscription;
   latestNews: any = null;
   latestNewsSubscription: Subscription;
-  loadingNews: boolean = true;
+  loadingNews: boolean = false;
+  initDbSubscription: Subscription;
 
   constructor(private navCtrl: NavController, private dbService: DbService,
     private settingService: SettingService, private http: Http,
     private translate: TranslateService, private alertCtrl: AlertController) {
-    this.downloadNews();
   }
 
   ionViewWillEnter() {
-    this.dbService.getCourses();
-    this.coursesSubscription = this.dbService.coursesSubject.subscribe(
-      courses => this.courses = courses
-    );
+    this.initDbSubscription = this.dbService.initSubject.subscribe((init) => {
+      if (init) {
+        this.downloadNews();
+        this.dbService.getCourses();
+        this.coursesSubscription = this.dbService.coursesSubject.subscribe(
+          courses => this.courses = courses
+        );
 
-    this.dbService.getLatestNews();
-    this.latestNewsSubscription = this.dbService.latestNewsSubject.subscribe(
-      latestNews => this.latestNews = latestNews
-    );
+        this.dbService.getLatestNews();
+        this.latestNewsSubscription = this.dbService.latestNewsSubject.subscribe(
+          latestNews => this.latestNews = latestNews
+        );
+      }
+    });
   }
 
   ionViewWillLeave() {
+    this.initDbSubscription.unsubscribe();
     this.coursesSubscription.unsubscribe();
     this.downloadNewsSubscription.unsubscribe();
     this.latestNewsSubscription.unsubscribe();
@@ -78,7 +84,7 @@ export class HomePage {
     this.loadingNews = true;
     this.downloadNewsSubscription = this.http.get(NHK_URL)
       .map(res => res.json())
-      .subscribe(listNews => {
+      .subscribe((listNews) => {
         this.loadingNews = false;
         this.dbService.addOrUpdateNews(listNews);
       }, err => {

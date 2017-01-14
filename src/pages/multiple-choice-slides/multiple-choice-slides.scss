@@ -59,27 +59,16 @@
     position: relative;
     width: 90%;
     height: 50px;
-    color: white;
     font-size: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid white;
     margin: 10px auto;
     border-radius: 25px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
-    background: url('../../images/btn-wood.png') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-
-    // -webkit-box-shadow: 0 0 2px 3px #87d134;
-    // -moz-box-shadow: 0 0 2px 3px #87d134;
-    // box-shadow: 0 0 2px 3px #87d134;
     -webkit-box-shadow: 0 0 2px 3px color($colors, favorite);
     -moz-box-shadow: 0 0 2px 3px color($colors, favorite);
     box-shadow: 0 0 2px 3px color($colors, favorite);
@@ -92,37 +81,22 @@
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      border: 1px solid white;
       display: flex;
       justify-content: center;
       align-items: center;
+      -webkit-box-shadow: 0 0 2px 3px color($colors, favorite);
+      -moz-box-shadow: 0 0 2px 3px color($colors, favorite);
+      box-shadow: 0 0 2px 3px color($colors, favorite);
     }
   }
 
   .activated {
-    opacity: 0.7;
-    color: white;
+    opacity: 0.5;
   }
 
   .disabled {
     pointer-events: none;
     opacity: 0.5;
-  }
-
-  .odd {
-    background: url('../../images/bg-odd.jpg') no-repeat center center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-
-  .even {
-    background: url('../../images/bg-even.jpg') no-repeat center center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
   }
 }
 
@@ -171,7 +145,7 @@
   right: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.9);
-  z-index: 100;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -187,11 +161,11 @@
     align-items: center;
 
     &.correct {
-      background-color: rgba(230, 23, 112, 0.3);
+      background-color: color($colors, primary);
     }
 
     &.incorrect {
-      background-color: rgba(245, 61, 61, 0.3);
+      background-color: color($colors, danger);
     }
   }
 
@@ -206,12 +180,11 @@
 
 .level-success {
   position: absolute;
+  top: 0;
   bottom: 0;
   right: 0;
   left: 0;
-  background-image: linear-gradient(
-      color($colors, primary) 70%, white
-    );
+  background-image: linear-gradient(color($colors, primary) 70%, white);
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -269,6 +242,7 @@
 
 .level-fail {
   position: absolute;
+  top: 0;
   bottom: 0;
   right: 0;
   left: 0;

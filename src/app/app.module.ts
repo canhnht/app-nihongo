@@ -10,6 +10,14 @@ import { LocalStorageService, SettingService, SliderService, DbService, AudioSer
 import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent } from '../components';
 import { CustomDatePipe } from '../custom-date.pipe';
 
+export function makeTranslateFactory(http: Http) {
+  return new TranslateStaticLoader(http, 'assets/i18n', '.json');
+}
+
+export function makeStorageFactory() {
+  return new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'io.techybrain.minagoi' });
+}
+
 @NgModule({
   declarations: [
     MyApp,
@@ -21,7 +29,7 @@ import { CustomDatePipe } from '../custom-date.pipe';
     IonicModule.forRoot(MyApp),
     TranslateModule.forRoot({
       provide: TranslateLoader,
-      useFactory: (http: Http) => new TranslateStaticLoader(http, 'assets/i18n', '.json'),
+      useFactory: makeTranslateFactory,
       deps: [Http],
     })
   ],
@@ -38,7 +46,7 @@ import { CustomDatePipe } from '../custom-date.pipe';
     LocalStorageService, SettingService, SliderService, DbService, AudioService, AuthService, DownloadService,
     {
       provide: Storage,
-      useFactory: () => new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'io.techybrain.minagoi' }),
+      useFactory: makeStorageFactory,
     }
   ],
 })

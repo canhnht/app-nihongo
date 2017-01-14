@@ -65,7 +65,6 @@ export class MultipleChoiceSlides {
 
   reset() {
     this.listQuestion = this.generateListQuestion();
-    alert(`listQuestion ${JSON.stringify(this.listQuestion)}`);
     this.numberWrongAnswer = 0;
     this.answerAll = false;
     this.success = false;

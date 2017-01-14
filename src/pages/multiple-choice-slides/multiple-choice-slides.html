@@ -8,13 +8,13 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<div class="countdown-bar">
-  <div class="current-countdown" [style.width.%]="countdownPercent"></div>
-</div>
 <ion-content class="multiple-choice-slides">
+  <div class="countdown-bar">
+    <div class="current-countdown" [style.width.%]="countdownPercent"></div>
+  </div>
   <ion-slides #questionSlider [options]="sliderOptions"
     (ionDidChange)="onSlideChanged($event)">
-    <ion-slide class="question-slide" *ngFor="let question of listQuestion; let i = index" [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
+    <ion-slide class="question-slide" *ngFor="let question of listQuestion; let i = index">
       <div class="question" *ngIf="isTextQuestion(question)">
         {{question.question}}
       </div>
@@ -42,9 +42,11 @@
     </ion-slide>
   </ion-slides>
 </ion-content>
-<div class="slides-progress">
-  <div class="current-progress" [style.width.%]="progressPercent"></div>
-</div>
+<ion-footer>
+  <div class="slides-progress">
+    <div class="current-progress" [style.width.%]="progressPercent"></div>
+  </div>
+</ion-footer>
 <div class="answer-screen" *ngIf="selectedOption != -1">
   <i class="fa fa-check answer correct" primary *ngIf="isCorrect"></i>
   <i class="fa fa-close answer incorrect" danger *ngIf="!isCorrect"></i>
@@ -60,7 +62,7 @@
     <div class="number">{{listQuestion.length}}</div>
   </div>
   <div class="group-btn">
-    <button ion-button round danger (click)="close()">
+    <button ion-button round danger (click)="close()" icon-left>
       <ion-icon name="undo"></ion-icon>
       {{'Exit' | translate}}
     </button>
@@ -69,11 +71,11 @@
 <div class="level-fail" *ngIf="answerAll && !success">
   <div class="title">{{'Fail' | translate}}</div>
   <div class="group-btn">
-    <button ion-button round primary (click)="playAgain()">
+    <button ion-button round primary (click)="playAgain()" icon-left>
       <ion-icon name="sync"></ion-icon>
       {{'Test_again' | translate}}
     </button>
-    <button ion-button round danger (click)="close()">
+    <button ion-button round danger (click)="close()" icon-left>
       <ion-icon name="undo"></ion-icon>
       {{'Exit' | translate}}
     </button>
