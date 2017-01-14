@@ -7,31 +7,18 @@
     <ion-slides #modControl pager [options]="mySlideOptions">
       
       <ion-slide>
-        <button ion-button icon-only outline>
+        <button ion-button icon-only outline [class.disabled]="!audioService.isShuffle" (click)="toggleShuffle($event)">
           <ion-icon name="shuffle"></ion-icon>
         </button>
         <button ion-button round icon-right margin (click)="playAudio()">
           {{(isContinue ? 'Continue' : 'Ready') | translate}}
           <ion-icon name="play"></ion-icon>
         </button>
-        <button ion-button icon-only outline>
+        <button ion-button icon-only outline [class.disabled]="!audioService.isLoop" (click)="toggleLoop($event)">
           <ion-icon name="repeat"></ion-icon>
         </button>
       </ion-slide>
 
-      <ion-slide>
-        <button ion-button round icon-right>
-          Learn
-          <ion-icon name="book"></ion-icon>
-        </button>
-      </ion-slide>
-
-      <ion-slide>
-        <button ion-button round icon-right>
-          Game
-          <ion-icon name="game-controller-b"></ion-icon>
-        </button>
-      </ion-slide>      
     </ion-slides>
   </ion-toolbar>
 </ion-footer>

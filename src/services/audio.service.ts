@@ -42,6 +42,14 @@ export class AudioService {
       Toast.showShortCenter(this.translate.instant('Repeat_off')).subscribe(() => {});
     }
   }
+  
+  resetLoop(){
+    this.isLoop = false;
+  }
+
+  resetShuffle(){
+    this.isShuffle = false;
+  }
 
   toggleShuffle() {
     this.isShuffle = !this.isShuffle;

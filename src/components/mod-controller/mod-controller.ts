@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
-import { SpinnerDialog } from 'ionic-native';
+import { SpinnerDialog, Toast } from 'ionic-native';
 import { AudioService, SliderService, SettingService, SettingStatus  } from '../../services';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
@@ -36,6 +36,8 @@ export class ModControllerComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
+    this.audioService.resetLoop();
+    this.audioService.resetShuffle();
     this.isDisable = this.settingService.status === SettingStatus.None;
     this.isContinue = this.settingService.status === SettingStatus.Playing;
     this.settingSubscription = this.settingService.settingSubject.subscribe(
@@ -43,6 +45,10 @@ export class ModControllerComponent implements OnInit, OnDestroy{
         this.isDisable = setting.status === SettingStatus.None;
         this.isContinue = setting.status === SettingStatus.Playing;
         this.countWords = setting.countWords;
+        if(this.isDisable){
+          this.audioService.resetLoop();
+          this.audioService.resetShuffle();
+        }
       }
     )
   }
@@ -68,16 +74,27 @@ export class ModControllerComponent implements OnInit, OnDestroy{
   }
 
   toggleLoop() {
-    this.audioService.toggleLoop();
+    if(this.isSelectedWord())
+      this.audioService.toggleLoop();
   }
 
   toggleShuffle() {
-    this.audioService.toggleShuffle();
+    if(this.isSelectedWord())
+      this.audioService.toggleShuffle();
   }
 
   showSelectedWords() {
     let profileModal = this.modalCtrl.create(SelectedWords);
     profileModal.present();
+  }
+
+  isSelectedWord(){
+    if(this.isDisable){
+      Toast.hide();
+      Toast.showShortCenter(this.translate.instant('Warning_inactive')).subscribe(() => {});
+      return false;
+    }
+    return true;
   }
 
 }
