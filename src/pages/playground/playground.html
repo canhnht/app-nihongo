@@ -1,6 +1,4 @@
 
-
-
 <ion-content>
   <button ion-button clear color="danger" round large class="btn-close" (click)="closeSlide()" icon-only>
     <ion-icon name="close"></ion-icon>
@@ -13,14 +11,7 @@
     (ionDidChange)="onSlideChanged($event)">
     <ion-slide *ngFor="let slide of slides; let i = index">
       <div class="word-slide slide-content-{{i}}" [style.backgroundColor]="slide.color">
-        <div class="card" (click)="flipCard(slide)" [class.flipped]="slide.flipped">
-          <div class="face front">
-            <strong class="kanji">{{slide.kanji}}</strong>
-          </div>
-          <div class="face back">
-            <strong class="kanji">{{slide.kanji}}</strong>
-          </div>
-        </div>
+        <strong class="kanji">words[slide.nr].kanji</strong>
       </div>
     </ion-slide>
   </ion-slides>
@@ -34,6 +25,6 @@
     </button>
   </div>
 </ion-content>
-<ion-footer *ngIf="!hideAudioBar">
+<ion-footer *ngIf="true">
   <audio-player></audio-player>
 </ion-footer>

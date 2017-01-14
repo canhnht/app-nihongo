@@ -11,25 +11,13 @@
     (ionDidChange)="onSlideChanged($event)">
     <ion-slide *ngFor="let slide of slides; let i = index">
       <div class="word-slide slide-content-{{i}}" [style.backgroundColor]="slide.color">
-        <div class="card" (click)="flipCard(words[slide.nr])" [class.flipped]="words[slide.nr].flipped">
-          <div class="face front">
-            <strong class="kanji">{{words[slide.nr].kanji}}</strong>
-          </div>
-          <div class="face back">
-            <strong class="kanji">{{words[slide.nr].kanji}}</strong>
-            <h2 *ngFor="let phonetic of words[slide.nr].phonetic">{{phonetic}}</h2>
-            <div *ngFor="let meaning of words[slide.nr].meaning">{{meaning.mean}}</div>
-            <p class="example" *ngIf="!!words[slide.nr].mainExample">
-              <strong>{{words[slide.nr].mainExample.content}}</strong><br/>
-              {{words[slide.nr].mainExample.meaning}}
-            </p>
-            <p class="example" *ngFor="let example of words[slide.nr].otherExamples">
-              <strong>{{example.content}}</strong><br/>
-              {{example.phonetic}}<br/>
-              {{example.meaning}}
-            </p>
-          </div>
-        </div>
+        <strong class="kanji">{{words[slide.nr].kanji}}</strong>
+        <h2 *ngFor="let phonetic of words[slide.nr].phonetic">{{phonetic}}</h2>
+        <div *ngFor="let meaning of words[slide.nr].meaning">{{meaning.mean}}</div>
+        <p class="example" *ngIf="!!words[slide.nr].mainExample">
+          <strong>{{words[slide.nr].mainExample.content}}</strong><br/>
+          {{words[slide.nr].mainExample.meaning}}
+        </p>
       </div>
     </ion-slide>
   </ion-slides>

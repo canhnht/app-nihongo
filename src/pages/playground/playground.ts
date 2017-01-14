@@ -67,7 +67,8 @@ export class PlaygroundPage {
   }
 
   getColor(nr) {
-    return nr % 2 === 0 ? '#59a8f2' : '#51b147';
+    // return nr % 2 === 0 ? '#59a8f2' : '#51b147';
+    return '#51b147';
   }
 
   makeSlide(nr, data) {
@@ -144,10 +145,15 @@ export class PlaygroundPage {
     let dupStartNodes = document.querySelectorAll(".slide-content-0");
     let dupEndNodes = document.querySelectorAll(".slide-content-2");
     if (dupStartNodes.length !== 2 || dupEndNodes.length !== 2) return;
-    dupStartNodes.item(1).innerHTML = dupStartNodes.item(0).innerHTML;
-    // dupStartNodes.item(1).style.backgroundColor = dupStartNodes.item(0).style.backgroundColor;
-    dupEndNodes.item(0).innerHTML = dupEndNodes.item(1).innerHTML;
-    // dupEndNodes.item(0).style.backgroundColor = dupEndNodes.item(1).style.backgroundColor;
+    let dupStartNode = <HTMLElement>dupStartNodes.item(1);
+    let startNode = <HTMLElement>dupStartNodes.item(0);
+    dupStartNode.innerHTML = startNode.innerHTML;
+    dupStartNode.style.backgroundColor = startNode.style.backgroundColor;
+
+    let dupEndNode = <HTMLElement>dupEndNodes.item(0);
+    let endNode = <HTMLElement>dupEndNodes.item(1);
+    dupEndNode.innerHTML = endNode.innerHTML;
+    dupEndNode.style.backgroundColor = endNode.style.backgroundColor;
   }
 
   ngAfterViewChecked() {

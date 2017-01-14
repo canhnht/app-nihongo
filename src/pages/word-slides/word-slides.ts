@@ -48,7 +48,6 @@ export class WordSlides {
       this.words = this.audioService.listWordOrder.map(
         wordIndex => this.audioService.listWord[wordIndex]
       );
-      this.words = this.words.map((word) => Object.assign({ flipped: false }, word));
       if (this.sliderService.currentSlide >= 0) {
         let wordIndex = this.sliderService.currentSlide;
         this.default_slides_indexes = [
@@ -80,7 +79,8 @@ export class WordSlides {
   }
 
   getColor(nr) {
-    return nr % 2 === 0 ? '#59a8f2' : '#51b147';
+    // return nr % 2 === 0 ? '#59a8f2' : '#51b147';
+    return '#51b147';
   }
 
   makeSlide(nr) {
@@ -105,7 +105,6 @@ export class WordSlides {
           this.tail = this.slides[this.slides.length - 1].nr;
           this.vocabSlider.slideTo(2, 0, false);
           this.previousActiveIndex = 2;
-          this.words[trackIndex].flipped = false;
         }
       );
   }
@@ -143,15 +142,15 @@ export class WordSlides {
       this.firstTime = false;
     }
 
-    if ($event.activeIndex === 4) {
-      this.vocabSlider.slideTo(1, 0, false);
-      this.previousActiveIndex = 1;
-    } else if ($event.activeIndex === 0) {
-      this.vocabSlider.slideTo(3, 0, false);
-      this.previousActiveIndex = 3;
-    } else {
-      this.previousActiveIndex = $event.activeIndex;
-    }
+    // if ($event.activeIndex === 4) {
+    //   this.vocabSlider.slideTo(1, 0, false);
+    //   this.previousActiveIndex = 1;
+    // } else if ($event.activeIndex === 0) {
+    //   this.vocabSlider.slideTo(3, 0, false);
+    //   this.previousActiveIndex = 3;
+    // } else {
+    //   this.previousActiveIndex = $event.activeIndex;
+    // }
 
     this.currentIndex = this.slides[i].nr;
     if (this.playSingleWord) {
@@ -187,10 +186,15 @@ export class WordSlides {
     let dupStartNodes = document.querySelectorAll(".slide-content-0");
     let dupEndNodes = document.querySelectorAll(".slide-content-2");
     if (dupStartNodes.length !== 2 || dupEndNodes.length !== 2) return;
-    dupStartNodes.item(1).innerHTML = dupStartNodes.item(0).innerHTML;
-    // dupStartNodes.item(1).style.backgroundColor = dupStartNodes.item(0).style.backgroundColor;
-    dupEndNodes.item(0).innerHTML = dupEndNodes.item(1).innerHTML;
-    // dupEndNodes.item(0).style.backgroundColor = dupEndNodes.item(1).style.backgroundColor;
+    let dupStartNode = <HTMLElement>dupStartNodes.item(1);
+    let startNode = <HTMLElement>dupStartNodes.item(0);
+    dupStartNode.innerHTML = startNode.innerHTML;
+    dupStartNode.style.backgroundColor = startNode.style.backgroundColor;
+
+    let dupEndNode = <HTMLElement>dupEndNodes.item(0);
+    let endNode = <HTMLElement>dupEndNodes.item(1);
+    dupEndNode.innerHTML = endNode.innerHTML;
+    dupEndNode.style.backgroundColor = endNode.style.backgroundColor;
   }
 
   ngAfterViewChecked() {
@@ -221,9 +225,5 @@ export class WordSlides {
 
   closeSlide() {
     this.navCtrl.pop();
-  }
-
-  flipCard(word) {
-    word.flipped = !word.flipped;
   }
 }
