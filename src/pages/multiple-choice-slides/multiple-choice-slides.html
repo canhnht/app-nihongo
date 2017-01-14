@@ -3,7 +3,7 @@
     <ion-title>{{'Multiple_choice' | translate}}</ion-title>
     <ion-buttons end>
       <button ion-button large (click)="close()">
-        <ion-icon large name="close"></ion-icon>
+        <ion-icon name="close"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -14,30 +14,30 @@
 <ion-content class="multiple-choice-slides">
   <ion-slides #questionSlider [options]="sliderOptions"
     (ionDidChange)="onSlideChanged($event)">
-    <ion-slide class="question-slide" [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
-      <div class="question" *ngIf="true">
-        question.question
+    <ion-slide class="question-slide" *ngFor="let question of listQuestion; let i = index" [class.odd]="i % 2 == 1" [class.even]="i % 2 == 0">
+      <div class="question" *ngIf="isTextQuestion(question)">
+        {{question.question}}
       </div>
-      <i class="fa fa-volume-up question voice" *ngIf="false" (click)="playQuestion(question)"></i>
+      <i class="fa fa-volume-up question voice" *ngIf="isVoiceQuestion(question)" (click)="playQuestion(question)"></i>
       <div class="option" (click)="select(question, 0)"
         [class.activated]="selectedOption === 0">
         <div class="bullet">A</div>
-        question.options[0]
+        {{question.options[0]}}
       </div>
       <div class="option" (click)="select(question, 1)"
         [class.activated]="selectedOption === 1">
         <div class="bullet">B</div>
-        question.options[1]
+        {{question.options[1]}}
       </div>
       <div class="option" (click)="select(question, 2)"
         [class.activated]="selectedOption === 2">
         <div class="bullet">C</div>
-        question.options[2]
+        {{question.options[2]}}
       </div>
       <div class="option" (click)="select(question, 3)"
         [class.activated]="selectedOption === 3">
         <div class="bullet">D</div>
-        question.options[3]
+        {{question.options[3]}}
       </div>
     </ion-slide>
   </ion-slides>
@@ -45,7 +45,7 @@
 <div class="slides-progress">
   <div class="current-progress" [style.width.%]="progressPercent"></div>
 </div>
-<div class="answer-screen" *ngIf="false">
+<div class="answer-screen" *ngIf="selectedOption != -1">
   <i class="fa fa-check answer correct" primary *ngIf="isCorrect"></i>
   <i class="fa fa-close answer incorrect" danger *ngIf="!isCorrect"></i>
   <button ion-button class="btn-continue" (click)="next()">
@@ -53,7 +53,7 @@
   </button>
 </div>
 
-<div class="level-success" *ngIf="false">
+<div class="level-success" *ngIf="answerAll && success">
   <div class="title">{{'Congratulation' | translate}}</div>
   <div class="row">
     <div class="text">{{'Number_questions' | translate}}:</div>
@@ -66,7 +66,7 @@
     </button>
   </div>
 </div>
-<div class="level-fail" *ngIf="false">
+<div class="level-fail" *ngIf="answerAll && !success">
   <div class="title">{{'Fail' | translate}}</div>
   <div class="group-btn">
     <button ion-button round primary (click)="playAgain()">

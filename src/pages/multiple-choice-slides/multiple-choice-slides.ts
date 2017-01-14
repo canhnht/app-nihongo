@@ -22,10 +22,9 @@ enum QuestionType {
 };
 
 @Component({
-  selector: 'page-playground',
-  templateUrl: 'playground.html'
+  templateUrl: 'multiple-choice-slides.html'
 })
-export class PlaygroundPage {
+export class MultipleChoiceSlides {
   @ViewChild('questionSlider') questionSlider: Slides;
   slides: any = null;
 
@@ -37,7 +36,7 @@ export class PlaygroundPage {
       slides.lockSwipeToNext();
     }
   };
-  listQuestion: any[];
+  listQuestion: any[] = [];
   intervalCountdown: any = null;
   countdownPercent: number;
   progressPercent: number;
@@ -58,27 +57,15 @@ export class PlaygroundPage {
 
   constructor(private navController: NavController, private navParams: NavParams,
     private translate: TranslateService) {
-    this.words = [
-      {
-        kanji: 'kanji1',
-        phonetic: [ 'phonetic1' ]
-      },
-      {
-        kanji: 'kanji2',
-        phonetic: [ 'phonetic2' ]
-      },
-      {
-        kanji: 'kanji3',
-        phonetic: [ 'phonetic3' ]
-      }
-    ];
-    this.onPass = () => { alert('onPass'); };
-    this.onFail = () => { alert('onFail'); };
+    this.words = this.navParams.data.words;
+    this.onPass = this.navParams.data.onPass;
+    this.onFail = this.navParams.data.onFail;
     this.reset();
   }
 
   reset() {
     this.listQuestion = this.generateListQuestion();
+    alert(`listQuestion ${JSON.stringify(this.listQuestion)}`);
     this.numberWrongAnswer = 0;
     this.answerAll = false;
     this.success = false;
@@ -88,7 +75,7 @@ export class PlaygroundPage {
 
   generateListQuestion() {
     this.words = _.shuffle(this.words);
-    this.numberQuestions = Math.min(this.words.length, 10);
+    this.numberQuestions = 10;
     this.timeLimit = 10;
     let types = [
       QuestionType.KanjiToHiragana_Text,
@@ -106,14 +93,14 @@ export class PlaygroundPage {
     let question: any = {
       type: questionType
     };
-    if (questionType === QuestionType.KanjiToHiragana_Text
-      || questionType === QuestionType.KanjiToHiragana_Voice) {
+    if (questionType == QuestionType.KanjiToHiragana_Text
+      || questionType == QuestionType.KanjiToHiragana_Voice) {
       question.question = word.kanji;
       let otherOptions = this.getOtherOptions(3).map((word) => word.phonetic[0]);
       question.options = [word.phonetic[0], ...otherOptions];
       question.answer = 0;
-    } else if (questionType === QuestionType.HiraganaToKanji_Text
-      || questionType === QuestionType.HiraganaToKanji_Voice) {
+    } else if (questionType == QuestionType.HiraganaToKanji_Text
+      || questionType == QuestionType.HiraganaToKanji_Voice) {
       question.question = word.phonetic[0];
       let otherOptions = this.getOtherOptions(3).map(word => word.kanji);
       question.options = [word.kanji, ...otherOptions];
@@ -170,12 +157,12 @@ export class PlaygroundPage {
     } else if (question.type == QuestionType.HiraganaToKanji_Voice) {
       text = question.options[question.answer];
     }
-    // TextToSpeech.speak({
-    //   text: text,
-    //   locale: 'ja-jp'
-    // }).then(() => {}).catch(err => {
-    //   alert(`tts ${err}`);
-    // });
+    TextToSpeech.speak({
+      text: text,
+      locale: 'ja-jp'
+    }).then(() => {}).catch(err => {
+      alert(`tts ${err}`);
+    });
   }
 
   next() {
