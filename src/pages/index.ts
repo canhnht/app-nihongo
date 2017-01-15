@@ -16,3 +16,4 @@ export { TabHomePage } from './tab-home-page/tab-home-page';
 export { TabUserPage } from './tab-user-page/tab-user-page';
 export { ModalDownloadPage } from './modal-download-page/modal-download-page';
 export { MultipleChoiceSlides } from './multiple-choice-slides/multiple-choice-slides';
+export { MatchingWords } from './matching-words/matching-words';

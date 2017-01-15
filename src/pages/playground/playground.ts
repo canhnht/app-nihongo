@@ -56,6 +56,114 @@ export class PlaygroundPage {
   numberQuestions: number;
   timeLimit: number;
 
+  width: 4;
+  height: 5;
+  listCell = [
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: false,
+      correct: false
+    },
+    {
+      text: 'text',
+      flip: true,
+      correct: true
+    },
+    {
+      text: 'text',
+      flip: true,
+      correct: false
+    }
+  ];
+
   constructor(private navController: NavController, private navParams: NavParams,
     private translate: TranslateService) {
     this.words = [

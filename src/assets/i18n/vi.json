@@ -76,5 +76,9 @@
   "Exit": "Thoát",
   "Number_questions": "Số câu hỏi",
   "Fail": "Thất bại",
-  "Test_again": "Chơi lại"
+  "Test_again": "Làm lại",
+  "Complete_time": "Thời gian hoàn thành",
+  "minute": "phút",
+  "second": "giây",
+  "Matching_words": "Ghép từ"
 }

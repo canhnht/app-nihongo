@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { DbService } from './db.service';
 import { SettingService } from './setting.service';
 import { LocalStorageService } from './local-storage.service';
-import { formatSecondsAsHHMMSS } from '../helpers/MainHelper';
+import { formatSecondsAsHHMMSS } from '../helpers/main-helper';
 
 declare var cordova: any;
 

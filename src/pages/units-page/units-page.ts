@@ -4,7 +4,7 @@ import { SpinnerDialog } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { DbService } from '../../services';
 import { WordsPage } from '../words-page/words-page';
-import { MultipleChoiceSlides } from '../multiple-choice-slides/multiple-choice-slides';
+import { getRandomQuiz } from '../../helpers/main-helper';
 
 @Component({
   templateUrl: 'units-page.html',
@@ -24,14 +24,10 @@ export class UnitsPage {
   }
 
   goToUnit(unit) {
-    // this.navCtrl.push(WordsPage, {
-    //   selectedUnit: unit,
-    //   selectedCourse: this.course,
-    // });
     SpinnerDialog.show(this.translate.instant('Processing'),
       this.translate.instant('Please_wait'), false);
     this.dbService.getWordsByUnitId(unit.id).then((words) => {
-      this.navCtrl.push(MultipleChoiceSlides, {
+      this.navCtrl.push(getRandomQuiz(), {
         words,
         onFail: () => {
           alert(`onFail`);

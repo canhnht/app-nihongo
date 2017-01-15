@@ -46,7 +46,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="7000" />
     <preference name="ShowSplashScreenSpinner" value="true" />
-    <preference name="AutoHideSplashScreen" value="true"/>
+    <preference name="AutoHideSplashScreen" value="true" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
@@ -69,4 +69,5 @@
         <variable name="APP_ID" value="1807313106195382" />
         <variable name="APP_NAME" value="MINAGOI - dev" />
     </plugin>
+    <plugin name="cordova-plugin-nativeaudio" spec="~3.0.7" />
 </widget>

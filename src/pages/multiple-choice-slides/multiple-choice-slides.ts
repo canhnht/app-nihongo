@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, Slides, NavParams } from 'ionic-angular';
-import { SpinnerDialog, NativeAudio, TextToSpeech } from 'ionic-native';
+import { Toast, SpinnerDialog, NativeAudio, TextToSpeech } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import _ from 'lodash';
@@ -71,7 +71,7 @@ export class MultipleChoiceSlides {
   generateListQuestion() {
     this.words = _.shuffle(this.words);
     this.numberQuestions = 10;
-    this.timeLimit = 10;
+    this.timeLimit = 10000;
     let types = [
       QuestionType.KanjiToHiragana_Text,
       QuestionType.HiraganaToKanji_Text,
@@ -186,14 +186,13 @@ export class MultipleChoiceSlides {
     this.progressPercent = (questionIndex + 1) / this.numberQuestions * 100;
     this.selectedOption = -1;
     let interval = 500;
-    let timeLimit = this.timeLimit * 1000;
-    let countdown = timeLimit;
+    let countdown = this.timeLimit;
     this.intervalCountdown = setInterval(() => {
-      this.countdownPercent = countdown / timeLimit * 100;
+      this.countdownPercent = countdown / this.timeLimit * 100;
       countdown -= interval;
       if (countdown == 5000)
         NativeAudio.play('count_down_5');
-      if (countdown == 0) {
+      else if (countdown == 0) {
         this.select(this.listQuestion[questionIndex], -2);
       }
     }, interval);

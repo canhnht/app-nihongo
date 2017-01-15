@@ -1,4 +1,4 @@
-
+import { MultipleChoiceSlides, MatchingWords } from '../pages';
 
 export const formatSecondsAsHHMMSS = (seconds) => {
   let text: string = '';
@@ -17,3 +17,7 @@ export const formatSecondsAsHHMMSS = (seconds) => {
   return text;
 };
 
+export const getRandomQuiz = () => {
+  let quizTypes = [ MultipleChoiceSlides, MatchingWords ];
+  return quizTypes[Math.floor(Math.random() * quizTypes.length)];
+}

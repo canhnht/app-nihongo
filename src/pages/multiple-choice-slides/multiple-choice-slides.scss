@@ -1,27 +1,4 @@
 
-.multiple-choice-header {
-  background: #E61770;
-  height: 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition-property: all;
-  transition-duration: .5s;
-  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-  color: white;
-
-  .quote {
-    width: 80%;
-    margin-left: 5px;
-    font-size: 24px;
-    color: white;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-family: 'Patrick_Hand', Fallback, sans-serif;
-  }
-}
-
 .multiple-choice-slides {
   position: relative;
 
@@ -162,10 +139,12 @@
 
     &.correct {
       background-color: color($colors, primary);
+      color: white;
     }
 
     &.incorrect {
       background-color: color($colors, danger);
+      color: white;
     }
   }
 
@@ -178,7 +157,7 @@
 }
 
 
-.level-success {
+.multiple-choice-success {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -190,23 +169,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  .level {
-    position: absolute;
-    top: -20px;
-    width: 200px;
-    height: 40px;
-    left: calc(50% - 100px);
-    border-radius: 20px;
-    border: 2px solid white;
-    font-size: 20px;
-    background: #E61770;
-    font-family: 'Lobster', Fallback, sans-serif;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 
   .title {
     font-size: 60px;
@@ -234,13 +196,13 @@
     }
   }
 
-  .group-btn {
+  .btn-exit {
     margin-top: 100px;
   }
 }
 
 
-.level-fail {
+.multiple-choice-fail {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -253,47 +215,11 @@
   align-items: center;
   justify-content: center;
 
-  .level {
-    position: absolute;
-    top: -20px;
-    width: 200px;
-    height: 40px;
-    left: calc(50% - 100px);
-    border-radius: 20px;
-    border: 2px solid white;
-    font-size: 20px;
-    background: color($colors, secondary);
-    font-family: 'Lobster', Fallback, sans-serif;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
   .title {
     font-size: 60px;
     color: white;
     text-align: center;
     font-family: 'Lobster', Fallback, sans-serif;
-  }
-
-  .row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 80%;
-    margin-top: 30px;
-
-    .text {
-      color: white;
-      font-size: 22px;
-    }
-
-    .number {
-      color: white;
-      font-size: 30px;
-      font-weight: bold;
-    }
   }
 
   .group-btn {
