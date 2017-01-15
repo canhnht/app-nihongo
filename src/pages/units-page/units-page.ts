@@ -33,8 +33,20 @@ export class UnitsPage {
     this.dbService.getWordsByUnitId(unit.id).then((words) => {
       this.navCtrl.push(MultipleChoiceSlides, {
         words,
-        onFail: () => { alert(`onFail`); },
-        onPass: () => { alert(`onPass`); },
+        onFail: () => {
+          alert(`onFail`);
+          this.navCtrl.push(WordsPage, {
+            selectedUnit: unit,
+            selectedCourse: this.course,
+          });
+        },
+        onPass: () => {
+          alert(`onPass`);
+          this.navCtrl.push(WordsPage, {
+            selectedUnit: unit,
+            selectedCourse: this.course,
+          });
+        },
       });
     })
   }

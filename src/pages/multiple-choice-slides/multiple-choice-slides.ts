@@ -6,14 +6,6 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import _ from 'lodash';
 import { AudioPlayer } from '../../components';
 
-const QUOTES = {
-  FIRST_QUESTION: 'Hãy cố gắng trả lời đúng tất cả!',
-  CORRECT_QUESTION: 'Rất tốt! Tiếp tục phát huy nào!',
-  HALF_WAY: 'Nửa chặng rồi! Cố gắng lên!',
-  TIME_OUT: 'Bạn đã bỏ câu. Bạn phải chơi lại từ đầu.',
-  WRONG_ANSWER: 'Bạn đã sai. Bạn phải chơi lại từ đầu.'
-};
-
 enum QuestionType {
   KanjiToHiragana_Text,
   HiraganaToKanji_Text,
@@ -44,7 +36,6 @@ export class MultipleChoiceSlides {
   isCorrect: boolean;
   numberWrongAnswer: number;
   timeout: boolean;
-  quote: string;
   currentQuestion: number;
   answerAll: boolean;
   success: boolean;
@@ -60,11 +51,16 @@ export class MultipleChoiceSlides {
     this.words = this.navParams.data.words;
     this.onPass = this.navParams.data.onPass;
     this.onFail = this.navParams.data.onFail;
-    this.reset();
+    this.reset(true);
   }
 
-  reset() {
-    this.listQuestion = this.generateListQuestion();
+  reset(newQuestions = false) {
+    if (newQuestions)
+      this.listQuestion = this.generateListQuestion();
+    else {
+      this.listQuestion = _.shuffle(this.listQuestion)
+        .map((question) => this.shuffleAnswer(question));
+    }
     this.numberWrongAnswer = 0;
     this.answerAll = false;
     this.success = false;
@@ -136,7 +132,8 @@ export class MultipleChoiceSlides {
 
   ionViewWillLeave() {
     this.stopQuestion();
-    this.onFail();
+    if (this.answerAll && this.success) this.onPass();
+    else this.onFail();
   }
 
   isTextQuestion(question) {
@@ -165,11 +162,11 @@ export class MultipleChoiceSlides {
   }
 
   next() {
-    NativeAudio.play('touch', ()=>{});
+    NativeAudio.play('touch');
     if (this.currentQuestion + 1 === this.numberQuestions) {
       this.answerAll = true;
       this.success = this.numberWrongAnswer === 0;
-      NativeAudio.play(this.success ? 'success' : 'fail', ()=>{});
+      NativeAudio.play(this.success ? 'success' : 'fail');
     } else {
       this.slides.unlockSwipeToNext();
       this.questionSlider.slideNext();
@@ -186,7 +183,6 @@ export class MultipleChoiceSlides {
 
   startQuestion(questionIndex) {
     this.currentQuestion = questionIndex;
-    this.generateQuote(questionIndex);
     this.progressPercent = (questionIndex + 1) / this.numberQuestions * 100;
     this.selectedOption = -1;
     let interval = 500;
@@ -196,7 +192,7 @@ export class MultipleChoiceSlides {
       this.countdownPercent = countdown / timeLimit * 100;
       countdown -= interval;
       if (countdown == 5000)
-        NativeAudio.play('count_down_5', ()=>{});
+        NativeAudio.play('count_down_5');
       if (countdown == 0) {
         this.select(this.listQuestion[questionIndex], -2);
       }
@@ -219,10 +215,10 @@ export class MultipleChoiceSlides {
     this.selectedOption = optionIndex;
     this.isCorrect = this.selectedOption === question.answer;
     if (!this.isCorrect) {
-      NativeAudio.play('incorrect', ()=>{});
+      NativeAudio.play('incorrect');
       this.numberWrongAnswer++;
     } else {
-      NativeAudio.play('correct', ()=>{});
+      NativeAudio.play('correct');
     }
     if (optionIndex == -2) {
       this.timeout = true;
@@ -232,28 +228,12 @@ export class MultipleChoiceSlides {
   }
 
   close() {
-    NativeAudio.play('touch', ()=>{});
-    this.stopQuestion();
+    NativeAudio.play('touch');
     this.navController.pop();
   }
 
-  generateQuote(questionIndex) {
-    if (questionIndex === 0) this.quote = QUOTES.FIRST_QUESTION;
-    else if (this.timeout) {
-      this.quote = QUOTES.TIME_OUT;
-    } else if (this.numberWrongAnswer > 0) {
-      this.quote = QUOTES.WRONG_ANSWER;
-    } else {
-      if (questionIndex === Math.floor(this.numberQuestions / 2)) {
-        this.quote = QUOTES.HALF_WAY;
-      } else {
-        this.quote = QUOTES.CORRECT_QUESTION;
-      }
-    }
-  }
-
-  playAgain() {
-    NativeAudio.play('touch', ()=>{});
+  testAgain() {
+    NativeAudio.play('touch');
     this.reset();
     this.slideToBeginning();
   }

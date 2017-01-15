@@ -33,7 +33,8 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
-    this.initDbSubscription = this.dbService.initSubject.subscribe((init) => {
+    let initDbSubscription = this.dbService.initSubject.subscribe((init) => {
+      initDbSubscription.unsubscribe();
       if (init) {
         this.downloadNews();
         this.dbService.getCourses();
@@ -50,7 +51,6 @@ export class HomePage {
   }
 
   ionViewWillLeave() {
-    this.initDbSubscription.unsubscribe();
     this.coursesSubscription.unsubscribe();
     this.downloadNewsSubscription.unsubscribe();
     this.latestNewsSubscription.unsubscribe();
