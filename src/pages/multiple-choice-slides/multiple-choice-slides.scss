@@ -2,15 +2,6 @@
 .multiple-choice-slides {
   position: relative;
 
-  .btn-prev, .btn-next {
-    position: absolute;
-    display: none;
-    font-size: 66px;
-    top: calc(50% - 33px);
-    opacity: 0.5;
-    z-index: 5;
-  }
-
   .question {
     position: absolute;
     top: 50px;
@@ -68,7 +59,13 @@
   }
 
   .activated {
-    opacity: 0.5;
+    background-color: color($colors, favorite);
+    color: white;
+    border: 1px solid white;
+
+    .bullet {
+      border: 1px solid white;
+    }
   }
 
   .disabled {

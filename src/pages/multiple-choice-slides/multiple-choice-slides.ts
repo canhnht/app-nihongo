@@ -86,7 +86,8 @@ export class MultipleChoiceSlides {
 
   generateQuestion(word, questionType) {
     let question: any = {
-      type: questionType
+      type: questionType,
+      done: false
     };
     if (questionType == QuestionType.KanjiToHiragana_Text
       || questionType == QuestionType.KanjiToHiragana_Voice) {
@@ -193,6 +194,7 @@ export class MultipleChoiceSlides {
       if (countdown == 5000)
         NativeAudio.play('count_down_5');
       else if (countdown == 0) {
+        this.countdownPercent = 0;
         this.select(this.listQuestion[questionIndex], -2);
       }
     }, interval);
@@ -213,6 +215,7 @@ export class MultipleChoiceSlides {
     this.stopQuestion();
     this.selectedOption = optionIndex;
     this.isCorrect = this.selectedOption === question.answer;
+    question.done = true;
     if (!this.isCorrect) {
       NativeAudio.play('incorrect');
       this.numberWrongAnswer++;

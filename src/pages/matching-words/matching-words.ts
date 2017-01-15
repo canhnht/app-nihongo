@@ -93,6 +93,7 @@ export class MatchingWords {
       this.countdownPercent = this.countdown / this.timeLimit * 100;
       this.countdown -= interval;
       if (this.countdown == 0) {
+        this.countdownPercent = 0;
         this.stop();
         if (this.numberCorrect < this.numberQuestions) {
           NativeAudio.play('fail');
