@@ -36,12 +36,12 @@ export class MyApp {
     }).then(() => {
       StatusBar.styleDefault();
       Splashscreen.hide();
-      NativeAudio.preloadSimple('touch', `${ASSETS_BASE_URL}/sounds/touch.mp3`).then(()=>{},()=>{});
-      NativeAudio.preloadSimple('correct', `${ASSETS_BASE_URL}/sounds/correct.wav`).then(()=>{},()=>{});
-      NativeAudio.preloadSimple('incorrect', `${ASSETS_BASE_URL}/sounds/incorrect.mp3`).then(()=>{},()=>{});
-      NativeAudio.preloadSimple('fail', `${ASSETS_BASE_URL}/sounds/fail.wav`).then(()=>{},()=>{});
-      NativeAudio.preloadSimple('success', `${ASSETS_BASE_URL}/sounds/success.wav`).then(()=>{},()=>{});
-      NativeAudio.preloadSimple('count_down_5', `${ASSETS_BASE_URL}/sounds/count_down_5.mp3`).then(()=>{},()=>{});
+      NativeAudio.preloadSimple('touch', `${ASSETS_BASE_URL}/sounds/touch.mp3`);
+      NativeAudio.preloadSimple('correct', `${ASSETS_BASE_URL}/sounds/correct.wav`);
+      NativeAudio.preloadSimple('incorrect', `${ASSETS_BASE_URL}/sounds/incorrect.mp3`);
+      NativeAudio.preloadSimple('fail', `${ASSETS_BASE_URL}/sounds/fail.wav`);
+      NativeAudio.preloadSimple('success', `${ASSETS_BASE_URL}/sounds/success.wav`);
+      NativeAudio.preloadSimple('count_down_5', `${ASSETS_BASE_URL}/sounds/count_down_5.mp3`);
     });
   }
 

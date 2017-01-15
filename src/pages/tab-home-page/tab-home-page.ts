@@ -29,6 +29,7 @@ export class TabHomePage {
   latestNewsSubscription: Subscription;
   loadingNews: boolean = true;
   modalDownloadCourse: any;
+  initDbSubscription: Subscription;
 
 
   constructor(private navCtrl: NavController, private dbService: DbService,
@@ -39,15 +40,21 @@ export class TabHomePage {
   }
 
   ionViewWillEnter() {
-    this.dbService.getCourses();
-    this.coursesSubscription = this.dbService.coursesSubject.subscribe(
-      courses => this.courses = courses
-    );
+    let initDbSubscription = this.dbService.initSubject.subscribe((init) => {
+      initDbSubscription.unsubscribe();
+      if (init) {
+        this.downloadNews();
+        this.dbService.getCourses();
+        this.coursesSubscription = this.dbService.coursesSubject.subscribe(
+          courses => this.courses = courses
+        );
 
-    this.dbService.getLatestNews();
-    this.latestNewsSubscription = this.dbService.latestNewsSubject.subscribe(
-      latestNews => this.latestNews = latestNews
-    );
+        this.dbService.getLatestNews();
+        this.latestNewsSubscription = this.dbService.latestNewsSubject.subscribe(
+          latestNews => this.latestNews = latestNews
+        );
+      }
+    });
   }
 
   ionViewWillLeave() {

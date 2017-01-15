@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { SQLite, Toast, File } from 'ionic-native';
 import { Subject } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
@@ -10,20 +11,7 @@ declare var cordova: any;
 @Injectable()
 export class DbService {
   db: any = null;
-  listCourse: any[] = [];
-  listCourseSubject: Subject<any[]> = new Subject<any[]>();
-  currentCourseSubject: Subject<any> = new Subject<any>();
-  playlistSubject: Subject<any> = new Subject<any>();
-  currentCourse: any = {};
-  currentPlaylist: any = {};
-  currentPlaylistSubject: Subject<any> = new Subject<any>();
-  listNews: any[] = [];
-  listNewsSubject: Subject<any[]> = new Subject<any[]>();
-  allCourses: any = {};
-  allCoursesSubject: Subject<any[]> = new Subject<any[]>();
-  gameMultipleChoiceSubject: Subject<any> = new Subject<any>();
-  gameExploreJapanSubject: Subject<any> = new Subject<any>();
-
+  initSubject: Subject<any> = new Subject<any>();
   playlistsByWordId: any[] = [];
   playlistsByWordIdSubject: Subject<any[]> = new Subject<any[]>();
   courses: any[] = [];
@@ -33,27 +21,32 @@ export class DbService {
   playlists: any[] = [];
   playlistsSubject: Subject<any[]> = new Subject<any[]>();
 
-  constructor(private translate: TranslateService, private storageService: LocalStorageService) {
-    this.db = new SQLite();
-    this.db.openDatabase({
-      name: 'minagoi.db',
-      location: 'default',
-    }).then(this.initDatabase.bind(this)).then(this.getCourses.bind(this))
-      .catch((err) => {
-        Toast.showShortBottom(`Error init database ${JSON.stringify(err)}`).subscribe(() => {});
-      });
-  }
-
-  private initDatabase() {
-    return this.storageService.get('init_db').then((res) => {
-      if (!res) return File.readAsText(`${cordova.file.applicationDirectory}www/assets`, 'minagoi.sql')
-        .then(sqlText => {
+  constructor(private translate: TranslateService, private storageService: LocalStorageService,
+    private platform: Platform) {
+    this.platform.ready().then(() => {
+      this.db = new SQLite();
+      this.db.openDatabase({
+        name: 'minagoi.db',
+        location: 'default',
+      }).then(() => this.storageService.get('init_db')).then((res) => {
+          if (!res) return File.readAsText(`${cordova.file.applicationDirectory}www/assets`, 'minagoi.sql');
+          else {
+            this.initSubject.next(true);
+            return Promise.reject(null);
+          }
+        }).then((sqlText) => {
           let listSQL = sqlText.toString().split('----').slice(0, -1);
           return this.db.sqlBatch(listSQL);
+        })
+        .then(() => {
+          this.initSubject.next(true);
+          return this.storageService.set('init_db', true);
+        })
+        .catch((err) => {
+          if (err)
+            Toast.showShortBottom(`Error init database ${JSON.stringify(err)}`).subscribe(() => {});
         });
-    }).then(() => {
-      this.storageService.set('init_db', true);
-    });
+    })
   }
 
   getCourses() {
@@ -81,27 +74,14 @@ export class DbService {
       ];
     });
     return this.db.sqlBatch(listSql)
-      .catch((err) => alert(`addUnits error ${err.message}`));
-      // .catch(utils.errorHandler(this.translate.instant('Error_database')));
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
   addWord(word) {
     let sql = 'INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`, `audioFile`, `audioDuration`) VALUES (?,?,?,?,?,?,?,?,?)';
     return this.db.executeSql(sql, [ word.id, word.kanji, word.mainExample, word.meaning, word.otherExamples, word.phonetic, word.unitId, word.audioFile, word.audioDuration ])
-      .catch((err) => alert(`addWord error ${err.message}`));
-      // .catch(utils.errorHandler(this.translate.instant('Error_database')));
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
-
-  // addWords(words, unitId) {
-  //   let sql = 'INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`, `audioFile`, `audioDuration`) VALUES (?,?,?,?,?,?,?,?,?)';
-  //   let listSql = words.map((word) => {
-  //     return [
-  //       sql, [ word.id, word.kanji, word.mainExample, word.meaning, word.otherExamples, word.phonetic, unitId, word.audioFile, word.audioDuration ]
-  //     ];
-  //   });
-  //   return this.db.sqlBatch(listSql)
-  //     .catch(utils.errorHandler(this.translate.instant('Error_database')));
-  // }
 
   updateAudioFile(wordId, audioFile) {
     let sql = 'UPDATE `word` SET `audioFile` = ? WHERE `id` = ?';
@@ -162,25 +142,6 @@ export class DbService {
     return data;
   }
 
-  // getPlaylist(playlistId) {
-  //   if (!this.currentPlaylist || this.currentPlaylist._id !== playlistId) {
-  //     return Promise.resolve(this.db.get(playlistId))
-  //       .then(playlist => {
-  //         this.currentPlaylist = playlist;
-  //         return playlist;
-  //       })
-  //       .catch(utils.errorHandler(`Error get playlist by id ${playlistId}`));
-  //   } else {
-  //     return Promise.resolve(this.currentPlaylist);
-  //   }
-  // }
-
-  // updateMultiplePlaylists(playlists) {
-  //   this.db.bulkDocs(playlists)
-  //     .then(resp => {})
-  //     .catch(utils.errorHandler('Error update playlists'));
-  // }
-
   updateCourse(course) {
     let sql = 'UPDATE `course` SET `downloaded` = ?';
     return this.db.executeSql(sql, [ course.downloaded ])
@@ -215,46 +176,6 @@ export class DbService {
       return data[0];
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
-
-  // getWordsOfAllCourses() {
-  //   let listWord = this.listCourse.reduce((arr, course) => {
-  //     let wordsInUnits = course.units.reduce((words, unit) => {
-  //       return words.concat(unit.words);
-  //     }, []);
-  //     return arr.concat(wordsInUnits);
-  //   }, []);
-  //   return listWord;
-  // }
-
-  // getGameMultipleChoice() {
-  //   return this.db.get('gameMultipleChoice').catch(
-  //     utils.errorHandler('Error get game info')
-  //   );
-  // }
-
-  // updateGameMultipleChoice(game) {
-  //   this.db.put(game).then(resp => {}).catch(
-  //     utils.errorHandler('Error update game')
-  //   );
-  // }
-
-  // getGameExploreJapan() {
-  //   return this.db.get('gameExploreJapan').catch(
-  //     utils.errorHandler('Error get game info')
-  //   );
-  // }
-
-  // updateGameExploreJapan(game) {
-  //   this.db.put(game).then(resp => {}).catch(
-  //     utils.errorHandler('Error update game')
-  //   );
-  // }
-
-  // getExploreJapanData() {
-  //   return this.db.get('exploreJapanData').catch(
-  //     utils.errorHandler('Error get game data')
-  //   );
-  // }
 
   updateWord(word) {
     let sql = 'UPDATE `word` SET `lastPlayed` = ?, `timesPlayed` = ? WHERE `id` = ?';

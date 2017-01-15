@@ -70,5 +70,11 @@
   "Logout_facebook": "Đăng xuất ({{email}})",
   "Login_facebook_success": "Đăng nhập Facebook thành công",
   "Logout_facebook_success": "Đăng xuất Facebook thành công",
-  "Downloading_course": "Đang tải khoá học"
+  "Downloading_course": "Đang tải khoá học",
+  "Multiple_choice": "Trắc nghiệm",
+  "Congratulation": "Chúc mừng",
+  "Exit": "Thoát",
+  "Number_questions": "Số câu hỏi",
+  "Fail": "Thất bại",
+  "Test_again": "Chơi lại"
 }

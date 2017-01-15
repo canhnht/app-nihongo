@@ -1,4 +1,3 @@
-
 <ion-header class="multiple-choice-header">
   <ion-navbar color="primary">
     <ion-title>{{'Multiple_choice' | translate}}</ion-title>
@@ -11,52 +10,52 @@
 </ion-header>
 <ion-content class="multiple-choice-slides">
   <div class="countdown-bar">
-    <div class="current-countdown" [style.width.%]="100"></div>
+    <div class="current-countdown" [style.width.%]="countdownPercent"></div>
   </div>
   <ion-slides #questionSlider [options]="sliderOptions"
     (ionDidChange)="onSlideChanged($event)">
     <ion-slide class="question-slide" *ngFor="let question of listQuestion; let i = index">
-      <div class="question" *ngIf="true">
-        question.question
+      <div class="question" *ngIf="isTextQuestion(question)">
+        {{question.question}}
       </div>
-      <i class="fa fa-volume-up question voice" *ngIf="false" (click)="playQuestion(question)"></i>
+      <i class="fa fa-volume-up question voice" *ngIf="isVoiceQuestion(question)" (click)="playQuestion(question)"></i>
       <div class="option" (click)="select(question, 0)"
-        [class.activated]="false">
+        [class.activated]="selectedOption === 0">
         <div class="bullet">A</div>
-        question.options[0]
+        {{question.options[0]}}
       </div>
       <div class="option" (click)="select(question, 1)"
-        [class.activated]="false">
+        [class.activated]="selectedOption === 1">
         <div class="bullet">B</div>
-        question.options[1]
+        {{question.options[1]}}
       </div>
       <div class="option" (click)="select(question, 2)"
-        [class.activated]="true">
+        [class.activated]="selectedOption === 2">
         <div class="bullet">C</div>
-        question.options[2]
+        {{question.options[2]}}
       </div>
       <div class="option" (click)="select(question, 3)"
-        [class.activated]="false">
+        [class.activated]="selectedOption === 3">
         <div class="bullet">D</div>
-        question.options[3]
+        {{question.options[3]}}
       </div>
     </ion-slide>
   </ion-slides>
 </ion-content>
 <ion-footer>
   <div class="slides-progress">
-    <div class="current-progress" [style.width.%]="100"></div>
+    <div class="current-progress" [style.width.%]="progressPercent"></div>
   </div>
 </ion-footer>
-<div class="answer-screen" *ngIf="false">
-  <i class="fa fa-check answer correct" primary *ngIf="false"></i>
-  <i class="fa fa-close answer incorrect" danger *ngIf="true"></i>
+<div class="answer-screen" *ngIf="selectedOption != -1">
+  <i class="fa fa-check answer correct" primary *ngIf="isCorrect"></i>
+  <i class="fa fa-close answer incorrect" danger *ngIf="!isCorrect"></i>
   <button ion-button class="btn-continue" (click)="next()">
     {{'Continue' | translate}}
   </button>
 </div>
 
-<div class="level-success" *ngIf="false">
+<div class="level-success" *ngIf="answerAll && success">
   <div class="title">{{'Congratulation' | translate}}</div>
   <div class="row">
     <div class="text">{{'Number_questions' | translate}}:</div>
@@ -69,10 +68,10 @@
     </button>
   </div>
 </div>
-<div class="level-fail" *ngIf="true">
+<div class="level-fail" *ngIf="answerAll && !success">
   <div class="title">{{'Fail' | translate}}</div>
   <div class="group-btn">
-    <button ion-button round primary (click)="playAgain()" icon-left>
+    <button ion-button round primary (click)="testAgain()" icon-left>
       <ion-icon name="sync"></ion-icon>
       {{'Test_again' | translate}}
     </button>
