@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-title>{{'Matching_words' | translate}}</ion-title>
-    <ion-buttons end *ngIf="true">
+    <ion-buttons end *ngIf="playing">
       <button ion-button large (click)="pause()" icon-only>
         <ion-icon name="pause"></ion-icon>
       </button>
@@ -10,7 +10,7 @@
 </ion-header>
 <ion-content class="matching-words">
   <div class="countdown-bar-round">
-    <div class="current-countdown" [style.width.%]="100"></div>
+    <div class="current-countdown" [style.width.%]="countdownPercent"></div>
   </div>
   <div class="grid">
     <div class="cell" *ngFor="let cell of listCell; let ind = index"
@@ -22,17 +22,17 @@
 </ion-content>
 <ion-footer>
   <div class="round-progress">
-    <div class="current-progress" [style.width.%]="100"></div>
+    <div class="current-progress" [style.width.%]="progressPercent"></div>
   </div>
 </ion-footer>
 
-<div class="waiting" *ngIf="false">
+<div class="waiting" *ngIf="!playing">
   <button ion-button class="btn-play" clear (click)="play()" icon-only>
     <ion-icon name="play"></ion-icon>
   </button>
 </div>
 
-<div class="matching-words-success" *ngIf="false">
+<div class="matching-words-success" *ngIf="endQuiz && success">
   <div class="title">{{'Congratulation' | translate}}</div>
   <div class="row">
     <div class="text">{{'Complete_time' | translate}}:</div>
@@ -43,7 +43,7 @@
     {{'Exit' | translate}}
   </button>
 </div>
-<div class="matching-words-fail" *ngIf="true">
+<div class="matching-words-fail" *ngIf="endQuiz && !success">
   <div class="title">{{'Fail' | translate}}</div>
   <div class="group-btn">
     <button ion-button round color="primary" (click)="testAgain()" icon-left>

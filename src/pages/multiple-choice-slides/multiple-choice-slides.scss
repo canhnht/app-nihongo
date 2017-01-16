@@ -1,0 +1,225 @@
+
+.multiple-choice-slides {
+  position: relative;
+
+  .question {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 50px;
+    padding: 0 10px;
+    color: color($colors, primary);
+
+    &.voice {
+      font-size: 40px;
+    }
+  }
+
+  .btn-listen {
+    margin-bottom: 50px;
+  }
+
+  .option {
+    position: relative;
+    width: 90%;
+    height: 50px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px auto;
+    border-radius: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    -webkit-box-shadow: 0 0 2px 3px color($colors, favorite);
+    -moz-box-shadow: 0 0 2px 3px color($colors, favorite);
+    box-shadow: 0 0 2px 3px color($colors, favorite);
+
+    .bullet {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      -webkit-box-shadow: 0 0 2px 3px color($colors, favorite);
+      -moz-box-shadow: 0 0 2px 3px color($colors, favorite);
+      box-shadow: 0 0 2px 3px color($colors, favorite);
+    }
+  }
+
+  .activated {
+    background-color: color($colors, favorite);
+    color: white;
+    border: 1px solid white;
+
+    .bullet {
+      border: 1px solid white;
+    }
+  }
+
+  .disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+.slides-progress {
+  position: relative;
+  height: 10px;
+  width: 100%;
+  background-color: #777;
+
+  .current-progress {
+    position: absolute;
+    background-color: #E61770;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0%;
+  }
+}
+
+.countdown-bar {
+  position: relative;
+  height: 12px;
+  width: 100%;
+  background-color: white;
+
+  .current-countdown {
+    position: absolute;
+    background-image: repeating-linear-gradient(
+      45deg,
+      color($colors, light),
+      color($colors, light) 10px,
+      color($colors, secondary) 10px,
+      color($colors, secondary) 20px
+    );
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
+}
+
+.answer-screen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+  .answer {
+    font-size: 180px;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.correct {
+      background-color: color($colors, primary);
+      color: white;
+    }
+
+    &.incorrect {
+      background-color: color($colors, danger);
+      color: white;
+    }
+  }
+
+  .btn-continue {
+    font-size: 20px;
+    height: 50px;
+    width: 60%;
+    border-radius: 25px;
+  }
+}
+
+
+.multiple-choice-success {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-image: linear-gradient(color($colors, primary) 70%, white);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .title {
+    font-size: 60px;
+    color: white;
+    text-align: center;
+    font-family: 'Lobster', Fallback, sans-serif;
+    margin-bottom: 30px;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+
+    .text {
+      color: white;
+      font-size: 22px;
+    }
+
+    .number {
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+    }
+  }
+
+  .btn-exit {
+    margin-top: 100px;
+  }
+}
+
+
+.multiple-choice-fail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: color($colors, secondary);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .title {
+    font-size: 60px;
+    color: white;
+    text-align: center;
+    font-family: 'Lobster', Fallback, sans-serif;
+  }
+
+  .group-btn {
+    margin-top: 100px;
+  }
+}

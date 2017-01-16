@@ -1,9 +1,22 @@
 -- Init database for MINAGOI
 PRAGMA foreign_keys = ON;
 ----
--- Create table `course`
+
+-- Drop tables
+DROP TABLE IF EXISTS `news`;
+----
+DROP TABLE IF EXISTS `word_playlist`;
+----
+DROP TABLE IF EXISTS `word`;
+----
+DROP TABLE IF EXISTS `playlist`;
+----
+DROP TABLE IF EXISTS `unit`;
+----
 DROP TABLE IF EXISTS `course`;
 ----
+
+-- Create table `course`
 CREATE TABLE IF NOT EXISTS `course` (
   `id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
@@ -25,8 +38,6 @@ INSERT INTO `course` (`id`, `name`, `free`, `downloaded`, `noWords`, `noUnits`) 
 
 
 -- Create table `unit`
-DROP TABLE IF EXISTS `unit`;
-----
 CREATE TABLE IF NOT EXISTS `unit` (
   `id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
@@ -43,8 +54,6 @@ CREATE TABLE IF NOT EXISTS `unit` (
 
 
 -- Create table `playlist`
-DROP TABLE IF EXISTS `playlist`;
-----
 CREATE TABLE IF NOT EXISTS `playlist` (
   `id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
@@ -62,8 +71,6 @@ INSERT INTO `playlist` (`id`, `name`) VALUES
 
 
 -- Create table `word`
-DROP TABLE IF EXISTS `word`;
-----
 CREATE TABLE IF NOT EXISTS `word` (
   `id` VARCHAR(50) NOT NULL,
   `kanji` NVARCHAR(100) NOT NULL,
@@ -84,8 +91,6 @@ CREATE TABLE IF NOT EXISTS `word` (
 
 
 -- Create table `word_playlist`
-DROP TABLE IF EXISTS `word_playlist`;
-----
 CREATE TABLE IF NOT EXISTS `word_playlist` (
   `wordId` VARCHAR(50) NOT NULL,
   `playlistId` VARCHAR(50) NOT NULL,
@@ -98,8 +103,6 @@ CREATE TABLE IF NOT EXISTS `word_playlist` (
 
 
 -- Create table `news`
-DROP TABLE IF EXISTS `news`;
-----
 CREATE TABLE IF NOT EXISTS `news` (
   `id` VARCHAR(50) NOT NULL,
   `title` TEXT NOT NULL,

@@ -1,18 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, Slides, NavParams } from 'ionic-angular';
-import { SpinnerDialog, NativeAudio, TextToSpeech } from 'ionic-native';
+import { Toast, SpinnerDialog, NativeAudio, TextToSpeech } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import _ from 'lodash';
 import { AudioPlayer } from '../../components';
-
-const QUOTES = {
-  FIRST_QUESTION: 'Hãy cố gắng trả lời đúng tất cả!',
-  CORRECT_QUESTION: 'Rất tốt! Tiếp tục phát huy nào!',
-  HALF_WAY: 'Nửa chặng rồi! Cố gắng lên!',
-  TIME_OUT: 'Bạn đã bỏ câu. Bạn phải chơi lại từ đầu.',
-  WRONG_ANSWER: 'Bạn đã sai. Bạn phải chơi lại từ đầu.'
-};
 
 enum QuestionType {
   KanjiToHiragana_Text,
@@ -22,10 +14,9 @@ enum QuestionType {
 };
 
 @Component({
-  selector: 'page-playground',
-  templateUrl: 'playground.html'
+  templateUrl: 'multiple-choice-slides.html'
 })
-export class PlaygroundPage {
+export class MultipleChoiceSlides {
   @ViewChild('questionSlider') questionSlider: Slides;
   slides: any = null;
 
@@ -37,7 +28,7 @@ export class PlaygroundPage {
       slides.lockSwipeToNext();
     }
   };
-  listQuestion: any[];
+  listQuestion: any[] = [];
   intervalCountdown: any = null;
   countdownPercent: number;
   progressPercent: number;
@@ -45,7 +36,6 @@ export class PlaygroundPage {
   isCorrect: boolean;
   numberWrongAnswer: number;
   timeout: boolean;
-  quote: string;
   currentQuestion: number;
   answerAll: boolean;
   success: boolean;
@@ -56,137 +46,21 @@ export class PlaygroundPage {
   numberQuestions: number;
   timeLimit: number;
 
-  width: 4;
-  height: 5;
-  listCell = [
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: false,
-      correct: false
-    },
-    {
-      text: 'text',
-      flip: true,
-      correct: true
-    },
-    {
-      text: 'text',
-      flip: true,
-      correct: false
-    }
-  ];
-
   constructor(private navController: NavController, private navParams: NavParams,
     private translate: TranslateService) {
-    this.words = [
-      {
-        kanji: 'kanji1',
-        phonetic: [ 'phonetic1' ]
-      },
-      {
-        kanji: 'kanji2',
-        phonetic: [ 'phonetic2' ]
-      },
-      {
-        kanji: 'kanji3',
-        phonetic: [ 'phonetic3' ]
-      }
-    ];
-    this.onPass = () => { alert('onPass'); };
-    this.onFail = () => { alert('onFail'); };
-    this.reset();
+    this.words = this.navParams.data.words;
+    this.onPass = this.navParams.data.onPass;
+    this.onFail = this.navParams.data.onFail;
+    this.reset(true);
   }
 
-  reset() {
-    this.listQuestion = this.generateListQuestion();
+  reset(newQuestions = false) {
+    if (newQuestions)
+      this.listQuestion = this.generateListQuestion();
+    else {
+      this.listQuestion = _.shuffle(this.listQuestion)
+        .map((question) => this.shuffleAnswer(question));
+    }
     this.numberWrongAnswer = 0;
     this.answerAll = false;
     this.success = false;
@@ -196,8 +70,8 @@ export class PlaygroundPage {
 
   generateListQuestion() {
     this.words = _.shuffle(this.words);
-    this.numberQuestions = Math.min(this.words.length, 10);
-    this.timeLimit = 10;
+    this.numberQuestions = 10;
+    this.timeLimit = 10000;
     let types = [
       QuestionType.KanjiToHiragana_Text,
       QuestionType.HiraganaToKanji_Text,
@@ -212,16 +86,17 @@ export class PlaygroundPage {
 
   generateQuestion(word, questionType) {
     let question: any = {
-      type: questionType
+      type: questionType,
+      done: false
     };
-    if (questionType === QuestionType.KanjiToHiragana_Text
-      || questionType === QuestionType.KanjiToHiragana_Voice) {
+    if (questionType == QuestionType.KanjiToHiragana_Text
+      || questionType == QuestionType.KanjiToHiragana_Voice) {
       question.question = word.kanji;
       let otherOptions = this.getOtherOptions(3).map((word) => word.phonetic[0]);
       question.options = [word.phonetic[0], ...otherOptions];
       question.answer = 0;
-    } else if (questionType === QuestionType.HiraganaToKanji_Text
-      || questionType === QuestionType.HiraganaToKanji_Voice) {
+    } else if (questionType == QuestionType.HiraganaToKanji_Text
+      || questionType == QuestionType.HiraganaToKanji_Voice) {
       question.question = word.phonetic[0];
       let otherOptions = this.getOtherOptions(3).map(word => word.kanji);
       question.options = [word.kanji, ...otherOptions];
@@ -258,7 +133,8 @@ export class PlaygroundPage {
 
   ionViewWillLeave() {
     this.stopQuestion();
-    this.onFail();
+    if (this.answerAll && this.success) this.onPass();
+    else this.onFail();
   }
 
   isTextQuestion(question) {
@@ -278,20 +154,20 @@ export class PlaygroundPage {
     } else if (question.type == QuestionType.HiraganaToKanji_Voice) {
       text = question.options[question.answer];
     }
-    // TextToSpeech.speak({
-    //   text: text,
-    //   locale: 'ja-jp'
-    // }).then(() => {}).catch(err => {
-    //   alert(`tts ${err}`);
-    // });
+    TextToSpeech.speak({
+      text: text,
+      locale: 'ja-jp'
+    }).then(() => {}).catch(err => {
+      alert(`tts ${err}`);
+    });
   }
 
   next() {
-    NativeAudio.play('touch', ()=>{});
+    NativeAudio.play('touch');
     if (this.currentQuestion + 1 === this.numberQuestions) {
       this.answerAll = true;
       this.success = this.numberWrongAnswer === 0;
-      NativeAudio.play(this.success ? 'success' : 'fail', ()=>{});
+      NativeAudio.play(this.success ? 'success' : 'fail');
     } else {
       this.slides.unlockSwipeToNext();
       this.questionSlider.slideNext();
@@ -308,18 +184,17 @@ export class PlaygroundPage {
 
   startQuestion(questionIndex) {
     this.currentQuestion = questionIndex;
-    this.generateQuote(questionIndex);
     this.progressPercent = (questionIndex + 1) / this.numberQuestions * 100;
     this.selectedOption = -1;
     let interval = 500;
-    let timeLimit = this.timeLimit * 1000;
-    let countdown = timeLimit;
+    let countdown = this.timeLimit;
     this.intervalCountdown = setInterval(() => {
-      this.countdownPercent = countdown / timeLimit * 100;
+      this.countdownPercent = countdown / this.timeLimit * 100;
       countdown -= interval;
       if (countdown == 5000)
-        NativeAudio.play('count_down_5', ()=>{});
-      if (countdown == 0) {
+        NativeAudio.play('count_down_5');
+      else if (countdown == 0) {
+        this.countdownPercent = 0;
         this.select(this.listQuestion[questionIndex], -2);
       }
     }, interval);
@@ -340,11 +215,12 @@ export class PlaygroundPage {
     this.stopQuestion();
     this.selectedOption = optionIndex;
     this.isCorrect = this.selectedOption === question.answer;
+    question.done = true;
     if (!this.isCorrect) {
-      NativeAudio.play('incorrect', ()=>{});
+      NativeAudio.play('incorrect');
       this.numberWrongAnswer++;
     } else {
-      NativeAudio.play('correct', ()=>{});
+      NativeAudio.play('correct');
     }
     if (optionIndex == -2) {
       this.timeout = true;
@@ -354,28 +230,12 @@ export class PlaygroundPage {
   }
 
   close() {
-    NativeAudio.play('touch', ()=>{});
-    this.stopQuestion();
+    NativeAudio.play('touch');
     this.navController.pop();
   }
 
-  generateQuote(questionIndex) {
-    if (questionIndex === 0) this.quote = QUOTES.FIRST_QUESTION;
-    else if (this.timeout) {
-      this.quote = QUOTES.TIME_OUT;
-    } else if (this.numberWrongAnswer > 0) {
-      this.quote = QUOTES.WRONG_ANSWER;
-    } else {
-      if (questionIndex === Math.floor(this.numberQuestions / 2)) {
-        this.quote = QUOTES.HALF_WAY;
-      } else {
-        this.quote = QUOTES.CORRECT_QUESTION;
-      }
-    }
-  }
-
-  playAgain() {
-    NativeAudio.play('touch', ()=>{});
+  testAgain() {
+    NativeAudio.play('touch');
     this.reset();
     this.slideToBeginning();
   }
