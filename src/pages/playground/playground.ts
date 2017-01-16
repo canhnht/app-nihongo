@@ -163,21 +163,43 @@ export class PlaygroundPage {
       correct: false
     }
   ];
+  word = {
+    kanji: 'kanji',
+    phonetic: [ 'phonetic' ],
+  };
 
   constructor(private navController: NavController, private navParams: NavParams,
     private translate: TranslateService) {
     this.words = [
       {
+        id: 1,
+        kanji: 'kanji',
+        phonetic: [ 'phonetic' ],
+      },
+      {
+        id: 2,
         kanji: 'kanji1',
         phonetic: [ 'phonetic1' ]
       },
       {
+        id: 3,
         kanji: 'kanji2',
         phonetic: [ 'phonetic2' ]
       },
       {
+        id: 4,
         kanji: 'kanji3',
         phonetic: [ 'phonetic3' ]
+      },
+      {
+        id: 5,
+        kanji: 'kanji4',
+        phonetic: [ 'phonetic4' ]
+      },
+      {
+        id: 6,
+        kanji: 'kanji5',
+        phonetic: [ 'phonetic5' ]
       }
     ];
     this.onPass = () => { alert('onPass'); };
