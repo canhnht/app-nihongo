@@ -26,7 +26,6 @@ export class UnitsTmpPage {
 
   ionViewWillEnter() {
     this.loadUnitPage();
-    this.currentUnit
   }
 
   checkStatus(unit){

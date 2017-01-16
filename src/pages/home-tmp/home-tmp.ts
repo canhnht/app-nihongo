@@ -19,6 +19,7 @@ export class HomeTmpPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.homeTab = TabHomePage;
     this.userTab = TabUserPage;
+    console.log('loading HomeTmpPage');
   }
 
   ionViewDidLoad() {
