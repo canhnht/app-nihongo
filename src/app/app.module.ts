@@ -7,7 +7,7 @@ import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, UnitsTmpPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, HomeTmpPage, TabHomePage, TabUserPage,  ModalDownloadPage, MultipleChoiceSlides, MatchingWords } from '../pages';
 import { LocalStorageService, SettingService, SliderService, DbService, AudioService, AuthService, DownloadService } from '../services';
-import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent, ModControllerComponent} from '../components';
+import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent, ModControllerComponent, MultipleChoiceQuestion} from '../components';
 import { CustomDatePipe } from '../custom-date.pipe';
 
 export function makeTranslateFactory(http: Http) {
@@ -22,7 +22,7 @@ export function makeStorageFactory() {
   declarations: [
     MyApp,
     LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, UnitsTmpPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, HomeTmpPage, TabHomePage, TabUserPage, ModalDownloadPage, MultipleChoiceSlides, MatchingWords,
-    AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent,ModControllerComponent,
+    AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent,ModControllerComponent,MultipleChoiceQuestion,
     CustomDatePipe
   ],
   imports: [
