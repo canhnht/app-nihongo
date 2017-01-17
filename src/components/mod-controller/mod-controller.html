@@ -4,7 +4,7 @@
     </ion-icon>
     <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
     </ion-icon>
-    <ion-slides #modControl pager [options]="mySlideOptions">
+    <ion-slides #modControl pager [options]="modControlOptions">
       
       <ion-slide>
         <button ion-button icon-only outline [class.disabled]="!audioService.isShuffle" (click)="toggleShuffle($event)">
@@ -17,6 +17,14 @@
         <button ion-button icon-only outline [class.disabled]="!audioService.isLoop" (click)="toggleLoop($event)">
           <ion-icon name="repeat"></ion-icon>
         </button>
+      </ion-slide>
+      <ion-slide>
+       
+        <button ion-button round icon-right margin (click)="startLearn()">
+          Learn
+          <ion-icon name="book"></ion-icon>
+        </button>
+        
       </ion-slide>
 
     </ion-slides>

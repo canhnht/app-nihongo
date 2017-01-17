@@ -1,23 +1,49 @@
 
-<ion-content>
-  <button ion-button clear color="danger" round large class="btn-close" (click)="closeSlide()" icon-only>
-    <ion-icon name="close"></ion-icon>
-  </button>
+<ion-content class="conentSlide">
+  
   <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
   </ion-icon>
   <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
   </ion-icon>
-  <ion-slides #vocabSlider [options]="sliderOptions"
-    (ionDidChange)="onSlideChanged($event)">
+  <ion-slides #vocabSlider [options]="sliderOptions"  (ionDidChange)="onSlideChanged($event)">
     <ion-slide *ngFor="let slide of slides; let i = index">
-      <div class="word-slide slide-content-{{i}}" [style.backgroundColor]="slide.color">
-        <strong class="kanji">{{words[slide.nr].kanji}}</strong>
-        <h2 *ngFor="let phonetic of words[slide.nr].phonetic">{{phonetic}}</h2>
-        <div *ngFor="let meaning of words[slide.nr].meaning">{{meaning.mean}}</div>
-        <p class="example" *ngIf="!!words[slide.nr].mainExample">
-          <strong>{{words[slide.nr].mainExample.content}}</strong><br/>
-          {{words[slide.nr].mainExample.meaning}}
-        </p>
+      <div class="word-slide slide-content-{{i}}">
+        <ion-card>
+          <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
+            <ion-icon name="close"></ion-icon>
+          </button>
+          <ion-item-group>
+            <ion-item><strong class="kanji">{{words[slide.nr].kanji}}</strong></ion-item>
+            <ion-item>
+              <ion-badge>Phát âm:</ion-badge>
+              <span *ngFor="let phonetic of words[slide.nr].phonetic">{{phonetic}},</span>
+            </ion-item>
+            <ion-item  text-wrap>
+              <ion-badge>Nghĩa:</ion-badge>
+              <span *ngFor="let meaning of words[slide.nr].meaning">{{meaning.mean}},</span>
+            </ion-item>
+            <ion-item text-wrap>
+              <ion-badge>Ví dụ:</ion-badge>
+              <br>
+              <br>
+              <p class="example" *ngIf="!!words[slide.nr].mainExample">
+                <strong>{{words[slide.nr].mainExample.content}}</strong><br/>
+                {{words[slide.nr].mainExample.meaning}}
+              </p>
+            </ion-item>
+          </ion-item-group>
+
+          <ion-item-group>
+          <ion-item-divider color="light">{{"Others" | translate }}</ion-item-divider>
+          <ion-item *ngFor="let example of words[slide.nr].otherExamples" text-wrap>
+            <p class="example">
+              <strong>{{example.content}}</strong><br/>
+              {{example.meaning}}
+            </p>
+          </ion-item>
+        </ion-item-group>
+
+        </ion-card> 
       </div>
     </ion-slide>
   </ion-slides>

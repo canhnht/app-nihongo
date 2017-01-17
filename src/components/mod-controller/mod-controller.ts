@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { NavController, ModalController, Slides } from 'ionic-angular';
 import { SpinnerDialog, Toast } from 'ionic-native';
 import { AudioService, SliderService, SettingService, SettingStatus  } from '../../services';
 import { Subscription } from 'rxjs';
@@ -24,11 +24,15 @@ export class ModControllerComponent implements OnInit, OnDestroy{
   settingSubscription: Subscription;
   fullHeight: boolean = false;
   countWords: number = 0;
+  modControlOptions: any;
+  @ViewChild('modControl') modControl: Slides;
 
   constructor(private audioService: AudioService, private settingService: SettingService,
     private sliderService: SliderService, private translate: TranslateService,
     private navCtrl: NavController, private modalCtrl: ModalController) {
-    
+    this.modControlOptions = {
+      loop: true
+    };
   }
 
    toggleFullHeight() {
@@ -91,10 +95,23 @@ export class ModControllerComponent implements OnInit, OnDestroy{
   isSelectedWord(){
     if(this.isDisable){
       Toast.hide();
-      Toast.showShortCenter(this.translate.instant('Warning_inactive')).subscribe(() => {});
+      Toast.showShortCenter(this.translate.instant('Please_choose_word')).subscribe(() => {});
       return false;
     }
     return true;
+  }
+
+  startLearn(){
+     Toast.hide();
+     Toast.showShortCenter(this.translate.instant('Message_updating')).subscribe(() => {});
+  }
+
+  prev() {
+    this.modControl.slidePrev();
+  }
+
+  next() {
+    this.modControl.slideNext();
   }
 
 }

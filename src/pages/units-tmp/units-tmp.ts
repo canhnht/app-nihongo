@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
-import { DbService } from '../../services';
+import { SpinnerDialog } from 'ionic-native';
+import { TranslateService } from 'ng2-translate/ng2-translate';
+import { DbService, SettingService } from '../../services';
 import { WordsPage } from '../words-page/words-page';
+import { getRandomQuiz } from '../../helpers/main-helper';
 
 @Component({
   selector: 'page-units-tmp',
@@ -20,12 +23,12 @@ export class UnitsTmpPage {
   }
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
-    private dbService: DbService, private alertCtrl: AlertController) {
+    private dbService: DbService, private alertCtrl: AlertController, private translate: TranslateService, private settingService: SettingService) {
     this.course = this.navParams.data.selectedCourse;
   }
 
   ionViewWillEnter() {
-    this.loadUnitPage();
+    this.loadUnitPage(false);
   }
 
   checkStatus(unit){
@@ -42,7 +45,7 @@ export class UnitsTmpPage {
 
       Promise.all([promiseUpdateUnit, promiseUpdateListUnits])
       .then(()=>{
-        this.loadUnitPage();
+        this.loadUnitPage(true);
       })
 
       return;
@@ -61,15 +64,23 @@ export class UnitsTmpPage {
         {
           text: 'Đồng ý',
           handler: () => {
-            if(this.isPassedExam()){
-              let promiseUpdateNewUnit = this.updateStateUnit(unit.id, this.sttUnit.CURRENT);
-              let promiseUpdateOldUnit = this.updateStateUnit(this.currentUnit.id, this.sttUnit.PASS);
-              
-              Promise.all([promiseUpdateNewUnit, promiseUpdateOldUnit])
-              .then(()=>{
-                this.loadUnitPage();
-              })
-            }
+            SpinnerDialog.show(this.translate.instant('Processing'),this.translate.instant('Please_wait'), false);
+            this.dbService.getWordsByUnitId(unit.id).then((words) => {
+            this.navCtrl.push(getRandomQuiz(), {
+              words,
+              onFail: () => {},
+              onPass: () => {
+                let promiseUpdateNewUnit = this.updateStateUnit(unit.id, this.sttUnit.CURRENT);
+                let promiseUpdateOldUnit = this.updateStateUnit(this.currentUnit.id, this.sttUnit.PASS);
+                
+                Promise.all([promiseUpdateNewUnit, promiseUpdateOldUnit])
+                .then(()=>{
+                  this.loadUnitPage(true);
+                  this.goToUnit(unit);
+                })
+              },
+            });
+          });
           }
         }
       ]
@@ -85,12 +96,12 @@ export class UnitsTmpPage {
     }
   }
 
-  private loadUnitPage(){
+  private loadUnitPage(firsttime){
     this.dbService.getUnitsByCourseId(this.course.id).then(units => {
       this.units = units;
       let currentUnit = units.filter((item) => item.state == this.sttUnit.CURRENT);
       this.currentUnit =  currentUnit ? currentUnit[0] : null;
-      if(!this.currentUnit) {
+      if(!this.currentUnit && firsttime) {
          let alert = this.alertCtrl.create({
             title: 'Hướng dẫn:',
             subTitle: 'Vui lòng chọn một unit bạn muốn bắt đầu!',
@@ -114,6 +125,7 @@ export class UnitsTmpPage {
   }
 
   private goToUnit(unit) {
+    this.settingService.reset(true);
     this.navCtrl.push(WordsPage, {
       selectedUnit: unit,
       selectedCourse: this.course,
