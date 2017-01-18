@@ -215,7 +215,7 @@ export class DbService {
     if (!word.meaning) word.meaning = [];
     if (!word.otherExamples) word.otherExamples = [];
     if (!word.phonetic) word.phonetic = [];
-
+    if (!word.mainExample) word.mainExample = {};
     word.otherExamples = word.otherExamples.slice(0, 5);
   }
 

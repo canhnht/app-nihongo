@@ -17,7 +17,7 @@ export class MyApp {
   @ViewChild('content') nav: NavController;
   // rootPage = HomePage;
   rootPage = HomeTmpPage;
-  homePage = HomePage;
+  homePage = HomeTmpPage;
   playlistsPage = PlaylistsPage;
   feedbackPage = FeedbackPage;
   settingPage = SettingPage;

@@ -34,6 +34,8 @@ export class WordSlides {
   singleTrack: MediaPlugin = null;
   firstTime: boolean = true;
 
+  intervalUpdateDom: any;
+
   constructor(private navCtrl: NavController, private audioService: AudioService,
     private sliderService: SliderService, private dbService: DbService,
     private navParams: NavParams, private translate: TranslateService,
@@ -92,6 +94,7 @@ export class WordSlides {
 
   ionViewDidEnter() {
     SpinnerDialog.hide();
+    this.intervalUpdateDom = setInterval(this.updateDuplicateNode, 500);
   }
 
   ionViewWillEnter() {
@@ -114,6 +117,7 @@ export class WordSlides {
     this.trackIndexSubscription.unsubscribe();
     this.audioService.stopCountDown();
     this.audioService.pauseCurrentTrack();
+    clearInterval(this.intervalUpdateDom);
   }
 
   prev() {
@@ -141,16 +145,6 @@ export class WordSlides {
     } else {
       this.firstTime = false;
     }
-
-    // if ($event.activeIndex === 4) {
-    //   this.vocabSlider.slideTo(1, 0, false);
-    //   this.previousActiveIndex = 1;
-    // } else if ($event.activeIndex === 0) {
-    //   this.vocabSlider.slideTo(3, 0, false);
-    //   this.previousActiveIndex = 3;
-    // } else {
-    //   this.previousActiveIndex = $event.activeIndex;
-    // }
 
     this.currentIndex = this.slides[i].nr;
     if (this.playSingleWord) {
@@ -195,10 +189,6 @@ export class WordSlides {
     let endNode = <HTMLElement>dupEndNodes.item(1);
     dupEndNode.innerHTML = endNode.innerHTML;
     dupEndNode.style.backgroundColor = endNode.style.backgroundColor;
-  }
-
-  ngAfterViewChecked() {
-    this.updateDuplicateNode();
   }
 
   repeatCurrentVocabulary($event) {

@@ -1,18 +1,11 @@
-.odd {
-  background-color: #51b147;
-}
 
-.even {
-  background-color: #59a8f2;
-}
+// .kanji {
+//   font-size: 40px;
+// }
 
-.kanji {
-  font-size: 40px;
-}
-
-.example {
-  margin-top: 25px;
-}
+// .example {
+//   margin-top: 25px;
+// }
 
 .btn-prev, .btn-next {
   position: absolute;
@@ -53,30 +46,72 @@
   }
 }
 
-.btn-close {
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 5;
-}
+// .word-slide {
+//   position: absolute;
+//   top: 10px;
+//   bottom: 10px;
+//   left: 10px;
+//   right: 10px;
+//   border-radius: 10px;
+//   background: #f4f4f4;
+// }
 
-.word-slide {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
+// ion-slide {
+//   overflow-y: auto;
+// }
 
-.word-slide ion-card {
-  border-radius: 10px;
-}
+// .conentSlide {
+//   background: #f4f4f4;
+// }
 
-ion-slide{
-  // height:100%;
-  overflow-y: auto;
-}
+ion-slide {
+  position: relative;
+  background: #f4f4f4;
 
-.conentSlide {
-  background: #f4f4f4
+  .word-slide {
+    position: absolute;
+    background: white;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    border-radius: 10px;
+    text-align: left;
+    padding: 15px 0;
+    overflow-y: auto;
+
+    .btn-close {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 100;
+    }
+
+    .kanji {
+      font-size: 40px;
+      font-weight: bold;
+      margin-left: 15px;
+    }
+
+    .row {
+      margin-top: 20px;
+      margin-left: 15px;
+    }
+
+    .separator-other {
+      width: 100%;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 10px 0;
+      margin: 15px 0;
+    }
+
+    .example {
+      margin-left: 15px;
+
+      + .example {
+        margin-top: 20px;
+      }
+    }
+  }
 }
