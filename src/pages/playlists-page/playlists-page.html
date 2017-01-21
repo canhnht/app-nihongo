@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar color="primary" class="playlists-navbar">
+    <button ion-button menuToggle left icon-only>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{'My_playlist' | translate}}</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="addNewPlaylist()">
+        <ion-icon large name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="playlists-page">
+  <ion-list>
+    <ion-item-sliding *ngFor="let playlist of playlists">
+      <button ion-item text-wrap
+        (click)="goToPlaylistDetail($event, playlist)">
+        <ion-label class="playlist-item">
+          <ion-badge class="playlist-icon">
+            <ion-icon large name="musical-notes"></ion-icon>
+          </ion-badge>
+          <div>
+            <h1>{{playlist.name}}</h1>
+            <p>{{playlist.noWords}} {{'word' | translate}}</p>
+          </div>
+        </ion-label>
+      </button>
+      <ion-item-options>
+        <button ion-button color="primary"
+          (click)="editPlaylist(playlist)">
+          <ion-icon name="create" large></ion-icon><br />
+          {{'Edit' | translate}}
+        </button>
+        <button ion-button color="danger"
+          (click)="deletePlaylist(playlist)">
+          <ion-icon name="trash" large></ion-icon><br />
+          {{'Delete' | translate}}
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,26 @@
+<div class="audio-setting" [class.full]="fullHeight">
+  <i class="fa fa-bars btn-up" color="primary"
+    (click)="toggleFullHeight()" *ngIf="!fullHeight">
+  </i>
+  <i class="fa fa-sort-down btn-down" color="primary"
+    (click)="toggleFullHeight()" *ngIf="fullHeight">
+  </i>
+  <button ion-button round class="btn-ready" [disabled]="isDisable"
+    (click)="playAudio()" [class.full]="fullHeight">
+    {{(isContinue ? 'Continue' : 'Ready') | translate}}
+  </button>
+  <button ion-button [class.disabled]="!audioService.isLoop" class="btn-setting"
+    [disabled]="isDisable" [class.full]="fullHeight"
+    (click)="toggleLoop($event)" icon-only>
+    <ion-icon name="repeat"></ion-icon>
+  </button>
+  <button ion-button [class.disabled]="!audioService.isShuffle" class="btn-setting" [disabled]="isDisable" [class.full]="fullHeight"
+    (click)="toggleShuffle($event)" icon-only>
+    <ion-icon name="shuffle"></ion-icon>
+  </button>
+  <button ion-button class="btn-list" [class.full]="fullHeight"
+    (click)="showSelectedWords()" [disabled]="countWords === 0" icon-left>
+    <ion-icon class="icon-list" name="list-box"></ion-icon>
+    {{countWords}}
+  </button>
+</div>

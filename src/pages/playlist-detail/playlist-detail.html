@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar color="primary" class="playlist-navbar">
+    <ion-title>
+      {{playlist.name}}
+    </ion-title>
+    <ion-buttons end>
+      <custom-checkbox [checked]="selectedWords.length === words.length" (onClick)="toggleSelectAll()" *ngIf="words.length > 0">
+      </custom-checkbox>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item-sliding *ngFor="let word of words">
+      <button ion-item text-wrap (click)="selectWord($event, word)">
+        <ion-label>
+          <h1>{{word.kanji}}</h1>
+          <p>{{word.timesPlayed > 0 ? '(' + word.timesPlayed + ') - ' : ''}}
+            {{word.timesPlayed > 0 ? (word.lastPlayed | customDate) : ''}}
+          </p>
+        </ion-label>
+        <custom-checkbox item-right (onClick)="checkWord($event, word)"
+          [checked]="selectedWords.indexOf(word._id) >= 0">
+        </custom-checkbox>
+      </button>
+      <ion-item-options>
+        <button ion-button color="danger" (click)="deleteWord(word)">
+          <ion-icon name="trash" large></ion-icon><br />
+          {{'Delete' | translate}}
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
+<audio-setting></audio-setting>

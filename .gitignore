@@ -9,12 +9,15 @@
 log.txt
 *.sublime-project
 *.sublime-workspace
-
 .vscode/
+npm-debug.log*
+
 .idea/
 .sass-cache/
+.tmp/
 .versions/
 coverage/
+dist/
 node_modules/
 tmp/
 temp/
@@ -23,27 +26,9 @@ platforms/
 plugins/
 plugins/android.json
 plugins/ios.json
-www/build/
+www/
 $RECYCLE.BIN/
 
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
-
-# Don't ignore android build
-!platforms/
-
-platforms/*
-!platforms/android/
-
-platforms/android/*
-!platforms/android/build/
-
-platforms/android/build/*
-!platforms/android/build/outputs/
-
-platforms/android/build/outputs/*
-!platforms/android/build/outputs/apk/
-
-platforms/android/build/outputs/apk/*
-!platforms/android/build/outputs/apk/android-debug.apk

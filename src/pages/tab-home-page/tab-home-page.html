@@ -1,0 +1,57 @@
+  <ion-header>
+    <ion-navbar color="primary">
+      <button ion-button menuToggle left icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <ion-title>MINAGOI</ion-title>
+    </ion-navbar>
+  </ion-header>
+  <ion-content>
+    <ion-card>
+        <ion-card-header>
+            <ion-badge item-left>
+              {{'NHK_News' | translate}}
+            </ion-badge>
+        </ion-card-header>
+        <ion-card-content>
+           <button ion-button class="btn-load-news" *ngIf="!latestNews && !loadingNews"
+      (click)="downloadNews()">
+               {{'Download_news' | translate}}
+          </button>
+          <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading"
+      *ngIf="loadingNews"></i>
+          <div *ngIf="!loadingNews && !!latestNews">    
+            <p [innerHTML]="latestNews.titleWithRuby"></p>  
+          </div>
+        </ion-card-content>
+        <ion-row *ngIf="!loadingNews && !!latestNews"> 
+            <ion-col width-50>
+                <button ion-button icon-left full (click)="goToDetail()">
+                    <ion-icon name="musical-notes"></ion-icon>
+                    {{'Detail' | translate}}
+                </button>
+            </ion-col>
+            <ion-col width-50>
+                <button ion-button icon-left full (click)="listAllNews()">
+                    <ion-icon name="list-box"></ion-icon>
+                    {{'List_all' | translate}}
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-card>
+
+    <ion-card *ngFor="let course of courses; let i = index">
+        <ion-card-content>
+            <button ion-item (click)="checkBeforeDownload(course, i)">
+                <ion-thumbnail item-left>
+                   <img src="assets/images/courses/N3Logo.png">
+                </ion-thumbnail>
+                <h2>{{course.name}}</h2>
+                <p>
+                  <ion-badge item-right>{{course.noUnits}} {{'Unit' | translate}}</ion-badge>
+                  <ion-badge item-right>{{course.noWords}} {{'Word' | translate}}</ion-badge>
+                </p>
+            </button>
+        </ion-card-content>
+    </ion-card>
+  </ion-content>
