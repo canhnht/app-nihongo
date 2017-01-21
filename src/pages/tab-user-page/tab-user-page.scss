@@ -1,0 +1,32 @@
+
+.tab-user-page {
+  .login-request {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .icon-person {
+      font-size: 70px;
+      margin-top: 50px;
+    }
+
+    .icon-fb {
+      width: 30px;
+      font-size: 2.4rem;
+      margin-right: 10px;
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .avatar {
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

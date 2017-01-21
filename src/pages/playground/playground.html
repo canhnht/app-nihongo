@@ -1,68 +1,57 @@
-
-<ion-content class="conentSlide">
-
-  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
-  </ion-icon>
-  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
-  </ion-icon>
-  <ion-slides #vocabSlider [options]="sliderOptions" (ionDidChange)="onSlideChanged($event)">
-    <ion-slide>
-      <div class="word-slide slide-content-1">
-        <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
-          <ion-icon name="close"></ion-icon>
-        </button>
-        <div class="kanji">kanji</div>
-        <div class="row">
-          <ion-badge>Phát âm:</ion-badge>
-          <span>phonetic,</span>
-        </div>
-        <div class="row">
-          <ion-badge>Nghĩa:</ion-badge>
-          <span>meaning,</span>
-        </div>
-        <div class="row">
-          <ion-badge>Ví dụ:</ion-badge><br />
-          <strong>words[slide.nr].mainExample.content</strong><br />
-          words[slide.nr].mainExample.meaning
-        </div>
-        <div class="separator-other">{{'Others' | translate}}</div>
-        <div class="example">
-          <strong>example.content</strong><br/>
-          example.meaning
-        </div>
-        <div class="example">
-          <strong>example.content</strong><br/>
-          example.meaning
-        </div>
-        <div class="example">
-          <strong>example.content</strong><br/>
-          example.meaning
-        </div>
-        <div class="example">
-          <strong>example.content</strong><br/>
-          example.meaning
-        </div>
-        <div class="example">
-          <strong>example.content</strong><br/>
-          example.meaning
-        </div>
-        <div class="example">
-          <strong>example.content</strong><br/>
-          example.meaning
-        </div>
-      </div>
-    </ion-slide>
-  </ion-slides>
-  <div class="btn-group">
-    <button ion-button color="secondary" round class="btn-repeat"
-      (click)="repeatCurrentVocabulary($event)" icon-only>
-      <ion-icon name="volume-up"></ion-icon>
-    </button>
-    <button ion-button *ngIf="!hideBookmark" color="danger" round   class="btn-bookmark" (click)="addToPlaylist($event)" icon-only>
-      <ion-icon name="add"></ion-icon>
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Profile</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content class="tab-user-page">
+  <div class="login-request" *ngIf="false">
+    <ion-icon name="person" class="icon-person" large></ion-icon>
+    <p>{{'Log_in_to_see_profile' | translate}}</p>
+    <button ion-button clear>
+      <i class="fa fa-facebook-f icon-fb" color="primary"></i>
+      {{'Login_facebook' | translate}}
     </button>
   </div>
+  <ion-card *ngIf="true">
+    <ion-row>
+      <ion-col>
+        <ion-thumbnail class="avatar">
+          <img src="assets/images/bg-even.jpg">
+        </ion-thumbnail>
+      </ion-col>
+      <ion-col padding>
+        <h1>Frank Lee</h1>
+        <ion-badge>Lv N3</ion-badge>
+        <div margin-top>
+          <p>Words learned: <strong>1000</strong></p>
+          <p>Experience Points: <strong>500</strong></p>
+          <p>Current Course:</p>
+          <strong>Mimi kara oboeru N3</strong>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <ion-card *ngIf="true">
+    <ion-card-header>
+      History
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <button ion-item>
+          <ion-avatar item-left>
+            <img src="assets/images/tmp/N3Logo.png">
+          </ion-avatar>
+          <h3>Mimi kara Oboeru N3</h3>
+          <ion-badge item-right>Current</ion-badge>
+        </button>
+        <button ion-item>
+          <ion-avatar item-left>
+            <img src="assets/images/tmp/N3Logo.png">
+          </ion-avatar>
+          <h3>Mimi kara Oboeru N3</h3>
+          <p item-right>12/01/2017</p>
+        </button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
-<ion-footer *ngIf="!hideAudioBar">
-  <audio-player></audio-player>
-</ion-footer>

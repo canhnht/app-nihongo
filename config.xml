@@ -5,6 +5,7 @@
     <author email="canhnht1709@gmail.com" href="http://toithacmac.wordpress.com">Techybrain Team</author>
     <content src="index.html" />
     <access origin="*" />
+    <access origin="mailto:*" launch-external="yes" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />

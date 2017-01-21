@@ -25,7 +25,7 @@ export class SettingPage {
 
   ionViewWillEnter() {
     this.setLoginText(this.authService.isLoggedIn, this.authService.currentUser);
-    this.authSubscription = this.authService.authSubject.subscribe(({ isLoggedIn, currentUser}) => {
+    this.authSubscription = this.authService.authSubject.subscribe(({ isLoggedIn, currentUser }) => {
       this.zone.run(() => this.setLoginText(isLoggedIn, currentUser));
     });
   }

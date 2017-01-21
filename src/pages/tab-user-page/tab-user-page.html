@@ -1,49 +1,60 @@
 <ion-header>
-    <ion-navbar color="primary">
-      <ion-title>Profile</ion-title>
-    </ion-navbar>
-  </ion-header>
-  <ion-content>
-      <ion-card>   
-        <ion-row>
-            <ion-col>
-                <ion-thumbnail item-left>
-                    <img src="assets/images/tmp/avatar.jpg">
-                </ion-thumbnail>
-            </ion-col>
-            <ion-col text-justify padding> 
-                <h1>Frank Lee</h1>
-                <ion-badge item-right>Lv N3</ion-badge>
-                <div margin-top>
-                    <p>Words learned: 1000</p>
-                    <p>Experience Points: 500</p>
-                    <p>Current Course:</p>
-                    <p>Mimi kara oboeru N3</p>
-                </div>
-            </ion-col>
-        </ion-row>
-      </ion-card>
-      <ion-card>
-          <ion-card-header>
-              History
-          </ion-card-header>
-          <ion-card-content>
-            <ion-list>
-                <button ion-item>
-                    <ion-avatar item-left>
-                        <img src="assets/images/tmp/N3Logo.png">
-                    </ion-avatar>
-                    <h3>Mimi kara Oboeru N3</h3>
-                    <ion-badge item-right>Current</ion-badge>
-                </button> 
-                <button ion-item>
-                    <ion-avatar item-left>
-                        <img src="assets/images/tmp/N3Logo.png">
-                    </ion-avatar>
-                    <h3>Mimi kara Oboeru N3</h3>
-                    <p item-right>12/1/2017</p>
-                </button> 
-            </ion-list>
-          </ion-card-content>
-      </ion-card>
-  </ion-content>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle left icon-only>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Profile</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content class="tab-user-page">
+  <div class="login-request" *ngIf="!isLoggedIn">
+    <ion-icon name="person" class="icon-person" large></ion-icon>
+    <p>{{'Log_in_to_see_profile' | translate}}</p>
+    <button ion-button clear (click)="loginWithFacebook()">
+      <i class="fa fa-facebook-f icon-fb" color="primary"></i>
+      {{'Login_facebook' | translate}}
+    </button>
+  </div>
+  <ion-card *ngIf="isLoggedIn">
+    <ion-row>
+      <ion-col>
+        <ion-thumbnail class="avatar">
+          <img [src]="currentUser.photoURL">
+        </ion-thumbnail>
+      </ion-col>
+      <ion-col padding>
+        <h1>{{currentUser.displayName}}</h1>
+        <ion-badge *ngIf="!!currentUser.level">Lv {{currentUser.level}}</ion-badge>
+        <div margin-top *ngIf="!!currentUser.level">
+          <p>Words learned: <strong>{{currentUser.numberWordsLearned}}</strong></p>
+          <p>Experience Points: <strong>{{currentUser.exp}}</strong></p>
+          <p>Current Course:</p>
+          <strong>{{currentUser.currentCourse ? 'Mimi kara oboeru N3' : 'Not Available'}}</strong>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <ion-card *ngIf="isLoggedIn">
+    <ion-card-header>
+      History
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <button ion-item>
+          <ion-avatar item-left>
+            <img src="assets/images/tmp/N3Logo.png">
+          </ion-avatar>
+          <h3>Mimi kara Oboeru N3</h3>
+          <ion-badge item-right>Current</ion-badge>
+        </button>
+        <button ion-item>
+          <ion-avatar item-left>
+            <img src="assets/images/tmp/N3Logo.png">
+          </ion-avatar>
+          <h3>Mimi kara Oboeru N3</h3>
+          <p item-right>12/01/2017</p>
+        </button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

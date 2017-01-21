@@ -39,10 +39,11 @@ export class AuthService {
 
   private saveUser(user) {
     if (user) {
-      let { displayName, email, photoUrl, uid } = user;
-      this.currentUser = { displayName, email, photoUrl, uid };
-      return this.storage.set('user', { displayName, email, photoUrl, uid });
+      let { displayName, email, photoURL, uid } = user;
+      this.currentUser = { displayName, email, photoURL, uid };
+      return this.storage.set('user', { displayName, email, photoURL, uid });
     } else {
+      this.currentUser = {};
       return this.storage.set('user', null);
     }
   }
@@ -58,10 +59,11 @@ export class AuthService {
   }
 
   handleLoginError(error) {
+    this.isLoggedIn = false;
     var errorCode = error.code;
     var errorMessage = error.message;
-    var email = error.email;
     var credential = error.credential;
+    var email = error.email;
     switch (errorCode) {
       case 'auth/account-exists-with-different-credential':
         Toast.showShortBottom('Email already associated with another account').subscribe(() => {});
