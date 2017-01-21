@@ -1,0 +1,52 @@
+
+<ion-menu [content]="content" side="left" class="app-menu">
+  <ion-header>
+    <ion-toolbar color="primary" class="app-toolbar">
+      <div class="app-name">
+        MINAGOI
+      </div>
+      <div class="app-version">
+        Version <strong>1.1</strong>
+      </div>
+      <div class="copyright">
+        © 2017 <strong>TechyBrain</strong>
+      </div>
+      <i class="fa fa-facebook-official app-fb"></i>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <button ion-item menuClose text-wrap
+        (click)="openPage(homePage)">
+        <ion-label class="menu-item">
+          <ion-icon color="primary" name="home" class="menu-icon"></ion-icon>
+          {{'Home' | translate}}
+        </ion-label>
+      </button>
+      <button ion-item menuClose text-wrap
+        (click)="openPage(playlistsPage)">
+        <ion-label class="menu-item">
+          <ion-icon color="primary" name="bookmark" class="menu-icon"></ion-icon>
+          {{'My_playlist' | translate}}
+        </ion-label>
+      </button>
+      <button ion-item menuClose text-wrap
+        (click)="openPage(feedbackPage)">
+        <ion-label class="menu-item">
+          <ion-icon color="primary" name="mail" class="menu-icon"></ion-icon>
+          Góp ý và liên hệ
+        </ion-label>
+      </button>
+      <button ion-item menuClose text-wrap
+        (click)="openPage(settingPage, null, true)">
+        <ion-label class="menu-item">
+          <ion-icon color="primary" name="settings" class="menu-icon">
+          </ion-icon>
+          {{'Setting' | translate}}
+        </ion-label>
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-nav #content [root]="rootPage" swipeBackEnabled="false"></ion-nav>

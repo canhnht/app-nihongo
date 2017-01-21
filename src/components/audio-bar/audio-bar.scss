@@ -1,0 +1,26 @@
+.audio-bar {
+  width: 90%;
+  margin: 30px auto;
+  padding: 0 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  background-color: #E61770;
+
+  .btn-play {
+  }
+
+  .time-segment {
+    flex-grow: 1;
+    margin: 0 10px;
+  }
+
+  .time {
+    font-size: 15px;
+    background-color: #32db64;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+  }
+}

@@ -1,0 +1,90 @@
+.audio-setting {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  border-top: 2px solid #ccc;
+  background-color: white;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  height: 0;
+  transition-property: all;
+	transition-duration: .5s;
+	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+
+  &.full {
+    height: 60px;
+  }
+
+  .btn-up {
+    z-index: 10000;
+    position: absolute;
+    top: -35px;
+    left: calc(50% - 20px);
+    font-size: 30px;
+    width: 40px;
+    text-align: center;
+  }
+
+  .btn-down {
+    z-index: 10000;
+    position: absolute;
+    top: -45px;
+    left: calc(50% - 11px);
+    font-size: 40px;
+  }
+
+  .btn-ready {
+    position: relative;
+    width: 120px;
+    margin: 0 15px 0 10px;
+    height: 0px;
+    border: white;
+
+    &.full {
+      height: 36px;
+    }
+  }
+
+  .three-dots {
+    font-size: 40px;
+    margin-left: -5px;
+    color: #E61770;
+    display: none;
+
+    &.full {
+      display: block;
+    }
+  }
+
+  .btn-setting {
+    height: 0;
+    margin: 0 5px;
+
+    &.full {
+      height: 36px;
+    }
+  }
+
+  .disabled {
+    opacity: 0.5;
+  }
+
+  .btn-list {
+    height: 0;
+    margin-left: 5px;
+    font-size: 17px;
+    padding: 0 7px;
+
+    &.full {
+      height: 36px;
+    }
+
+    .icon-list {
+      padding: 0;
+      margin-right: 5px;
+    }
+  }
+}

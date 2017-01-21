@@ -1,0 +1,28 @@
+.news-page {
+
+  .card-news {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+
+    .img-news {
+      width: 40px;
+      margin: 0 5px 0 10px;
+    }
+
+    .title {
+      padding: 0 5px 10px 5px;
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .date {
+        color: #999;
+        font-size: 13px;
+      }
+    }
+  }
+}

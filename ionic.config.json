@@ -1,6 +1,6 @@
 {
-  "name": "app-nihongo",
-  "app_id": "",
+  "name": "ionic2-app-base",
+  "app_id": "f513a437",
   "typescript": true,
   "v2": true
 }

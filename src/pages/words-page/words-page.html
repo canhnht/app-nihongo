@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar color="primary" class="words-navbar">
+    <ion-title>
+      {{course.name}} - {{unit.name}}
+    </ion-title>
+    <ion-buttons end>
+      <custom-checkbox [checked]="selectedWords.length == words.length && words.length > 0"
+        (onClick)="toggleSelectAll()">
+      </custom-checkbox>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="words-page">
+  <ion-list [virtualScroll]="searchedWords">
+    <ion-item text-wrap *virtualItem="let word"
+      (click)="selectWord($event, word)">
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="!word.bookmarked" (click)="addToPlaylist($event, word)" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="word.bookmarked" (click)="addToPlaylist($event, word)" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>{{word.kanji}}</h1>
+          <p>{{word.timesPlayed > 0 ? '(' + word.timesPlayed + ') - ' : ''}}
+            {{word.timesPlayed > 0 ? (word.lastPlayed | customDate) : ''}}
+          </p>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right (onClick)="checkWord($event, word)"
+        [checked]="selectedWords.indexOf(word.id) >= 0">
+      </custom-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<mod-controller></mod-controller>
+<!--<audio-setting></audio-setting>-->
+

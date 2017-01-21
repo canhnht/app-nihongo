@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{course.name}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngFor="let unit of units;">
+    <button ion-item (click)="checkStatus(unit)">
+      <ion-avatar item-left>
+        <img [src]="unit.imageUrl">
+      </ion-avatar>
+      <h2>{{'Unit' | translate}} {{unit.number}}: {{unit.name}}</h2>
+      <p>{{unit.noWords}} {{'word' | translate}}</p>
+      <ion-icon name="lock" item-right *ngIf="isLock(unit)"></ion-icon>
+      <ion-icon name="checkmark-circle" color="success" item-right *ngIf="isPass(unit)"></ion-icon>
+      <ion-badge item-right *ngIf="isCurrent(unit)">Current</ion-badge>
+      <ion-icon name="add" item-right *ngIf="isOpen(unit)"></ion-icon>
+    </button>
+  </ion-card>
+</ion-content>
