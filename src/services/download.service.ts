@@ -16,7 +16,7 @@ export class DownloadService {
   constructor(private alertCtrl: AlertController, private dbService: DbService, private translate: TranslateService) {
   }
 
-  downloadCourse(course, index) {
+  downloadCourse(course) {
     if (Network.connection === 'none' || Network.connection === 'unknown') {
       let alert = this.alertCtrl.create({
         title: 'Kết nối internet',
@@ -35,7 +35,11 @@ export class DownloadService {
       remainingPercent -= 1;
 
       let listUnitId = Object.keys(course.units).filter((unitId) => course.units[unitId]);
-      return this.downloadUnits(listUnitId);
+
+      // let promiseUpdateCourse = this.dbService.updateCourse(course);
+      // let promiseDownloadUnits = this.downloadUnits(listUnitId);
+      // return Promise.all([ promiseUpdateCourse, promiseDownloadUnits ]);
+      return this.dbService.updateCourse(course).then(() => this.downloadUnits(listUnitId));
     }).then((listUnit) => {
       this.percDownloadedSubject.next({
         percDownloaded: 2
@@ -55,7 +59,8 @@ export class DownloadService {
         id: unit.id,
         name: unit.name,
         number: unit.number,
-        courseId: course.id
+        courseId: course.id,
+        imageUrl: unit.imageUrl
       }));
       return this.dbService.addUnits(listUnit).then(() => {
         this.percDownloadedSubject.next({
@@ -74,7 +79,7 @@ export class DownloadService {
       })).subscribe(() => {});
       course.downloading = false;
       course.downloaded = true;
-      return this.dbService.updateCourse(course);
+      return this.dbService.updateDownloadedCourse(course);
     })
     .catch(err => {
       course.downloading = false;

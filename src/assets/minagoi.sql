@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS `course`;
 CREATE TABLE IF NOT EXISTS `course` (
   `id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
-  `level` INTEGER DEFAULT 0,
+  `level` VARCHAR(50) NOT NULL,
   `imageUrl` VARCHAR(255) DEFAULT NULL,
   `free` BOOLEAN NOT NULL DEFAULT 1,
   `downloaded` BOOLEAN NOT NULL DEFAULT 0,
@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS `course` (
 ----
 
 -- Data for table `course`
-INSERT INTO `course` (`id`, `name`, `free`, `downloaded`, `noWords`, `noUnits`) VALUES
-  ('course1', 'N3', 1, 0, 0, 0);
+INSERT INTO `course` (`id`, `level`, `name`, `free`, `downloaded`, `noWords`, `noUnits`) VALUES
+  ('course1', 'N3', 'Mimi Kara Oboeru N3', 1, 0, 0, 0);
 ----
 
 
