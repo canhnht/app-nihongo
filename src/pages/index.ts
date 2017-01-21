@@ -11,7 +11,6 @@ export { PlaylistDetail } from './playlist-detail/playlist-detail';
 export { FeedbackPage } from './feedback-page/feedback-page';
 export { SettingPage } from './setting-page/setting-page';
 export { PlaygroundPage } from './playground/playground';
-export { HomeTmpPage } from './home-tmp/home-tmp';
 export { UnitsTmpPage } from './units-tmp/units-tmp';
 export { TabHomePage } from './tab-home-page/tab-home-page';
 export { TabUserPage } from './tab-user-page/tab-user-page';

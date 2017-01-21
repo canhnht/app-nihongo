@@ -64,12 +64,12 @@ export class TabHomePage {
     this.latestNewsSubscription.unsubscribe();
   }
 
-  checkBeforeDownload(course, index){
+  checkBeforeDownload(course){
     if(course.downloaded) {
       this.goToCourse(course);
     }else{
       this.openModalDownload(course);
-      this.downloadService.downloadCourse(course, index).then((rs) => {
+      this.downloadService.downloadCourse(course).then((rs) => {
           this.dbService.getCourses();
           this.modalDownloadCourse.dismiss();
           this.goToCourse(course);

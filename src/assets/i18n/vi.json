@@ -22,7 +22,7 @@
   "OK": "Đồng ý",
   "Add_new_playlist": "Thêm danh sách",
   "Enter_playlist": "Nhập tên danh sách",
-  "Cancel": "Hủy",
+  "Cancel": "Hủy bỏ",
   "Save": "Lưu",
   "Close": "Đóng",
   "Duplicate_playlist_message": "Tên danh sách đã tồn tại! Xin hãy nhập tên khác",
@@ -86,5 +86,10 @@
   "Matching_words": "Ghép từ",
   "Please_choose_word": "Bạn chưa chọn từ!",
   "Message_updating": "Chức năng đang được nâng cấp!",
-  "Others": "Khác"
+  "Others": "Khác",
+  "Guide": "Hướng dẫn",
+  "Select_unit_to_start": "Vui lòng chọn một unit bạn muốn bắt đầu",
+  "Test": "Kiểm tra",
+  "Test_before_new_unit": "Hãy làm bài test của Unit hiện tại trước khi bắt đầu Unit mới!",
+  "Version": "Phiên bản"
 }

@@ -6,114 +6,96 @@ import { DbService, SettingService } from '../../services';
 import { WordsPage } from '../words-page/words-page';
 import { getRandomQuiz } from '../../helpers/main-helper';
 
+export enum UnitStatus {
+  Open = 0,
+  Lock = 1,
+  Current = 2,
+  Pass = 3
+};
+
 @Component({
   selector: 'page-units-tmp',
   templateUrl: 'units-tmp.html'
 })
 export class UnitsTmpPage {
-
   units: any[] = [];
   course: any = {};
   currentUnit: any = {};
-  sttUnit = {
-    OPEN: 0,
-    LOCK: 1,
-    CURRENT: 2,
-    PASS: 3
-  }
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
-    private dbService: DbService, private alertCtrl: AlertController, private translate: TranslateService, private settingService: SettingService) {
+    private dbService: DbService, private alertCtrl: AlertController, private translate: TranslateService,
+    private settingService: SettingService) {
     this.course = this.navParams.data.selectedCourse;
   }
 
   ionViewWillEnter() {
-    this.loadUnitPage(false);
+    this.loadUnitPage();
   }
 
   checkStatus(unit){
-    let stt = unit.state;
-
-    if(this.isOpen(stt)){
-      
+    if (this.isOpen(unit)) {
       let listUpdateUnits = this.units.filter((item) => item.id !== unit.id);
-
-      let promiseUpdateUnit =  this.updateStateUnit(unit.id, this.sttUnit.CURRENT);
+      let promiseUpdateUnit =  this.updateStateUnit(unit.id, UnitStatus.Current);
       let promiseUpdateListUnits = listUpdateUnits.map((unit) => {
-        return this.updateStateUnit(unit.id, this.sttUnit.LOCK);
-      })
-
-      Promise.all([promiseUpdateUnit, promiseUpdateListUnits])
-      .then(()=>{
-        this.loadUnitPage(true);
-      })
-
-      return;
-    }
-
-    if(this.isLock(stt)){
-      
+        return this.updateStateUnit(unit.id, UnitStatus.Lock);
+      });
+      Promise.all(promiseUpdateListUnits.concat(promiseUpdateUnit)).then(() => {
+        this.loadUnitPage();
+      });
+    } else if (this.isLock(unit)) {
       let alert = this.alertCtrl.create({
-      title: 'Kiểm tra',
-      subTitle: 'Hãy làm bài test để chắc chắn bạn đã sẵn sàng cho Unit mới!',
-      buttons: [
-        {
-          text: 'Huỷ bỏ',
-          handler: () => {}
-        },
-        {
-          text: 'Đồng ý',
-          handler: () => {
-            SpinnerDialog.show(this.translate.instant('Processing'),this.translate.instant('Please_wait'), false);
-            this.dbService.getWordsByUnitId(unit.id).then((words) => {
-            this.navCtrl.push(getRandomQuiz(), {
-              words,
-              onFail: () => {},
-              onPass: () => {
-                let promiseUpdateNewUnit = this.updateStateUnit(unit.id, this.sttUnit.CURRENT);
-                let promiseUpdateOldUnit = this.updateStateUnit(this.currentUnit.id, this.sttUnit.PASS);
-                
-                Promise.all([promiseUpdateNewUnit, promiseUpdateOldUnit])
-                .then(()=>{
-                  this.loadUnitPage(true);
-                  this.goToUnit(unit);
-                })
-              },
+        title: this.translate.instant('Test'),
+        subTitle: this.translate.instant('Test_before_new_unit'),
+        buttons: [
+          {
+            text: this.translate.instant('Cancel'),
+          },
+          {
+            text: this.translate.instant('OK'),
+            handler: () => {
+              SpinnerDialog.show(this.translate.instant('Processing'),
+                this.translate.instant('Please_wait'), false);
+              this.dbService.getWordsByUnitId(unit.id).then((words) => {
+              this.navCtrl.push(getRandomQuiz(), {
+                words,
+                onFail: () => {},
+                onPass: () => {
+                  let promiseUpdateNewUnit = this.updateStateUnit(unit.id, UnitStatus.Current);
+                  let promiseUpdateOldUnit = this.updateStateUnit(this.currentUnit.id, UnitStatus.Pass);
+                  Promise.all([promiseUpdateNewUnit, promiseUpdateOldUnit]).then(() => {
+                    this.loadUnitPage();
+                    this.goToUnit(unit);
+                  });
+                },
+              });
             });
-          });
+            }
           }
-        }
-      ]
-      })
-
+        ]
+      });
       alert.present();
-      return;
-    }
-
-    if(this.isPass(stt) || this.isCurrent(stt)){
+    } else if (this.isPass(unit) || this.isCurrent(unit)) {
       this.goToUnit(unit);
-      return;
     }
   }
 
-  private loadUnitPage(firsttime){
-    this.dbService.getUnitsByCourseId(this.course.id).then(units => {
+  private loadUnitPage() {
+    this.dbService.getUnitsByCourseId(this.course.id).then((units) => {
       this.units = units;
-      let currentUnit = units.filter((item) => item.state == this.sttUnit.CURRENT);
-      this.currentUnit =  currentUnit ? currentUnit[0] : null;
-      if(!this.currentUnit && firsttime) {
-         let alert = this.alertCtrl.create({
-            title: 'Hướng dẫn:',
-            subTitle: 'Vui lòng chọn một unit bạn muốn bắt đầu!',
-            buttons: [
-              {
-                text: 'Đã hiểu',
-              }
-            ]
-          })
-          alert.present();
+      this.currentUnit = units.find((item) => item.state == UnitStatus.Current);
+      if (!this.currentUnit) {
+        let alert = this.alertCtrl.create({
+          title: this.translate.instant('Guide'),
+          subTitle: this.translate.instant('Select_unit_to_start'),
+          buttons: [
+            {
+              text: this.translate.instant('Close'),
+            }
+          ]
+        });
+        alert.present();
       }
-    })
+    });
   }
 
   private updateStateUnit(unitId, state){
@@ -132,23 +114,19 @@ export class UnitsTmpPage {
     });
   }
 
-  private isPassedExam(){
-    return true;
+  isPass(unit) {
+    return unit.state == UnitStatus.Pass;
   }
 
-  isPass(stt){
-    return stt == this.sttUnit.PASS;
+  isCurrent(unit) {
+    return unit.state == UnitStatus.Current;
   }
 
-  isCurrent(stt){
-    return stt == this.sttUnit.CURRENT;
+  isOpen(unit) {
+    return unit.state == UnitStatus.Open;
   }
 
-  isOpen(stt){
-    return stt == this.sttUnit.OPEN;
-  }
-
-  isLock(stt){
-    return stt ==  this.sttUnit.LOCK;
+  isLock(unit) {
+    return unit.state == UnitStatus.Lock;
   }
 }

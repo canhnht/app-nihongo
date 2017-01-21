@@ -67,10 +67,10 @@ export class DbService {
   }
 
   addUnits(units) {
-    let sql = 'INSERT INTO `unit` (`id`, `name`, `number`, `courseId`) VALUES (?,?,?,?)';
+    let sql = 'INSERT INTO `unit` (`id`, `name`, `number`, `courseId`, `imageUrl`) VALUES (?,?,?,?,?)';
     let listSql = units.map((unit) => {
       return [
-        sql, [ unit.id, unit.name, unit.number, unit.courseId ]
+        sql, [ unit.id, unit.name, unit.number, unit.courseId, unit.imageUrl ]
       ];
     });
     return this.db.sqlBatch(listSql)
@@ -142,9 +142,15 @@ export class DbService {
     return data;
   }
 
+  updateDownloadedCourse(course) {
+    let sql = 'UPDATE `course` SET `downloaded` = ? WHERE `id` = ?';
+    return this.db.executeSql(sql, [ course.downloaded, course.id ])
+      .catch(utils.errorHandler('Error_database'));
+  }
+
   updateCourse(course) {
-    let sql = 'UPDATE `course` SET `downloaded` = ?';
-    return this.db.executeSql(sql, [ course.downloaded ])
+    let sql = 'UPDATE `course` SET `imageUrl` = ?, `name` = ?, `free` = ?, `level` = ? WHERE `id` = ?';
+    return this.db.executeSql(sql, [ course.imageUrl, course.name, course.free, course.level, course.id ])
       .catch(utils.errorHandler('Error_database'));
   }
 
