@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
-import { Facebook, Toast } from 'ionic-native';
+import { Facebook, Toast, SpinnerDialog } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
+import { LocalStorageService } from './local-storage.service';
 import { Subject } from 'rxjs';
 import * as utils from '../utils';
 
@@ -11,50 +11,105 @@ let firebase = require('firebase');
 @Injectable()
 export class AuthService {
   isLoggedIn: boolean = false;
-  currentUser: any = {};
+  currentUser: any = null;
   authSubject: Subject<any> = new Subject<any>();
 
-  constructor(private storage: Storage, private translate: TranslateService) {
+  constructor(private storageService: LocalStorageService, private translate: TranslateService) {
     this.checkLoginState();
   }
 
   checkLoginState() {
     firebase.auth().onAuthStateChanged((user) => {
-      this.saveUser(user);
-      if (user) {
-        this.isLoggedIn = true;
+      this.isLoggedIn = !!user;
+      if (this.isLoggedIn) {
+        let promiseStorageUser = this.storageService.get('user');
+        let promiseFirebaseUser = firebase.database().ref(`users/${user.uid}`).once('value').then((snapshot) => snapshot.val());
+        Promise.all([ promiseStorageUser, promiseFirebaseUser ]).then((data) => {
+          let userInStorage = data[0];
+          let userInFirebase = data[1];
+          if (!userInStorage) {
+            if (!userInFirebase) {  // new sign-in
+              this.currentUser = {
+                uid: user.uid,
+                displayName: user.displayName,
+                email: user.email,
+                avatarUrl: user.photoURL,
+                level: 'N3',
+                numberWordsLearned: 0,
+                exp: 0,
+                currentCourse: null,
+                courses: []
+              };
+              this.initUserInFirebase(user)
+                .then(() => this.storageService.set('user', this.currentUser))
+                .then(() => {
+                  SpinnerDialog.hide();
+                  this.pushState();
+                });
+            } else {  // sign-out, then sign-in
+              this.currentUser = Object.assign({}, userInFirebase, {
+                uid: user.uid,
+                displayName: user.displayName,
+                email: user.email,
+                avatarUrl: user.photoURL
+              });
+              this.updateUserInFirebase(user)
+                .then(() => this.storageService.set('user', this.currentUser))
+                .then(() => {
+                  SpinnerDialog.hide();
+                  this.pushState();
+                });
+            }
+          } else {  // already sign-in
+            this.currentUser = userInStorage;
+            SpinnerDialog.hide();
+            this.pushState();
+          }
+        });
       } else {
-        this.isLoggedIn = false;
+        this.storageService.remove('user');
+        this.currentUser = null;
+        this.pushState();
       }
-      this.pushState();
     });
   }
 
-  private pushState() {
+  pushState() {
     this.authSubject.next({
       isLoggedIn: this.isLoggedIn,
       currentUser: this.currentUser
     });
   }
 
-  private saveUser(user) {
-    if (user) {
-      let { displayName, email, photoURL, uid } = user;
-      this.currentUser = { displayName, email, photoURL, uid };
-      return this.storage.set('user', { displayName, email, photoURL, uid });
-    } else {
-      this.currentUser = {};
-      return this.storage.set('user', null);
-    }
+  private updateUserInFirebase(user) {
+    let updates = {};
+    updates[`users/${user.uid}/displayName`] = user.displayName;
+    updates[`users/${user.uid}/email`] = user.email;
+    updates[`users/${user.uid}/avatarUrl`] = user.photoURL;
+    return firebase.database().ref().update(updates);
+  }
+
+  private initUserInFirebase(user) {
+    let userInfo = {
+      displayName: user.displayName,
+      email: user.email,
+      avatarUrl: user.photoURL,
+      level: 'N3',
+      numberWordsLearned: 0,
+      exp: 0,
+      currentCourse: null,
+      courses: []
+    };
+    return firebase.database().ref(`users/${user.uid}`).set(userInfo);
   }
 
   loginWithFacebook() {
     return Facebook.login([ 'public_profile', 'email' ]).then((response) => {
+      SpinnerDialog.show(this.translate.instant('Processing'),
+        this.translate.instant('Please_wait'), false);
       let facebookCredential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
       let signInPromise = Promise.resolve(firebase.auth().signInWithCredential(facebookCredential));
-      return signInPromise.then((user) => {
-        this.isLoggedIn = true;
-      }).catch(this.handleLoginError);
+      return signInPromise.catch(this.handleLoginError);
     }).catch(utils.errorHandler(this.translate.instant('Error_login_facebook')));
   }
 

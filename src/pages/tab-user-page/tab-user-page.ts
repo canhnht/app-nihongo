@@ -2,7 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Toast } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { AuthService } from '../../services';
+import { AuthService, LocalStorageService } from '../../services';
 
 declare var require: any;
 let firebase = require('firebase');
@@ -12,52 +12,23 @@ let firebase = require('firebase');
 })
 export class TabUserPage {
   isLoggedIn: boolean = false;
-  currentUser: any = {};
+  currentUser: any = null;
   authSubscription: Subscription;
 
   constructor(private authService: AuthService, private translate: TranslateService,
-    private zone: NgZone) {
-
+    private zone: NgZone, private storageService: LocalStorageService) {
   }
 
   ionViewWillEnter() {
     this.isLoggedIn = this.authService.isLoggedIn;
     this.currentUser = this.authService.currentUser;
-    this.getUserInfo();
+    if (this.isLoggedIn) this.startTrackUserInfo(this.currentUser.uid);
     this.authSubscription = this.authService.authSubject.subscribe(({ isLoggedIn, currentUser }) => {
       this.zone.run(() => {
         this.isLoggedIn = isLoggedIn;
         this.currentUser = currentUser;
-        this.getUserInfo();
+        if (this.isLoggedIn) this.startTrackUserInfo(this.currentUser.uid);
       });
-    });
-  }
-
-  private getUserInfo() {
-    firebase.database().ref(`users/${this.currentUser.uid}`).once('value').then((snapshot) => {
-      let userInfo = snapshot.val();
-      if (!userInfo) this.initUser();
-      else {
-        this.currentUser = Object.assign({}, this.currentUser, userInfo);
-      }
-    }).catch((err) => {
-    });
-  }
-
-  private initUser() {
-    this.currentUser = Object.assign({
-      level: 'N3',
-      numberWordsLearned: 0,
-      exp: 0,
-      currentCourse: null,
-      courses: []
-    }, this.currentUser);
-    firebase.database().ref(`users/${this.currentUser.uid}`).set({
-      level: 'N3',
-      numberWordsLearned: 0,
-      exp: 0,
-      currentCourse: null,
-      courses: []
     });
   }
 
@@ -65,9 +36,22 @@ export class TabUserPage {
     this.authSubscription.unsubscribe();
   }
 
+  startTrackUserInfo(uid) {
+    firebase.database().ref(`users/${uid}`).on('value', (snapshot) => {
+      let userInfo = snapshot.val();
+      if (userInfo) this.currentUser = Object.assign({}, this.currentUser, userInfo);
+    });
+  }
+
   loginWithFacebook() {
     this.authService.loginWithFacebook().then(() => {
       Toast.showLongBottom(this.translate.instant('Login_facebook_success')).subscribe(() => {});
+    });
+  }
+
+  logoutFacebook() {
+    this.authService.logoutFacebook().then(() => {
+      Toast.showLongBottom(this.translate.instant('Logout_facebook_success')).subscribe(() => {});
     });
   }
 }

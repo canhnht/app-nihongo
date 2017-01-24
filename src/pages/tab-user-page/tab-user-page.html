@@ -4,6 +4,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Profile</ion-title>
+    <ion-buttons end *ngIf="isLoggedIn">
+      <button ion-button icon-only (click)="logoutFacebook()">
+        <ion-icon large name="log-out"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content class="tab-user-page">
@@ -19,7 +24,7 @@
     <ion-row>
       <ion-col>
         <ion-thumbnail class="avatar">
-          <img [src]="currentUser.photoURL">
+          <img [src]="currentUser.avatarUrl">
         </ion-thumbnail>
       </ion-col>
       <ion-col padding>
