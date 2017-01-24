@@ -53,6 +53,8 @@
   "Rate_app": "Đánh giá ứng dụng",
   "Break_between_words": "Thời gian nghỉ giữa 2 từ",
   "second": "giây",
+  "minute": "phút",
+  "hour": "giờ",
   "Repeat_times": "Số lần lặp lại 1 từ",
   "time": "lần",
   "Choose_language": "Chọn ngôn ngữ",
@@ -77,12 +79,10 @@
   "Access": "Vào khoá học",
   "Number_questions": "Số câu hỏi",
   "Fail": "Thất bại",
-  "Fail_quiz": "Rất tiếc, bạn chưa thể truy cập UNIT này! Hãy ôn tập lại nhé!",
+  "Fail_quiz": "Rất tiếc, bạn chưa thể truy cập Unit này! Hãy ôn tập lại nhé!",
   "Pass_quiz": "Chúc mừng bạn đã vượt qua bài kiểm tra!",
   "Test_again": "Làm lại",
   "Complete_time": "Thời gian hoàn thành",
-  "minute": "phút",
-  "second": "giây",
   "Matching_words": "Ghép từ",
   "Please_choose_word": "Bạn chưa chọn từ!",
   "Message_updating": "Chức năng đang được nâng cấp!",
@@ -93,5 +93,6 @@
   "Test_before_new_unit": "Hãy làm bài test của Unit hiện tại trước khi bắt đầu Unit mới!",
   "Version": "Phiên bản",
   "Log_in_to_see_profile": "Hãy đăng nhập để thấy thông tin cá nhân",
-  "Profile": "Thông tin cá nhân"
+  "Profile": "Thông tin cá nhân",
+  "Current": "Đang học"
 }

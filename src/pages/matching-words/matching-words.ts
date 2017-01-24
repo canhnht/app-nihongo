@@ -29,14 +29,18 @@ export class MatchingWords {
 
   constructor(private navController: NavController, private translate: TranslateService,
     private navParams: NavParams) {
-    this.words = this.navParams.data.words;
+    this.words = this.navParams.data.words.filter((word) => {
+      if (word.phonetic.length == 0) return false;
+      if (word.phonetic.length == 1 && word.phonetic[0] === word.kanji) return false;
+      return true;
+    });
     this.onPass = this.navParams.data.onPass;
     this.onFail = this.navParams.data.onFail;
     this.reset(true);
   }
 
   reset(newQuestions = false) {
-    this.timeLimit = 60000;
+    this.timeLimit = 300000;
     this.countdown = this.timeLimit;
     this.numberQuestions = 10;
     this.progressPercent = 0;
@@ -146,7 +150,7 @@ export class MatchingWords {
             NativeAudio.play('success');
             this.stop();
             this.endQuiz = true;
-            this.success = false;
+            this.success = true;
           }
         } else {
           NativeAudio.play('incorrect');

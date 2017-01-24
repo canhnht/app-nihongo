@@ -7,7 +7,6 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { NewsPage } from '../news-page/news-page';
 import { NewsDetail } from '../news-detail/news-detail';
 import { UnitsPage } from '../units-page/units-page';
-import { UnitsTmpPage } from '../units-tmp/units-tmp';
 import { ModalDownloadPage } from '../modal-download-page/modal-download-page';
 import { DbService, SettingService, DownloadService, LocalStorageService } from '../../services';
 import { NHK_URL } from '../../constants';
@@ -90,7 +89,7 @@ export class TabHomePage {
 
   private goToCourse(course) {
     this.settingService.reset(true);
-    this.app.getRootNav().push(UnitsTmpPage,{selectedCourse: course});
+    this.app.getRootNav().push(UnitsPage, {selectedCourse: course});
   }
 
   deleteCourse(course) {
