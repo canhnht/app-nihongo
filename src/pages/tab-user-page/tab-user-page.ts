@@ -34,6 +34,8 @@ export class TabUserPage {
 
   ionViewWillLeave() {
     this.authSubscription.unsubscribe();
+    if (this.isLoggedIn)
+      this.stopTrackUserInfo(this.currentUser.uid);
   }
 
   startTrackUserInfo(uid) {
@@ -41,6 +43,10 @@ export class TabUserPage {
       let userInfo = snapshot.val();
       if (userInfo) this.currentUser = Object.assign({}, this.currentUser, userInfo);
     });
+  }
+
+  stopTrackUserInfo(uid) {
+    firebase.database().ref(`users/${uid}`).off('value');
   }
 
   loginWithFacebook() {
