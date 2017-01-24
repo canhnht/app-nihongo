@@ -11,19 +11,21 @@ import { LocalStorageService, AuthService } from '../../services';
 export class SettingPage {
   timeBetweenWords: number;
   repeatEachWord: number;
+  language: string;
   loginText: string;
   authSubscription: Subscription;
 
   constructor(private alertCtrl: AlertController, private authService: AuthService,
     private translate: TranslateService, private storageService: LocalStorageService,
     private zone: NgZone) {
-    this.storageService.get('time_between_words').then(res => this.timeBetweenWords = res);
-    this.storageService.get('repeat_each_word').then(res => this.repeatEachWord = res);
+    this.storageService.get('time_between_words').then((res) => this.timeBetweenWords = res);
+    this.storageService.get('repeat_each_word').then((res) => this.repeatEachWord = res);
+    this.storageService.get('language').then((res) => this.language = res);
   }
 
   ionViewWillEnter() {
     this.setLoginText(this.authService.isLoggedIn, this.authService.currentUser);
-    this.authSubscription = this.authService.authSubject.subscribe(({ isLoggedIn, currentUser}) => {
+    this.authSubscription = this.authService.authSubject.subscribe(({ isLoggedIn, currentUser }) => {
       this.zone.run(() => this.setLoginText(isLoggedIn, currentUser));
     });
   }
@@ -42,34 +44,8 @@ export class SettingPage {
     }
   }
 
-  selectLanguage() {
-    let languageAlert = this.alertCtrl.create();
-    languageAlert.setTitle(this.translate.instant('Choose_language'));
-
-    this.storageService.get('language').then(res => {
-      languageAlert.addInput({
-        type: 'radio',
-        label: this.translate.instant('Vietnamese'),
-        value: 'vi',
-        checked: res === 'vi'
-      });
-
-      languageAlert.addInput({
-        type: 'radio',
-        label: this.translate.instant('Japanese'),
-        value: 'ja',
-        checked: res === 'ja'
-      });
-
-      languageAlert.addButton(this.translate.instant('Cancel'));
-      languageAlert.addButton({
-        text: this.translate.instant('OK'),
-        handler: data => {
-          this.storageService.set('language', data);
-        }
-      });
-      languageAlert.present();
-    });
+  setLanguage() {
+    this.storageService.set('language', this.language);
   }
 
   setTimeBetweenWords() {

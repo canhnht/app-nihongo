@@ -9,7 +9,7 @@ import { NewsDetail } from '../news-detail/news-detail';
 import { UnitsPage } from '../units-page/units-page';
 import { UnitsTmpPage } from '../units-tmp/units-tmp';
 import { ModalDownloadPage } from '../modal-download-page/modal-download-page';
-import { DbService, SettingService, DownloadService } from '../../services';
+import { DbService, SettingService, DownloadService, LocalStorageService } from '../../services';
 import { NHK_URL } from '../../constants';
 import * as utils from '../../utils';
 
@@ -32,30 +32,36 @@ export class TabHomePage {
   modalDownloadCourse: any;
   initDbSubscription: Subscription;
 
-
   constructor(private app: App, private navCtrl: NavController, private dbService: DbService,
-    private settingService: SettingService, private http: Http,
+    private settingService: SettingService, private http: Http, private storageService: LocalStorageService,
     private translate: TranslateService, private downloadService: DownloadService, private alertCtrl: AlertController, public modalCtrl: ModalController) {
-    this.downloadNews();
-
   }
 
   ionViewWillEnter() {
+    this.storageService.get('init_db').then((res) => {
+      if (res) {
+        this.loadData();
+      }
+    });
     let initDbSubscription = this.dbService.initSubject.subscribe((init) => {
       initDbSubscription.unsubscribe();
       if (init) {
-        this.downloadNews();
-        this.dbService.getCourses();
-        this.coursesSubscription = this.dbService.coursesSubject.subscribe(
-          courses => this.courses = courses
-        );
-
-        this.dbService.getLatestNews();
-        this.latestNewsSubscription = this.dbService.latestNewsSubject.subscribe(
-          latestNews => this.latestNews = latestNews
-        );
+        this.loadData();
       }
     });
+  }
+
+  private loadData() {
+    this.downloadNews();
+    this.dbService.getCourses();
+    this.coursesSubscription = this.dbService.coursesSubject.subscribe(
+      courses => this.courses = courses
+    );
+
+    this.dbService.getLatestNews();
+    this.latestNewsSubscription = this.dbService.latestNewsSubject.subscribe(
+      latestNews => this.latestNews = latestNews
+    );
   }
 
   ionViewWillLeave() {

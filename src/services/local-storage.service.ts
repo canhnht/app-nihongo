@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
+export type LocalConfig = 'language'
+                        | 'time_between_words'
+                        | 'repeat_each_word'
+                        | 'user'
+                        | 'init'
+                        | 'init_db';
+
 @Injectable()
 export class LocalStorageService {
-
   constructor(private storage: Storage) {
   }
 
@@ -19,13 +25,14 @@ export class LocalStorageService {
   }
 
   set(key, value) {
-    value = JSON.stringify(value);
     return this.storage.set(key, value);
   }
 
   get(key) {
-    return this.storage.get(key).then(res => {
-      return JSON.parse(res);
-    })
+    return this.storage.get(key);
+  }
+
+  remove(key) {
+    return this.storage.remove(key);
   }
 }

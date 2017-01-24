@@ -14,12 +14,10 @@
         <ion-icon color="primary" name="globe" class="setting-icon"></ion-icon>
         {{'Language' | translate}}
       </ion-label>
-    </button>
-    <button ion-item text-wrap>
-      <ion-label class="setting-item">
-        <ion-icon color="primary" name="star-half" class="setting-icon"></ion-icon>
-        {{'Rate_app' | translate}}
-      </ion-label>
+      <ion-select [(ngModel)]="language" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}" (ionChange)="setLanguage()">
+        <ion-option value="vi">{{'Vietnamese' | translate}}</ion-option>
+        <ion-option value="ja">{{'Japanese' | translate}}</ion-option>
+      </ion-select>
     </button>
     <button ion-item text-wrap>
       <ion-label class="setting-item">
@@ -46,6 +44,18 @@
         <ion-option value="5">5 {{'time' | translate}}</ion-option>
         <ion-option value="10">10 {{'time' | translate}}</ion-option>
       </ion-select>
+    </button>
+    <button ion-item text-wrap>
+      <ion-label class="setting-item">
+        <ion-icon color="primary" name="star-half" class="setting-icon"></ion-icon>
+        {{'Rate_app' | translate}}
+      </ion-label>
+    </button>
+    <button ion-item text-wrap href="mailto:canhnht1709@gmail.com">
+      <ion-label class="setting-item">
+        <ion-icon color="primary" name="mail" class="setting-icon"></ion-icon>
+        {{'Feedback' | translate}}
+      </ion-label>
     </button>
     <button ion-item text-wrap (click)="toggleAuthFacebook()">
       <ion-label class="setting-item">
