@@ -20,6 +20,10 @@ export class NewsPage {
     this.dbService.getAllNews().then(listNews => this.listNews = listNews);
   }
 
+  ionViewDidEnter() {
+    SpinnerDialog.hide();
+  }
+
   refreshNews() {
     SpinnerDialog.show(this.translate.instant('Downloading_news'),
       this.translate.instant('Please_wait'), false);

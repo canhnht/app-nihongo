@@ -46,6 +46,10 @@ export class WordsPage {
     );
   }
 
+  ionViewDidEnter() {
+    SpinnerDialog.hide();
+  }
+
   ionViewWillLeave() {
     this.currentCourseSubscription.unsubscribe();
     this.settingSubscription.unsubscribe();

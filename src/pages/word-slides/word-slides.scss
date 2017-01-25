@@ -46,27 +46,16 @@
   }
 }
 
-// .word-slide {
-//   position: absolute;
-//   top: 10px;
-//   bottom: 10px;
-//   left: 10px;
-//   right: 10px;
-//   border-radius: 10px;
-//   background: #f4f4f4;
-// }
-
-// ion-slide {
-//   overflow-y: auto;
-// }
-
-// .conentSlide {
-//   background: #f4f4f4;
-// }
-
 ion-slide {
   position: relative;
   background: #f4f4f4;
+
+  .btn-close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
+  }
 
   .word-slide {
     position: absolute;
@@ -79,13 +68,6 @@ ion-slide {
     text-align: left;
     padding: 15px 0;
     overflow-y: auto;
-
-    .btn-close {
-      position: absolute;
-      right: 0;
-      top: 0;
-      z-index: 100;
-    }
 
     .kanji {
       font-size: 40px;

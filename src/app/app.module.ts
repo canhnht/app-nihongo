@@ -5,10 +5,10 @@ import { TranslateModule, TranslateLoader,
   TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
-import { LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, UnitsTmpPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, TabHomePage, TabUserPage,  ModalDownloadPage, MultipleChoiceSlides, MatchingWords } from '../pages';
+import { LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, TabHomePage, TabUserPage,  ModalDownloadPage, MultipleChoiceSlides, MatchingWords } from '../pages';
 import { LocalStorageService, SettingService, SliderService, DbService, AudioService, AuthService, DownloadService } from '../services';
 import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent, ModControllerComponent, MultipleChoiceQuestion} from '../components';
-import { CustomDatePipe } from '../custom-date.pipe';
+import { CustomDatePipe, CustomTimePipe } from '../pipes';
 
 export function makeTranslateFactory(http: Http) {
   return new TranslateStaticLoader(http, 'assets/i18n', '.json');
@@ -21,9 +21,9 @@ export function makeStorageFactory() {
 @NgModule({
   declarations: [
     MyApp,
-    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, UnitsTmpPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, TabHomePage, TabUserPage, ModalDownloadPage, MultipleChoiceSlides, MatchingWords,
+    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, TabHomePage, TabUserPage, ModalDownloadPage, MultipleChoiceSlides, MatchingWords,
     AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent,ModControllerComponent,MultipleChoiceQuestion,
-    CustomDatePipe
+    CustomDatePipe, CustomTimePipe
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -36,7 +36,7 @@ export function makeStorageFactory() {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, UnitsTmpPage, WordsPage, PlaylistOptions, SelectedWords, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, TabHomePage, TabUserPage, ModalDownloadPage, MultipleChoiceSlides, MatchingWords
+    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, PlaylistOptions, SelectedWords, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, TabHomePage, TabUserPage, ModalDownloadPage, MultipleChoiceSlides, MatchingWords
   ],
   providers: [
     {
