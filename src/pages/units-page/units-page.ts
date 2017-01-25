@@ -101,6 +101,8 @@ export class UnitsPage {
   }
 
   private goToUnit(unit) {
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
     this.settingService.reset(true);
     this.navCtrl.push(WordsPage, {
       selectedUnit: unit,

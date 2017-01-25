@@ -15,8 +15,8 @@
 </ion-header>
 
 <ion-content class="words-page">
-  <ion-list [virtualScroll]="searchedWords">
-    <ion-item text-wrap *virtualItem="let word"
+  <ion-list>
+    <ion-item text-wrap *ngFor="let word of searchedWords"
       (click)="selectWord($event, word)">
       <ion-label class="word-item">
         <button ion-button clear large class="word-bookmark" [class.hidden]="!word.bookmarked" (click)="addToPlaylist($event, word)" icon-only>
@@ -38,6 +38,7 @@
     </ion-item>
   </ion-list>
 </ion-content>
-<mod-controller></mod-controller>
-<!--<audio-setting></audio-setting>-->
+<ion-footer>
+  <mod-controller></mod-controller>
+</ion-footer>
 
