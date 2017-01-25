@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs';
-import { Toast, File } from 'ionic-native';
+import { Toast, File, SpinnerDialog } from 'ionic-native';
 import { App, NavController, AlertController, ModalController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { NewsPage } from '../news-page/news-page';
@@ -104,11 +104,13 @@ export class TabHomePage {
   }
 
   goToDetail() {
-    this.navCtrl.push(NewsDetail, { selectedNews: this.latestNews });
+    this.app.getRootNav().push(NewsDetail, { selectedNews: this.latestNews });
   }
 
   listAllNews() {
-    this.navCtrl.push(NewsPage);
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
+    this.app.getRootNav().push(NewsPage);
   }
 
   downloadNews() {
