@@ -1,57 +1,215 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>Profile</ion-title>
+  <ion-navbar color="primary" class="words-navbar">
+    <ion-title>
+      course.name - unit.name
+    </ion-title>
+    <ion-buttons end>
+      <custom-checkbox [checked]="false"
+        (onClick)="toggleSelectAll()">
+      </custom-checkbox>
+    </ion-buttons>
   </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
-<ion-content class="tab-user-page">
-  <div class="login-request" *ngIf="false">
-    <ion-icon name="person" class="icon-person" large></ion-icon>
-    <p>{{'Log_in_to_see_profile' | translate}}</p>
-    <button ion-button clear>
-      <i class="fa fa-facebook-f icon-fb" color="primary"></i>
-      {{'Login_facebook' | translate}}
-    </button>
-  </div>
-  <ion-card *ngIf="true">
-    <ion-row>
-      <ion-col>
-        <ion-thumbnail class="avatar">
-          <img src="assets/images/bg-even.jpg">
-        </ion-thumbnail>
-      </ion-col>
-      <ion-col padding>
-        <h1>Frank Lee</h1>
-        <ion-badge>Lv N3</ion-badge>
-        <div margin-top>
-          <p>Words learned: <strong>1000</strong></p>
-          <p>Experience Points: <strong>500</strong></p>
-          <p>Current Course:</p>
-          <strong>Mimi kara oboeru N3</strong>
+
+<ion-content class="words-page">
+  <ion-list>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
         </div>
-      </ion-col>
-    </ion-row>
-  </ion-card>
-  <ion-card *ngIf="true">
-    <ion-card-header>
-      History
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <button ion-item>
-          <ion-avatar item-left>
-            <img src="assets/images/tmp/N3Logo.png">
-          </ion-avatar>
-          <h3>Mimi kara Oboeru N3</h3>
-          <ion-badge item-right>Current</ion-badge>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
         </button>
-        <button ion-item>
-          <ion-avatar item-left>
-            <img src="assets/images/tmp/N3Logo.png">
-          </ion-avatar>
-          <h3>Mimi kara Oboeru N3</h3>
-          <p item-right>12/01/2017</p>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
         </button>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+        <div>
+          <h1>word.kanji</h1>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right
+        [checked]="true">
+      </custom-checkbox>
+    </ion-item>
+  </ion-list>
 </ion-content>
+<ion-footer>
+  <mod-controller></mod-controller>
+</ion-footer>

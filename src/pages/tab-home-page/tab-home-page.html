@@ -40,17 +40,15 @@
   </ion-card>
 
   <ion-card *ngFor="let course of courses; let i = index">
-    <ion-card-content>
-      <button ion-item (click)="checkBeforeDownload(course)">
-        <ion-thumbnail item-left>
-           <img [src]="course.imageUrl">
-        </ion-thumbnail>
-        <h2>{{course.name}}</h2>
-        <p>
-          <ion-badge item-right>{{course.noUnits}} {{'Unit' | translate}}</ion-badge>
-          <ion-badge item-right>{{course.noWords}} {{'Word' | translate}}</ion-badge>
-        </p>
-      </button>
-    </ion-card-content>
+    <button ion-item (click)="checkBeforeDownload(course)">
+      <ion-thumbnail item-left>
+         <img [src]="course.imageUrl">
+      </ion-thumbnail>
+      <h2>{{course.name}}</h2>
+      <p>
+        <ion-badge item-right>{{course.noUnits}} {{'Unit' | translate}}</ion-badge>
+        <ion-badge item-right>{{course.noWords}} {{'Word' | translate}}</ion-badge>
+      </p>
+    </button>
   </ion-card>
 </ion-content>

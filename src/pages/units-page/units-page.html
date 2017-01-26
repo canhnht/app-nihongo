@@ -1,22 +1,21 @@
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>
-      {{course.name}}
-    </ion-title>
+    <ion-title>{{course.name}}</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content class="units-page">
-  <ion-list [virtualScroll]="units">
-    <button ion-item text-wrap *virtualItem="let unit"
-      (click)="goToUnit(unit)">
-      <ion-label class="unit-item">
-        <ion-badge class="unit-number">U{{unit.number}}</ion-badge>
-        <div>
-          <h1>{{unit.name}}</h1>
-          <p>{{unit.noWords}} {{'word' | translate}}</p>
-        </div>
-      </ion-label>
+<ion-content>
+  <ion-card *ngFor="let unit of units;">
+    <button ion-item (click)="checkStatus(unit)">
+      <ion-avatar item-left>
+        <img [src]="unit.imageUrl">
+      </ion-avatar>
+      <h2>{{'Unit' | translate}} {{unit.number}}: {{unit.name}}</h2>
+      <p>{{unit.noWords}} {{'word' | translate}}</p>
+      <ion-icon name="lock" item-right *ngIf="isLock(unit)"></ion-icon>
+      <ion-icon name="checkmark-circle" color="success" item-right *ngIf="isPass(unit)"></ion-icon>
+      <ion-badge item-right *ngIf="isCurrent(unit)">{{'Current' | translate}}</ion-badge>
+      <ion-icon name="add" item-right *ngIf="isOpen(unit)"></ion-icon>
     </button>
-  </ion-list>
+  </ion-card>
 </ion-content>

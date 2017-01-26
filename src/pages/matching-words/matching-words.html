@@ -34,9 +34,10 @@
 
 <div class="matching-words-success" *ngIf="endQuiz && success">
   <div class="title">{{'Congratulation' | translate}}</div>
+  <div class="quiz-infor">{{'Pass_quiz' | translate }}</div>
   <div class="row">
     <div class="text">{{'Complete_time' | translate}}:</div>
-    <div class="number">{{10}} {{'minute' | translate}} {{00}} {{'second' | translate}}</div>
+    <div class="number">{{(timeLimit - countdown) | customTime}}</div>
   </div>
   <button class="btn-exit" ion-button round color="danger" (click)="close()" icon-left>
     <ion-icon name="undo"></ion-icon>
@@ -45,6 +46,7 @@
 </div>
 <div class="matching-words-fail" *ngIf="endQuiz && !success">
   <div class="title">{{'Fail' | translate}}</div>
+  <div class="quiz-infor">{{'Fail_quiz' | translate }}</div>
   <div class="group-btn">
     <button ion-button round color="primary" (click)="testAgain()" icon-left>
       <ion-icon name="sync"></ion-icon>

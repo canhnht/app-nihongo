@@ -48,7 +48,11 @@ export class MultipleChoiceSlides {
 
   constructor(private navController: NavController, private navParams: NavParams,
     private translate: TranslateService) {
-    this.words = this.navParams.data.words;
+    this.words = this.navParams.data.words.filter((word) => {
+      if (word.phonetic.length == 0) return false;
+      if (word.phonetic.length == 1 && word.phonetic[0] === word.kanji) return false;
+      return true;
+    });
     this.onPass = this.navParams.data.onPass;
     this.onFail = this.navParams.data.onFail;
     this.reset(true);

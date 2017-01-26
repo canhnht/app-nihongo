@@ -52,7 +52,7 @@
 
 <div class="multiple-choice-success" *ngIf="answerAll && success">
   <div class="title">{{'Congratulation' | translate}}</div>
-  <div class="quiz_infor"><p>{{'Pass_quiz' | translate }}</p></div>
+  <div class="quiz-infor">{{'Pass_quiz' | translate }}</div>
   <div class="row">
     <div class="text">{{'Number_questions' | translate}}:</div>
     <div class="number">{{listQuestion.length}}</div>
@@ -64,7 +64,7 @@
 </div>
 <div class="multiple-choice-fail" *ngIf="answerAll && !success">
   <div class="title">{{'Fail' | translate}}</div>
-  <div class="quiz_infor"><p>{{'Fail_quiz' | translate }}</p></div>
+  <div class="quiz-infor">{{'Fail_quiz' | translate }}</div>
   <div class="group-btn">
     <button ion-button round color="primary" (click)="testAgain()" icon-left>
       <ion-icon name="sync"></ion-icon>

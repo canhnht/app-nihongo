@@ -5,7 +5,7 @@
   border-radius: 10px;
   display: flex;
   align-items: center;
-  background-color: #E61770;
+  background-color: color($colors, primary);
 
   .btn-play {
   }
@@ -17,7 +17,7 @@
 
   .time {
     font-size: 15px;
-    background-color: #32db64;
+    background-color: color($colors, secondary);
     padding: 5px;
     border-radius: 5px;
     color: white;

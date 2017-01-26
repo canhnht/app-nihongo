@@ -1,32 +1,32 @@
-mod-controller {
-    ion-slides {
-        height: 50px;
-    }
 
-    .btn-prev, .btn-next {
-        position: absolute;
-        // display: none;
-        font-size: 40px;
-        top: calc(50% - 22px);
-        opacity: 0.2;
-        z-index: 5;
-    }
+.mod-controller {
+  ion-slides {
+    height: 50px;
+  }
 
-    .btn-prev {
+  .btn-prev, .btn-next {
+    position: absolute;
+    font-size: 40px;
+    top: calc(50% - 25px);
+    opacity: 0.5;
+    z-index: 5;
+  }
+
+  .btn-prev {
     left: 10px;
-    }
+  }
 
-    .btn-next {
+  .btn-next {
     right: 10px;
-    }
+  }
 
-    ion-toolbar:hover, :focus {
-        .btn-prev, .btn-next {
-           opacity: 1;
-        }
+  &:hover, :focus {
+    .btn-prev, .btn-next {
+      opacity: 1;
     }
+  }
 
-    .disabled {
-        opacity: 0.5;
-    }
+  .disabled {
+    opacity: 0.5;
+  }
 }

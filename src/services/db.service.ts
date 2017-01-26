@@ -253,7 +253,7 @@ export class DbService {
   }
 
   updateAnalytic(word) {
-    let sql = 'UPDATE `word` SET `lastPlayed` = ? AND `timesPlayed` = `timesPlayed` + 1 WHERE `id` = ?';
+    let sql = 'UPDATE `word` SET `lastPlayed` = ?, `timesPlayed` = `timesPlayed` + 1 WHERE `id` = ?';
     return this.db.executeSql(sql, [ Date.now(), word.id ])
       .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
