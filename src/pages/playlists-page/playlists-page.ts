@@ -3,7 +3,7 @@ import { NavController, AlertController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { Toast } from 'ionic-native';
 import { Subscription } from 'rxjs';
-import { DbService } from '../../services/db.service';
+import { DbService, SettingService } from '../../services';
 import { PlaylistDetail } from '../playlist-detail/playlist-detail';
 
 @Component({
@@ -14,7 +14,8 @@ export class PlaylistsPage {
   playlistsSubscription: Subscription;
 
   constructor(private navCtrl: NavController, private dbService: DbService,
-    private translate: TranslateService, private alertCtrl: AlertController) {
+    private translate: TranslateService, private alertCtrl: AlertController,
+    private settingService: SettingService) {
   }
 
   ionViewWillEnter() {
@@ -30,6 +31,7 @@ export class PlaylistsPage {
 
   goToPlaylistDetail($event, playlist) {
     if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
+    this.settingService.reset(true);
     this.navCtrl.push(PlaylistDetail, { selectedPlaylist: playlist });
   }
 

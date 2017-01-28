@@ -82,7 +82,6 @@ export class SettingService {
   }
 
   toggleWordInPlaylist(playlistId, word) {
-    this.status = SettingStatus.Selecting;
     if (this.selectedType !== playlistId) this.reset(true);
     this.selectedType = playlistId;
     let searchIndex = this.selectedList.indexOf(word.id);

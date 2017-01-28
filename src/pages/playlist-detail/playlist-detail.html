@@ -10,8 +10,12 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
+<ion-content class="playlist-detail">
+  <div class="no-words-message" *ngIf="words.length === 0">
+    Danh sách đang rỗng.<br>
+    Hãy thêm từ vào danh sách!
+  </div>
+  <ion-list *ngIf="words.length > 0">
     <ion-item-sliding *ngFor="let word of words">
       <button ion-item text-wrap (click)="selectWord($event, word)">
         <ion-label>
@@ -21,7 +25,7 @@
           </p>
         </ion-label>
         <custom-checkbox item-right (onClick)="checkWord($event, word)"
-          [checked]="selectedWords.indexOf(word._id) >= 0">
+          [checked]="selectedWords.indexOf(word.id) >= 0">
         </custom-checkbox>
       </button>
       <ion-item-options>
@@ -33,4 +37,6 @@
     </ion-item-sliding>
   </ion-list>
 </ion-content>
-<audio-setting></audio-setting>
+<ion-footer *ngIf="words.length > 0">
+  <mod-controller></mod-controller>
+</ion-footer>
