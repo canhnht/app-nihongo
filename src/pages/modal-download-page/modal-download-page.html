@@ -4,9 +4,9 @@
     <span class="version">V1.1</span>
   </div>
   <div text-center class="downloadInfor">
-    <img width="50" height="50" src={{course.image}}>
-    <ion-title>{{course.name}}</ion-title> 
-    <progress-bar [progress]="perDownloading"></progress-bar> 
+    <img width="50" height="50" [src]="course.imageUrl">
+    <ion-title>{{course.name}}</ion-title>
+    <progress-bar [progress]="perDownloading"></progress-bar>
     <span>{{'Downloading_course' | translate}}</span>
   </div>
 </ion-content>

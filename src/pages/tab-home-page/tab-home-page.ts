@@ -74,16 +74,16 @@ export class TabHomePage {
       this.goToCourse(course);
     }else{
       this.openModalDownload(course);
-      this.downloadService.downloadCourse(course).then((rs) => {
-          this.dbService.getCourses();
-          this.modalDownloadCourse.dismiss();
-          this.goToCourse(course);
+      this.downloadService.downloadCourse(course).then(() => {
+        this.dbService.getCourses();
+        this.modalDownloadCourse.dismiss();
+        this.goToCourse(course);
       });
     }
   }
 
   private openModalDownload(course) {
-    this.modalDownloadCourse = this.modalCtrl.create(ModalDownloadPage, {course: course});
+    this.modalDownloadCourse = this.modalCtrl.create(ModalDownloadPage, { course: course });
     this.modalDownloadCourse.present();
   }
 

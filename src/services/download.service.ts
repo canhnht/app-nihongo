@@ -26,7 +26,7 @@ export class DownloadService {
       alert.present();
       return;
     }
-    course.downloading = true;
+
     let remainingPercent = 100;
     return this.downloadCourseInfo(course.id).then((course) => {
       this.percDownloadedSubject.next({
@@ -73,16 +73,14 @@ export class DownloadService {
         let wordsPromise = listWord.map((word) => this.downloadWord(word));
         return Promise.all(wordsPromise);
       });
-    }).then(res => {
+    }).then((res) => {
       Toast.showLongCenter(this.translate.instant('Download_course_successfully', {
         courseName: course.name
       })).subscribe(() => {});
-      course.downloading = false;
       course.downloaded = true;
       return this.dbService.updateDownloadedCourse(course);
     })
-    .catch(err => {
-      course.downloading = false;
+    .catch((err) => {
       Toast.showLongBottom(this.translate.instant('Error_download_course')).subscribe(() => {});
     });
   }
