@@ -1,38 +1,55 @@
 <ion-header>
-  <ion-navbar color="primary" class="playlist-navbar">
-    <ion-title>
-      playlist.name
-    </ion-title>
-    <ion-buttons end>
-      <custom-checkbox [checked]="false">
-      </custom-checkbox>
-    </ion-buttons>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle left icon-only>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>MINAGOI</ion-title>
   </ion-navbar>
 </ion-header>
-
-<ion-content class="playlist-detail">
-  <div class="no-words-message" *ngIf="true">
-    Danh sách đang rỗng.<br>
-    Hãy thêm từ vào danh sách!
-  </div>
-  <ion-list *ngIf="false">
-    <ion-item-sliding>
-      <button ion-item text-wrap>
-        <ion-label>
-          <h1>word.kanji</h1>
-        </ion-label>
-        <custom-checkbox item-right [checked]="false">
-        </custom-checkbox>
+<ion-content class="tab-home-page">
+  <ion-card>
+    <ion-card-header>
+      <ion-badge item-left>
+        {{'NHK_News' | translate}}
+      </ion-badge>
+    </ion-card-header>
+    <ion-card-content text-center>
+      <button ion-button class="btn-load-news" *ngIf="true"
+        (click)="downloadNews()">
+         {{'Download_news' | translate}}
       </button>
-      <ion-item-options>
-        <button ion-button color="danger">
-          <ion-icon name="trash" large></ion-icon><br />
-          {{'Delete' | translate}}
+      <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading" *ngIf="false"></i>
+      <div *ngIf="false">
+        <p [innerHTML]="latestNews.titleWithRuby"></p>
+      </div>
+    </ion-card-content>
+    <ion-row *ngIf="!loadingNews && !!latestNews">
+      <ion-col width-50>
+        <button ion-button icon-left full (click)="goToDetail()">
+          <ion-icon name="musical-notes"></ion-icon>
+          {{'Detail' | translate}}
         </button>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
+      </ion-col>
+      <ion-col width-50>
+        <button ion-button icon-left full (click)="listAllNews()">
+          <ion-icon name="list-box"></ion-icon>
+          {{'List_all' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <ion-card class="course-item">
+    <button ion-item>
+      <ion-thumbnail item-left>
+         <img [src]="null">
+      </ion-thumbnail>
+      <h2>course.name</h2>
+      <p>
+        <ion-badge item-right>10 {{'Unit' | translate}}</ion-badge>
+        <ion-badge item-right>100 {{'Word' | translate}}</ion-badge>
+      </p>
+    </button>
+    <span class="downloading-text">{{'Downloading...' | translate}}</span>
+  </ion-card>
 </ion-content>
-<ion-footer>
-  <mod-controller></mod-controller>
-</ion-footer>
