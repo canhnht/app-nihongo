@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS `course` (
 ----
 
 -- Data for table `course`
-INSERT INTO `course` (`id`, `level`, `name`, `free`, `downloaded`, `noWords`, `noUnits`) VALUES
-  ('course1', 'N3', 'Mimi Kara Oboeru N3', 1, 0, 0, 0);
+INSERT INTO `course` (`id`, `imageUrl`, `level`, `name`, `free`, `downloaded`, `noWords`, `noUnits`) VALUES
+  ('course1', 'http://tiengnhat2s.com/sites/default/files/styles/large/public/11928720_1651785261745232_2291909341170067735_n.jpg?itok=vD5cnryV', 'N3', 'Mimi Kara Oboeru N3', 1, 0, 0, 0);
 ----
 
 

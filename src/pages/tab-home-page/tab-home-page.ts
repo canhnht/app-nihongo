@@ -69,21 +69,33 @@ export class TabHomePage {
     this.latestNewsSubscription.unsubscribe();
   }
 
-  checkBeforeDownload(course){
-    if(course.downloaded) {
+  checkBeforeDownload(course) {
+    if (this.downloadService.downloadingCourseId && this.downloadService.downloadingCourseId !== course.id) {
+      let alert = this.alertCtrl.create({
+        title: this.translate.instant('Download_course'),
+        subTitle: this.translate.instant('Download_one_course_a_time')
+      });
+      alert.present();
+      return;
+    }
+    if (course.downloaded) {
       this.goToCourse(course);
-    }else{
+    } else if (course.downloading) {
       this.openModalDownload(course);
-      this.downloadService.downloadCourse(course).then((rs) => {
-          this.dbService.getCourses();
-          this.modalDownloadCourse.dismiss();
-          this.goToCourse(course);
+    } else {
+      this.openModalDownload(course);
+      course.downloading = true;
+      this.downloadService.downloadCourse(course).then(() => {
+        course.downloading = false;
+        this.dbService.getCourses();
+        this.modalDownloadCourse.dismiss();
+        this.goToCourse(course);
       });
     }
   }
 
   private openModalDownload(course) {
-    this.modalDownloadCourse = this.modalCtrl.create(ModalDownloadPage, {course: course});
+    this.modalDownloadCourse = this.modalCtrl.create(ModalDownloadPage, { course: course });
     this.modalDownloadCourse.present();
   }
 

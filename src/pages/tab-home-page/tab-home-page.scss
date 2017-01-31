@@ -1,12 +1,23 @@
-page-tab-home-page {
-    .btn-load-news {
-        width: 150px;
-        margin-left: calc(50% - 75px);
-        margin-bottom: 10px;
-     }
+.tab-home-page {
+  .btn-load-news {
+    width: 150px;
+    margin-left: calc(50% - 75px);
+    margin-bottom: 10px;
+  }
 
-     .news-loading {
-        width: 100%;
-        margin-bottom: 10px;
-     }
+  .news-loading {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .course-item {
+    position: relative;
+
+    .downloading-text {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      font-style: italic;
+    }
+  }
 }

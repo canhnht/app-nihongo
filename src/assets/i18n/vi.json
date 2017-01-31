@@ -94,5 +94,8 @@
   "Version": "Phiên bản",
   "Log_in_to_see_profile": "Hãy đăng nhập để thấy thông tin cá nhân",
   "Profile": "Thông tin cá nhân",
-  "Current": "Đang học"
+  "Current": "Đang học",
+  "Downloading...": "Đang tải...",
+  "Download_course": "Tải khóa học",
+  "Download_one_course_a_time": "Mỗi lần bạn chỉ có thể tải một khóa học."
 }

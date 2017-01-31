@@ -6,15 +6,15 @@
     <ion-title>MINAGOI</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content class="tab-home-page">
   <ion-card>
     <ion-card-header>
       <ion-badge item-left>
         {{'NHK_News' | translate}}
       </ion-badge>
     </ion-card-header>
-    <ion-card-content>
-      <button ion-button class="btn-load-news" *ngIf="!latestNews && !loadingNews"
+    <ion-card-content text-center>
+      <button ion-button full class="btn-load-news" *ngIf="!latestNews && !loadingNews"
         (click)="downloadNews()">
          {{'Download_news' | translate}}
       </button>
@@ -39,7 +39,7 @@
     </ion-row>
   </ion-card>
 
-  <ion-card *ngFor="let course of courses; let i = index">
+  <ion-card class="course-item" *ngFor="let course of courses; let i = index">
     <button ion-item (click)="checkBeforeDownload(course)">
       <ion-thumbnail item-left>
          <img [src]="course.imageUrl">
@@ -50,5 +50,6 @@
         <ion-badge item-right>{{course.noWords}} {{'Word' | translate}}</ion-badge>
       </p>
     </button>
+    <span class="downloading-text" *ngIf="course.downloading">{{'Downloading...' | translate}}</span>
   </ion-card>
 </ion-content>

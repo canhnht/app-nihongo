@@ -8,20 +8,21 @@ import { Subscription } from 'rxjs';
   templateUrl: 'modal-download-page.html'
 })
 export class ModalDownloadPage {
-
   perDownloading: any = 0;
   percDownloadedSubscription: Subscription;
   course: any;
-  constructor(public viewCtrl: ViewController, private downloadService: DownloadService, public params: NavParams) {
-    this.course = this.params.get('course');
-    this.course.image = "assets/images/courses/N3Logo.png";
+
+  constructor(public viewCtrl: ViewController, private downloadService: DownloadService,
+    private navParams: NavParams) {
+    this.course = this.navParams.get('course');
   }
 
   ionViewWillEnter(){
+    this.perDownloading = Math.floor(this.downloadService.downloadedPercent);
     this.percDownloadedSubscription = this.downloadService.percDownloadedSubject.subscribe(
-      download => {
-        this.perDownloading = parseInt(download.percDownloaded);
-    })
+      ({ percDownloaded }) => {
+        this.perDownloading = Math.floor(percDownloaded);
+    });
   }
 
   ionViewWillLeave() {

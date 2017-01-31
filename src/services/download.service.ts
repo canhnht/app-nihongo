@@ -10,8 +10,9 @@ declare var cordova: any;
 @Injectable()
 export class DownloadService {
   percentPerWord: number;
-  downloadedPercent: number;
+  downloadedPercent: number = 0;
   percDownloadedSubject: Subject<any> = new Subject<any>();
+  downloadingCourseId: string = null;
 
   constructor(private alertCtrl: AlertController, private dbService: DbService, private translate: TranslateService) {
   }
@@ -26,8 +27,9 @@ export class DownloadService {
       alert.present();
       return;
     }
-    course.downloading = true;
+
     let remainingPercent = 100;
+    this.downloadingCourseId = course.id;
     return this.downloadCourseInfo(course.id).then((course) => {
       this.percDownloadedSubject.next({
         percDownloaded: 1
@@ -73,16 +75,16 @@ export class DownloadService {
         let wordsPromise = listWord.map((word) => this.downloadWord(word));
         return Promise.all(wordsPromise);
       });
-    }).then(res => {
+    }).then((res) => {
       Toast.showLongCenter(this.translate.instant('Download_course_successfully', {
         courseName: course.name
       })).subscribe(() => {});
-      course.downloading = false;
       course.downloaded = true;
+      this.downloadingCourseId = null;
       return this.dbService.updateDownloadedCourse(course);
     })
-    .catch(err => {
-      course.downloading = false;
+    .catch((err) => {
+      this.downloadingCourseId = null;
       Toast.showLongBottom(this.translate.instant('Error_download_course')).subscribe(() => {});
     });
   }
