@@ -7,6 +7,14 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="tab-home-page">
+  <ion-refresher (ionRefresh)="refreshCourses($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      [pullingText]="'Pull_to_refresh_courses' | translate"
+      refreshingSpinner="circles"
+      [refreshingText]="'Downloading...' | translate">
+    </ion-refresher-content>
+  </ion-refresher>
   <ion-card>
     <ion-card-header>
       <ion-badge item-left>
@@ -42,7 +50,7 @@
   <ion-card class="course-item" *ngFor="let course of courses; let i = index">
     <button ion-item (click)="checkBeforeDownload(course)">
       <ion-thumbnail item-left>
-         <img [src]="course.imageUrl">
+        <img [src]="course.imageUrl">
       </ion-thumbnail>
       <h2>{{course.name}}</h2>
       <p>

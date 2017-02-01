@@ -97,5 +97,7 @@
   "Current": "Đang học",
   "Downloading...": "Đang tải...",
   "Download_course": "Tải khóa học",
-  "Download_one_course_a_time": "Mỗi lần bạn chỉ có thể tải một khóa học."
+  "Download_one_course_a_time": "Mỗi lần bạn chỉ có thể tải một khóa học.",
+  "Pull_to_refresh_news": "Kéo để tải tin tức",
+  "Pull_to_refresh_courses": "Kéo để tải khóa học"
 }

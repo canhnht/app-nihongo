@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs';
-import { Toast, File, SpinnerDialog } from 'ionic-native';
+import { Toast, File, SpinnerDialog, Network } from 'ionic-native';
 import { App, NavController, AlertController, ModalController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { NewsPage } from '../news-page/news-page';
@@ -13,13 +13,14 @@ import { NHK_URL } from '../../constants';
 import * as utils from '../../utils';
 
 declare var cordova: any;
+declare var require: any;
+let firebase = require('firebase');
 
 @Component({
   selector: 'page-tab-home-page',
   templateUrl: 'tab-home-page.html'
 })
 export class TabHomePage {
-
   courses: any[] = [];
   coursesSubscription: Subscription;
   settingSubscription: Subscription;
@@ -30,6 +31,7 @@ export class TabHomePage {
   loadingNews: boolean = true;
   modalDownloadCourse: any;
   initDbSubscription: Subscription;
+  dataURI: string;
 
   constructor(private app: App, private navCtrl: NavController, private dbService: DbService,
     private settingService: SettingService, private http: Http, private storageService: LocalStorageService,
@@ -104,17 +106,6 @@ export class TabHomePage {
     this.app.getRootNav().push(UnitsPage, {selectedCourse: course});
   }
 
-  deleteCourse(course) {
-    let folderPath = cordova.file.dataDirectory;
-    File.removeRecursively(folderPath, course.id).then(res => {
-      Toast.showLongCenter(this.translate.instant('Delete_course_successfully', {
-        courseName: course.courseName
-      })).subscribe(() => {});
-    }).catch(utils.errorHandler(this.translate.instant('Error_delete_course')));
-
-    this.dbService.deleteCourse(course);
-  }
-
   goToDetail() {
     this.app.getRootNav().push(NewsDetail, { selectedNews: this.latestNews });
   }
@@ -126,6 +117,10 @@ export class TabHomePage {
   }
 
   downloadNews() {
+    if (Network.type === 'none' || Network.type === 'unknown') {
+      Toast.showShortBottom(this.translate.instant('Download_news_error')).subscribe(() => {});
+      return;
+    }
     this.loadingNews = true;
     this.downloadNewsSubscription = this.http.get(NHK_URL)
       .map(res => res.json())
@@ -138,5 +133,35 @@ export class TabHomePage {
       });
   }
 
+  refreshCourses(refresher) {
+    if (Network.type === 'none' || Network.type === 'unknown' || this.downloadService.downloadingCourseId) {
+      refresher.complete();
+      return;
+    }
+    firebase.database().ref('courses').once('value').then((snapshot) => {
+      let courses = snapshot.val();
+      let listCourse = Object.keys(courses).map((courseId) => {
+        let course = courses[courseId];
+        delete course.units;
+        course.id = courseId;
+        return course;
+      });
+      let imagesPromise = listCourse.map((course) => this.downloadImage(course));
+      return Promise.all(imagesPromise);
+    }).then((listCourse) => {
+      return this.dbService.addOrUpdateCourses(listCourse);
+    }).then(() => {
+      refresher.complete();
+    }).catch((err) => {
+      refresher.complete();
+    });
+  }
+
+  private downloadImage(course) {
+    return utils.downloadImageData(course.imageUrl).then((imageData) => {
+      course.imageUrl = imageData;
+      return course;
+    });
+  }
 }
 

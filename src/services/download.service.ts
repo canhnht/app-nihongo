@@ -4,6 +4,8 @@ import { Toast, Transfer, Network } from 'ionic-native';
 import { AlertController } from 'ionic-angular';
 import { DbService } from '../services';
 import { TranslateService } from 'ng2-translate/ng2-translate';
+import * as utils from '../utils';
+
 let firebase = require('firebase');
 declare var cordova: any;
 
@@ -18,7 +20,7 @@ export class DownloadService {
   }
 
   downloadCourse(course) {
-    if (Network.connection === 'none' || Network.connection === 'unknown') {
+    if (Network.type === 'none' || Network.type === 'unknown') {
       let alert = this.alertCtrl.create({
         title: 'Kết nối internet',
         subTitle: 'Hãy bật kết nối internet để bắt đầu tải khóa học!',
@@ -38,9 +40,6 @@ export class DownloadService {
 
       let listUnitId = Object.keys(course.units).filter((unitId) => course.units[unitId]);
 
-      // let promiseUpdateCourse = this.dbService.updateCourse(course);
-      // let promiseDownloadUnits = this.downloadUnits(listUnitId);
-      // return Promise.all([ promiseUpdateCourse, promiseDownloadUnits ]);
       return this.dbService.updateCourse(course).then(() => this.downloadUnits(listUnitId));
     }).then((listUnit) => {
       this.percDownloadedSubject.next({
@@ -98,8 +97,12 @@ export class DownloadService {
   private downloadUnits(listUnitId) {
     let unitsPromise = listUnitId.map((unitId) => {
       let unitRef = firebase.database().ref(`/units/${unitId}`);
-      return unitRef.once('value').then((res) => res.val())
-        .then((unit) => Object.assign({ id: unitId }, unit));
+      return unitRef.once('value').then((res) => res.val()).then((unit) => {
+        return utils.downloadImageData(unit.imageUrl).then((imageData) => {
+          unit.imageUrl = imageData;
+          return unit;
+        });
+      }).then((unit) => Object.assign({ id: unitId }, unit));
     });
     return Promise.all(unitsPromise);
   }
@@ -139,7 +142,6 @@ export class DownloadService {
         return Promise.resolve(fileTransfer.download(url,
           `${folderPath}/${word.audioFile}.mp3`));
       });
-      // .then(() => this.dbService.updateAudioFile(word.id, `${courseId}/${unitId}/${word.audioFile}.mp3`));
     }
   }
 }

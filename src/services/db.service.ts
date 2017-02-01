@@ -59,10 +59,26 @@ export class DbService {
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
-  deleteCourse(courseId) {
-    let sql = 'UPDATE `course` SET `noWords` = 0, `noUnits` = 0, `downloaded` = 0 WHERE `id` = ?';
-    return this.db.executeSql(sql, [ courseId ])
-      .then(this.getCourses.bind(this))
+  updateDownloadedCourse(course) {
+    let sql = 'UPDATE `course` SET `downloaded` = ? WHERE `id` = ?';
+    return this.db.executeSql(sql, [ course.downloaded, course.id ])
+      .catch(utils.errorHandler('Error_database'));
+  }
+
+  updateCourse(course) {
+    let sql = 'UPDATE `course` SET `imageUrl` = ?, `name` = ?, `free` = ?, `level` = ? WHERE `id` = ?';
+    return this.db.executeSql(sql, [ course.imageUrl, course.name, course.free, course.level, course.id ])
+      .catch(utils.errorHandler('Error_database'));
+  }
+
+  addOrUpdateCourses(listCourse) {
+    let sql = 'INSERT OR REPLACE INTO `course` (`id`, `name`, `level`, `imageUrl`, `free`, `downloaded`, `noWords`, `noUnits`) VALUES (?,?,?,?,?, (SELECT `downloaded` FROM `course` WHERE `id` = ?), (SELECT `noWords` FROM `course` WHERE `id` = ?), (SELECT `noUnits` FROM `course` WHERE `id` = ?))';
+    let listSql = listCourse.map((course) => {
+      return [
+        sql, [ course.id, course.name, course.level, course.imageUrl, course.free, course.id, course.id, course.id ]
+      ];
+    });
+    return this.db.sqlBatch(listSql).then(this.getCourses.bind(this))
       .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
@@ -140,18 +156,6 @@ export class DbService {
       data.push(resultSet.rows.item(iter));
     }
     return data;
-  }
-
-  updateDownloadedCourse(course) {
-    let sql = 'UPDATE `course` SET `downloaded` = ? WHERE `id` = ?';
-    return this.db.executeSql(sql, [ course.downloaded, course.id ])
-      .catch(utils.errorHandler('Error_database'));
-  }
-
-  updateCourse(course) {
-    let sql = 'UPDATE `course` SET `imageUrl` = ?, `name` = ?, `free` = ?, `level` = ? WHERE `id` = ?';
-    return this.db.executeSql(sql, [ course.imageUrl, course.name, course.free, course.level, course.id ])
-      .catch(utils.errorHandler('Error_database'));
   }
 
   addOrUpdateNews(listNews) {
