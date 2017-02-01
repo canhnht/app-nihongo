@@ -67,6 +67,7 @@
   "Error_download_course": "Xảy ra lỗi khi tải khóa học",
   "Error_login_facebook": "Xảy ra lỗi khi đăng nhập với Facebook",
   "Error_logout_facebook": "Xảy ra lỗi khi đăng xuất Facebook",
+  "Error_analytics": "Xảy ra lỗi khi thu thập dữ liệu",
   "Next_word_countdown": "Từ tiếp theo trong {{seconds}} giây",
   "Login_facebook": "Đăng nhập với Facebook",
   "Logout_facebook": "Đăng xuất ({{email}})",

@@ -17,8 +17,7 @@ import { WordSlides } from '../../pages';
   selector: 'mod-controller',
   templateUrl: 'mod-controller.html'
 })
-export class ModControllerComponent implements OnInit, OnDestroy{
-
+export class ModControllerComponent implements OnInit, OnDestroy {
   isDisable: boolean = true;
   isContinue: boolean = false;
   settingSubscription: Subscription;
@@ -78,7 +77,7 @@ export class ModControllerComponent implements OnInit, OnDestroy{
   }
 
   toggleLoop() {
-    if(this.isSelectedWord())
+    if (this.isSelectedWord())
       this.audioService.toggleLoop();
   }
 
@@ -92,8 +91,8 @@ export class ModControllerComponent implements OnInit, OnDestroy{
     profileModal.present();
   }
 
-  isSelectedWord(){
-    if(this.isDisable){
+  isSelectedWord() {
+    if (this.isDisable) {
       Toast.hide();
       Toast.showShortCenter(this.translate.instant('Please_choose_word')).subscribe(() => {});
       return false;

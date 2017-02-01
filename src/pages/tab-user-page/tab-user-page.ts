@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { Toast } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { AuthService, LocalStorageService } from '../../services';
+import { AnalyticsService, Events, Params } from '../../services';
 
 declare var require: any;
 let firebase = require('firebase');
@@ -16,10 +17,12 @@ export class TabUserPage {
   authSubscription: Subscription;
 
   constructor(private authService: AuthService, private translate: TranslateService,
-    private zone: NgZone, private storageService: LocalStorageService) {
+    private zone: NgZone, private storageService: LocalStorageService,
+    private analytics: AnalyticsService) {
   }
 
   ionViewWillEnter() {
+    this.analytics.logEvent(Events.VIEW_PROFILE);
     this.isLoggedIn = this.authService.isLoggedIn;
     this.currentUser = this.authService.currentUser;
     if (this.isLoggedIn) this.startTrackUserInfo(this.currentUser.uid);

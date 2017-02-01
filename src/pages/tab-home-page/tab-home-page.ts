@@ -9,10 +9,10 @@ import { NewsDetail } from '../news-detail/news-detail';
 import { UnitsPage } from '../units-page/units-page';
 import { ModalDownloadPage } from '../modal-download-page/modal-download-page';
 import { DbService, SettingService, DownloadService, LocalStorageService } from '../../services';
+import { AnalyticsService, Events, Params } from '../../services';
 import { NHK_URL } from '../../constants';
 import * as utils from '../../utils';
 
-declare var cordova: any;
 declare var require: any;
 let firebase = require('firebase');
 
@@ -35,7 +35,8 @@ export class TabHomePage {
 
   constructor(private app: App, private navCtrl: NavController, private dbService: DbService,
     private settingService: SettingService, private http: Http, private storageService: LocalStorageService,
-    private translate: TranslateService, private downloadService: DownloadService, private alertCtrl: AlertController, public modalCtrl: ModalController) {
+    private translate: TranslateService, private downloadService: DownloadService, private alertCtrl: AlertController,
+    private modalCtrl: ModalController, private analytics: AnalyticsService) {
   }
 
   ionViewWillEnter() {
@@ -102,6 +103,11 @@ export class TabHomePage {
   }
 
   private goToCourse(course) {
+    this.analytics.logEvent(Events.VIEW_COURSE, {
+      [Params.COURSE_ID]: course.id,
+      [Params.COURSE_NAME]: course.name,
+      [Params.COURSE_LEVEL]: course.level
+    });
     this.settingService.reset(true);
     this.app.getRootNav().push(UnitsPage, {selectedCourse: course});
   }
@@ -111,12 +117,14 @@ export class TabHomePage {
   }
 
   listAllNews() {
+    this.analytics.logEvent(Events.VIEW_NEWS);
     SpinnerDialog.show(this.translate.instant('Processing'),
       this.translate.instant('Please_wait'), false);
     this.app.getRootNav().push(NewsPage);
   }
 
   downloadNews() {
+    this.analytics.logEvent(Events.DOWNLOAD_NEWS);
     if (Network.type === 'none' || Network.type === 'unknown') {
       Toast.showShortBottom(this.translate.instant('Download_news_error')).subscribe(() => {});
       return;
@@ -134,6 +142,7 @@ export class TabHomePage {
   }
 
   refreshCourses(refresher) {
+    this.analytics.logEvent(Events.DOWNLOAD_COURSE);
     if (Network.type === 'none' || Network.type === 'unknown' || this.downloadService.downloadingCourseId) {
       refresher.complete();
       return;

@@ -8,7 +8,7 @@
       <button ion-button icon-only outline [class.disabled]="!audioService.isShuffle" (click)="toggleShuffle($event)">
         <ion-icon name="shuffle"></ion-icon>
       </button>
-      <button ion-button round icon-right margin (click)="playAudio()">
+      <button ion-button round icon-right margin (click)="playAudio()" [disabled]="isDisable">
         {{(isContinue ? 'Continue' : 'Ready') | translate}}
         <ion-icon name="play"></ion-icon>
       </button>
