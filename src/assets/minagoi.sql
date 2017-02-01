@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `course` (
   `id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
   `level` VARCHAR(50) NOT NULL,
-  `imageUrl` VARCHAR(255) DEFAULT NULL,
+  `imageUrl` TEXT DEFAULT NULL,
   `free` BOOLEAN NOT NULL DEFAULT 1,
   `downloaded` BOOLEAN NOT NULL DEFAULT 0,
   `noWords` INTEGER NOT NULL DEFAULT 0,
@@ -41,7 +41,7 @@ INSERT INTO `course` (`id`, `imageUrl`, `level`, `name`, `free`, `downloaded`, `
 CREATE TABLE IF NOT EXISTS `unit` (
   `id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  `imageUrl` VARCHAR(255) DEFAULT NULL,
+  `imageUrl` TEXT DEFAULT NULL,
   `number` INTEGER NOT NULL DEFAULT 0,
   `state` BOOLEAN NOT NULL DEFAULT 0,
   `noWords` INTEGER NOT NULL DEFAULT 0,

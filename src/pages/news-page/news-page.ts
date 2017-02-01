@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
-import { SpinnerDialog, MediaPlugin } from 'ionic-native';
-import { NavController, AlertController } from 'ionic-angular';
+import { SpinnerDialog, MediaPlugin, Network, Toast } from 'ionic-native';
+import { NavController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { DbService } from '../../services';
 import { NewsDetail } from '../news-detail/news-detail';
@@ -15,30 +15,27 @@ export class NewsPage {
   media: MediaPlugin = null;
 
   constructor(private navCtrl: NavController, private dbService: DbService,
-    private http: Http, private translate: TranslateService,
-    private alertCtrl: AlertController) {
-    this.dbService.getAllNews().then(listNews => this.listNews = listNews);
+    private http: Http, private translate: TranslateService) {
+    this.dbService.getAllNews().then((listNews) => this.listNews = listNews);
   }
 
   ionViewDidEnter() {
     SpinnerDialog.hide();
   }
 
-  refreshNews() {
-    SpinnerDialog.show(this.translate.instant('Downloading_news'),
-      this.translate.instant('Please_wait'), false);
-    this.http.get(NHK_URL).toPromise().then(resp => {
-      this.listNews = resp.json();
-      this.dbService.addOrUpdateNews(this.listNews);
-      SpinnerDialog.hide();
-    }).catch(err => {
-      SpinnerDialog.hide();
-      let alert = this.alertCtrl.create({
-        title: 'Không thể tải tin tức',
-        subTitle: 'Lỗi kết nối internet!',
-        buttons: ['Đồng ý']
+  refreshNews(refresher) {
+    if (Network.type === 'none' || Network.type === 'unknown') {
+      refresher.complete();
+      return;
+    }
+    this.http.get(NHK_URL).toPromise().then((res) => {
+      this.listNews = res.json();
+      return this.dbService.addOrUpdateNews(this.listNews).then(() => {
+        refresher.complete();
       });
-      alert.present();
+    }).catch(err => {
+      refresher.complete();
+      Toast.showShortBottom(this.translate.instant('Download_news_error')).subscribe(() => {});
     });
   }
 

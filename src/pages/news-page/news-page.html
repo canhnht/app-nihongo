@@ -1,15 +1,18 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-title>{{'NHK_News' | translate}}</ion-title>
-    <ion-buttons end>
-      <button ion-button (click)="refreshNews()" icon-only>
-        <ion-icon name="refresh"></ion-icon>
-      </button>
-    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="news-page">
+  <ion-refresher (ionRefresh)="refreshNews($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      [pullingText]="'Pull_to_refresh_news' | translate"
+      refreshingSpinner="circles"
+      [refreshingText]="'Downloading...' | translate">
+    </ion-refresher-content>
+  </ion-refresher>
   <ion-card *ngFor="let news of listNews">
     <div class="card-news">
       <img src="assets/images/bg_newstitle.gif" class="img-news" />
