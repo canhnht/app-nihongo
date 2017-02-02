@@ -36,4 +36,9 @@ export class AnalyticsService {
     Firebase.logEvent(eventName, params)
       .catch(utils.errorHandler(this.translate.instant('Error_analytics')));
   }
+
+  setUserId(userId: string) {
+    Firebase.setUserId(userId)
+      .catch(utils.errorHandler(this.translate.instant('Error_analytics')));
+  }
 }
