@@ -4,7 +4,7 @@ import { Toast, Transfer, Network } from 'ionic-native';
 import { AlertController } from 'ionic-angular';
 import { DbService } from '../services';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import * as utils from '../utils';
+import * as utils from '../helpers/utils';
 
 let firebase = require('firebase');
 declare var cordova: any;

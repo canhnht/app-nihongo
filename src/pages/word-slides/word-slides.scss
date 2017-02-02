@@ -1,12 +1,4 @@
 
-// .kanji {
-//   font-size: 40px;
-// }
-
-// .example {
-//   margin-top: 25px;
-// }
-
 .btn-prev, .btn-next {
   position: absolute;
   display: none;
@@ -46,16 +38,16 @@
   }
 }
 
+.btn-close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 5;
+}
+
 ion-slide {
   position: relative;
   background: #f4f4f4;
-
-  .btn-close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-index: 10;
-  }
 
   .word-slide {
     position: absolute;

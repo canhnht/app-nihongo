@@ -5,13 +5,7 @@ import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import _ from 'lodash';
 import { AudioPlayer } from '../../components';
-
-enum QuestionType {
-  KanjiToHiragana_Text,
-  HiraganaToKanji_Text,
-  KanjiToHiragana_Voice,
-  HiraganaToKanji_Voice,
-};
+import { QuestionType } from '../../helpers/custom-types';
 
 @Component({
   templateUrl: 'multiple-choice-slides.html'
@@ -109,7 +103,7 @@ export class MultipleChoiceSlides {
     return this.shuffleAnswer(question);
   }
 
-  getOtherOptions(numberOptions) {
+  private getOtherOptions(numberOptions) {
     let startIndex = this.numberQuestions;
     let endIndex = this.words.length;
     for (let index = startIndex; index < endIndex; ++index) {
@@ -121,7 +115,7 @@ export class MultipleChoiceSlides {
     return this.words.slice(startIndex, startIndex + numberOptions);
   }
 
-  shuffleAnswer(question) {
+  private shuffleAnswer(question) {
     question = Object.assign({}, question);
     let randomIndex = 1 + Math.floor(Math.random() * 3);
     let temp = question.options[0];

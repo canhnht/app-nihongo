@@ -4,7 +4,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { LocalStorageService } from './local-storage.service';
 import { AnalyticsService } from './analytics.service';
 import { Subject } from 'rxjs';
-import * as utils from '../utils';
+import * as utils from '../helpers/utils';
 
 declare var require: any;
 let firebase = require('firebase');

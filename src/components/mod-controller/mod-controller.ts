@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NavController, ModalController, Slides } from 'ionic-angular';
 import { SpinnerDialog, Toast } from 'ionic-native';
-import { AudioService, SliderService, SettingService, SettingStatus  } from '../../services';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { SelectedWords } from '../selected-words/selected-words';
 import { WordSlides } from '../../pages';
+import { LearningSlides } from '../../pages';
+import { AudioService, SliderService, SettingService  } from '../../services';
+import { SettingStatus } from '../../helpers/custom-types';
 
 /*
   Generated class for the ModController component.
@@ -100,9 +102,12 @@ export class ModControllerComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  startLearn(){
-     Toast.hide();
-     Toast.showShortCenter(this.translate.instant('Message_updating')).subscribe(() => {});
+  startLearn() {
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
+    this.navCtrl.push(LearningSlides, {
+      listWord: this.settingService.selectedWords
+    });
   }
 
   prev() {

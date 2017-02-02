@@ -4,7 +4,7 @@ import { StatusBar, Splashscreen, NativeAudio } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
-import { ASSETS_BASE_URL } from '../constants';
+import { ASSETS_BASE_URL } from '../helpers/constants';
 import { firebaseConfig } from './config-local';
 
 declare var require: any;

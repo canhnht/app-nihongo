@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-
-export enum SettingStatus {
-  Selecting, Playing, None
-};
+import { SettingStatus } from '../helpers/custom-types';
 
 @Injectable()
 export class SettingService {

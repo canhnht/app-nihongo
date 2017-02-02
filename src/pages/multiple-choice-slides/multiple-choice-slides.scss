@@ -67,11 +67,6 @@
       border: 1px solid white;
     }
   }
-
-  .disabled {
-    pointer-events: none;
-    opacity: 0.5;
-  }
 }
 
 .slides-progress {
@@ -82,7 +77,7 @@
 
   .current-progress {
     position: absolute;
-    background-color: #E61770;
+    background-color: color($colors, primary);
     left: 0;
     top: 0;
     bottom: 0;

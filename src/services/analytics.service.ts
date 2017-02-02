@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firebase } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import * as utils from '../utils';
+import * as utils from '../helpers/utils';
 
 export const Events = {
   SEARCH_WORD: 'search_word',

@@ -10,8 +10,8 @@ import { UnitsPage } from '../units-page/units-page';
 import { ModalDownloadPage } from '../modal-download-page/modal-download-page';
 import { DbService, SettingService, DownloadService, LocalStorageService } from '../../services';
 import { AnalyticsService, Events, Params } from '../../services';
-import { NHK_URL } from '../../constants';
-import * as utils from '../../utils';
+import { NHK_URL } from '../../helpers/constants';
+import * as utils from '../../helpers/utils';
 
 declare var require: any;
 let firebase = require('firebase');

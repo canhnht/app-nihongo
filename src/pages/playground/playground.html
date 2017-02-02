@@ -1,55 +1,95 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <button ion-button menuToggle left icon-only>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>MINAGOI</ion-title>
-  </ion-navbar>
-</ion-header>
-<ion-content class="tab-home-page">
-  <ion-card>
-    <ion-card-header>
-      <ion-badge item-left>
-        {{'NHK_News' | translate}}
-      </ion-badge>
-    </ion-card-header>
-    <ion-card-content text-center>
-      <button ion-button class="btn-load-news" *ngIf="true"
-        (click)="downloadNews()">
-         {{'Download_news' | translate}}
-      </button>
-      <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading" *ngIf="false"></i>
-      <div *ngIf="false">
-        <p [innerHTML]="latestNews.titleWithRuby"></p>
-      </div>
-    </ion-card-content>
-    <ion-row *ngIf="!loadingNews && !!latestNews">
-      <ion-col width-50>
-        <button ion-button icon-left full (click)="goToDetail()">
-          <ion-icon name="musical-notes"></ion-icon>
-          {{'Detail' | translate}}
-        </button>
-      </ion-col>
-      <ion-col width-50>
-        <button ion-button icon-left full (click)="listAllNews()">
-          <ion-icon name="list-box"></ion-icon>
-          {{'List_all' | translate}}
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-card>
 
-  <ion-card class="course-item">
-    <button ion-item>
-      <ion-thumbnail item-left>
-         <img [src]="null">
-      </ion-thumbnail>
-      <h2>course.name</h2>
-      <p>
-        <ion-badge item-right>10 {{'Unit' | translate}}</ion-badge>
-        <ion-badge item-right>100 {{'Word' | translate}}</ion-badge>
-      </p>
-    </button>
-    <span class="downloading-text">{{'Downloading...' | translate}}</span>
-  </ion-card>
+<ion-content class="learning-slides">
+  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()"></ion-icon>
+  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()"></ion-icon>
+  <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
+    <ion-icon name="close"></ion-icon>
+  </button>
+  <ion-slides>
+    <ion-slide>
+      <div class="word-slide" *ngIf="false">
+        <div class="slide-content">
+          <div class="kanji">word.kanji</div>
+          <div class="row">
+            <ion-badge>{{'Pronunciation' | translate}}:</ion-badge>
+            <span>phonetic1,</span><span>phonetic2,</span>
+          </div>
+          <div class="row">
+            <ion-badge>{{'Meaning' | translate}}:</ion-badge>
+            <span>meaning.mean1,</span><span>meaning.mean2,</span>
+          </div>
+          <div class="row">
+            <ion-badge>{{'Example' | translate}}:</ion-badge><br />
+            <strong>words.mainExample.content</strong><br/>
+            words.mainExample.meaning
+          </div>
+          <div class="separator-other">{{'Others' | translate}}</div>
+          <div class="example">
+            <strong>example.content</strong><br/>
+            example.meaning
+          </div>
+          <div class="example">
+            <strong>example.content</strong><br/>
+            example.meaning
+          </div>
+          <div class="example">
+            <strong>example.content</strong><br/>
+            example.meaning
+          </div>
+          <div class="example">
+            <strong>example.content</strong><br/>
+            example.meaning
+          </div>
+          <div class="example">
+            <strong>example.content</strong><br/>
+            example.meaning
+          </div>
+          <div class="example">
+            <strong>example.content</strong><br/>
+            example.meaning
+          </div>
+        </div>
+        <div class="btn-group">
+          <button ion-button color="secondary" round class="btn-repeat"
+            (click)="repeatCurrentVocabulary($event)" icon-only>
+            <ion-icon name="volume-up"></ion-icon>
+          </button>
+          <button ion-button color="danger" round class="btn-bookmark" (click)="addToPlaylist($event)" icon-only>
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </div>
+      </div>
+      <div class="question-slide" *ngIf="true">
+        <div class="question" *ngIf="true">
+          question.question
+        </div>
+        <i class="fa fa-volume-up question voice" *ngIf="false" (click)="playQuestion(question)"></i>
+        <div class="option" (click)="select(question, 0)"
+          [class.activated]="false">
+          <div class="bullet">A</div>
+          question.options[0]
+        </div>
+        <div class="option" (click)="select(question, 1)"
+          [class.activated]="true" [class.correct]="true">
+          <div class="bullet">B</div>
+          question.options[1]
+        </div>
+        <div class="option" (click)="select(question, 2)"
+          [class.activated]="false">
+          <div class="bullet">C</div>
+          question.options[2]
+        </div>
+        <div class="option" (click)="select(question, 3)"
+          [class.activated]="false">
+          <div class="bullet">D</div>
+          question.options[3]
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
 </ion-content>
+<ion-footer>
+  <div class="learning-progress">
+    <div class="current-progress" [style.width.%]="40"></div>
+  </div>
+</ion-footer>

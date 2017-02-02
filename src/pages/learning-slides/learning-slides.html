@@ -1,0 +1,92 @@
+
+<ion-content class="learning-slides">
+  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()"></ion-icon>
+  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()"></ion-icon>
+  <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
+    <ion-icon name="close"></ion-icon>
+  </button>
+  <ion-slides #learningSlider [options]="sliderOptions"
+    (ionDidChange)="onSlideChanged($event)">
+    <ion-slide *ngFor="let slide of slides">
+      <div class="word-slide" *ngIf="isWordSlide(slide)">
+        <div class="slide-content">
+          <div class="kanji">{{slide.kanji}}</div>
+          <div class="row">
+            <ion-badge>{{'Pronunciation' | translate}}:</ion-badge>
+            <span *ngFor="let phonetic of slide.phonetic">{{phonetic}},</span>
+          </div>
+          <div class="row">
+            <ion-badge>{{'Meaning' | translate}}:</ion-badge>
+            <span *ngFor="let meaning of slide.meaning">{{meaning.mean}},</span>
+          </div>
+          <div class="row">
+            <ion-badge>{{'Example' | translate}}:</ion-badge><br/>
+            <strong>{{slide.mainExample.content}}</strong><br/>
+            {{slide.mainExample.meaning}}
+          </div>
+          <div class="separator-other">{{'Others' | translate}}</div>
+          <div class="example" *ngFor="let example of slide.otherExamples">
+            <strong>{{example.content}}</strong><br/>
+            {{example.meaning}}
+          </div>
+        </div>
+        <div class="btn-group">
+          <button ion-button color="secondary" round class="btn-repeat"
+            (click)="repeatCurrentVocabulary($event)" icon-only>
+            <ion-icon name="volume-up"></ion-icon>
+          </button>
+          <button ion-button color="danger" round class="btn-bookmark"
+            (click)="addToPlaylist($event)" icon-only>
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </div>
+      </div>
+
+
+      <div class="question-slide" *ngIf="isQuestionSlide(slide)">
+        <div class="question" *ngIf="isTextQuestion(slide)">
+          {{slide.question}}
+        </div>
+        <i class="fa fa-volume-up question voice" *ngIf="isVoiceQuestion(slide)"
+          (click)="playQuestion(slide)"></i>
+        <div class="option" (click)="answerQuestion(slide, 0)"
+          [class.activated]="slide.done"
+          [class.disabled]="slide.done && slide.selectedOption != 0"
+          [class.correct]="slide.done && slide.selectedOption == 0 && slide.correct"
+          [class.incorrect]="slide.done && slide.selectedOption == 0 && !slide.correct">
+          <div class="bullet">A</div>
+          {{slide.options[0]}}
+        </div>
+        <div class="option" (click)="answerQuestion(slide, 1)"
+          [class.activated]="slide.done"
+          [class.disabled]="slide.done && slide.selectedOption != 1"
+          [class.correct]="slide.done && slide.selectedOption == 1 && slide.correct"
+          [class.incorrect]="slide.done && slide.selectedOption == 1 && !slide.correct">
+          <div class="bullet">B</div>
+          {{slide.options[1]}}
+        </div>
+        <div class="option" (click)="answerQuestion(slide, 2)"
+          [class.activated]="slide.done"
+          [class.disabled]="slide.done && slide.selectedOption != 2"
+          [class.correct]="slide.done && slide.selectedOption == 2 && slide.correct"
+          [class.incorrect]="slide.done && slide.selectedOption == 2 && !slide.correct">
+          <div class="bullet">C</div>
+          {{slide.options[2]}}
+        </div>
+        <div class="option" (click)="answerQuestion(slide, 3)"
+          [class.activated]="slide.done"
+          [class.disabled]="slide.done && slide.selectedOption != 3"
+          [class.correct]="slide.done && slide.selectedOption == 3 && slide.correct"
+          [class.incorrect]="slide.done && slide.selectedOption == 3 && !slide.correct">
+          <div class="bullet">D</div>
+          {{slide.options[3]}}
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+<ion-footer>
+  <div class="learning-progress">
+    <div class="current-progress" [style.width.%]="slideProgress"></div>
+  </div>
+</ion-footer>
