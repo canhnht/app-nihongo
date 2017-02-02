@@ -1,95 +1,76 @@
 
-<ion-content class="learning-slides">
-  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()"></ion-icon>
-  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()"></ion-icon>
+<ion-content>
+  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
+  </ion-icon>
+  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
+  </ion-icon>
   <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
     <ion-icon name="close"></ion-icon>
   </button>
-  <ion-slides>
+  <ion-slides #vocabSlider [options]="sliderOptions" (ionDidChange)="onSlideChanged($event)">
     <ion-slide>
-      <div class="word-slide" *ngIf="false">
-        <div class="slide-content">
-          <div class="kanji">word.kanji</div>
-          <div class="row">
-            <ion-badge>{{'Pronunciation' | translate}}:</ion-badge>
-            <span>phonetic1,</span><span>phonetic2,</span>
-          </div>
-          <div class="row">
-            <ion-badge>{{'Meaning' | translate}}:</ion-badge>
-            <span>meaning.mean1,</span><span>meaning.mean2,</span>
-          </div>
-          <div class="row">
-            <ion-badge>{{'Example' | translate}}:</ion-badge><br />
-            <strong>words.mainExample.content</strong><br/>
-            words.mainExample.meaning
-          </div>
-          <div class="separator-other">{{'Others' | translate}}</div>
-          <div class="example">
-            <strong>example.content</strong><br/>
-            example.meaning
-          </div>
-          <div class="example">
-            <strong>example.content</strong><br/>
-            example.meaning
-          </div>
-          <div class="example">
-            <strong>example.content</strong><br/>
-            example.meaning
-          </div>
-          <div class="example">
-            <strong>example.content</strong><br/>
-            example.meaning
-          </div>
-          <div class="example">
-            <strong>example.content</strong><br/>
-            example.meaning
-          </div>
-          <div class="example">
-            <strong>example.content</strong><br/>
-            example.meaning
-          </div>
+      <div class="word-slide slide-content-0">
+        <div class="kanji">words[slide.nr].kanji</div>
+        <div class="row">
+          <ion-badge>{{'Pronunciation' | translate}}:</ion-badge>
+          <span>phonetic,</span>
         </div>
-        <div class="btn-group">
-          <button ion-button color="secondary" round class="btn-repeat"
-            (click)="repeatCurrentVocabulary($event)" icon-only>
-            <ion-icon name="volume-up"></ion-icon>
-          </button>
-          <button ion-button color="danger" round class="btn-bookmark" (click)="addToPlaylist($event)" icon-only>
-            <ion-icon name="add"></ion-icon>
-          </button>
+        <div class="row">
+          <ion-badge>{{'Meaning' | translate}}:</ion-badge>
+          <span>meaning.mean,</span>
         </div>
-      </div>
-      <div class="question-slide" *ngIf="true">
-        <div class="question" *ngIf="true">
-          question.question
+        <div class="row">
+          <ion-badge>{{'Example' | translate}}:</ion-badge><br/>
+          <strong>words[slide.nr].mainExample.content</strong><br/>
+          words[slide.nr].mainExample.meaning
         </div>
-        <i class="fa fa-volume-up question voice" *ngIf="false" (click)="playQuestion(question)"></i>
-        <div class="option" (click)="select(question, 0)"
-          [class.activated]="false">
-          <div class="bullet">A</div>
-          question.options[0]
-        </div>
-        <div class="option" (click)="select(question, 1)"
-          [class.activated]="true" [class.correct]="true">
-          <div class="bullet">B</div>
-          question.options[1]
-        </div>
-        <div class="option" (click)="select(question, 2)"
-          [class.activated]="false">
-          <div class="bullet">C</div>
-          question.options[2]
-        </div>
-        <div class="option" (click)="select(question, 3)"
-          [class.activated]="false">
-          <div class="bullet">D</div>
-          question.options[3]
+        <div class="separator-other">{{'Others' | translate}}</div>
+        <div class="example">
+          <strong>example.content</strong><br/>
+          example.meaning
         </div>
       </div>
     </ion-slide>
   </ion-slides>
-</ion-content>
-<ion-footer>
-  <div class="learning-progress">
-    <div class="current-progress" [style.width.%]="40"></div>
+  <div class="btn-group">
+    <button ion-button color="secondary" round class="btn-repeat"
+      (click)="repeatCurrentVocabulary($event)" icon-only>
+      <ion-icon name="volume-up"></ion-icon>
+    </button>
+    <button ion-button color="danger" round   class="btn-bookmark"
+      (click)="addToPlaylist($event)" icon-only>
+      <ion-icon name="add"></ion-icon>
+    </button>
   </div>
-</ion-footer>
+</ion-content>
+
+<div class="question-popup" *ngIf="false">
+  <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
+    <ion-icon name="close"></ion-icon>
+  </button>
+  <div class="question" *ngIf="true">
+    slide.question
+  </div>
+  <i class="fa fa-volume-up question voice" *ngIf="false"
+    (click)="playQuestion(slide)"></i>
+  <div class="option" (click)="answerQuestion(slide, 0)"
+    >
+    <div class="bullet">A</div>
+    slide.options[0]
+  </div>
+  <div class="option" (click)="answerQuestion(slide, 1)"
+    >
+    <div class="bullet">B</div>
+    slide.options[1]
+  </div>
+  <div class="option" (click)="answerQuestion(slide, 2)"
+    >
+    <div class="bullet">C</div>
+    slide.options[2]
+  </div>
+  <div class="option" (click)="answerQuestion(slide, 3)"
+    >
+    <div class="bullet">D</div>
+    slide.options[3]
+  </div>
+</div>
