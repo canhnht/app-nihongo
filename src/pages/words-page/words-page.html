@@ -27,9 +27,12 @@
         </button>
         <div>
           <h1>{{word.kanji}}</h1>
-          <p>{{word.timesPlayed > 0 ? '(' + word.timesPlayed + ') - ' : ''}}
-            {{word.timesPlayed > 0 ? (word.lastPlayed | customDate) : ''}}
-          </p>
+          <span class="times-played" *ngIf="word.timesPlayed > 0">
+            <ion-icon name="headset"></ion-icon> {{word.timesPlayed}}
+          </span>
+          <span class="last-played" *ngIf="word.timesPlayed > 0">
+            <ion-icon name="calendar"></ion-icon> {{word.lastPlayed | customDate}}
+          </span>
         </div>
       </ion-label>
       <custom-checkbox item-right (onClick)="checkWord($event, word)"
