@@ -116,6 +116,12 @@ export class MultipleChoiceSlides {
   }
 
   private shuffleAnswer(question) {
+    if (question.answer != 0) {
+      let temp = question.options[0];
+      question.options[0] = question.options[question.answer];
+      question.options[question.answer] = temp;
+      question.answer = 0;
+    }
     question = Object.assign({}, question);
     let randomIndex = 1 + Math.floor(Math.random() * 3);
     let temp = question.options[0];

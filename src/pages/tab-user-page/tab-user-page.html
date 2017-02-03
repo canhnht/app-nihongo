@@ -31,9 +31,9 @@
         <h1>{{currentUser.displayName}}</h1>
         <ion-badge *ngIf="!!currentUser.level">Lv {{currentUser.level}}</ion-badge>
         <div margin-top *ngIf="!!currentUser.level">
-          <p>Words learned: <strong>{{currentUser.numberWordsLearned}}</strong></p>
-          <p>Experience Points: <strong>{{currentUser.exp}}</strong></p>
-          <p>Current Course:</p>
+          <p>{{'Words_learned' | translate}}: <strong>{{currentUser.numberWordsLearned}}</strong></p>
+          <p>{{'Exp_points' | translate}}: <strong>{{currentUser.exp}}</strong></p>
+          <p>{{'Current_course' | translate}}:</p>
           <strong>{{currentUser.currentCourse ? 'Mimi kara oboeru N3' : 'Not Available'}}</strong>
         </div>
       </ion-col>
