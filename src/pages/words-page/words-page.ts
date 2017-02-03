@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController } from 'ionic-angular';
-import { Toast } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { AudioService, SliderService, DbService, SettingService, LoaderService } from '../../services';
