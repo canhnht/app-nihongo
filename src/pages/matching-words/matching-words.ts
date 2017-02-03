@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { SpinnerDialog, NativeAudio } from 'ionic-native';
+import { NativeAudio } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import _ from 'lodash';
+import { LoaderService } from '../../services';
 
 @Component({
   templateUrl: 'matching-words.html',
@@ -28,7 +29,7 @@ export class MatchingWords {
   timeLimit: number;
 
   constructor(private navController: NavController, private translate: TranslateService,
-    private navParams: NavParams) {
+    private navParams: NavParams, private loader: LoaderService) {
     this.words = this.navParams.data.words.filter((word) => {
       if (word.phonetic.length == 0) return false;
       if (word.phonetic.length == 1 && word.phonetic[0] === word.kanji) return false;
@@ -57,7 +58,7 @@ export class MatchingWords {
   }
 
   ionViewDidEnter() {
-    SpinnerDialog.hide();
+    this.loader.hide();
     this.start();
   }
 

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, Slides, NavParams } from 'ionic-angular';
-import { SpinnerDialog, NativeAudio, TextToSpeech } from 'ionic-native';
+import { NativeAudio, TextToSpeech } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import _ from 'lodash';
@@ -272,10 +272,6 @@ export class PlaygroundPage {
     question.options[randomIndex] = temp;
     question.answer = randomIndex;
     return question;
-  }
-
-  ionViewDidEnter() {
-    SpinnerDialog.hide();
   }
 
   ionViewWillLeave() {

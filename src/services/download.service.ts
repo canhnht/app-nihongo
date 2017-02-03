@@ -83,8 +83,10 @@ export class DownloadService {
       return this.dbService.updateDownloadedCourse(course);
     })
     .catch((err) => {
-      this.downloadingCourseId = null;
       Toast.showLongBottom(this.translate.instant('Error_download_course')).subscribe(() => {});
+      course.downloaded = true;
+      this.downloadingCourseId = null;
+      return this.dbService.updateDownloadedCourse(course);
     });
   }
 
@@ -136,11 +138,11 @@ export class DownloadService {
     if (!word.audioFile) return Promise.resolve();
     else {
       let pathReference = storage.ref(`${courseId}/${unitId}/${word.audioFile}.mp3`);
-      return Promise.resolve(pathReference.getDownloadURL()).then((url) => {
+      return pathReference.getDownloadURL().then((url) => {
         let folderPath = `${cordova.file.dataDirectory}${courseId}/${unitId}`;
         const fileTransfer = new Transfer();
-        return Promise.resolve(fileTransfer.download(url,
-          `${folderPath}/${word.audioFile}.mp3`));
+        return fileTransfer.download(url,
+          `${folderPath}/${word.audioFile}.mp3`);
       });
     }
   }

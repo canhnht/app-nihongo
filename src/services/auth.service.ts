@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Facebook, Toast, SpinnerDialog } from 'ionic-native';
+import { Facebook, Toast } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { LocalStorageService } from './local-storage.service';
 import { AnalyticsService } from './analytics.service';
+import { LoaderService } from './loader.service';
 import { Subject } from 'rxjs';
 import * as utils from '../helpers/utils';
 
@@ -16,7 +17,7 @@ export class AuthService {
   authSubject: Subject<any> = new Subject<any>();
 
   constructor(private storageService: LocalStorageService, private translate: TranslateService,
-    private analytics: AnalyticsService) {
+    private analytics: AnalyticsService, private loader: LoaderService) {
     this.checkLoginState();
   }
 
@@ -46,7 +47,7 @@ export class AuthService {
               this.initUserInFirebase(user)
                 .then(() => this.storageService.set('user', this.currentUser))
                 .then(() => {
-                  SpinnerDialog.hide();
+                  this.loader.hide();
                   this.pushState();
                 });
             } else {  // sign-out, then sign-in
@@ -59,13 +60,13 @@ export class AuthService {
               this.updateUserInFirebase(user)
                 .then(() => this.storageService.set('user', this.currentUser))
                 .then(() => {
-                  SpinnerDialog.hide();
+                  this.loader.hide();
                   this.pushState();
                 });
             }
           } else {  // already sign-in
             this.currentUser = userInStorage;
-            SpinnerDialog.hide();
+            this.loader.hide();
             this.pushState();
           }
         });
@@ -109,8 +110,7 @@ export class AuthService {
 
   loginWithFacebook() {
     return Facebook.login([ 'public_profile', 'email' ]).then((response) => {
-      SpinnerDialog.show(this.translate.instant('Processing'),
-        this.translate.instant('Please_wait'), false);
+      this.loader.show();
       let facebookCredential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
       let signInPromise = Promise.resolve(firebase.auth().signInWithCredential(facebookCredential));
       return signInPromise.catch(this.handleLoginError);

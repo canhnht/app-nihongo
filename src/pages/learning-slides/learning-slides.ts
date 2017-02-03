@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, Slides, ModalController, NavParams } from 'ionic-angular';
-import { SpinnerDialog, MediaPlugin, NativeAudio, TextToSpeech } from 'ionic-native';
+import { MediaPlugin, NativeAudio, TextToSpeech } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { PlaylistOptions } from '../../components';
-import { AudioService, SliderService, DbService } from '../../services';
+import { AudioService, SliderService, DbService, LoaderService } from '../../services';
 import { QuestionType } from '../../helpers/custom-types';
 
 declare var cordova: any;
@@ -40,7 +40,7 @@ export class LearningSlides {
   constructor(private navCtrl: NavController, private audioService: AudioService,
     private sliderService: SliderService, private dbService: DbService,
     private navParams: NavParams, private translate: TranslateService,
-    private modalCtrl: ModalController) {
+    private modalCtrl: ModalController, private loader: LoaderService) {
     this.words = this.navParams.data.listWord;
 
     this.default_slides_indexes = [ this.previousWordIndex(0), 0, this.nextWordIndex(0) ];
@@ -75,7 +75,7 @@ export class LearningSlides {
   }
 
   ionViewDidEnter() {
-    SpinnerDialog.hide();
+    this.loader.hide();
     this.intervalUpdateDom = setInterval(this.updateDuplicateNode, 500);
   }
 

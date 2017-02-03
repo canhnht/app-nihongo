@@ -1,20 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NavController, ModalController, Slides } from 'ionic-angular';
-import { SpinnerDialog, Toast } from 'ionic-native';
+import { Toast } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { SelectedWords } from '../selected-words/selected-words';
 import { WordSlides } from '../../pages';
 import { LearningSlides } from '../../pages';
-import { AudioService, SliderService, SettingService  } from '../../services';
+import { AudioService, SliderService, SettingService, LoaderService } from '../../services';
 import { SettingStatus } from '../../helpers/custom-types';
 
-/*
-  Generated class for the ModController component.
-
-  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
-  for more info on Angular 2 Components.
-*/
 @Component({
   selector: 'mod-controller',
   templateUrl: 'mod-controller.html'
@@ -30,7 +24,7 @@ export class ModControllerComponent implements OnInit, OnDestroy {
 
   constructor(private audioService: AudioService, private settingService: SettingService,
     private sliderService: SliderService, private translate: TranslateService,
-    private navCtrl: NavController, private modalCtrl: ModalController) {
+    private navCtrl: NavController, private loader: LoaderService) {
     this.modControlOptions = {
       loop: true
     };
@@ -63,8 +57,7 @@ export class ModControllerComponent implements OnInit, OnDestroy {
   }
 
   playAudio() {
-    SpinnerDialog.show(this.translate.instant('Processing'),
-      this.translate.instant('Please_wait'), false);
+    this.loader.show();
     if (this.isContinue) {
       this.audioService.generateListWordOrder();
       this.audioService.playCurrentTrack();
@@ -88,11 +81,6 @@ export class ModControllerComponent implements OnInit, OnDestroy {
       this.audioService.toggleShuffle();
   }
 
-  showSelectedWords() {
-    let profileModal = this.modalCtrl.create(SelectedWords);
-    profileModal.present();
-  }
-
   isSelectedWord() {
     if (this.isDisable) {
       Toast.hide();
@@ -103,8 +91,7 @@ export class ModControllerComponent implements OnInit, OnDestroy {
   }
 
   startLearn() {
-    SpinnerDialog.show(this.translate.instant('Processing'),
-      this.translate.instant('Please_wait'), false);
+    this.loader.show();
     this.navCtrl.push(LearningSlides, {
       listWord: this.settingService.selectedWords
     });
