@@ -5,7 +5,7 @@ import { NavController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { DbService } from '../../services';
 import { NewsDetail } from '../news-detail/news-detail';
-import { NHK_URL } from '../../constants';
+import { NHK_URL } from '../../helpers/constants';
 
 @Component({
   templateUrl: 'news-page.html',

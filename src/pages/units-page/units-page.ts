@@ -5,13 +5,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { DbService, SettingService } from '../../services';
 import { WordsPage } from '../words-page/words-page';
 import { getRandomQuiz } from '../../helpers/main-helper';
-
-export enum UnitStatus {
-  Open = 0,
-  Lock = 1,
-  Current = 2,
-  Pass = 3
-};
+import { UnitStatus } from '../../helpers/custom-types';
 
 @Component({
   templateUrl: 'units-page.html'

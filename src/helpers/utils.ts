@@ -1,4 +1,5 @@
 import { Toast } from 'ionic-native';
+import { QuestionType } from './custom-types';
 
 const arrayBufferToBase64 = (buffer) => {
   let binary = '';
@@ -8,7 +9,7 @@ const arrayBufferToBase64 = (buffer) => {
     binary += String.fromCharCode(bytes[i]);
   }
   return window.btoa(binary);
-}
+};
 
 export const errorHandler = (message: string) => {
   return (err) => {

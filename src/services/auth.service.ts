@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Facebook, Toast, SpinnerDialog } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { LocalStorageService } from './local-storage.service';
+import { AnalyticsService } from './analytics.service';
 import { Subject } from 'rxjs';
-import * as utils from '../utils';
+import * as utils from '../helpers/utils';
 
 declare var require: any;
 let firebase = require('firebase');
@@ -14,7 +15,8 @@ export class AuthService {
   currentUser: any = null;
   authSubject: Subject<any> = new Subject<any>();
 
-  constructor(private storageService: LocalStorageService, private translate: TranslateService) {
+  constructor(private storageService: LocalStorageService, private translate: TranslateService,
+    private analytics: AnalyticsService) {
     this.checkLoginState();
   }
 
@@ -22,6 +24,7 @@ export class AuthService {
     firebase.auth().onAuthStateChanged((user) => {
       this.isLoggedIn = !!user;
       if (this.isLoggedIn) {
+        this.analytics.setUserId(user.uid);
         let promiseStorageUser = this.storageService.get('user');
         let promiseFirebaseUser = firebase.database().ref(`users/${user.uid}`).once('value').then((snapshot) => snapshot.val());
         Promise.all([ promiseStorageUser, promiseFirebaseUser ]).then((data) => {
@@ -67,6 +70,7 @@ export class AuthService {
           }
         });
       } else {
+        this.analytics.setUserId(null);
         this.storageService.remove('user');
         this.currentUser = null;
         this.pushState();

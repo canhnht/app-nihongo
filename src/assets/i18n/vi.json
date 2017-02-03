@@ -67,6 +67,7 @@
   "Error_download_course": "Xảy ra lỗi khi tải khóa học",
   "Error_login_facebook": "Xảy ra lỗi khi đăng nhập với Facebook",
   "Error_logout_facebook": "Xảy ra lỗi khi đăng xuất Facebook",
+  "Error_analytics": "Xảy ra lỗi khi thu thập dữ liệu",
   "Next_word_countdown": "Từ tiếp theo trong {{seconds}} giây",
   "Login_facebook": "Đăng nhập với Facebook",
   "Logout_facebook": "Đăng xuất ({{email}})",
@@ -99,5 +100,11 @@
   "Download_course": "Tải khóa học",
   "Download_one_course_a_time": "Mỗi lần bạn chỉ có thể tải một khóa học.",
   "Pull_to_refresh_news": "Kéo để tải tin tức",
-  "Pull_to_refresh_courses": "Kéo để tải khóa học"
+  "Pull_to_refresh_courses": "Kéo để tải khóa học",
+  "Pronunciation": "Phát âm",
+  "Meaning": "Nghĩa",
+  "Example": "Ví dụ",
+  "Words_learned": "Words Learned",
+  "Exp_points": "Experience Points",
+  "Current_course": "Current Course"
 }

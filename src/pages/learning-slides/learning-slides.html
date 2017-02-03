@@ -1,0 +1,88 @@
+
+<ion-content>
+  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
+  </ion-icon>
+  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
+  </ion-icon>
+  <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
+    <ion-icon name="close"></ion-icon>
+  </button>
+  <ion-slides #vocabSlider [options]="sliderOptions" (ionDidChange)="onSlideChanged($event)">
+    <ion-slide *ngFor="let slide of slides; let i = index">
+      <div class="word-slide slide-content-{{i}}">
+        <div class="kanji">{{words[slide.nr].kanji}}</div>
+        <div class="row">
+          <ion-badge>{{'Pronunciation' | translate}}:</ion-badge>
+          <span *ngFor="let phonetic of words[slide.nr].phonetic">{{phonetic}},</span>
+        </div>
+        <div class="row">
+          <ion-badge>{{'Meaning' | translate}}:</ion-badge>
+          <span *ngFor="let meaning of words[slide.nr].meaning">{{meaning.mean}},</span>
+        </div>
+        <div class="row">
+          <ion-badge>{{'Example' | translate}}:</ion-badge><br/>
+          <strong>{{words[slide.nr].mainExample.content}}</strong><br/>
+          {{words[slide.nr].mainExample.meaning}}
+        </div>
+        <div class="separator-other">{{'Others' | translate}}</div>
+        <div class="example" *ngFor="let example of words[slide.nr].otherExamples">
+          <strong>{{example.content}}</strong><br/>
+          {{example.meaning}}
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <div class="btn-group">
+    <button ion-button color="secondary" round class="btn-repeat"
+      (click)="repeatCurrentVocabulary($event)" icon-only>
+      <ion-icon name="volume-up"></ion-icon>
+    </button>
+    <button ion-button *ngIf="!hideBookmark" color="danger" round   class="btn-bookmark" (click)="addToPlaylist($event)" icon-only>
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </div>
+</ion-content>
+
+
+<div class="question-popup" *ngIf="showQuestion">
+  <button ion-button clear color="primary" round large class="btn-close" (click)="closeQuestion()" icon-only>
+    <ion-icon name="close"></ion-icon>
+  </button>
+  <div class="question" *ngIf="isTextQuestion(question)">
+    {{question.question}}
+  </div>
+  <i class="fa fa-volume-up question voice" *ngIf="isVoiceQuestion(question)"
+    (click)="playQuestion(question)"></i>
+  <div class="option" (click)="answerQuestion(question, 0)"
+    [class.activated]="question.done"
+    [class.disabled]="question.done && question.selectedOption != 0"
+    [class.correct]="question.done && question.selectedOption == 0 && question.correct"
+    [class.incorrect]="question.done && question.selectedOption == 0 && !question.correct">
+    <div class="bullet">A</div>
+    {{question.options[0]}}
+  </div>
+  <div class="option" (click)="answerQuestion(question, 1)"
+    [class.activated]="question.done"
+    [class.disabled]="question.done && question.selectedOption != 1"
+    [class.correct]="question.done && question.selectedOption == 1 && question.correct"
+    [class.incorrect]="question.done && question.selectedOption == 1 && !question.correct">
+    <div class="bullet">B</div>
+    {{question.options[1]}}
+  </div>
+  <div class="option" (click)="answerQuestion(question, 2)"
+    [class.activated]="question.done"
+    [class.disabled]="question.done && question.selectedOption != 2"
+    [class.correct]="question.done && question.selectedOption == 2 && question.correct"
+    [class.incorrect]="question.done && question.selectedOption == 2 && !question.correct">
+    <div class="bullet">C</div>
+    {{question.options[2]}}
+  </div>
+  <div class="option" (click)="answerQuestion(question, 3)"
+    [class.activated]="question.done"
+    [class.disabled]="question.done && question.selectedOption != 3"
+    [class.correct]="question.done && question.selectedOption == 3 && question.correct"
+    [class.incorrect]="question.done && question.selectedOption == 3 && !question.correct">
+    <div class="bullet">D</div>
+    {{question.options[3]}}
+  </div>
+</div>

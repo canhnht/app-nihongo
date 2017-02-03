@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NavController, ModalController, Slides } from 'ionic-angular';
 import { SpinnerDialog, Toast } from 'ionic-native';
-import { AudioService, SliderService, SettingService, SettingStatus  } from '../../services';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { SelectedWords } from '../selected-words/selected-words';
 import { WordSlides } from '../../pages';
+import { LearningSlides } from '../../pages';
+import { AudioService, SliderService, SettingService  } from '../../services';
+import { SettingStatus } from '../../helpers/custom-types';
 
 /*
   Generated class for the ModController component.
@@ -17,8 +19,7 @@ import { WordSlides } from '../../pages';
   selector: 'mod-controller',
   templateUrl: 'mod-controller.html'
 })
-export class ModControllerComponent implements OnInit, OnDestroy{
-
+export class ModControllerComponent implements OnInit, OnDestroy {
   isDisable: boolean = true;
   isContinue: boolean = false;
   settingSubscription: Subscription;
@@ -78,7 +79,7 @@ export class ModControllerComponent implements OnInit, OnDestroy{
   }
 
   toggleLoop() {
-    if(this.isSelectedWord())
+    if (this.isSelectedWord())
       this.audioService.toggleLoop();
   }
 
@@ -92,8 +93,8 @@ export class ModControllerComponent implements OnInit, OnDestroy{
     profileModal.present();
   }
 
-  isSelectedWord(){
-    if(this.isDisable){
+  isSelectedWord() {
+    if (this.isDisable) {
       Toast.hide();
       Toast.showShortCenter(this.translate.instant('Please_choose_word')).subscribe(() => {});
       return false;
@@ -101,9 +102,12 @@ export class ModControllerComponent implements OnInit, OnDestroy{
     return true;
   }
 
-  startLearn(){
-     Toast.hide();
-     Toast.showShortCenter(this.translate.instant('Message_updating')).subscribe(() => {});
+  startLearn() {
+    SpinnerDialog.show(this.translate.instant('Processing'),
+      this.translate.instant('Please_wait'), false);
+    this.navCtrl.push(LearningSlides, {
+      listWord: this.settingService.selectedWords
+    });
   }
 
   prev() {

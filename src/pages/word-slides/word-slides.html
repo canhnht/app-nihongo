@@ -1,26 +1,26 @@
 
-<ion-content class="conentSlide">
+<ion-content>
   <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
   </ion-icon>
   <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
   </ion-icon>
+  <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
+    <ion-icon name="close"></ion-icon>
+  </button>
   <ion-slides #vocabSlider [options]="sliderOptions" (ionDidChange)="onSlideChanged($event)">
     <ion-slide *ngFor="let slide of slides; let i = index">
-      <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
-        <ion-icon name="close"></ion-icon>
-      </button>
       <div class="word-slide slide-content-{{i}}">
         <div class="kanji">{{words[slide.nr].kanji}}</div>
         <div class="row">
-          <ion-badge>Phát âm:</ion-badge>
+          <ion-badge>{{'Pronunciation' | translate}}:</ion-badge>
           <span *ngFor="let phonetic of words[slide.nr].phonetic">{{phonetic}},</span>
         </div>
         <div class="row">
-          <ion-badge>Nghĩa:</ion-badge>
+          <ion-badge>{{'Meaning' | translate}}:</ion-badge>
           <span *ngFor="let meaning of words[slide.nr].meaning">{{meaning.mean}},</span>
         </div>
         <div class="row">
-          <ion-badge>Ví dụ:</ion-badge><br />
+          <ion-badge>{{'Example' | translate}}:</ion-badge><br/>
           <strong>{{words[slide.nr].mainExample.content}}</strong><br/>
           {{words[slide.nr].mainExample.meaning}}
         </div>

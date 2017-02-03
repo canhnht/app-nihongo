@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
 import { SpinnerDialog } from 'ionic-native';
-import { AudioService, SliderService, SettingService, SettingStatus  } from '../../services';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { SelectedWords } from '../selected-words/selected-words';
 import { WordSlides } from '../../pages';
+import { AudioService, SliderService, SettingService } from '../../services';
+import { SettingStatus } from '../../helpers/custom-types';
 
 @Component({
   selector: 'audio-setting',

@@ -3,7 +3,7 @@ import { Platform } from 'ionic-angular';
 import { SQLite, Toast, File } from 'ionic-native';
 import { Subject } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import * as utils from '../utils';
+import * as utils from '../helpers/utils';
 import { LocalStorageService } from './local-storage.service';
 
 declare var cordova: any;
