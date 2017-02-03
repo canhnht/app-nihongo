@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController } from 'ionic-angular';
 import { Subscription } from 'rxjs';
-import { SpinnerDialog } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { AudioService, SliderService, DbService, SettingService } from '../../services';
+import { AudioService, SliderService, DbService, SettingService, LoaderService } from '../../services';
 import { WordSlides } from '../word-slides/word-slides';
 import { PlaylistOptions } from '../../components';
 
@@ -23,7 +22,8 @@ export class WordsPage {
   constructor(private navCtrl: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
     private dbService: DbService, private settingService: SettingService,
-    private translate: TranslateService, private modalCtrl: ModalController) {
+    private translate: TranslateService, private modalCtrl: ModalController,
+    private loader: LoaderService) {
   }
 
   ionViewWillEnter() {
@@ -47,7 +47,7 @@ export class WordsPage {
   }
 
   ionViewDidEnter() {
-    SpinnerDialog.hide();
+    this.loader.hide();
   }
 
   ionViewWillLeave() {
@@ -57,8 +57,7 @@ export class WordsPage {
 
   selectWord($event, word) {
     if ($event.target.localName === 'label' || $event.target.localName === 'input') return;
-    SpinnerDialog.show(this.translate.instant('Processing'),
-      this.translate.instant('Please_wait'), false);
+    this.loader.show();
     let wordIndex = this.words.findIndex(item => item.id === word.id);
     this.navCtrl.push(WordSlides, {
       playSingleWord: true,

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
-import { SpinnerDialog } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { DbService, SettingService } from '../../services';
+import { DbService, SettingService, LoaderService } from '../../services';
 import { WordsPage } from '../words-page/words-page';
 import { getRandomQuiz } from '../../helpers/main-helper';
 import { UnitStatus } from '../../helpers/custom-types';
@@ -17,7 +16,7 @@ export class UnitsPage {
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
     private dbService: DbService, private alertCtrl: AlertController, private translate: TranslateService,
-    private settingService: SettingService) {
+    private settingService: SettingService, private loader: LoaderService) {
     this.course = this.navParams.data.selectedCourse;
   }
 
@@ -46,8 +45,7 @@ export class UnitsPage {
           {
             text: this.translate.instant('OK'),
             handler: () => {
-              SpinnerDialog.show(this.translate.instant('Processing'),
-                this.translate.instant('Please_wait'), false);
+              this.loader.show();
               this.dbService.getWordsByUnitId(unit.id).then((words) => {
               this.navCtrl.push(getRandomQuiz(), {
                 words,
@@ -95,8 +93,7 @@ export class UnitsPage {
   }
 
   private goToUnit(unit) {
-    SpinnerDialog.show(this.translate.instant('Processing'),
-      this.translate.instant('Please_wait'), false);
+    this.loader.show();
     this.settingService.reset(true);
     this.navCtrl.push(WordsPage, {
       selectedUnit: unit,

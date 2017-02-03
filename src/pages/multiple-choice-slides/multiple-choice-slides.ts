@@ -1,11 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, Slides, NavParams } from 'ionic-angular';
-import { Toast, SpinnerDialog, NativeAudio, TextToSpeech } from 'ionic-native';
+import { Toast, NativeAudio, TextToSpeech } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import _ from 'lodash';
 import { AudioPlayer } from '../../components';
 import { QuestionType } from '../../helpers/custom-types';
+import { LoaderService } from '../../services';
 
 @Component({
   templateUrl: 'multiple-choice-slides.html'
@@ -41,7 +42,7 @@ export class MultipleChoiceSlides {
   timeLimit: number;
 
   constructor(private navController: NavController, private navParams: NavParams,
-    private translate: TranslateService) {
+    private translate: TranslateService, private loader: LoaderService) {
     this.words = this.navParams.data.words.filter((word) => {
       if (word.phonetic.length == 0) return false;
       if (word.phonetic.length == 1 && word.phonetic[0] === word.kanji) return false;
@@ -132,7 +133,7 @@ export class MultipleChoiceSlides {
   }
 
   ionViewDidEnter() {
-    SpinnerDialog.hide();
+    this.loader.hide();
   }
 
   ionViewWillLeave() {

@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
-import { SpinnerDialog } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { SelectedWords } from '../selected-words/selected-words';
 import { WordSlides } from '../../pages';
-import { AudioService, SliderService, SettingService } from '../../services';
+import { AudioService, SliderService, SettingService, LoaderService } from '../../services';
 import { SettingStatus } from '../../helpers/custom-types';
 
 @Component({
@@ -21,7 +20,8 @@ export class AudioSetting implements OnInit, OnDestroy {
 
   constructor(private audioService: AudioService, private settingService: SettingService,
     private sliderService: SliderService, private translate: TranslateService,
-    private navCtrl: NavController, private modalCtrl: ModalController) {
+    private navCtrl: NavController, private modalCtrl: ModalController,
+    private loader: LoaderService) {
   }
 
   toggleFullHeight() {
@@ -45,8 +45,7 @@ export class AudioSetting implements OnInit, OnDestroy {
   }
 
   playAudio() {
-    SpinnerDialog.show(this.translate.instant('Processing'),
-      this.translate.instant('Please_wait'), false);
+    this.loader.show();
     if (this.isContinue) {
       this.audioService.generateListWordOrder();
       this.audioService.playCurrentTrack();

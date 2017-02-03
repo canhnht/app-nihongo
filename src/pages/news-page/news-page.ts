@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
-import { SpinnerDialog, MediaPlugin, Network, Toast } from 'ionic-native';
+import { MediaPlugin, Network, Toast } from 'ionic-native';
 import { NavController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { DbService } from '../../services';
+import { DbService, LoaderService } from '../../services';
 import { NewsDetail } from '../news-detail/news-detail';
 import { NHK_URL } from '../../helpers/constants';
 
@@ -15,12 +15,12 @@ export class NewsPage {
   media: MediaPlugin = null;
 
   constructor(private navCtrl: NavController, private dbService: DbService,
-    private http: Http, private translate: TranslateService) {
+    private http: Http, private translate: TranslateService, private loader: LoaderService) {
     this.dbService.getAllNews().then((listNews) => this.listNews = listNews);
   }
 
   ionViewDidEnter() {
-    SpinnerDialog.hide();
+    this.loader.hide();
   }
 
   refreshNews(refresher) {
