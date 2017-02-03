@@ -1,76 +1,47 @@
+<ion-header>
+  <ion-navbar color="primary" class="words-navbar">
+    <ion-title>
+      unit.name - course.name
+    </ion-title>
+    <ion-buttons end>
+      <custom-checkbox [checked]="false"
+        (onClick)="toggleSelectAll()">
+      </custom-checkbox>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
 
-<ion-content>
-  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
-  </ion-icon>
-  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
-  </ion-icon>
-  <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
-    <ion-icon name="close"></ion-icon>
-  </button>
-  <ion-slides #vocabSlider [options]="sliderOptions" (ionDidChange)="onSlideChanged($event)">
-    <ion-slide>
-      <div class="word-slide slide-content-0">
-        <div class="kanji">words[slide.nr].kanji</div>
-        <div class="row">
-          <ion-badge>{{'Pronunciation' | translate}}:</ion-badge>
-          <span>phonetic,</span>
+<ion-content class="words-page">
+  <ion-list>
+    <ion-item text-wrap
+      (click)="selectWord($event, word)">
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark" [class.hidden]="true" (click)="addToPlaylist($event, word)" icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark" [class.hidden]="false" (click)="addToPlaylist($event, word)" icon-only>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div>
+          <h1>word.kanji</h1>
+          <span class="times-played">
+            <ion-icon name="headset"></ion-icon> 10
+          </span>
+          <span class="last-played">
+            <ion-icon name="calendar"></ion-icon> 5:04 PM
+          </span>
         </div>
-        <div class="row">
-          <ion-badge>{{'Meaning' | translate}}:</ion-badge>
-          <span>meaning.mean,</span>
-        </div>
-        <div class="row">
-          <ion-badge>{{'Example' | translate}}:</ion-badge><br/>
-          <strong>words[slide.nr].mainExample.content</strong><br/>
-          words[slide.nr].mainExample.meaning
-        </div>
-        <div class="separator-other">{{'Others' | translate}}</div>
-        <div class="example">
-          <strong>example.content</strong><br/>
-          example.meaning
-        </div>
-      </div>
-    </ion-slide>
-  </ion-slides>
-  <div class="btn-group">
-    <button ion-button color="secondary" round class="btn-repeat"
-      (click)="repeatCurrentVocabulary($event)" icon-only>
-      <ion-icon name="volume-up"></ion-icon>
-    </button>
-    <button ion-button color="danger" round   class="btn-bookmark"
-      (click)="addToPlaylist($event)" icon-only>
-      <ion-icon name="add"></ion-icon>
-    </button>
-  </div>
+      </ion-label>
+      <custom-checkbox item-right (onClick)="checkWord($event, word)"
+        [checked]="false">
+      </custom-checkbox>
+    </ion-item>
+  </ion-list>
 </ion-content>
+<ion-footer>
+  <mod-controller></mod-controller>
+</ion-footer>
 
-<div class="question-popup" *ngIf="false">
-  <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
-    <ion-icon name="close"></ion-icon>
-  </button>
-  <div class="question" *ngIf="true">
-    slide.question
-  </div>
-  <i class="fa fa-volume-up question voice" *ngIf="false"
-    (click)="playQuestion(slide)"></i>
-  <div class="option" (click)="answerQuestion(slide, 0)"
-    >
-    <div class="bullet">A</div>
-    slide.options[0]
-  </div>
-  <div class="option" (click)="answerQuestion(slide, 1)"
-    >
-    <div class="bullet">B</div>
-    slide.options[1]
-  </div>
-  <div class="option" (click)="answerQuestion(slide, 2)"
-    >
-    <div class="bullet">C</div>
-    slide.options[2]
-  </div>
-  <div class="option" (click)="answerQuestion(slide, 3)"
-    >
-    <div class="bullet">D</div>
-    slide.options[3]
-  </div>
-</div>

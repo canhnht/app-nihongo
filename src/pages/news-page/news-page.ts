@@ -23,22 +23,6 @@ export class NewsPage {
     this.loader.hide();
   }
 
-  refreshNews(refresher) {
-    if (Network.type === 'none' || Network.type === 'unknown') {
-      refresher.complete();
-      return;
-    }
-    this.http.get(NHK_URL).toPromise().then((res) => {
-      this.listNews = res.json();
-      return this.dbService.addOrUpdateNews(this.listNews).then(() => {
-        refresher.complete();
-      });
-    }).catch(err => {
-      refresher.complete();
-      Toast.showShortBottom(this.translate.instant('Download_news_error')).subscribe(() => {});
-    });
-  }
-
   playNews(news) {
     this.media = new MediaPlugin(news.voiceUrl);
     this.media.play();

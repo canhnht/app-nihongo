@@ -94,6 +94,11 @@ export class TabHomePage {
     } else if (course.downloading) {
       this.openModalDownload(course);
     } else {
+      this.analytics.logEvent(Events.DOWNLOAD_COURSE, {
+        [Params.COURSE_ID]: course.id,
+        [Params.COURSE_NAME]: course.name,
+        [Params.COURSE_LEVEL]: course.level
+      });
       this.openModalDownload(course);
       course.downloading = true;
       this.downloadService.downloadCourse(course).then(() => {
@@ -149,7 +154,6 @@ export class TabHomePage {
   }
 
   refreshCourses(refresher) {
-    this.analytics.logEvent(Events.DOWNLOAD_COURSE);
     if (Network.type === 'none' || Network.type === 'unknown' || this.downloadService.downloadingCourseId) {
       refresher.complete();
       return;

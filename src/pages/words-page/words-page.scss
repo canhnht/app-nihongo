@@ -17,6 +17,14 @@
         display: none;
       }
     }
+
+    .times-played, .last-played {
+      font-size: 12px;
+      color: #888;
+    }
+    .last-played {
+      margin-left: 20px;
+    }
   }
 }
 

@@ -7,14 +7,6 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="tab-home-page">
-  <ion-refresher (ionRefresh)="refreshCourses($event)">
-    <ion-refresher-content
-      pullingIcon="arrow-dropdown"
-      [pullingText]="'Pull_to_refresh_courses' | translate"
-      refreshingSpinner="circles"
-      [refreshingText]="'Downloading...' | translate">
-    </ion-refresher-content>
-  </ion-refresher>
   <ion-card>
     <ion-card-header>
       <ion-badge item-left>

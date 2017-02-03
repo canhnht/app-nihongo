@@ -31,9 +31,7 @@ export class WordsPage {
     this.course = this.navParams.data.selectedCourse;
     this.dbService.getWordsByUnitId(this.unit.id).then((words) => {
       this.words = words;
-      this.searchedWords = this.words.filter(word => {
-        return word.kanji.startsWith(this.value);
-      });
+      this.searchedWords = this.filterWords(this.words, this.value);
     });
 
     if (this.settingService.selectedType === this.unit.id)
@@ -92,9 +90,17 @@ export class WordsPage {
   }
 
   search($event) {
-    this.value = $event.value;
-    this.searchedWords = this.words.filter(word => {
-      return word.kanji.startsWith(this.value);
+    this.value = $event.target.value;
+    this.searchedWords = this.filterWords(this.words, this.value);
+  }
+
+  private filterWords(words, value) {
+    return words.filter((word) => {
+      let ok = (word.kanji.indexOf(value) !== -1);
+      word.phonetic.forEach((e) => {
+        ok = ok || (e.indexOf(value) !== -1);
+      });
+      return ok;
     });
   }
 }
