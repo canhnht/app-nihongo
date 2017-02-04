@@ -1,47 +1,75 @@
 <ion-header>
-  <ion-navbar color="primary" class="words-navbar">
-    <ion-title>
-      unit.name - course.name
-    </ion-title>
-    <ion-buttons end>
-      <custom-checkbox [checked]="false"
-        (onClick)="toggleSelectAll()">
-      </custom-checkbox>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle left icon-only>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Profile</ion-title>
+    <ion-buttons end *ngIf="true">
+      <button ion-button icon-only (click)="logoutFacebook()">
+        <ion-icon large name="log-out"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
-  <ion-toolbar>
-    <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
-  </ion-toolbar>
 </ion-header>
-
-<ion-content class="words-page">
-  <ion-list>
-    <ion-item text-wrap
-      (click)="selectWord($event, word)">
-      <ion-label class="word-item">
-        <button ion-button clear large class="word-bookmark" [class.hidden]="true" (click)="addToPlaylist($event, word)" icon-only>
-          <i class="fa fa-bookmark icon-bookmark"></i>
-        </button>
-        <button ion-button clear large class="word-bookmark" [class.hidden]="false" (click)="addToPlaylist($event, word)" icon-only>
-          <i class="fa fa-bookmark-o icon-bookmark"></i>
-        </button>
-        <div>
-          <h1>word.kanji</h1>
-          <span class="times-played">
-            <ion-icon name="headset"></ion-icon> 10
-          </span>
-          <span class="last-played">
-            <ion-icon name="calendar"></ion-icon> 5:04 PM
-          </span>
+<ion-content class="tab-user-page">
+  <div class="login-request" *ngIf="false">
+    <ion-icon name="person" class="icon-person" large></ion-icon>
+    <p>{{'Log_in_to_see_profile' | translate}}</p>
+    <button ion-button clear (click)="loginWithFacebook()">
+      <i class="fa fa-facebook-f icon-fb" color="primary"></i>
+      {{'Login_facebook' | translate}}
+    </button>
+  </div>
+  <ion-card *ngIf="true">
+    <ion-row>
+      <ion-col>
+        <ion-thumbnail class="avatar">
+          <img src="currentUser.avatarUrl">
+        </ion-thumbnail>
+      </ion-col>
+      <ion-col padding>
+        <h1>currentUser.displayName</h1>
+        <ion-badge *ngIf="true">Lv currentUser.level</ion-badge>
+        <div margin-top *ngIf="true">
+          <p>{{'Words_learned' | translate}}: <strong>currentUser.numberWordsLearned</strong></p>
+          <p>{{'Exp_points' | translate}}: <strong>currentUser.exp</strong></p>
+          <p>{{'Current_course' | translate}}:</p>
+          <strong>currentUser.currentCourse ? 'Mimi kara oboeru N3' : 'Not Available'</strong>
         </div>
-      </ion-label>
-      <custom-checkbox item-right (onClick)="checkWord($event, word)"
-        [checked]="false">
-      </custom-checkbox>
-    </ion-item>
-  </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <ion-card *ngIf="true">
+    <ion-card-header>
+      History
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <button ion-item>
+          <ion-avatar item-left>
+            <img src="assets/images/tmp/N3Logo.png">
+          </ion-avatar>
+          <h3>Mimi kara Oboeru N3</h3>
+          <ion-badge item-right>Current</ion-badge>
+        </button>
+        <button ion-item>
+          <ion-avatar item-left>
+            <img src="assets/images/tmp/N3Logo.png">
+          </ion-avatar>
+          <h3>Mimi kara Oboeru N3</h3>
+          <p item-right>12/01/2017</p>
+        </button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-fab bottom right>
+    <button ion-fab><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list side="top">
+      <a ion-fab text-wrap href="mailto:techybraingroup@gmail.com">
+        <ion-icon name="mail"></ion-icon>
+      </a>
+      <button ion-fab><ion-icon name="star"></ion-icon></button>
+      <button ion-fab><ion-icon name="share"></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>
-<ion-footer>
-  <mod-controller></mod-controller>
-</ion-footer>
-
