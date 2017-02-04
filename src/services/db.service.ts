@@ -217,6 +217,17 @@ export class DbService {
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
+  getRandomWords(numberWords) {
+    let sql = 'SELECT * FROM `word` ORDER BY RANDOM() LIMIT ?';
+    return this.db.executeSql(sql, [ numberWords ]).then((resultSet) => {
+      let data = this.convertResultSetToArray(resultSet);
+      data.forEach((word) => {
+        this.processWord(word);
+      });
+      return data;
+    }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
   private processWord(word) {
     word.mainExample = JSON.parse(word.mainExample);
     word.meaning = JSON.parse(word.meaning);

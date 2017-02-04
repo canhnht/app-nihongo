@@ -52,4 +52,5 @@
     </plugin>
     <plugin name="cordova-plugin-nativeaudio" spec="~3.0.7" />
     <plugin name="cordova-plugin-firebase" spec="~0.1.19" />
+    <plugin name="de.appplant.cordova.plugin.local-notification" spec="~0.8.4" />
 </widget>

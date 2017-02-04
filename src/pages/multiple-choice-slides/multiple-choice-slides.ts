@@ -1,10 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, Slides, NavParams } from 'ionic-angular';
-import { Toast, NativeAudio, TextToSpeech } from 'ionic-native';
-import { Subscription } from 'rxjs';
+import { NativeAudio, TextToSpeech } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import _ from 'lodash';
-import { AudioPlayer } from '../../components';
 import { QuestionType } from '../../helpers/custom-types';
 import { LoaderService } from '../../services';
 

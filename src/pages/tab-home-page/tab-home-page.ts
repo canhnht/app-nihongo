@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs';
-import { Toast, File, Network } from 'ionic-native';
+import { Toast, Network } from 'ionic-native';
 import { App, NavController, AlertController, ModalController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { NewsPage } from '../news-page/news-page';
@@ -13,6 +13,7 @@ import { AnalyticsService, Events, Params } from '../../services';
 import { NHK_URL } from '../../helpers/constants';
 import * as utils from '../../helpers/utils';
 
+declare var cordova: any;
 declare var require: any;
 let firebase = require('firebase');
 
@@ -28,7 +29,7 @@ export class TabHomePage {
   downloadNewsSubscription: Subscription;
   latestNews: any = null;
   latestNewsSubscription: Subscription;
-  loadingNews: boolean = true;
+  loadingNews: boolean = false;
   modalDownloadCourse: any;
   initDbSubscription: Subscription;
   dataURI: string;
@@ -136,11 +137,9 @@ export class TabHomePage {
   }
 
   downloadNews() {
+    if (Network.type === 'none' || Network.type === 'unknown') return;
+
     this.analytics.logEvent(Events.DOWNLOAD_NEWS);
-    if (Network.type === 'none' || Network.type === 'unknown') {
-      Toast.showShortBottom(this.translate.instant('Download_news_error')).subscribe(() => {});
-      return;
-    }
     this.loadingNews = true;
     this.downloadNewsSubscription = this.http.get(NHK_URL)
       .map(res => res.json())
@@ -151,37 +150,6 @@ export class TabHomePage {
         this.loadingNews = false;
         Toast.showShortBottom(this.translate.instant('Download_news_error')).subscribe(() => {});
       });
-  }
-
-  refreshCourses(refresher) {
-    if (Network.type === 'none' || Network.type === 'unknown' || this.downloadService.downloadingCourseId) {
-      refresher.complete();
-      return;
-    }
-    firebase.database().ref('courses').once('value').then((snapshot) => {
-      let courses = snapshot.val();
-      let listCourse = Object.keys(courses).map((courseId) => {
-        let course = courses[courseId];
-        delete course.units;
-        course.id = courseId;
-        return course;
-      });
-      let imagesPromise = listCourse.map((course) => this.downloadImage(course));
-      return Promise.all(imagesPromise);
-    }).then((listCourse) => {
-      return this.dbService.addOrUpdateCourses(listCourse);
-    }).then(() => {
-      refresher.complete();
-    }).catch((err) => {
-      refresher.complete();
-    });
-  }
-
-  private downloadImage(course) {
-    return utils.downloadImageData(course.imageUrl).then((imageData) => {
-      course.imageUrl = imageData;
-      return course;
-    });
   }
 }
 
