@@ -12,7 +12,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="tab-user-page">
-  <div class="login-request" *ngIf="true">
+  <div class="login-request" *ngIf="false">
     <ion-icon name="person" class="icon-person" large></ion-icon>
     <p>{{'Log_in_to_see_profile' | translate}}</p>
     <button ion-button clear (click)="loginWithFacebook()">
@@ -20,26 +20,26 @@
       {{'Login_facebook' | translate}}
     </button>
   </div>
-  <ion-card *ngIf="false">
+  <ion-card *ngIf="true">
     <ion-row>
       <ion-col>
         <ion-thumbnail class="avatar">
-          <img [src]="currentUser.avatarUrl">
+          <img src="currentUser.avatarUrl">
         </ion-thumbnail>
       </ion-col>
       <ion-col padding>
-        <h1>{{currentUser.displayName}}</h1>
-        <ion-badge *ngIf="!!currentUser.level">Lv {{currentUser.level}}</ion-badge>
-        <div margin-top *ngIf="!!currentUser.level">
-          <p>{{'Words_learned' | translate}}: <strong>{{currentUser.numberWordsLearned}}</strong></p>
-          <p>{{'Exp_points' | translate}}: <strong>{{currentUser.exp}}</strong></p>
+        <h1>currentUser.displayName</h1>
+        <ion-badge *ngIf="true">Lv currentUser.level</ion-badge>
+        <div margin-top *ngIf="true">
+          <p>{{'Words_learned' | translate}}: <strong>currentUser.numberWordsLearned</strong></p>
+          <p>{{'Exp_points' | translate}}: <strong>currentUser.exp</strong></p>
           <p>{{'Current_course' | translate}}:</p>
-          <strong>{{currentUser.currentCourse ? 'Mimi kara oboeru N3' : 'Not Available'}}</strong>
+          <strong>currentUser.currentCourse ? 'Mimi kara oboeru N3' : 'Not Available'</strong>
         </div>
       </ion-col>
     </ion-row>
   </ion-card>
-  <ion-card *ngIf="false">
+  <ion-card *ngIf="true">
     <ion-card-header>
       History
     </ion-card-header>
