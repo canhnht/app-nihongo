@@ -30,6 +30,13 @@
           {{'My_playlist' | translate}}
         </ion-label>
       </button>
+      <button ion-item menuClose text-wrap
+        (click)="openPage(aboutUsPage)">
+        <ion-label class="menu-item">
+          <ion-icon color="primary" name="people" class="menu-icon"></ion-icon>
+          {{'About_us' | translate}}
+        </ion-label>
+      </button>
     </ion-list>
   </ion-content>
 </ion-menu>
