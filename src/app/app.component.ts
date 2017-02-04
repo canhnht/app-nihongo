@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
 import { StatusBar, Splashscreen, NativeAudio } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage } from '../pages';
+import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage, AboutUsPage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
 import { ASSETS_BASE_URL } from '../helpers/constants';
 import { firebaseConfig } from './config-local';
@@ -20,6 +20,7 @@ export class MyApp {
   playlistsPage = PlaylistsPage;
   feedbackPage = FeedbackPage;
   settingPage = SettingPage;
+  aboutUsPage = AboutUsPage;
 
   constructor(private platform: Platform, private translate: TranslateService,
     private storageService: LocalStorageService, private dbService: DbService) {
@@ -50,19 +51,7 @@ export class MyApp {
     this.translate.use(userLang);
   }
 
-  openPage(page, params, isBack = false) {
-    let lastView = this.nav.last();
-    while (lastView.component !== HomePage
-      && lastView.component !== PlaylistsPage
-      && lastView.component !== FeedbackPage
-      && lastView.component !== SettingPage
-      ) {
-      lastView = this.nav.getPrevious(lastView);
-    }
-    if (isBack) {
-      if (lastView.component !== page)
-        this.nav.push(page, params);
-    } else
-      this.nav.setRoot(page, params);
+  openPage(page) {
+    this.nav.setRoot(page);
   }
 }
