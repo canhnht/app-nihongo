@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
 import { StatusBar, Splashscreen, NativeAudio, LocalNotifications } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage, AboutUsPage } from '../pages';
+import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage, AboutUsPage, SentencePage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
 import { ASSETS_BASE_URL } from '../helpers/constants';
 import { firebaseConfig } from './config-local';
@@ -45,6 +45,11 @@ export class MyApp {
       let splashScreen = document.getElementById('splashscreen');
       splashScreen.style.display = 'none';
 
+      LocalNotifications.on('click', (notification) => {
+        let { word, sentence } = JSON.parse(notification.data);
+        this.nav.setRoot(SentencePage, { word, sentence });
+      });
+      LocalNotifications.cancelAll();
       document.addEventListener('pause', () => {
         this.generateLocalNotifications();
       });
@@ -57,14 +62,18 @@ export class MyApp {
       else return Promise.resolve(true);
     }).then((granted) => {
       if (granted)
-        return this.dbService.getRandomWords(5).then((randomWords) => {
+        return this.dbService.getRandomWords(3).then((randomWords) => {
           let notifications = randomWords.map((word, index) => {
             return {
               id: index,
               title: `${this.translate.instant('Learn_now')} - ${word.kanji}`,
               text: word.mainExample.content,
               icon: 'res://icon.png',
-              every: 'day'
+              every: 'day',
+              data: {
+                word,
+                sentence: word.mainExample
+              }
             };
           });
           notifications.forEach((item) => LocalNotifications.schedule(item));

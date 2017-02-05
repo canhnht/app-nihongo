@@ -1,0 +1,59 @@
+
+.sentence-page {
+  background: #f4f4f4;
+
+  .word-content {
+    position: absolute;
+    background: white;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    border-radius: 10px;
+    text-align: left;
+    padding: 15px 0;
+    overflow-y: auto;
+
+    .sentence {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 15px;
+    }
+
+    .sentence-meaning {
+      font-size: 18px;
+      margin: 15px;
+    }
+
+    .separator {
+      width: 100%;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 10px 0;
+      margin: 15px 0;
+    }
+
+    .kanji {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 0 15px;
+
+      .voice {
+        float: right;
+      }
+    }
+
+    .row {
+      margin-top: 15px;
+      margin-left: 15px;
+    }
+
+    .example {
+      margin-left: 15px;
+
+      + .example {
+        margin-top: 20px;
+      }
+    }
+  }
+}
