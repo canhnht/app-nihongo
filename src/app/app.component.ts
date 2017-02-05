@@ -49,8 +49,7 @@ export class MyApp {
         let { word, sentence } = JSON.parse(notification.data);
         this.nav.setRoot(SentencePage, { word, sentence });
       });
-      LocalNotifications.cancelAll();
-      document.addEventListener('pause', () => {
+      LocalNotifications.cancelAll().then(() => {
         this.generateLocalNotifications();
       });
     });
