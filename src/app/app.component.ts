@@ -61,9 +61,10 @@ export class MyApp {
           let notifications = randomWords.map((word, index) => {
             return {
               id: index,
-              title: word.kanji,
+              title: `${this.translate.instant('Learn_now')} - ${word.kanji}`,
               text: word.mainExample.content,
               icon: 'res://icon.png',
+              every: 'day'
             };
           });
           notifications.forEach((item) => LocalNotifications.schedule(item));
