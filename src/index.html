@@ -25,10 +25,58 @@
 
   <link href="assets/css/font-awesome.min.css" rel="stylesheet">
   <link href="build/main.css" rel="stylesheet">
+  <link href="build/swiper.min.css" rel="stylesheet">
 
+  <style>
+    #splashscreen {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      background: #f55831;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Roboto", "Helvetica Neue", sans-serif;
+      color: white;
+      font-weight: bold;
+    }
+
+    #app-info {
+      text-align: right;
+    }
+
+    #app-name {
+      font-size: 50px;
+      padding: 3px 5px;
+    }
+
+    #app-author {
+      font-size: 16px;
+    }
+
+    #app-version {
+      margin-left: 5px;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-
+  <div id="splashscreen">
+    <div id="app-info">
+      <div id="app-name">
+        MINAGOI
+      </div>
+      <div id="app-author">
+        by Techybrain
+      </div>
+    </div>
+    <span id="app-version">
+      v1.1
+    </span>
+  </div>
   <!-- Ionic's root component and where the app will load -->
   <ion-app></ion-app>
 
