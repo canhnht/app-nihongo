@@ -25,7 +25,6 @@
 
   <link href="assets/css/font-awesome.min.css" rel="stylesheet">
   <link href="build/main.css" rel="stylesheet">
-  <link href="build/swiper.min.css" rel="stylesheet">
 
   <style>
     #splashscreen {
@@ -35,13 +34,12 @@
       bottom: 0;
       left: 0;
       z-index: 100;
-      background: #f55831;
+      background: white;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       font-family: "Roboto", "Helvetica Neue", sans-serif;
-      color: white;
-      font-weight: bold;
     }
 
     #app-info {
@@ -49,17 +47,26 @@
     }
 
     #app-name {
+      background: #f55831;
+      color: white;
       font-size: 50px;
-      padding: 3px 5px;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-weight: bold;
     }
 
     #app-author {
-      font-size: 16px;
+      font-size: 18px;
+      color: #f55831;
+      margin-top: 8px;
+      font-weight: bold;
     }
 
-    #app-version {
-      margin-left: 5px;
+    #loading-tip {
+      position: absolute;
+      bottom: 25%;
       font-size: 18px;
+      color: #888;
     }
   </style>
 </head>
@@ -73,9 +80,9 @@
         by Techybrain
       </div>
     </div>
-    <span id="app-version">
-      v1.1
-    </span>
+    <div id="loading-tip">
+      Loading...
+    </div>
   </div>
   <!-- Ionic's root component and where the app will load -->
   <ion-app></ion-app>

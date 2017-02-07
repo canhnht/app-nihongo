@@ -11,13 +11,15 @@
     content: '';
     display: inline-block;
     vertical-align: text-top;
-    width: 30px;
-    height: 30px;
-    background: #ccc;
+    width: 28px;
+    height: 28px;
+    border: 2px solid #aaa;
+    background: white;
   }
 
   &:checked + label:before {
     background: #32db64;
+    border: 2px solid #32db64;
   }
 
   // Checkmark. Could be replaced with an image
