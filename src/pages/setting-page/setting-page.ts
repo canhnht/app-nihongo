@@ -1,5 +1,4 @@
 import { Component, NgZone } from '@angular/core';
-import { AlertController } from 'ionic-angular';
 import { Toast } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { Subscription } from 'rxjs';
@@ -15,9 +14,8 @@ export class SettingPage {
   loginText: string;
   authSubscription: Subscription;
 
-  constructor(private alertCtrl: AlertController, private authService: AuthService,
-    private translate: TranslateService, private storageService: LocalStorageService,
-    private zone: NgZone) {
+  constructor(private authService: AuthService, private zone: NgZone,
+    private translate: TranslateService, private storageService: LocalStorageService) {
     this.storageService.get('time_between_words').then((res) => this.timeBetweenWords = res);
     this.storageService.get('repeat_each_word').then((res) => this.repeatEachWord = res);
     this.storageService.get('language').then((res) => this.language = res);

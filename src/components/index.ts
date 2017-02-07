@@ -8,3 +8,4 @@ export { SelectedWords } from './selected-words/selected-words';
 export { ProgressBarComponent } from './progress-bar/progress-bar';
 export { MultipleChoiceQuestion } from './multiple-choice-question/multiple-choice-question';
 export { ModControllerComponent } from './mod-controller/mod-controller';
+export { SettingWord } from './setting-word/setting-word';

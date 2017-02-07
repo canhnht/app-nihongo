@@ -3,6 +3,11 @@
     <ion-title>
       {{unit.name}} - {{course.name}}
     </ion-title>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="openSettings()">
+        <ion-icon name="settings"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-buttons end>
       <custom-checkbox [checked]="selectedWords.length == words.length && words.length > 0"
         (onClick)="toggleSelectAll()">

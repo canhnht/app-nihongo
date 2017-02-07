@@ -7,7 +7,7 @@ import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, TabHomePage, TabUserPage,  ModalDownloadPage, MultipleChoiceSlides, MatchingWords, LearningSlides, AboutUsPage, SentencePage } from '../pages';
 import { LocalStorageService, SettingService, SliderService, DbService, AudioService, AuthService, DownloadService, AnalyticsService, LoaderService } from '../services';
-import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent, ModControllerComponent, MultipleChoiceQuestion} from '../components';
+import { AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent, ModControllerComponent, MultipleChoiceQuestion, SettingWord } from '../components';
 import { CustomDatePipe, CustomTimePipe } from '../pipes';
 
 export function makeTranslateFactory(http: Http) {
@@ -22,7 +22,7 @@ export function makeStorageFactory() {
   declarations: [
     MyApp,
     LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, TabHomePage, TabUserPage, ModalDownloadPage, MultipleChoiceSlides, MatchingWords, LearningSlides, AboutUsPage, SentencePage,
-    AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent,ModControllerComponent,MultipleChoiceQuestion,
+    AudioBar, AudioPlayer, AudioSetting, CustomCheckbox, PlaylistOptions, SelectedWords, ProgressBarComponent,ModControllerComponent,MultipleChoiceQuestion, SettingWord,
     CustomDatePipe, CustomTimePipe
   ],
   imports: [
@@ -36,7 +36,7 @@ export function makeStorageFactory() {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, PlaylistOptions, SelectedWords, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, TabHomePage, TabUserPage, ModalDownloadPage, MultipleChoiceSlides, MatchingWords, LearningSlides, AboutUsPage, SentencePage
+    LoginPage, HomePage, NewsPage, NewsDetail, UnitsPage, WordsPage, PlaylistOptions, SelectedWords, WordSlides, PlaylistsPage, PlaylistDetail, FeedbackPage, SettingPage, PlaygroundPage, TabHomePage, TabUserPage, ModalDownloadPage, MultipleChoiceSlides, MatchingWords, LearningSlides, AboutUsPage, SentencePage, SettingWord
   ],
   providers: [
     {

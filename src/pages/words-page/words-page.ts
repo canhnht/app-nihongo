@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { AudioService, SliderService, DbService, SettingService, LoaderService } from '../../services';
 import { WordSlides } from '../word-slides/word-slides';
-import { PlaylistOptions } from '../../components';
+import { PlaylistOptions, SettingWord } from '../../components';
 
 @Component({
   templateUrl: 'words-page.html',
@@ -78,6 +78,11 @@ export class WordsPage {
       word.bookmarked = isBookmarked;
       this.dbService.updateWordPlaylist(word.id, diffPlaylists);
     });
+    modal.present();
+  }
+
+  openSettings() {
+    let modal = this.modalCtrl.create(SettingWord);
     modal.present();
   }
 

@@ -37,7 +37,8 @@
         <ion-icon color="primary" name="repeat" class="setting-icon"></ion-icon>
         {{'Repeat_times' | translate}}
       </ion-label>
-      <ion-select [(ngModel)]="repeatEachWord" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}" (ionChange)="setRepeatEachWord()">
+      <ion-select [(ngModel)]="repeatEachWord" cancelText="{{'Cancel' | translate}}"
+        okText="{{'OK' | translate}}" (ionChange)="setRepeatEachWord()">
         <ion-option value="1">1 {{'time' | translate}}</ion-option>
         <ion-option value="2">2 {{'time' | translate}}</ion-option>
         <ion-option value="3">3 {{'time' | translate}}</ion-option>

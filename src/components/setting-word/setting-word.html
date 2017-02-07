@@ -1,0 +1,64 @@
+
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{'Setting' | translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-badge>{{'Listening_mode' | translate}}</ion-badge>
+    </ion-card-header>
+    <ion-list>
+      <ion-item text-wrap>
+        <ion-label>
+          <ion-icon name="timer"></ion-icon>
+          {{'Break_between_words' | translate}}
+        </ion-label>
+        <ion-select [(ngModel)]="timeBetweenWords"
+          cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}"
+          (ionChange)="setTimeBetweenWords()">
+          <ion-option value="0">0 {{'second' | translate}}</ion-option>
+          <ion-option value="3">3 {{'second' | translate}}</ion-option>
+          <ion-option value="5">5 {{'second' | translate}}</ion-option>
+          <ion-option value="10">10 {{'second' | translate}}</ion-option>
+          <ion-option value="15">15 {{'second' | translate}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item text-wrap>
+        <ion-label>
+          <ion-icon name="repeat"></ion-icon>
+          {{'Repeat_times' | translate}}
+        </ion-label>
+        <ion-select [(ngModel)]="repeatEachWord" cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}" (ionChange)="setRepeatEachWord()">
+          <ion-option value="1">1 {{'time' | translate}}</ion-option>
+          <ion-option value="2">2 {{'time' | translate}}</ion-option>
+          <ion-option value="3">3 {{'time' | translate}}</ion-option>
+          <ion-option value="5">5 {{'time' | translate}}</ion-option>
+          <ion-option value="10">10 {{'time' | translate}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-badge>Others</ion-badge>
+    </ion-card-header>
+    <ion-list>
+      <ion-item text-wrap>
+        <ion-label>
+          <ion-icon name="photos"></ion-icon>
+          {{'Display' | translate}}
+        </ion-label>
+        <ion-select [(ngModel)]="modeDisplay" multiple="true"
+          cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
+          <ion-option value="kanji" selected="true">Kanji</ion-option>
+          <ion-option value="hiragana">Hiragana</ion-option>
+          <ion-option value="meaning">Meaning</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+</ion-content>
