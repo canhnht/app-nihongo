@@ -1,25 +1,61 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <button ion-button menuToggle left>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>{{'About_us' | translate}}</ion-title>
+  <ion-navbar color="primary" class="words-navbar">
+    <ion-title>
+      unit.name - course.name
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="openSettings()">
+        <ion-icon name="settings"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <custom-checkbox [checked]="false"
+        (onClick)="toggleSelectAll()">
+      </custom-checkbox>
+    </ion-buttons>
   </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content class="about-us-page">
-  <h2>Techybrain</h2>
-  <h4>Thông tin chung</h4>
-  <p class="description">
-    <ion-badge>Email</ion-badge> <a href="mailto:techybraingroup@gmail.com">techybraingroup@gmail.com</a><br/>
-    <ion-badge>Facebook</ion-badge> Techybrain<br/>
-    <ion-badge>Blog</ion-badge> <a href="toithacmac.wordpress.com">toithacmac.wordpress.com</a>
-  </p>
-  <h4>Các ứng dụng khác</h4>
-  <ul>
-    <li>Mygoi</li>
-  </ul>
-  <custom-checkbox [checked]="false"></custom-checkbox>
-  <br/>
-  <custom-checkbox [checked]="true"></custom-checkbox>
+<ion-content class="words-page">
+  <ion-list>
+    <ion-item text-wrap
+      (click)="selectWord($event, word)">
+      <ion-label class="word-item">
+        <button ion-button clear large class="word-bookmark"
+          [class.hidden]="true" (click)="addToPlaylist($event, word)"
+          icon-only>
+          <i class="fa fa-bookmark icon-bookmark"></i>
+        </button>
+        <button ion-button clear large class="word-bookmark"
+          [class.hidden]="false" (click)="addToPlaylist($event, word)"
+          icon-only text-center>
+          <i class="fa fa-bookmark-o icon-bookmark"></i>
+        </button>
+        <div class="word-content">
+          <h1>word.kanji</h1>
+          <h2>
+            <span>word.hiragana</span>
+            <span>-</span>
+            <span>word.meaning word.meaning word.meaning word.meaning word.meaning</span>
+          </h2>
+          <span class="times-played" *ngIf="true">
+            <ion-icon name="headset"></ion-icon> 1
+          </span>
+          <span class="last-played" *ngIf="true">
+            <ion-icon name="calendar"></ion-icon> 10-10-10
+          </span>
+        </div>
+      </ion-label>
+      <custom-checkbox item-right (onClick)="checkWord($event, word)"
+        [checked]="false">
+      </custom-checkbox>
+    </ion-item>
+  </ion-list>
 </ion-content>
+<ion-footer>
+  <mod-controller></mod-controller>
+</ion-footer>
+

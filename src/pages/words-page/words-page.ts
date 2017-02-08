@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { AudioService, SliderService, DbService, SettingService, LoaderService } from '../../services';
+import { AudioService, SliderService, DbService, SettingService, LoaderService, LocalStorageService } from '../../services';
 import { WordSlides } from '../word-slides/word-slides';
 import { PlaylistOptions, SettingWord } from '../../components';
 
@@ -18,12 +18,14 @@ export class WordsPage {
   settingSubscription: Subscription;
   currentCourseSubscription: Subscription;
   value: string = '';
+  displayHiragana: boolean;
+  displayMeaning: boolean;
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
     private dbService: DbService, private settingService: SettingService,
     private translate: TranslateService, private modalCtrl: ModalController,
-    private loader: LoaderService) {
+    private loader: LoaderService, private storageService: LocalStorageService) {
   }
 
   ionViewWillEnter() {
@@ -42,6 +44,11 @@ export class WordsPage {
           this.selectedWords = setting.selectedList;
       }
     );
+
+    this.storageService.get('display_mode').then((res) => {
+      this.displayHiragana = res.indexOf('hiragana') >= 0;
+      this.displayMeaning = res.indexOf('meaning') >= 0;
+    });
   }
 
   ionViewDidEnter() {
@@ -83,6 +90,12 @@ export class WordsPage {
 
   openSettings() {
     let modal = this.modalCtrl.create(SettingWord);
+    modal.onDidDismiss(() => {
+      this.storageService.get('display_mode').then((res) => {
+        this.displayHiragana = res.indexOf('hiragana') >= 0;
+        this.displayMeaning = res.indexOf('meaning') >= 0;
+      });
+    });
     modal.present();
   }
 

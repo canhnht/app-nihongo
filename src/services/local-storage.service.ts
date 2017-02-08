@@ -6,7 +6,8 @@ export type LocalConfig = 'language'
                         | 'repeat_each_word'
                         | 'user'
                         | 'init'
-                        | 'init_db';
+                        | 'init_db'
+                        | 'display_mode';
 
 @Injectable()
 export class LocalStorageService {
@@ -24,15 +25,15 @@ export class LocalStorageService {
     });
   }
 
-  set(key, value) {
+  set(key: LocalConfig, value) {
     return this.storage.set(key, value);
   }
 
-  get(key) {
+  get(key: LocalConfig) {
     return this.storage.get(key);
   }
 
-  remove(key) {
+  remove(key: LocalConfig) {
     return this.storage.remove(key);
   }
 }

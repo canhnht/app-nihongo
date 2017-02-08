@@ -2,6 +2,11 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-title>{{'Setting' | translate}}</ion-title>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="close()">
+        {{'Close' | translate}}
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -52,11 +57,11 @@
           <ion-icon name="photos"></ion-icon>
           {{'Display' | translate}}
         </ion-label>
-        <ion-select [(ngModel)]="modeDisplay" multiple="true"
-          cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}">
-          <ion-option value="kanji" selected="true">Kanji</ion-option>
+        <ion-select [(ngModel)]="displayMode" multiple="true"
+          cancelText="{{'Cancel' | translate}}" okText="{{'OK' | translate}}"
+          (ionChange)="setDisplayMode()">
           <ion-option value="hiragana">Hiragana</ion-option>
-          <ion-option value="meaning">Meaning</ion-option>
+          <ion-option value="meaning">{{'Meaning' | translate}}</ion-option>
         </ion-select>
       </ion-item>
     </ion-list>
