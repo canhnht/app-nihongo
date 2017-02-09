@@ -39,6 +39,10 @@
     </ion-row>
   </ion-card>
 
+  <div class="courses-separator">
+    <div class="text">{{'Courses' | translate}}</div>
+  </div>
+
   <ion-card class="course-item" *ngFor="let course of courses; let i = index">
     <button ion-item (click)="checkBeforeDownload(course)">
       <ion-thumbnail item-left>

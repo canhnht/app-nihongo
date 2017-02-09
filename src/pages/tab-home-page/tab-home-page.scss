@@ -10,6 +10,28 @@
     margin-bottom: 10px;
   }
 
+  .courses-separator {
+    position: relative;
+    border-bottom: 3px solid #aaa;
+    height: 3px;
+    width: 100%;
+    text-align: center;
+    margin-top: 17px;
+    margin-bottom: 17px;
+
+    .text {
+      position: absolute;
+      width: 120px;
+      background: white;
+      color: #aaa;
+      margin-left: calc(50% - 60px);
+      bottom: -12px;
+      font-size: 17px;
+      font-weight: bold;
+      font-family: "Roboto", "Helvetica Neue", sans-serif;
+    }
+  }
+
   .course-item {
     position: relative;
 
