@@ -52,6 +52,7 @@ export class TabHomePage {
         this.loadData();
       }
     });
+    this.trackCourses();
   }
 
   private loadData() {
@@ -150,6 +151,31 @@ export class TabHomePage {
         this.loadingNews = false;
         Toast.showShortBottom(this.translate.instant('Download_news_error')).subscribe(() => {});
       });
+  }
+
+  trackCourses() {
+    firebase.database().ref('courses').on('value', (snapshot) => {
+      let courses = snapshot.val();
+      let listCourse = Object.keys(courses).map((courseId) => {
+        let course = courses[courseId];
+        delete course.units;
+        course.id = courseId;
+        return course;
+      });
+      let imagesPromise = listCourse.map((course) => this.downloadImage(course));
+      Promise.all(imagesPromise).then((listCourse) => {
+        return this.dbService.addOrUpdateCourses(listCourse);
+      }).then(() => {
+        Toast.showLongBottom(this.translate.instant('Courses_updated')).subscribe(() => {});
+      }).catch(utils.errorHandler(this.translate.instant('Error_update_courses')));
+    });
+  }
+
+  private downloadImage(course) {
+    return utils.downloadImageData(course.imageUrl).then((imageData) => {
+      course.imageUrl = imageData;
+      return course;
+    });
   }
 }
 

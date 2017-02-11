@@ -68,6 +68,7 @@
   "Error_login_facebook": "Xảy ra lỗi khi đăng nhập với Facebook",
   "Error_logout_facebook": "Xảy ra lỗi khi đăng xuất Facebook",
   "Error_analytics": "Xảy ra lỗi khi thu thập dữ liệu",
+  "Error_update_courses": "Xảy ra lỗi khi cập nhật khóa học",
   "Next_word_countdown": "Từ tiếp theo trong {{seconds}} giây",
   "Login_facebook": "Đăng nhập với Facebook",
   "Logout_facebook": "Đăng xuất ({{email}})",
@@ -114,5 +115,6 @@
   "Learning_mode": "Chế độ học",
   "Display": "Hiển thị",
   "Close": "Đóng",
-  "Courses": "Các khóa học"
+  "Courses": "Các khóa học",
+  "Courses_updated": "Các khóa học đã được cập nhật mới nhất"
 }

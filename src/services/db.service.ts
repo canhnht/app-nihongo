@@ -50,7 +50,7 @@ export class DbService {
   }
 
   getCourses() {
-    let sql = 'SELECT * FROM `course`';
+    let sql = 'SELECT * FROM `course` ORDER BY `id`';
     return this.db.executeSql(sql, []).then((resultSet) => {
       let data = this.convertResultSetToArray(resultSet);
       this.courses = data;

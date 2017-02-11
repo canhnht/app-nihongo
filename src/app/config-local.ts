@@ -5,3 +5,8 @@ export const firebaseConfig = {
   storageBucket: "mimi-kara-nihongo-stagin-c7e92.appspot.com",
   messagingSenderId: "996204881976"
 };
+
+export const oneSignalConfig = {
+  appID: 'd47210d7-7aa7-4dda-8a2d-bd2ceeb81e2b',
+  googleProjectNumber: '996204881976'
+};

@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
-import { StatusBar, Splashscreen, NativeAudio, LocalNotifications } from 'ionic-native';
+import { StatusBar, Splashscreen, NativeAudio, LocalNotifications, OneSignal } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage, AboutUsPage, SentencePage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
 import { ASSETS_BASE_URL } from '../helpers/constants';
-import { firebaseConfig } from './config-local';
+import { firebaseConfig, oneSignalConfig } from './config-local';
 
 declare var require: any;
 let firebase = require('firebase');
@@ -45,18 +45,22 @@ export class MyApp {
       let splashScreen = document.getElementById('splashscreen');
       splashScreen.style.display = 'none';
 
-      LocalNotifications.on('click', (notification) => {
-        let { word, sentence } = JSON.parse(notification.data);
-        this.nav.setRoot(SentencePage, { word, sentence });
-      });
-      LocalNotifications.cancelAll();
-      document.addEventListener('pause', () => {
-        LocalNotifications.getAllIds().then((ids) => {
-          if (ids.length == 0)
-            LocalNotifications.cancelAll().then(() => {
-              this.generateLocalNotifications();
-            });
-        });
+      this.initializeLocalNotifications();
+      this.initializeOneSignal();
+    });
+  }
+
+  private initializeLocalNotifications() {
+    LocalNotifications.on('click', (notification) => {
+      let { word, sentence } = JSON.parse(notification.data);
+      this.nav.setRoot(SentencePage, { word, sentence });
+    });
+    document.addEventListener('pause', () => {
+      LocalNotifications.getAllIds().then((ids) => {
+        if (ids.length == 0)
+          LocalNotifications.cancelAll().then(() => {
+            this.generateLocalNotifications();
+          });
       });
     });
   }
@@ -86,10 +90,17 @@ export class MyApp {
     });
   }
 
-  initializeI18n() {
+  private initializeI18n() {
     let userLang = 'vi';
     this.translate.setDefaultLang('vi');
     this.translate.use(userLang);
+  }
+
+  private initializeOneSignal() {
+    OneSignal.startInit(oneSignalConfig.appID, oneSignalConfig.googleProjectNumber)
+      .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+      .handleNotificationOpened((jsonData) => {
+      }).endInit();
   }
 
   openPage(page) {
