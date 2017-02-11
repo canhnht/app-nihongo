@@ -1,25 +1,58 @@
 <ion-header>
   <ion-navbar color="primary">
-    <button ion-button menuToggle left>
+    <button ion-button menuToggle left icon-only>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{'About_us' | translate}}</ion-title>
+    <ion-title>MINAGOI</ion-title>
   </ion-navbar>
 </ion-header>
+<ion-content class="tab-home-page">
+  <ion-card>
+    <ion-card-header>
+      <ion-badge item-left>
+        {{'NHK_News' | translate}}
+      </ion-badge>
+    </ion-card-header>
+    <ion-card-content text-center>
+      <button ion-button full class="btn-load-news" *ngIf="true" (click)="downloadNews()">
+         {{'Download_news' | translate}}
+      </button>
+      <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading" *ngIf="false"></i>
+      <div *ngIf="false">
+        <p [innerHTML]="latestNews.titleWithRuby"></p>
+      </div>
+    </ion-card-content>
+    <ion-row *ngIf="false">
+      <ion-col width-50>
+        <button ion-button icon-left full (click)="goToDetail()">
+          <ion-icon name="musical-notes"></ion-icon>
+          {{'Detail' | translate}}
+        </button>
+      </ion-col>
+      <ion-col width-50>
+        <button ion-button icon-left full (click)="listAllNews()">
+          <ion-icon name="list-box"></ion-icon>
+          {{'List_all' | translate}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
 
-<ion-content class="about-us-page">
-  <h2>Techybrain</h2>
-  <h4>Thông tin chung</h4>
-  <p class="description">
-    <ion-badge>Email</ion-badge> <a href="mailto:techybraingroup@gmail.com">techybraingroup@gmail.com</a><br/>
-    <ion-badge>Facebook</ion-badge> Techybrain<br/>
-    <ion-badge>Blog</ion-badge> <a href="toithacmac.wordpress.com">toithacmac.wordpress.com</a>
-  </p>
-  <h4>Các ứng dụng khác</h4>
-  <ul>
-    <li>Mygoi</li>
-  </ul>
-  <custom-checkbox [checked]="false"></custom-checkbox>
-  <br/>
-  <custom-checkbox [checked]="true"></custom-checkbox>
+  <div class="courses-separator">
+    <div class="text">{{'Courses' | translate}}</div>
+  </div>
+
+  <ion-card class="course-item">
+    <button ion-item (click)="checkBeforeDownload(course)">
+      <ion-thumbnail item-left>
+        <img src="course.imageUrl">
+      </ion-thumbnail>
+      <h2>course.name</h2>
+      <p>
+        <ion-badge item-right>1 {{'Unit' | translate}}</ion-badge>
+        <ion-badge item-right>100 {{'Word' | translate}}</ion-badge>
+      </p>
+    </button>
+    <span class="downloading-text" *ngIf="false">{{'Downloading...' | translate}}</span>
+  </ion-card>
 </ion-content>
