@@ -14,7 +14,7 @@ const arrayBufferToBase64 = (buffer) => {
 export const errorHandler = (message: string) => {
   return (err) => {
     // Toast.showLongBottom(message).subscribe(() => {});
-    alert(`errorHandler "${err} - ${err.code} - ${err.message}"`);
+    alert(`errorHandler "${err} - ${err.code} - ${err.message} - ${JSON.stringify(err)}"`);
     throw err;
   };
 };
