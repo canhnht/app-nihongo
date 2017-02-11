@@ -15,7 +15,7 @@ let firebase = require('firebase');
 })
 export class MyApp {
   @ViewChild('content') nav: NavController;
-  rootPage = PlaygroundPage;
+  rootPage = HomePage;
   homePage = HomePage;
   playlistsPage = PlaylistsPage;
   feedbackPage = FeedbackPage;
