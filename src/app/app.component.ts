@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
-import { StatusBar, Splashscreen, NativeAudio, LocalNotifications, OneSignal } from 'ionic-native';
+import { StatusBar, Splashscreen, NativeAudio, LocalNotifications, OneSignal, AdMob } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage, AboutUsPage, SentencePage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
 import { ASSETS_BASE_URL } from '../helpers/constants';
-import { firebaseConfig, oneSignalConfig } from './config-local';
+import { firebaseConfig, oneSignalConfig, admobConfig } from './config-local';
 
 declare var require: any;
 let firebase = require('firebase');
@@ -47,6 +47,7 @@ export class MyApp {
 
       this.initializeLocalNotifications();
       this.initializeOneSignal();
+      this.initializeAdMod();
     });
   }
 
@@ -101,6 +102,15 @@ export class MyApp {
       .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
       .handleNotificationOpened((jsonData) => {
       }).endInit();
+  }
+
+  private initializeAdMod() {
+    AdMob.createBanner({
+      adId: admobConfig.banner,
+      isTesting: true,
+      overlap: false,
+      position: AdMob.AD_POSITION.BOTTOM_CENTER
+    });
   }
 
   openPage(page) {

@@ -10,3 +10,7 @@ export const oneSignalConfig = {
   appID: 'd47210d7-7aa7-4dda-8a2d-bd2ceeb81e2b',
   googleProjectNumber: '996204881976'
 };
+
+export const admobConfig = {
+  banner: 'ca-app-pub-4839461538938791/2486913465'
+};
