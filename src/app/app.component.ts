@@ -49,8 +49,14 @@ export class MyApp {
         let { word, sentence } = JSON.parse(notification.data);
         this.nav.setRoot(SentencePage, { word, sentence });
       });
-      LocalNotifications.cancelAll().then(() => {
-        this.generateLocalNotifications();
+      LocalNotifications.cancelAll();
+      document.addEventListener('pause', () => {
+        LocalNotifications.getAllIds().then((ids) => {
+          if (ids.length == 0)
+            LocalNotifications.cancelAll().then(() => {
+              this.generateLocalNotifications();
+            });
+        });
       });
     });
   }
