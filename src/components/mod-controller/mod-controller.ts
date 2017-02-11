@@ -3,7 +3,6 @@ import { NavController, ModalController, Slides } from 'ionic-angular';
 import { Toast } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { SelectedWords } from '../selected-words/selected-words';
 import { WordSlides } from '../../pages';
 import { LearningSlides } from '../../pages';
 import { AudioService, SliderService, SettingService, LoaderService } from '../../services';

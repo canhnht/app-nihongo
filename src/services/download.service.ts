@@ -40,7 +40,10 @@ export class DownloadService {
 
       let listUnitId = Object.keys(course.units).filter((unitId) => course.units[unitId]);
 
-      return this.dbService.updateCourse(course).then(() => this.downloadUnits(listUnitId));
+      return utils.downloadImageData(course.imageUrl).then((imageData) => {
+        course.imageUrl = imageData;
+        return this.dbService.updateCourse(course);
+      }).then(() => this.downloadUnits(listUnitId));
     }).then((listUnit) => {
       this.percDownloadedSubject.next({
         percDownloaded: 2

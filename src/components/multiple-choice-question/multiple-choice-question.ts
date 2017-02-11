@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NativeAudio } from 'ionic-native';
-import _ from 'lodash';
 
 enum QuestionType {
   KanjiToHiragana_Text,

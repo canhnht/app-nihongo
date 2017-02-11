@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, Slides, ModalController, NavParams } from 'ionic-angular';
 import { MediaPlugin, NativeAudio, TextToSpeech } from 'ionic-native';
-import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { PlaylistOptions } from '../../components';
 import { AudioService, SliderService, DbService, LoaderService } from '../../services';

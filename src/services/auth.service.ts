@@ -119,10 +119,7 @@ export class AuthService {
 
   handleLoginError(error) {
     this.isLoggedIn = false;
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    var credential = error.credential;
-    var email = error.email;
+    const errorCode = error.code;
     switch (errorCode) {
       case 'auth/account-exists-with-different-credential':
         Toast.showShortBottom('Email already associated with another account').subscribe(() => {});

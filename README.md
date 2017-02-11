@@ -9,6 +9,7 @@
 - `npm install --global ionic cordova` to install ionic cordova
 - `ionic platform add android` to add platform android
 - Install Android SDK
+- Go to folder `node_modules`, clone this library https://github.com/canhnht/openjtalk
 
 ## Run project
 
@@ -74,3 +75,6 @@ Run `./access_database.sh`
 
 ### Install npm library
 http://ionicframework.com/docs/v2/resources/third-party-libs/
+
+## Notes
+- To display app icon in local notification. Copy icon.png from `mipmap` folder to `drawable` folder

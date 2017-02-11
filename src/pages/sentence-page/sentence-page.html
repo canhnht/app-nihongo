@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle left>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{word.kanji}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="sentence-page">
+  <div class="word-content">
+    <div class="sentence">
+      {{displaySentence[0]}}
+      <ion-badge class="sentence">{{displaySentence[1]}}</ion-badge>
+      {{displaySentence[2]}}
+    </div>
+    <div class="sentence-meaning">
+      {{sentence.meaning}}
+    </div>
+    <div class="separator">{{'Word_info' | translate}}</div>
+    <div class="kanji">
+      {{word.kanji}}
+      <i class="fa fa-volume-up voice" color="primary"
+        (click)="playWord()"></i>
+    </div>
+    <div class="row">
+      <ion-badge>{{'Pronunciation' | translate}}</ion-badge>
+      <span *ngFor="let phonetic of word.phonetic">{{phonetic}},</span>
+    </div>
+    <div class="row">
+      <ion-badge>{{'Meaning' | translate}}</ion-badge>
+      <span *ngFor="let meaning of word.meaning">{{meaning.mean}},</span>
+    </div>
+    <div class="row">
+      <ion-badge>{{'Example' | translate}}</ion-badge><br/>
+      <div class="example" *ngFor="let example of word.otherExamples">
+        <strong>{{example.content}}</strong><br/>
+        {{example.meaning}}
+      </div>
+    </div>
+  </div>
+</ion-content>

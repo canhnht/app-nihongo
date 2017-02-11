@@ -16,11 +16,11 @@
           <span *ngFor="let phonetic of words[slide.nr].phonetic">{{phonetic}},</span>
         </div>
         <div class="row">
-          <ion-badge>{{'Meaning' | translate}}:</ion-badge>
+          <ion-badge>{{'Meaning' | translate}}</ion-badge>
           <span *ngFor="let meaning of words[slide.nr].meaning">{{meaning.mean}},</span>
         </div>
         <div class="row">
-          <ion-badge>{{'Example' | translate}}:</ion-badge><br/>
+          <ion-badge>{{'Example' | translate}}</ion-badge><br/>
           <strong>{{words[slide.nr].mainExample.content}}</strong><br/>
           {{words[slide.nr].mainExample.meaning}}
         </div>
