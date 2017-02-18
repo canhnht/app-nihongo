@@ -21,43 +21,34 @@
     </button>
   </div>
   <ion-card *ngIf="isLoggedIn">
-    <ion-row>
-      <ion-col>
-        <ion-thumbnail class="avatar">
-          <img [src]="currentUser.avatarUrl">
-        </ion-thumbnail>
-      </ion-col>
-      <ion-col padding>
-        <h1>{{currentUser.displayName}}</h1>
-        <ion-badge *ngIf="!!currentUser.level">Lv {{currentUser.level}}</ion-badge>
-        <div margin-top *ngIf="!!currentUser.level">
-          <p>{{'Words_learned' | translate}}: <strong>{{currentUser.numberWordsLearned}}</strong></p>
-          <p>{{'Exp_points' | translate}}: <strong>{{currentUser.exp}}</strong></p>
-          <p>{{'Current_course' | translate}}:</p>
-          <strong>{{currentUser.currentCourse ? 'Mimi kara oboeru N3' : 'Not Available'}}</strong>
+    <div class="user-card" padding>
+      <img [src]="currentUser.avatarUrl" class="avatar" />
+      <div class="user-info" margin-left padding-right>
+        <div class="display-name" text-wrap margin-bottom>
+          {{currentUser.displayName}}
         </div>
-      </ion-col>
-    </ion-row>
+        <div class="user-statistics">
+          {{'Words_learned' | translate}}
+          <ion-badge>{{currentUser.numberWordsLearned}}</ion-badge>
+        </div>
+      </div>
+    </div>
   </ion-card>
   <ion-card *ngIf="isLoggedIn">
     <ion-card-header>
-      History
+      {{'History' | translate}}
     </ion-card-header>
     <ion-card-content>
-      <ion-list>
-        <button ion-item>
+      <div *ngIf="!(currentUser.courses && currentUser.courses.length > 0)">
+        {{'No_history' | translate}}
+      </div>
+      <ion-list *ngIf="currentUser.courses && currentUser.courses.length > 0">
+        <button ion-item *ngFor="let course of currentUser.courses">
           <ion-avatar item-left>
-            <img src="assets/images/tmp/N3Logo.png">
+            <img [src]="course.imageUrl">
           </ion-avatar>
-          <h3>Mimi kara Oboeru N3</h3>
-          <ion-badge item-right>Current</ion-badge>
-        </button>
-        <button ion-item>
-          <ion-avatar item-left>
-            <img src="assets/images/tmp/N3Logo.png">
-          </ion-avatar>
-          <h3>Mimi kara Oboeru N3</h3>
-          <p item-right>12/01/2017</p>
+          <h3>{{course.name}}</h3>
+          <p>{{course.learned | date}}</p>
         </button>
       </ion-list>
     </ion-card-content>

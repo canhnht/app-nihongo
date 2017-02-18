@@ -59,6 +59,15 @@ export class DbService {
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
+  getCoursesById(listCourseId) {
+    let courseIdCondition = listCourseId.join(',');
+    let sql = 'SELECT * FROM `course` WHERE `id` IN (?) ORDER BY `id`';
+    return this.db.executeSql(sql, [ courseIdCondition ]).then((resultSet) => {
+      let data = this.convertResultSetToArray(resultSet);
+      return data;
+    }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
   updateDownloadedCourse(course) {
     let sql = 'UPDATE `course` SET `downloaded` = ? WHERE `id` = ?';
     return this.db.executeSql(sql, [ course.downloaded, course.id ])

@@ -2,7 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Toast } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { AuthService, LocalStorageService } from '../../services';
+import { AuthService, LocalStorageService, DbService } from '../../services';
 import { AnalyticsService, Events, Params } from '../../services';
 
 declare var require: any;
@@ -18,7 +18,7 @@ export class TabUserPage {
 
   constructor(private authService: AuthService, private translate: TranslateService,
     private zone: NgZone, private storageService: LocalStorageService,
-    private analytics: AnalyticsService) {
+    private analytics: AnalyticsService, private dbService: DbService) {
   }
 
   ionViewWillEnter() {
@@ -44,7 +44,23 @@ export class TabUserPage {
   startTrackUserInfo(uid) {
     firebase.database().ref(`users/${uid}`).on('value', (snapshot) => {
       let userInfo = snapshot.val();
-      if (userInfo) this.currentUser = Object.assign({}, this.currentUser, userInfo);
+      if (userInfo) {
+        if (userInfo.courses) {
+          let listCourseId = Object.keys(userInfo.courses);
+          this.dbService.getCoursesById(listCourseId).then((courses) => {
+            userInfo.courses = courses.map((course) => Object.assign({
+              learned: userInfo.courses[course.id]
+            }, course));
+            this.zone.run(() => {
+              this.currentUser = Object.assign({}, this.currentUser, userInfo);
+            });
+          });
+        } else {
+          this.zone.run(() => {
+            this.currentUser = Object.assign({}, this.currentUser, userInfo);
+          });
+        }
+      }
     });
   }
 

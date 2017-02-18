@@ -54,6 +54,9 @@
         <ion-badge item-right>{{course.noWords}} {{'Word' | translate}}</ion-badge>
       </p>
     </button>
-    <span class="downloading-text" *ngIf="course.downloading">{{'Downloading...' | translate}}</span>
+    <span class="downloading-text"
+      *ngIf="course.id === downloadService.downloadingCourseId">
+      {{'Downloading...' | translate}}
+    </span>
   </ion-card>
 </ion-content>

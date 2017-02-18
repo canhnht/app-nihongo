@@ -14,6 +14,7 @@
   <div class="no-words-message" *ngIf="words.length === 0">
     Danh sách đang rỗng.<br>
     Hãy thêm từ vào danh sách!
+    <img class="bookmark" src="assets/images/bookmark.gif" />
   </div>
   <ion-list *ngIf="words.length > 0">
     <ion-item-sliding *ngFor="let word of words">

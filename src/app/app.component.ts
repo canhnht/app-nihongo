@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
-import { StatusBar, Splashscreen, NativeAudio, LocalNotifications, OneSignal, AdMob } from 'ionic-native';
+import { StatusBar, Splashscreen, NativeAudio, LocalNotifications, AdMob } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage, AboutUsPage, SentencePage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
@@ -46,7 +46,6 @@ export class MyApp {
       splashScreen.style.display = 'none';
 
       this.initializeLocalNotifications();
-      this.initializeOneSignal();
       this.initializeAdMod();
     });
   }
@@ -97,20 +96,15 @@ export class MyApp {
     this.translate.use(userLang);
   }
 
-  private initializeOneSignal() {
-    OneSignal.startInit(oneSignalConfig.appID, oneSignalConfig.googleProjectNumber)
-      .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
-      .handleNotificationOpened((jsonData) => {
-      }).endInit();
-  }
-
   private initializeAdMod() {
     AdMob.createBanner({
       adId: admobConfig.banner,
       isTesting: true,
       overlap: false,
       position: AdMob.AD_POSITION.BOTTOM_CENTER
-    });
+    }).then(() => {
+      AdMob.hideBanner();
+    })
   }
 
   openPage(page) {

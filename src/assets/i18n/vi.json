@@ -1,6 +1,6 @@
 {
   "Home": "Khóa học",
-  "My_playlist": "Danh sách từ",
+  "My_playlist": "Danh sách của tôi",
   "Setting": "Cài đặt",
   "Sign_in_facebook": "Đăng nhập với Facebook",
   "Sign_out": "Đăng xuất",
@@ -105,9 +105,7 @@
   "Pronunciation": "Phát âm",
   "Meaning": "Nghĩa",
   "Example": "Ví dụ",
-  "Words_learned": "Words Learned",
-  "Exp_points": "Experience Points",
-  "Current_course": "Current Course",
+  "Words_learned": "Các từ đã học",
   "About_us": "Về chúng tôi",
   "Learn_now": "Học ngay",
   "Word_info": "Thông tin từ",
@@ -116,5 +114,11 @@
   "Display": "Hiển thị",
   "Close": "Đóng",
   "Courses": "Các khóa học",
-  "Courses_updated": "Các khóa học đã được cập nhật mới nhất"
+  "Courses_updated": "Các khóa học đã được cập nhật mới nhất",
+  "Save": "Lưu",
+  "History": "Lịch sử",
+  "No_history": "Bạn chưa có khóa học nào",
+  "Confirm_download_course": "Bạn có muốn tải khóa học {{courseName}} ngay bây giờ?",
+  "Intro": "Giới thiệu",
+  "Contact": "Liên hệ"
 }

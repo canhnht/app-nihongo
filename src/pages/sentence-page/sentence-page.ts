@@ -62,8 +62,10 @@ export class SentencePage {
   }
 
   ionViewWillLeave() {
-    this.track.release();
-    this.track = null;
+    if (this.track) {
+      this.track.release();
+      this.track = null;
+    }
   }
 
   playWord() {

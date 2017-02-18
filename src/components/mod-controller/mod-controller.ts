@@ -18,15 +18,14 @@ export class ModControllerComponent implements OnInit, OnDestroy {
   settingSubscription: Subscription;
   fullHeight: boolean = false;
   countWords: number = 0;
-  modControlOptions: any;
+  modControlOptions: any = {
+    loop: false
+  };
   @ViewChild('modControl') modControl: Slides;
 
   constructor(private audioService: AudioService, private settingService: SettingService,
     private sliderService: SliderService, private translate: TranslateService,
     private navCtrl: NavController, private loader: LoaderService) {
-    this.modControlOptions = {
-      loop: true
-    };
   }
 
    toggleFullHeight() {

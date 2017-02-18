@@ -38,10 +38,7 @@ export class AuthService {
                 displayName: user.displayName,
                 email: user.email,
                 avatarUrl: user.photoURL,
-                level: 'N3',
                 numberWordsLearned: 0,
-                exp: 0,
-                currentCourse: null,
                 courses: []
               };
               this.initUserInFirebase(user)
@@ -99,10 +96,7 @@ export class AuthService {
       displayName: user.displayName,
       email: user.email,
       avatarUrl: user.photoURL,
-      level: 'N3',
       numberWordsLearned: 0,
-      exp: 0,
-      currentCourse: null,
       courses: []
     };
     return firebase.database().ref(`users/${user.uid}`).set(userInfo);
@@ -144,5 +138,13 @@ export class AuthService {
 
   logoutFacebook() {
     return firebase.auth().signOut().catch(utils.errorHandler(this.translate.instant('Error_logout_facebook')));
+  }
+
+  saveHistory(course) {
+    if (this.isLoggedIn) {
+      let updates = {};
+      updates[`users/${this.currentUser.uid}/courses/${course.id}`] = Date.now();
+      return firebase.database().ref().update(updates);
+    }
   }
 }

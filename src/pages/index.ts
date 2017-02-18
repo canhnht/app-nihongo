@@ -17,5 +17,5 @@ export { ModalDownloadPage } from './modal-download-page/modal-download-page';
 export { MultipleChoiceSlides } from './multiple-choice-slides/multiple-choice-slides';
 export { MatchingWords } from './matching-words/matching-words';
 export { LearningSlides } from './learning-slides/learning-slides';
-export { AboutUsPage } from './about-us-page/about-us-page';
+export { AboutUsPage, AuthorInfo } from './about-us-page/about-us-page';
 export { SentencePage } from './sentence-page/sentence-page';

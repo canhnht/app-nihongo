@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs';
-import { Toast, Network } from 'ionic-native';
-import { App, NavController, AlertController, ModalController } from 'ionic-angular';
+import { Toast, Network, OneSignal } from 'ionic-native';
+import { Platform, App, NavController, AlertController, ModalController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { NewsPage } from '../news-page/news-page';
 import { NewsDetail } from '../news-detail/news-detail';
 import { UnitsPage } from '../units-page/units-page';
 import { ModalDownloadPage } from '../modal-download-page/modal-download-page';
-import { DbService, SettingService, DownloadService, LocalStorageService, LoaderService } from '../../services';
+import { DbService, SettingService, DownloadService, LocalStorageService, LoaderService, AuthService } from '../../services';
 import { AnalyticsService, Events, Params } from '../../services';
 import { NHK_URL } from '../../helpers/constants';
 import * as utils from '../../helpers/utils';
+import { oneSignalConfig } from '../../app/config-local';
 
 declare var cordova: any;
 declare var require: any;
@@ -37,7 +38,59 @@ export class TabHomePage {
   constructor(private app: App, private navCtrl: NavController, private dbService: DbService,
     private settingService: SettingService, private http: Http, private storageService: LocalStorageService,
     private translate: TranslateService, private downloadService: DownloadService, private alertCtrl: AlertController,
-    private modalCtrl: ModalController, private analytics: AnalyticsService, private loader: LoaderService) {
+    private modalCtrl: ModalController, private analytics: AnalyticsService, private loader: LoaderService,
+    private authService: AuthService, private platform: Platform) {
+    let initDbSubscription = this.dbService.initSubject.subscribe((init) => {
+      initDbSubscription.unsubscribe();
+      if (init) {
+        this.downloadNews();
+        this.loadData();
+      }
+    });
+
+    this.platform.ready().then(() => {
+      this.initializeOneSignal();
+    });
+  }
+
+  private initializeOneSignal() {
+    OneSignal.startInit(oneSignalConfig.appID, oneSignalConfig.googleProjectNumber)
+      .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+      .handleNotificationOpened((jsonData) => {
+        let course = jsonData.notification.payload.additionalData;
+        course.free = course.free === 'true';
+        let prompt = this.alertCtrl.create({
+          title: this.translate.instant('Download_course'),
+          subTitle: this.translate.instant('Confirm_download_course', {
+            courseName: course.name
+          }),
+          buttons: [
+            {
+              text: this.translate.instant('Cancel'),
+            },
+            {
+              text: this.translate.instant('OK'),
+              handler: () => {
+                this.getDisplayedCourse(course).then((course) =>{
+                  this.checkBeforeDownload(course);
+                });
+              }
+            }
+          ]
+        });
+        prompt.present();
+      }).endInit();
+  }
+
+  private getDisplayedCourse(course) {
+    let searchedCourse = this.courses.find((item) => item.id === course.id);
+    if (!searchedCourse) {
+      return this.dbService.addOrUpdateCourses([ course ]).then(() => {
+        return this.courses.find((item) => item.id === course.id);
+      });
+    } else {
+      return Promise.resolve(searchedCourse);
+    }
   }
 
   ionViewWillEnter() {
@@ -46,17 +99,10 @@ export class TabHomePage {
         this.loadData();
       }
     });
-    let initDbSubscription = this.dbService.initSubject.subscribe((init) => {
-      initDbSubscription.unsubscribe();
-      if (init) {
-        this.loadData();
-      }
-    });
     this.trackCourses();
   }
 
   private loadData() {
-    this.downloadNews();
     this.dbService.getCourses();
     this.coursesSubscription = this.dbService.coursesSubject.subscribe(
       (courses) => {
@@ -96,6 +142,15 @@ export class TabHomePage {
     } else if (course.downloading) {
       this.openModalDownload(course);
     } else {
+      if (Network.type === 'none' || Network.type === 'unknown') {
+        let alert = this.alertCtrl.create({
+          title: 'Kết nối internet',
+          subTitle: 'Hãy bật kết nối internet để bắt đầu tải khóa học!',
+          buttons: ['Đồng ý']
+        });
+        alert.present();
+        return;
+      }
       this.analytics.logEvent(Events.DOWNLOAD_COURSE, {
         [Params.COURSE_ID]: course.id,
         [Params.COURSE_NAME]: course.name,
@@ -123,6 +178,7 @@ export class TabHomePage {
       [Params.COURSE_NAME]: course.name,
       [Params.COURSE_LEVEL]: course.level
     });
+    this.authService.saveHistory(course);
     this.settingService.reset(true);
     this.app.getRootNav().push(UnitsPage, {selectedCourse: course});
   }
@@ -166,7 +222,8 @@ export class TabHomePage {
       Promise.all(imagesPromise).then((listCourse) => {
         return this.dbService.addOrUpdateCourses(listCourse);
       }).then(() => {
-        Toast.showLongBottom(this.translate.instant('Courses_updated')).subscribe(() => {});
+        if (listCourse.length !== this.courses.length)
+          Toast.showLongBottom(this.translate.instant('Courses_updated')).subscribe(() => {});
       }).catch(utils.errorHandler(this.translate.instant('Error_update_courses')));
     });
   }
