@@ -1,5 +1,7 @@
 {
-  "Home": "Khóa học",
+  "Home": "Trang chủ",
+  "Courses": "Khóa học",
+  "You": "Trang cá nhân",
   "My_playlist": "Danh sách của tôi",
   "Setting": "Cài đặt",
   "Sign_in_facebook": "Đăng nhập với Facebook",
@@ -120,5 +122,7 @@
   "No_history": "Bạn chưa có khóa học nào",
   "Confirm_download_course": "Bạn có muốn tải khóa học {{courseName}} ngay bây giờ?",
   "Intro": "Giới thiệu",
-  "Contact": "Liên hệ"
+  "Contact": "Liên hệ",
+  "Content": "Nội dung",
+  "Phrases": "Cụm từ"
 }

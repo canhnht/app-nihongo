@@ -23,7 +23,6 @@ export class HomePage {
   }
 
   ionViewWillLeave() {
-    alert(`home-page ${Network.type}`);
     if (Network.type === 'none' || Network.type === 'unknown') return;
     AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
   }
