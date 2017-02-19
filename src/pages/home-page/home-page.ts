@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { AdMob } from 'ionic-native';
+import { AdMob, Network } from 'ionic-native';
 import { TabHomePage } from '../tab-home-page/tab-home-page';
 import { TabUserPage } from '../tab-user-page/tab-user-page';
 import { AuthService } from '../../services';
@@ -23,6 +23,8 @@ export class HomePage {
   }
 
   ionViewWillLeave() {
+    alert(`home-page ${Network.type}`);
+    if (Network.type === 'none' || Network.type === 'unknown') return;
     AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
   }
 }

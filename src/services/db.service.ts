@@ -29,6 +29,7 @@ export class DbService {
         name: 'minagoi.db',
         location: 'default',
       }).then(() => this.storageService.get('init_db')).then((res) => {
+          // this.filterLatestNews();
           if (!res) return File.readAsText(`${cordova.file.applicationDirectory}www/assets`, 'minagoi.sql');
           else {
             this.initSubject.next(true);
@@ -47,6 +48,12 @@ export class DbService {
             Toast.showShortBottom(`Error init database ${JSON.stringify(err)}`).subscribe(() => {});
         });
     })
+  }
+
+  private filterLatestNews() {
+    let sql = 'DELETE FROM `news` WHERE `id` NOT IN (SELECT `id` FROM `news` ORDER BY `date` DESC LIMIT 50)';
+    return this.db.executeSql(sql, [])
+      .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
   getCourses() {
@@ -169,32 +176,50 @@ export class DbService {
   }
 
   addOrUpdateNews(listNews) {
-    let sql = 'INSERT OR REPLACE INTO `news` (`id`, `title`, `titleWithRuby`, `outlineWithRuby`, `contentWithRuby`, `imageUrl`, `voiceUrl`, `date`, `dateText`) VALUES (?,?,?,?,?,?,?,?,?)';
+    let sql = 'INSERT OR REPLACE INTO `news` (`id`, `title`, `titleWithRuby`, `outlineWithRuby`, `contentWithRuby`, `imageUrl`, `voiceUrl`, `date`, `dateText`, `sourceUrl`, `words`) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
     let listSql = listNews.map((news) => {
       return [
-        sql, [ news.id, news.title, news.titleWithRuby, news.outlineWithRuby, news.contentWithRuby, news.imageUrl, news.voiceUrl, news.date, news.dateText ]
+        sql, [ news.id, news.title, news.titleWithRuby, news.outlineWithRuby, news.contentWithRuby, news.imageUrl, news.voiceUrl, news.date, news.dateText, news.sourceUrl, JSON.stringify(news.words) ]
       ];
     });
     return this.db.sqlBatch(listSql).then(this.getLatestNews.bind(this))
       .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
-  getAllNews() {
-    let sql = 'SELECT * FROM `news` ORDER BY `news`.`date` DESC';
-    return this.db.executeSql(sql, []).then((resultSet) => {
+  getNewsFromDate(fromDate) {
+    let pageSize = 10;
+    let sql = 'SELECT * FROM `news` WHERE `date` < ? ORDER BY `date` DESC LIMIT ?';
+    return this.db.executeSql(sql, [ fromDate, pageSize ]).then((resultSet) => {
       let data = this.convertResultSetToArray(resultSet);
+      data.forEach((news) => this.processNews(news));
       return data;
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
+  getNewsToDate(toDate) {
+    let pageSize = 10;
+    let sql = 'SELECT * FROM `news` WHERE `date` > ? ORDER BY `date` ASC LIMIT ?';
+    return this.db.executeSql(sql, [ toDate, pageSize ]).then((resultSet) => {
+      let data = this.convertResultSetToArray(resultSet);
+      data.forEach((news) => this.processNews(news));
+      return data.reverse();
+    }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
   getLatestNews() {
-    let sql = 'SELECT * FROM `news` ORDER BY `news`.`date` DESC LIMIT 1';
+    let sql = 'SELECT * FROM `news` ORDER BY `date` DESC LIMIT 1';
     return this.db.executeSql(sql, []).then((resultSet) => {
       let data = this.convertResultSetToArray(resultSet);
       this.latestNews = data[0];
+      this.processNews(this.latestNews);
       this.latestNewsSubject.next(this.latestNews);
       return data[0];
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
+  }
+
+  private processNews(news) {
+    if (!news) return;
+    news.words = JSON.parse(news.words);
   }
 
   updateWord(word) {
@@ -247,7 +272,7 @@ export class DbService {
     if (!word.otherExamples) word.otherExamples = [];
     if (!word.phonetic) word.phonetic = [];
     if (!word.mainExample) word.mainExample = {};
-    word.otherExamples = word.otherExamples.slice(0, 5);
+    // word.otherExamples = word.otherExamples.slice(0, 5);
   }
 
   getUnitsByCourseId(courseId) {

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
-import { StatusBar, Splashscreen, NativeAudio, LocalNotifications, AdMob } from 'ionic-native';
+import { StatusBar, Splashscreen, NativeAudio, LocalNotifications, AdMob, Network } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage, AboutUsPage, SentencePage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
@@ -104,7 +104,13 @@ export class MyApp {
       position: AdMob.AD_POSITION.BOTTOM_CENTER
     }).then(() => {
       AdMob.hideBanner();
-    })
+    });
+    Network.onDisconnect().subscribe(() => {
+      AdMob.hideBanner();
+    });
+    Network.onConnect().subscribe(() => {
+      AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
+    });
   }
 
   openPage(page) {

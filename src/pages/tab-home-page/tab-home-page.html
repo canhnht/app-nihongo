@@ -18,12 +18,13 @@
         (click)="downloadNews()">
          {{'Download_news' | translate}}
       </button>
-      <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading" *ngIf="loadingNews"></i>
-      <div *ngIf="!loadingNews && !!latestNews">
+      <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading"
+        *ngIf="loadingNews && !latestNews"></i>
+      <div *ngIf="latestNews">
         <p [innerHTML]="latestNews.titleWithRuby"></p>
       </div>
     </ion-card-content>
-    <ion-row *ngIf="!loadingNews && !!latestNews">
+    <ion-row *ngIf="latestNews">
       <ion-col width-50>
         <button ion-button icon-left full (click)="goToDetail()">
           <ion-icon name="musical-notes"></ion-icon>

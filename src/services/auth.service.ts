@@ -70,7 +70,7 @@ export class AuthService {
       } else {
         this.analytics.setUserId(null);
         this.storageService.remove('user');
-        this.currentUser = null;
+        this.currentUser = {};
         this.pushState();
       }
     });

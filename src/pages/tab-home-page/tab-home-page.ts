@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, URLSearchParams } from '@angular/http';
 import { Subscription } from 'rxjs';
 import { Toast, Network, OneSignal } from 'ionic-native';
 import { Platform, App, NavController, AlertController, ModalController } from 'ionic-angular';
@@ -118,7 +118,9 @@ export class TabHomePage {
 
     this.dbService.getLatestNews();
     this.latestNewsSubscription = this.dbService.latestNewsSubject.subscribe(
-      latestNews => this.latestNews = latestNews
+      (latestNews) => {
+        this.latestNews = latestNews;
+      }
     );
   }
 
@@ -198,12 +200,15 @@ export class TabHomePage {
 
     this.analytics.logEvent(Events.DOWNLOAD_NEWS);
     this.loadingNews = true;
-    this.downloadNewsSubscription = this.http.get(NHK_URL)
-      .map(res => res.json())
-      .subscribe(listNews => {
+    let params: URLSearchParams = new URLSearchParams();
+    let currentDate = new Date();
+    params.set('fromDate', `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`);
+    this.downloadNewsSubscription = this.http.get(NHK_URL, { search: params })
+      .map((res) => res.json())
+      .subscribe((listNews) => {
         this.loadingNews = false;
         this.dbService.addOrUpdateNews(listNews);
-      }, err => {
+      }, (err) => {
         this.loadingNews = false;
         Toast.showShortBottom(this.translate.instant('Download_news_error')).subscribe(() => {});
       });
