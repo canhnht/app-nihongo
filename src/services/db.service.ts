@@ -60,9 +60,10 @@ export class DbService {
   }
 
   getCoursesById(listCourseId) {
-    let courseIdCondition = listCourseId.join(',');
-    let sql = 'SELECT * FROM `course` WHERE `id` IN (?) ORDER BY `id`';
-    return this.db.executeSql(sql, [ courseIdCondition ]).then((resultSet) => {
+    if (!listCourseId || listCourseId.length == 0) return Promise.resolve([]);
+    let questionMarks = listCourseId.map(() => '?').join(',');
+    let sql = 'SELECT * FROM `course` WHERE `id` IN (' + questionMarks + ') ORDER BY `id`';
+    return this.db.executeSql(sql, listCourseId).then((resultSet) => {
       let data = this.convertResultSetToArray(resultSet);
       return data;
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));

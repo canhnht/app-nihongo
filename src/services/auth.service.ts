@@ -13,7 +13,7 @@ let firebase = require('firebase');
 @Injectable()
 export class AuthService {
   isLoggedIn: boolean = false;
-  currentUser: any = null;
+  currentUser: any = {};
   authSubject: Subject<any> = new Subject<any>();
 
   constructor(private storageService: LocalStorageService, private translate: TranslateService,
