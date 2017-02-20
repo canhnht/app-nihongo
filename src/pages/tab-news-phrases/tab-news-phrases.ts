@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, NavController, App } from 'ionic-angular';
+import { NavParams, NavController } from 'ionic-angular';
 import { TextToSpeech } from 'ionic-native';
 
 @Component({
@@ -9,15 +9,13 @@ export class TabNewsPhrases {
   news: any = {};
   words: any[] = [];
 
-  constructor(private navParams: NavParams, private navCtrl: NavController,
-    private app: App) {
+  constructor(private navParams: NavParams, private navCtrl: NavController) {
     this.news = this.navParams.data;
     this.words = this.news.words.map((word) => {
       let phonetic = word.phonetic.trim();
-      word.phonetic = word.otherPhonetic
+      word.phoneticList = word.otherPhonetic
         .filter((e) => e.trim() !== phonetic).concat(phonetic);
-      delete word.otherPhonetic;
-      word.meaning = word.meaning.map((e) => e.mean);
+      word.meaningList = word.meaning.map((e) => e.mean);
       return word;
     });
   }
@@ -33,6 +31,6 @@ export class TabNewsPhrases {
   }
 
   goBack() {
-    this.app.getRootNav().pop();
+    this.navCtrl.parent.viewCtrl.dismiss();
   }
 }

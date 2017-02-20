@@ -9,8 +9,7 @@
 </ion-header>
 
 <ion-content class="tab-news-phrases">
-  abc
-  <!-- <ion-list>
+  <ion-list>
     <ion-item *ngFor="let word of words" text-wrap>
       <ion-label class="word-item">
         <button ion-button clear large class="btn-listen"
@@ -21,15 +20,15 @@
           <h1 color="primary">{{word.kanji}}</h1>
           <h2>
             <span *ngIf="word.phonetic.length > 0">
-              {{word.phonetic | commaConcat}}
+              {{word.phoneticList | commaConcat}}
             </span>
             <span *ngIf="word.phonetic.length > 0 && word.meaning.length > 0">-</span>
             <span *ngIf="word.meaning.length > 0">
-              {{word.meaning | commaConcat}}
+              {{word.meaningList | commaConcat}}
             </span>
           </h2>
         </div>
       </ion-label>
     </ion-item>
-  </ion-list> -->
+  </ion-list>
 </ion-content>
