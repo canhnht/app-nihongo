@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { NavParams, NavController, App } from 'ionic-angular';
 import { TextToSpeech } from 'ionic-native';
 
 @Component({
@@ -9,7 +9,8 @@ export class TabNewsPhrases {
   news: any = {};
   words: any[] = [];
 
-  constructor(private navParams: NavParams) {
+  constructor(private navParams: NavParams, private navCtrl: NavController,
+    private app: App) {
     this.news = this.navParams.data;
     this.words = this.news.words.map((word) => {
       let phonetic = word.phonetic.trim();
@@ -29,5 +30,9 @@ export class TabNewsPhrases {
     }).then(() => {}).catch(err => {
       alert(`tts ${err}`);
     });
+  }
+
+  goBack() {
+    this.app.getRootNav().pop();
   }
 }

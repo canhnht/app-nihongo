@@ -1,11 +1,16 @@
 <ion-header>
   <ion-navbar color="primary">
+    <button ion-button menuToggle="right" icon-only
+      *ngIf="!navCtrl.canGoBack()" (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </button>
     <ion-title>{{news.title}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="tab-news-phrases">
-  <ion-list>
+  abc
+  <!-- <ion-list>
     <ion-item *ngFor="let word of words" text-wrap>
       <ion-label class="word-item">
         <button ion-button clear large class="btn-listen"
@@ -26,5 +31,5 @@
         </div>
       </ion-label>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 </ion-content>

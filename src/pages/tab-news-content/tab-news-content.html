@@ -1,5 +1,9 @@
 <ion-header>
   <ion-navbar color="primary">
+    <button ion-button menuToggle="right" icon-only
+      *ngIf="!navCtrl.canGoBack()" (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </button>
     <ion-title>{{news.title}}</ion-title>
   </ion-navbar>
 </ion-header>
