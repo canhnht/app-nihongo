@@ -30,10 +30,12 @@ export class MyApp {
   initializeApp() {
     this.initializeI18n();
     firebase.initializeApp(firebaseConfig);
-
+    alert('initializeApp');
     this.platform.ready().then(() => {
+      alert('platform ready');
       return this.storageService.init();
     }).then(() => {
+      alert('storageService init');
       let splashScreen = document.getElementById('splashscreen');
       splashScreen.style.display = 'none';
 
@@ -45,8 +47,8 @@ export class MyApp {
       NativeAudio.preloadSimple('success', `${ASSETS_BASE_URL}/sounds/success.wav`);
       NativeAudio.preloadSimple('count_down_5', `${ASSETS_BASE_URL}/sounds/count_down_5.mp3`);
 
-      // this.initializeLocalNotifications();
-      // this.initializeAdMod();
+      this.initializeLocalNotifications();
+      this.initializeAdMod();
     });
   }
 
