@@ -62,6 +62,9 @@ export class WordSlides {
       }
     }
 
+    this.words.forEach((word) => {
+      word.meaningList = word.meaning.map((e) => e.mean);
+    });
     this.default_slides = this.default_slides_indexes.map((e) => this.makeSlide(e));
     this.slides = [...this.default_slides];
     this.head = this.slides[0].nr;
@@ -113,6 +116,7 @@ export class WordSlides {
   }
 
   ionViewWillLeave() {
+    this.loader.show();
     if (this.playSingleWord) return this.singleTrack.release();
     this.trackIndexSubscription.unsubscribe();
     this.audioService.stopCountDown();
@@ -213,7 +217,8 @@ export class WordSlides {
     modal.present();
   }
 
-  closeSlide() {
+  closeSlide($event) {
+    $event.stopPropagation();
     this.navCtrl.pop();
   }
 }

@@ -21,6 +21,7 @@ export class UnitsPage {
   }
 
   ionViewWillEnter() {
+    this.loader.hide();
     this.loadUnitPage();
   }
 

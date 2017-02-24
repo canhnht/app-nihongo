@@ -1,18 +1,54 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <ion-title>news.title</ion-title>
-  </ion-navbar>
-</ion-header>
 
-<ion-content class="news-detail">
-  <div class="title">
-    <img src="assets/images/bg_newstitle.gif" class="img-news" />
-    <h1>
-      news.titleWithRuby
-    </h1>
-  </div>
-  <em class="date">news.dateText</em>
-  <div class="content">
-    news.contentWithRuby
+<ion-content>
+  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
+  </ion-icon>
+  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
+  </ion-icon>
+  <ion-icon name="close" (click)="closeSlide()" class="btn-close"
+    color="primary">
+  </ion-icon>
+  <ion-slides #vocabSlider [options]="sliderOptions" (ionDidChange)="onSlideChanged($event)">
+    <ion-slide>
+      <div class="word-slide slide-content-0">
+        <div class="kanji">kanji</div>
+        <div class="row">
+          <ion-badge>{{'Pronunciation' | translate}}:</ion-badge>
+          <span>phonetic,</span>
+        </div>
+        <div class="row">
+          <ion-badge>{{'Meaning' | translate}}</ion-badge>
+          <span>meaning.mean,</span>
+        </div>
+        <div class="row example">
+          <ion-badge>{{'Example' | translate}}</ion-badge><br/>
+          <strong color="primary">words[slide.nr].mainExample.content</strong><br/>
+          words[slide.nr].mainExample.meaning
+        </div>
+        <div class="separator-other">{{'Others' | translate}}</div>
+        <div class="example">
+          <strong color="primary">example.content</strong><br/>
+          <span class="example-phonetic">example.phonetic</span><br/>
+          example.meaning
+        </div>
+        <div class="example">
+          <strong color="primary">example.content</strong><br/>
+          <span class="example-phonetic">example.phonetic</span><br/>
+          example.meaning
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <div class="btn-group">
+    <button ion-button color="secondary" round class="btn-repeat"
+      (click)="repeatCurrentVocabulary($event)" icon-only>
+      <ion-icon name="volume-up"></ion-icon>
+    </button>
+    <button ion-button *ngIf="!hideBookmark" color="danger" round
+      class="btn-bookmark" (click)="addToPlaylist($event)" icon-only>
+      <ion-icon name="add"></ion-icon>
+    </button>
   </div>
 </ion-content>
+<ion-footer *ngIf="!hideAudioBar">
+  <audio-player></audio-player>
+</ion-footer>

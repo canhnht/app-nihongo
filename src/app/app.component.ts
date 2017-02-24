@@ -34,6 +34,9 @@ export class MyApp {
     this.platform.ready().then(() => {
       return this.storageService.init();
     }).then(() => {
+      let splashScreen = document.getElementById('splashscreen');
+      splashScreen.style.display = 'none';
+
       StatusBar.styleDefault();
       NativeAudio.preloadSimple('touch', `${ASSETS_BASE_URL}/sounds/touch.mp3`);
       NativeAudio.preloadSimple('correct', `${ASSETS_BASE_URL}/sounds/correct.wav`);
@@ -42,11 +45,8 @@ export class MyApp {
       NativeAudio.preloadSimple('success', `${ASSETS_BASE_URL}/sounds/success.wav`);
       NativeAudio.preloadSimple('count_down_5', `${ASSETS_BASE_URL}/sounds/count_down_5.mp3`);
 
-      let splashScreen = document.getElementById('splashscreen');
-      splashScreen.style.display = 'none';
-
-      this.initializeLocalNotifications();
-      this.initializeAdMod();
+      // this.initializeLocalNotifications();
+      // this.initializeAdMod();
     });
   }
 

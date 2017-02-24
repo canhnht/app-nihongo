@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import * as utils from '../helpers/utils';
 import { LocalStorageService } from './local-storage.service';
+import { AuthService } from './auth.service';
 
 declare var cordova: any;
 
@@ -22,7 +23,7 @@ export class DbService {
   playlistsSubject: Subject<any[]> = new Subject<any[]>();
 
   constructor(private translate: TranslateService, private storageService: LocalStorageService,
-    private platform: Platform) {
+    private platform: Platform, private authService: AuthService) {
     this.platform.ready().then(() => {
       this.db = new SQLite();
       this.db.openDatabase({
@@ -272,11 +273,11 @@ export class DbService {
     if (!word.otherExamples) word.otherExamples = [];
     if (!word.phonetic) word.phonetic = [];
     if (!word.mainExample) word.mainExample = {};
-    // word.otherExamples = word.otherExamples.slice(0, 5);
+    word.otherExamples = word.otherExamples.slice(0, 5);
   }
 
   getUnitsByCourseId(courseId) {
-    let sql = 'SELECT * FROM `unit` WHERE `courseId` = ?';
+    let sql = 'SELECT * FROM `unit` WHERE `courseId` = ? ORDER BY `number`';
     return this.db.executeSql(sql, [ courseId ]).then((resultSet) => {
       return this.convertResultSetToArray(resultSet);
     }).catch(utils.errorHandler(this.translate.instant('Error_database')));
@@ -303,6 +304,8 @@ export class DbService {
   }
 
   updateAnalytic(word) {
+    if (word.timesPlayed === 0)
+      this.authService.increaseNumberWordsLearned();
     let sql = 'UPDATE `word` SET `lastPlayed` = ?, `timesPlayed` = `timesPlayed` + 1 WHERE `id` = ?';
     return this.db.executeSql(sql, [ Date.now(), word.id ])
       .catch(utils.errorHandler(this.translate.instant('Error_database')));

@@ -18,7 +18,9 @@ export class LoaderService {
   }
 
   hide() {
-    this.loader.dismiss();
-    this.loader = null;
+    if (this.loader) {
+      this.loader.dismiss();
+      this.loader = null;
+    }
   }
 }

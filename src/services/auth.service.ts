@@ -147,4 +147,13 @@ export class AuthService {
       return firebase.database().ref().update(updates);
     }
   }
+
+  increaseNumberWordsLearned() {
+    if (this.isLoggedIn) {
+      let updates = {};
+      this.currentUser.numberWordsLearned += 1;
+      updates[`users/${this.currentUser.uid}/numberWordsLearned`] = this.currentUser.numberWordsLearned;
+      return firebase.database().ref().update(updates);
+    }
+  }
 }
