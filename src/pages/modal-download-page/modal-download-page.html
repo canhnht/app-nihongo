@@ -8,5 +8,8 @@
     <ion-title>{{course.name}}</ion-title>
     <progress-bar [progress]="perDownloading"></progress-bar>
     <span>{{'Downloading_course' | translate}}</span>
+    <div class="tip">
+      {{randomTip}}
+    </div>
   </div>
 </ion-content>

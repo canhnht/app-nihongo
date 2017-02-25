@@ -25,7 +25,7 @@ export class AuthService {
     firebase.auth().onAuthStateChanged((user) => {
       this.isLoggedIn = !!user;
       if (this.isLoggedIn) {
-        this.analytics.setUserId(user.uid);
+        // this.analytics.setUserId(user.uid);
         let promiseStorageUser = this.storageService.get('user');
         let promiseFirebaseUser = firebase.database().ref(`users/${user.uid}`).once('value').then((snapshot) => snapshot.val());
         Promise.all([ promiseStorageUser, promiseFirebaseUser ]).then((data) => {
@@ -68,7 +68,7 @@ export class AuthService {
           }
         });
       } else {
-        this.analytics.setUserId(null);
+        // this.analytics.setUserId(null);
         this.storageService.remove('user');
         this.currentUser = {};
         this.pushState();

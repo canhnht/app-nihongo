@@ -19,7 +19,7 @@ declare var require: any;
 let firebase = require('firebase');
 
 @Component({
-  selector: 'page-tab-home-page',
+  selector: 'tab-home-page',
   templateUrl: 'tab-home-page.html'
 })
 export class TabHomePage {
