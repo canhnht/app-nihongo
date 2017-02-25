@@ -83,6 +83,12 @@ export class DbService {
       .catch(utils.errorHandler('Error_database'));
   }
 
+  resetErrorCourse(course) {
+    let sql = 'UPDATE `course` SET `noWords` = ?, `noUnits` = ? WHERE `id` = ?';
+    return this.db.executeSql(sql, [ 0, 0, course.id ])
+      .catch(utils.errorHandler('Error_database'));
+  }
+
   updateCourse(course) {
     let sql = 'UPDATE `course` SET `imageUrl` = ?, `name` = ?, `free` = ?, `level` = ? WHERE `id` = ?';
     return this.db.executeSql(sql, [ course.imageUrl, course.name, course.free, course.level, course.id ])

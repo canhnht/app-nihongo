@@ -78,8 +78,10 @@ export class DownloadService {
     .catch((err) => {
       Toast.showLongBottom(this.translate.instant('Error_download_course')).subscribe(() => {});
       course.downloaded = true;
+      course.noUnits = 0;
+      course.noWords = 0;
       this.downloadingCourseId = null;
-      return this.dbService.updateDownloadedCourse(course);
+      return this.dbService.resetErrorCourse(course);
     });
   }
 

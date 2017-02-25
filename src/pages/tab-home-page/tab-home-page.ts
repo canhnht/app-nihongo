@@ -109,8 +109,9 @@ export class TabHomePage {
         this.courses = courses;
         this.courses.forEach((item) => {
           if (!item.downloaded && item.noUnits > 0) {
-            item.downloaded = true;
-            this.dbService.updateDownloadedCourse(item);
+            item.noUnits = 0;
+            item.noWords = 0;
+            this.dbService.resetErrorCourse(item);
           }
         });
       }
@@ -162,7 +163,7 @@ export class TabHomePage {
           },
           {
             text: this.translate.instant('OK'),
-            handler: (data) => {
+            handler: () => {
               this.analytics.logEvent(Events.DOWNLOAD_COURSE, {
                 [Params.COURSE_ID]: course.id,
                 [Params.COURSE_NAME]: course.name,

@@ -43,8 +43,9 @@ export class MultipleChoiceSlides {
     private translate: TranslateService, private loader: LoaderService) {
     this.words = this.navParams.data.words.filter((word) => {
       if (word.kanji.trim() === '') return false;
+      if (!word.phonetic) return false;
       if (word.phonetic.length == 0) return false;
-      if (word.phonetic.length == 1 && word.phonetic[0] === word.kanji) return false;
+      // if (word.phonetic.length == 1 && word.phonetic[0] === word.kanji) return false;
       return true;
     });
     this.onPass = this.navParams.data.onPass;
