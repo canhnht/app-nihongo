@@ -26,8 +26,12 @@
         </div>
         <div class="separator-other">{{'Others' | translate}}</div>
         <div class="example" *ngFor="let example of words[slide.nr].otherExamples">
-          <strong color="primary">{{example.content}}</strong><br/>
-          <span class="example-phonetic">{{example.phonetic}}</span><br/>
+          <strong color="primary">
+            {{example.content}}
+          </strong><br/>
+          <span class="example-phonetic">
+            {{example.phonetic}}
+          </span><br/>
           <em>{{example.meaning}}</em>
         </div>
       </div>

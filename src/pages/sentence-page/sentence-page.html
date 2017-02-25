@@ -25,17 +25,22 @@
     </div>
     <div class="row">
       <ion-badge>{{'Pronunciation' | translate}}</ion-badge>
-      <span *ngFor="let phonetic of word.phonetic">{{phonetic}},</span>
+      <span>{{word.phonetic | commaConcat}}</span>
     </div>
     <div class="row">
       <ion-badge>{{'Meaning' | translate}}</ion-badge>
-      <span *ngFor="let meaning of word.meaning">{{meaning.mean}},</span>
+      <span>{{word.meaningList | commaConcat}}</span>
     </div>
     <div class="row">
       <ion-badge>{{'Example' | translate}}</ion-badge><br/>
       <div class="example" *ngFor="let example of word.otherExamples">
-        <strong>{{example.content}}</strong><br/>
-        {{example.meaning}}
+        <strong color="primary">
+          {{example.content}}
+        </strong><br/>
+        <span class="example-phonetic">
+          {{example.phonetic}}
+        </span><br/>
+        <em>{{example.meaning}}</em>
       </div>
     </div>
   </div>
