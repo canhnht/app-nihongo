@@ -13,7 +13,7 @@
         {{'NHK_News' | translate}}
       </ion-badge>
     </ion-card-header>
-    <ion-card-content text-center>
+    <ion-card-content>
       <button ion-button full class="btn-load-news" *ngIf="!latestNews && !loadingNews"
         (click)="downloadNews()">
          {{'Download_news' | translate}}

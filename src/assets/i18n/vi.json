@@ -82,6 +82,7 @@
   "Exit": "Thoát",
   "Access": "Vào khoá học",
   "Number_questions": "Số câu hỏi",
+  "Number_correct_answers": "Số câu đúng",
   "Fail": "Thất bại",
   "Fail_quiz": "Rất tiếc, bạn chưa thể truy cập Unit này! Hãy ôn tập lại nhé!",
   "Pass_quiz": "Chúc mừng bạn đã vượt qua bài kiểm tra!",
@@ -102,6 +103,7 @@
   "Downloading...": "Đang tải...",
   "Download_course": "Tải khóa học",
   "Download_one_course_a_time": "Mỗi lần bạn chỉ có thể tải một khóa học.",
+  "Download_course_confirmation": "Xin hãy giữ kết nối internet trong khi tải khóa học. Bạn có muốn tải khóa học này?",
   "Pull_to_refresh_news": "Kéo để tải tin tức",
   "Pull_to_refresh_courses": "Kéo để tải khóa học",
   "Pronunciation": "Phát âm",
@@ -124,5 +126,10 @@
   "Intro": "Giới thiệu",
   "Contact": "Liên hệ",
   "Content": "Nội dung",
-  "Phrases": "Cụm từ"
+  "Phrases": "Cụm từ",
+  "Connect_internet": "Kết nối internet",
+  "Turn_on_internet": "Hãy bật kết nối internet để bắt đầu tải khóa học!",
+  "Source": "Nguồn",
+  "Empty_list": "Danh sách đang rỗng!",
+  "Instruction_add_word": "Hãy vào danh sách từ của khóa học để thêm từ như hướng dẫn bên dưới."
 }

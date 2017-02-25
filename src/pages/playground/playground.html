@@ -1,54 +1,45 @@
+<ion-header>
+  <ion-navbar color="primary" class="playlist-navbar">
+    <ion-title>
+      playlist.name
+    </ion-title>
+    <ion-buttons end>
+      <custom-checkbox [checked]="false" (onClick)="toggleSelectAll()" *ngIf="false">
+      </custom-checkbox>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
 
-<ion-content>
-  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
-  </ion-icon>
-  <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
-  </ion-icon>
-  <ion-icon name="close" (click)="closeSlide()" class="btn-close"
-    color="primary">
-  </ion-icon>
-  <ion-slides #vocabSlider [options]="sliderOptions" (ionDidChange)="onSlideChanged($event)">
-    <ion-slide>
-      <div class="word-slide slide-content-0">
-        <div class="kanji">kanji</div>
-        <div class="row">
-          <ion-badge>{{'Pronunciation' | translate}}:</ion-badge>
-          <span>phonetic,</span>
-        </div>
-        <div class="row">
-          <ion-badge>{{'Meaning' | translate}}</ion-badge>
-          <span>meaning.mean,</span>
-        </div>
-        <div class="row example">
-          <ion-badge>{{'Example' | translate}}</ion-badge><br/>
-          <strong color="primary">words[slide.nr].mainExample.content</strong><br/>
-          words[slide.nr].mainExample.meaning
-        </div>
-        <div class="separator-other">{{'Others' | translate}}</div>
-        <div class="example">
-          <strong color="primary">example.content</strong><br/>
-          <span class="example-phonetic">example.phonetic</span><br/>
-          example.meaning
-        </div>
-        <div class="example">
-          <strong color="primary">example.content</strong><br/>
-          <span class="example-phonetic">example.phonetic</span><br/>
-          example.meaning
-        </div>
-      </div>
-    </ion-slide>
-  </ion-slides>
-  <div class="btn-group">
-    <button ion-button color="secondary" round class="btn-repeat"
-      (click)="repeatCurrentVocabulary($event)" icon-only>
-      <ion-icon name="volume-up"></ion-icon>
-    </button>
-    <button ion-button *ngIf="!hideBookmark" color="danger" round
-      class="btn-bookmark" (click)="addToPlaylist($event)" icon-only>
-      <ion-icon name="add"></ion-icon>
-    </button>
+<ion-content class="playlist-detail">
+  <div class="no-words-message" *ngIf="true">
+    {{'Empty_list' | translate}}
+    <p>
+    {{'Instruction_add_word' | translate}}
+    </p>
+    <img class="bookmark" src="assets/images/bookmark.gif" />
   </div>
+  <ion-list *ngIf="false">
+    <ion-item-sliding *ngFor="let word of words">
+      <button ion-item text-wrap (click)="selectWord($event, word)">
+        <ion-label>
+          <h1>{{word.kanji}}</h1>
+          <p>{{word.timesPlayed > 0 ? '(' + word.timesPlayed + ') - ' : ''}}
+            {{word.timesPlayed > 0 ? (word.lastPlayed | customDate) : ''}}
+          </p>
+        </ion-label>
+        <custom-checkbox item-right (onClick)="checkWord($event, word)"
+          [checked]="selectedWords.indexOf(word.id) >= 0">
+        </custom-checkbox>
+      </button>
+      <ion-item-options>
+        <button ion-button color="danger" (click)="deleteWord(word)">
+          <ion-icon name="trash" large></ion-icon><br />
+          {{'Delete' | translate}}
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 </ion-content>
-<ion-footer *ngIf="!hideAudioBar">
-  <audio-player></audio-player>
+<ion-footer *ngIf="words.length > 0">
+  <mod-controller></mod-controller>
 </ion-footer>

@@ -146,26 +146,41 @@ export class TabHomePage {
     } else {
       if (Network.type === 'none' || Network.type === 'unknown') {
         let alert = this.alertCtrl.create({
-          title: 'Kết nối internet',
-          subTitle: 'Hãy bật kết nối internet để bắt đầu tải khóa học!',
-          buttons: ['Đồng ý']
+          title: this.translate.instant('Connect_internet'),
+          subTitle: this.translate.instant('Turn_on_internet'),
+          buttons: [this.translate.instant('OK')]
         });
         alert.present();
         return;
       }
-      this.analytics.logEvent(Events.DOWNLOAD_COURSE, {
-        [Params.COURSE_ID]: course.id,
-        [Params.COURSE_NAME]: course.name,
-        [Params.COURSE_LEVEL]: course.level
+      let alert = this.alertCtrl.create({
+        title: this.translate.instant('Download_course'),
+        subTitle: this.translate.instant('Download_course_confirmation'),
+        buttons: [
+          {
+            text: this.translate.instant('Cancel'),
+          },
+          {
+            text: this.translate.instant('OK'),
+            handler: (data) => {
+              this.analytics.logEvent(Events.DOWNLOAD_COURSE, {
+                [Params.COURSE_ID]: course.id,
+                [Params.COURSE_NAME]: course.name,
+                [Params.COURSE_LEVEL]: course.level
+              });
+              this.openModalDownload(course);
+              course.downloading = true;
+              this.downloadService.downloadCourse(course).then(() => {
+                course.downloading = false;
+                this.dbService.getCourses();
+                this.modalDownloadCourse.dismiss();
+                this.goToCourse(course);
+              });
+            }
+          }
+        ]
       });
-      this.openModalDownload(course);
-      course.downloading = true;
-      this.downloadService.downloadCourse(course).then(() => {
-        course.downloading = false;
-        this.dbService.getCourses();
-        this.modalDownloadCourse.dismiss();
-        this.goToCourse(course);
-      });
+      alert.present();
     }
   }
 

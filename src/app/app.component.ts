@@ -9,6 +9,7 @@ import { firebaseConfig, oneSignalConfig, admobConfig } from './config-local';
 
 declare var require: any;
 let firebase = require('firebase');
+firebase.initializeApp(firebaseConfig);
 
 @Component({
   templateUrl: 'app.html',
@@ -29,13 +30,9 @@ export class MyApp {
 
   initializeApp() {
     this.initializeI18n();
-    firebase.initializeApp(firebaseConfig);
-    alert('initializeApp');
     this.platform.ready().then(() => {
-      alert('platform ready');
       return this.storageService.init();
     }).then(() => {
-      alert('storageService init');
       let splashScreen = document.getElementById('splashscreen');
       splashScreen.style.display = 'none';
 

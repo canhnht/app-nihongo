@@ -30,9 +30,9 @@ export class DbService {
         name: 'minagoi.db',
         location: 'default',
       }).then(() => this.storageService.get('init_db')).then((res) => {
-          // this.filterLatestNews();
           if (!res) return File.readAsText(`${cordova.file.applicationDirectory}www/assets`, 'minagoi.sql');
           else {
+            this.filterLatestNews();
             this.initSubject.next(true);
             return Promise.reject(null);
           }
@@ -138,7 +138,7 @@ export class DbService {
   }
 
   getAllPlaylists() {
-    let sql = 'SELECT * FROM `playlist`';
+    let sql = 'SELECT * FROM `playlist` ORDER BY `createdAt`';
     return this.db.executeSql(sql, []).then((resultSet) => {
       let data = this.convertResultSetToArray(resultSet);
       this.playlists = data;
@@ -152,8 +152,9 @@ export class DbService {
     return this.db.executeSql(sql, [ playlist.id, playlist.name, playlist.noWords ]).then(() => {
       this.playlistsByWordId.push(Object.assign({ checked: false }, playlist));
       this.playlistsByWordIdSubject.next(this.playlistsByWordId);
-    })
-    .catch(utils.errorHandler('Error_database'));
+      this.getAllPlaylists
+    }).then(this.getAllPlaylists.bind(this))
+      .catch(utils.errorHandler('Error_database'));
   }
 
   deletePlaylist(playlist) {

@@ -65,6 +65,12 @@
 <div class="multiple-choice-fail" *ngIf="answerAll && !success">
   <div class="title">{{'Fail' | translate}}</div>
   <div class="quiz-infor">{{'Fail_quiz' | translate }}</div>
+  <div class="row">
+    <div class="text">{{'Number_correct_answers' | translate}}</div>
+    <div class="number">
+      {{listQuestion.length - this.numberWrongAnswer}}/{{listQuestion.length}}
+    </div>
+  </div>
   <div class="group-btn">
     <button ion-button round color="primary" (click)="testAgain()" icon-left>
       <ion-icon name="sync"></ion-icon>

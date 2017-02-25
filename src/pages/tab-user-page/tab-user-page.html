@@ -3,7 +3,7 @@
     <button ion-button menuToggle left icon-only>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Profile</ion-title>
+    <ion-title>{{'You' | translate}}</ion-title>
     <ion-buttons end *ngIf="isLoggedIn">
       <button ion-button icon-only (click)="logoutFacebook()">
         <ion-icon large name="log-out"></ion-icon>

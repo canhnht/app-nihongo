@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { MediaPlugin } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { AudioService, SliderService, DbService, SettingService, LoaderService } from '../../services';
 import { WordSlides } from '../word-slides/word-slides';
+
+declare var cordova: any;
 
 @Component({
   templateUrl: 'playlist-detail.html',
@@ -13,7 +16,8 @@ export class PlaylistDetail {
   words: any[] = [];
   selectedWords: any[] = [];
   settingSubscription: Subscription;
-  currentPlaylistSubscription: Subscription;
+  track: MediaPlugin = null;
+  playingWordId: string = null;
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
@@ -67,8 +71,21 @@ export class PlaylistDetail {
   }
 
   deleteWord(word) {
-    let wordIndex = this.playlist.words.findIndex(item => item.id === word.id);
-    this.playlist.words.splice(wordIndex, 1);
+    let wordIndex = this.words.findIndex(item => item.id === word.id);
+    this.words.splice(wordIndex, 1);
     this.dbService.deleteWordPlaylist(word.id, this.playlist.id);
+  }
+
+  playWord($event, word) {
+    $event.stopPropagation();
+    if (this.playingWordId === word.id) {
+      if (this.track) this.track.stop();
+      else this.track = new MediaPlugin(`${cordova.file.dataDirectory}${word.audioFile}`);
+    } else {
+      this.playingWordId = word.id;
+      if (this.track) this.track.release();
+      this.track = new MediaPlugin(`${cordova.file.dataDirectory}${word.audioFile}`);
+    }
+    this.track.play();
   }
 }

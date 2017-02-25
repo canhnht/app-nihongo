@@ -18,4 +18,8 @@
   <audio-bar [audioLink]="news.voiceUrl"></audio-bar>
   <div class="content" [innerHTML]="news.contentWithRuby">
   </div>
+  <div class="source">
+    <ion-badge>{{'Source' | translate}}</ion-badge>
+    <a [href]="news.sourceUrl">{{news.sourceUrl}}</a>
+  </div>
 </ion-content>

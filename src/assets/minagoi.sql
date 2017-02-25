@@ -56,16 +56,16 @@ CREATE TABLE IF NOT EXISTS `unit` (
 -- Create table `playlist`
 CREATE TABLE IF NOT EXISTS `playlist` (
   `id` VARCHAR(50) NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
+  `name` NVARCHAR(255) NOT NULL,
   `noWords` INTEGER NOT NULL DEFAULT 0,
+  `createdAt` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 );
 ----
 
 -- Data for table `playlist`
 INSERT INTO `playlist` (`id`, `name`) VALUES
-  ('playlist1', 'My favorites'),
-  ('playlist2', 'My list');
+  ('playlist1', 'Các từ yêu thích');
 ----
 
 

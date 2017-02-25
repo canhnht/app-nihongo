@@ -12,18 +12,34 @@
 
 <ion-content class="playlist-detail">
   <div class="no-words-message" *ngIf="words.length === 0">
-    Danh sách đang rỗng.<br>
-    Hãy thêm từ vào danh sách!
+    {{'Empty_list' | translate}}
+    <p>
+    {{'Instruction_add_word' | translate}}
+    </p>
     <img class="bookmark" src="assets/images/bookmark.gif" />
   </div>
   <ion-list *ngIf="words.length > 0">
     <ion-item-sliding *ngFor="let word of words">
       <button ion-item text-wrap (click)="selectWord($event, word)">
-        <ion-label>
-          <h1>{{word.kanji}}</h1>
-          <p>{{word.timesPlayed > 0 ? '(' + word.timesPlayed + ') - ' : ''}}
-            {{word.timesPlayed > 0 ? (word.lastPlayed | customDate) : ''}}
-          </p>
+        <ion-label class="word-item">
+          <button ion-button clear large class="btn-listen"
+            (click)="playWord($event, word)" icon-only>
+            <ion-icon name="volume-up" large></ion-icon>
+          </button>
+          <div class="word-content">
+            <h1 color="primary">{{word.kanji}}</h1>
+            <h2>
+              <span *ngIf="word.phonetic.length > 0">{{word.phonetic[0]}}</span>
+              <span *ngIf="word.phonetic.length > 0 && word.meaning.length > 0">-</span>
+              <span *ngIf="word.meaning.length > 0">{{word.meaning[0].mean}}</span>
+            </h2>
+            <span class="times-played" *ngIf="word.timesPlayed > 0">
+              <ion-icon name="headset"></ion-icon> {{word.timesPlayed}}
+            </span>
+            <span class="last-played" *ngIf="word.timesPlayed > 0">
+              <ion-icon name="calendar"></ion-icon> {{word.lastPlayed | customDate}}
+            </span>
+          </div>
         </ion-label>
         <custom-checkbox item-right (onClick)="checkWord($event, word)"
           [checked]="selectedWords.indexOf(word.id) >= 0">
