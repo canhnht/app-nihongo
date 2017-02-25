@@ -44,7 +44,7 @@
     <div class="text">{{'Courses' | translate}}</div>
   </div>
 
-  <ion-card class="course-item" *ngFor="let course of courses; let i = index">
+  <ion-card class="course-item" *ngFor="let course of courses">
     <button ion-item (click)="checkBeforeDownload(course)">
       <ion-thumbnail item-left>
         <img [src]="course.imageUrl">
@@ -55,9 +55,5 @@
         <ion-badge item-right>{{course.noWords}} {{'Word' | translate}}</ion-badge>
       </p>
     </button>
-    <span class="downloading-text"
-      *ngIf="course.id === downloadService.downloadingCourseId">
-      {{'Downloading...' | translate}}
-    </span>
   </ion-card>
 </ion-content>

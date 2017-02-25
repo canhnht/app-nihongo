@@ -132,18 +132,8 @@ export class TabHomePage {
   }
 
   checkBeforeDownload(course) {
-    if (this.downloadService.downloadingCourseId && this.downloadService.downloadingCourseId !== course.id) {
-      let alert = this.alertCtrl.create({
-        title: this.translate.instant('Download_course'),
-        subTitle: this.translate.instant('Download_one_course_a_time')
-      });
-      alert.present();
-      return;
-    }
     if (course.downloaded) {
       this.goToCourse(course);
-    } else if (course.downloading) {
-      this.openModalDownload(course);
     } else {
       if (Network.type === 'none' || Network.type === 'unknown') {
         let alert = this.alertCtrl.create({
@@ -164,15 +154,13 @@ export class TabHomePage {
           {
             text: this.translate.instant('OK'),
             handler: () => {
-              this.analytics.logEvent(Events.DOWNLOAD_COURSE, {
-                [Params.COURSE_ID]: course.id,
-                [Params.COURSE_NAME]: course.name,
-                [Params.COURSE_LEVEL]: course.level
-              });
               this.openModalDownload(course);
-              course.downloading = true;
               this.downloadService.downloadCourse(course).then(() => {
-                course.downloading = false;
+                this.analytics.logEvent(Events.DOWNLOAD_COURSE, {
+                  [Params.COURSE_ID]: course.id,
+                  [Params.COURSE_NAME]: course.name,
+                  [Params.COURSE_LEVEL]: course.level
+                });
                 this.dbService.getCourses();
                 this.modalDownloadCourse.dismiss();
                 this.goToCourse(course);

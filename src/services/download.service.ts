@@ -14,14 +14,12 @@ export class DownloadService {
   percentPerWord: number;
   downloadedPercent: number = 0;
   percDownloadedSubject: Subject<any> = new Subject<any>();
-  downloadingCourseId: string = null;
 
   constructor(private alertCtrl: AlertController, private dbService: DbService, private translate: TranslateService) {
   }
 
   downloadCourse(course) {
     let remainingPercent = 100;
-    this.downloadingCourseId = course.id;
     return this.downloadCourseInfo(course.id).then((course) => {
       this.percDownloadedSubject.next({
         percDownloaded: 1
@@ -72,15 +70,12 @@ export class DownloadService {
         courseName: course.name
       })).subscribe(() => {});
       course.downloaded = true;
-      this.downloadingCourseId = null;
       return this.dbService.updateDownloadedCourse(course);
     })
     .catch((err) => {
       Toast.showLongBottom(this.translate.instant('Error_download_course')).subscribe(() => {});
-      course.downloaded = true;
       course.noUnits = 0;
       course.noWords = 0;
-      this.downloadingCourseId = null;
       return this.dbService.resetErrorCourse(course);
     });
   }

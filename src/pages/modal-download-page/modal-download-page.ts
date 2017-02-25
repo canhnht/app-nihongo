@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController } from 'ionic-angular';
+import { NavParams, ViewController, Platform } from 'ionic-angular';
 import { DownloadService } from '../../services';
 import { Subscription } from 'rxjs';
 
@@ -17,10 +17,13 @@ export class ModalDownloadPage {
   randomTip: string = '';
   tips: string[] = [];
   intervalRandomTip: any = null;
+  unregisterBackButton: any = null;
 
   constructor(public viewCtrl: ViewController, private downloadService: DownloadService,
-    private navParams: NavParams) {
+    private navParams: NavParams, private platform: Platform) {
     this.course = this.navParams.get('course');
+    this.unregisterBackButton = this.platform.registerBackButtonAction(() => {
+    }, 1000);
   }
 
   startTrackDownloadingTips() {
@@ -59,6 +62,7 @@ export class ModalDownloadPage {
   }
 
   ionViewWillLeave() {
+    this.unregisterBackButton();
     this.percDownloadedSubscription.unsubscribe();
     this.stopTrackDownloadingTips();
     this.stopGenerateRandomTip();
