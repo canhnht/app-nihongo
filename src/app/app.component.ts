@@ -29,6 +29,12 @@ export class MyApp {
   }
 
   initializeApp() {
+    let initDbSubscription = this.dbService.initSubject.subscribe((init) => {
+      initDbSubscription.unsubscribe();
+      if (init) {
+        this.initializeLocalNotifications();
+      }
+    });
     this.initializeI18n();
     this.platform.ready().then(() => {
       return this.storageService.init();
@@ -44,7 +50,6 @@ export class MyApp {
       NativeAudio.preloadSimple('success', `${ASSETS_BASE_URL}/sounds/success.wav`);
       NativeAudio.preloadSimple('count_down_5', `${ASSETS_BASE_URL}/sounds/count_down_5.mp3`);
 
-      this.initializeLocalNotifications();
       this.initializeAdMod();
     });
   }
