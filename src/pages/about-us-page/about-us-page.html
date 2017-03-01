@@ -8,15 +8,20 @@
 </ion-header>
 
 <ion-content class="about-us-page">
-  <h2>Techybrain</h2>
-  <h4>Thông tin chung</h4>
-  <p class="description">
-    <ion-badge>Email</ion-badge> <a href="mailto:techybraingroup@gmail.com">techybraingroup@gmail.com</a><br/>
-    <ion-badge>Facebook</ion-badge> Techybrain<br/>
-    <ion-badge>Blog</ion-badge> <a href="toithacmac.wordpress.com">toithacmac.wordpress.com</a>
-  </p>
-  <h4>Các ứng dụng khác</h4>
-  <ul>
-    <li>Mygoi</li>
-  </ul>
+  <ion-list>
+    <button ion-item text-wrap (click)="openIntroduction()">
+      <ion-label class="setting-item">
+        <ion-icon color="primary" name="information-circle"
+          class="setting-icon"></ion-icon>
+        {{'Intro' | translate}}
+      </ion-label>
+    </button>
+    <button ion-item text-wrap (click)="openContact()">
+      <ion-label class="setting-item">
+        <ion-icon color="primary" name="mail"
+          class="setting-icon"></ion-icon>
+        {{'Contact' | translate}}
+      </ion-label>
+    </button>
+  </ion-list>
 </ion-content>

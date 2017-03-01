@@ -1,58 +1,12 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <button ion-button menuToggle left icon-only>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>MINAGOI</ion-title>
-  </ion-navbar>
-</ion-header>
-<ion-content class="tab-home-page">
-  <ion-card>
-    <ion-card-header>
-      <ion-badge item-left>
-        {{'NHK_News' | translate}}
-      </ion-badge>
-    </ion-card-header>
-    <ion-card-content text-center>
-      <button ion-button full class="btn-load-news" *ngIf="true" (click)="downloadNews()">
-         {{'Download_news' | translate}}
-      </button>
-      <i class="fa fa-refresh fa-spin fa-3x fa-fw news-loading" *ngIf="false"></i>
-      <div *ngIf="false">
-        <p [innerHTML]="latestNews.titleWithRuby"></p>
-      </div>
-    </ion-card-content>
-    <ion-row *ngIf="false">
-      <ion-col width-50>
-        <button ion-button icon-left full (click)="goToDetail()">
-          <ion-icon name="musical-notes"></ion-icon>
-          {{'Detail' | translate}}
-        </button>
-      </ion-col>
-      <ion-col width-50>
-        <button ion-button icon-left full (click)="listAllNews()">
-          <ion-icon name="list-box"></ion-icon>
-          {{'List_all' | translate}}
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-card>
-
-  <div class="courses-separator">
-    <div class="text">{{'Courses' | translate}}</div>
+<ion-content padding>
+  <div class="appInfor" text-center>
+    <ion-badge class="title">MINAGOI</ion-badge>
   </div>
-
-  <ion-card class="course-item">
-    <button ion-item (click)="checkBeforeDownload(course)">
-      <ion-thumbnail item-left>
-        <img src="course.imageUrl">
-      </ion-thumbnail>
-      <h2>course.name</h2>
-      <p>
-        <ion-badge item-right>1 {{'Unit' | translate}}</ion-badge>
-        <ion-badge item-right>100 {{'Word' | translate}}</ion-badge>
-      </p>
-    </button>
-    <span class="downloading-text" *ngIf="false">{{'Downloading...' | translate}}</span>
-  </ion-card>
+  <div text-center class="downloadInfor">
+    <img width="50" height="50" src="course.imageUrl">
+    <ion-title>course.name</ion-title>
+    <progress-bar [progress]="10"></progress-bar>
+    <span>{{'Downloading_course' | translate}}</span>
+    <div class="tip">Ứng dụng sẽ cung cấp thêm nhiều khóa học. Rất mong sự ủng hộ từ các bạn.</div>
+  </div>
 </ion-content>

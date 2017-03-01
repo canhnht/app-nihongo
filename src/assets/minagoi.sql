@@ -1,6 +1,4 @@
 -- Init database for MINAGOI
-PRAGMA foreign_keys = ON;
-----
 
 -- Drop tables
 DROP TABLE IF EXISTS `news`;
@@ -47,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `unit` (
   `noWords` INTEGER NOT NULL DEFAULT 0,
   `courseId` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`courseId`) REFERENCES `course`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`courseId`) REFERENCES `course`(`id`)
 );
 ----
 
@@ -56,16 +54,16 @@ CREATE TABLE IF NOT EXISTS `unit` (
 -- Create table `playlist`
 CREATE TABLE IF NOT EXISTS `playlist` (
   `id` VARCHAR(50) NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
+  `name` NVARCHAR(255) NOT NULL,
   `noWords` INTEGER NOT NULL DEFAULT 0,
+  `createdAt` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 );
 ----
 
 -- Data for table `playlist`
 INSERT INTO `playlist` (`id`, `name`) VALUES
-  ('playlist1', 'My favorites'),
-  ('playlist2', 'My list');
+  ('playlist1', 'Các từ yêu thích');
 ----
 
 
@@ -84,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `word` (
   `lastPlayed` INTEGER(11) DEFAULT NULL,
   `timesPlayed` INTEGER DEFAULT 0,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`unitId`) REFERENCES `unit` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`unitId`) REFERENCES `unit` (`id`)
 );
 ----
 
@@ -95,8 +93,8 @@ CREATE TABLE IF NOT EXISTS `word_playlist` (
   `wordId` VARCHAR(50) NOT NULL,
   `playlistId` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`wordId`, `playlistId`),
-  FOREIGN KEY (`wordId`) REFERENCES `word` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (`playlistId`) REFERENCES `playlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`wordId`) REFERENCES `word` (`id`),
+  FOREIGN KEY (`playlistId`) REFERENCES `playlist` (`id`)
 );
 ----
 
@@ -113,6 +111,8 @@ CREATE TABLE IF NOT EXISTS `news` (
   `voiceUrl` VARCHAR(255) DEFAULT NULL,
   `date` VARCHAR(100) DEFAULT NULL,
   `dateText` NVARCHAR(100) DEFAULT NULL,
+  `sourceUrl` VARCHAR(255) DEFAULT NULL,
+  `words` TEXT NOT NULL,
   PRIMARY KEY (`id`)
 );
 ----
@@ -120,17 +120,17 @@ CREATE TABLE IF NOT EXISTS `news` (
 
 
 -- Create triggers
-DROP TRIGGER IF EXISTS `increase_noWords_unit`;
+DROP TRIGGER IF EXISTS `decrease_noWords_unit`;
 ----
-CREATE TRIGGER IF NOT EXISTS `increase_noWords_unit` AFTER DELETE ON `word`
+CREATE TRIGGER IF NOT EXISTS `decrease_noWords_unit` AFTER DELETE ON `word`
   BEGIN
     UPDATE `unit` SET `noWords` = `noWords` - 1 WHERE `id` = old.unitId;
   END;
 ----
 
-DROP TRIGGER IF EXISTS `decrease_noWords_unit`;
+DROP TRIGGER IF EXISTS `increase_noWords_unit`;
 ----
-CREATE TRIGGER IF NOT EXISTS `decrease_noWords_unit` AFTER INSERT ON `word`
+CREATE TRIGGER IF NOT EXISTS `increase_noWords_unit` AFTER INSERT ON `word`
   BEGIN
     UPDATE `unit` SET `noWords` = `noWords` + 1 WHERE `id` = new.unitId;
   END;
@@ -176,6 +176,20 @@ CREATE TRIGGER IF NOT EXISTS `increase_noWords_playlist` AFTER INSERT ON `word_p
   END;
 ----
 
+DROP TRIGGER IF EXISTS `delete_playlist`;
+----
+CREATE TRIGGER IF NOT EXISTS `delete_playlist` AFTER DELETE ON `playlist`
+  BEGIN
+    DELETE FROM `word_playlist` WHERE `playlistId` = old.id;
+  END;
+----
 
+DROP TRIGGER IF EXISTS `delete_unit`;
+----
+CREATE TRIGGER IF NOT EXISTS `delete_unit` AFTER DELETE ON `unit`
+  BEGIN
+    DELETE FROM `word` WHERE `unitId` = old.id;
+  END;
+----
 
 -- .read src/assets/minagoi.sql

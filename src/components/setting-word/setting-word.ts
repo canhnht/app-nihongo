@@ -11,9 +11,12 @@ export class SettingWord {
   repeatEachWord: number;
 
   constructor(public viewCtrl: ViewController, private storageService: LocalStorageService) {
-   this.storageService.get('time_between_words').then((res) => this.timeBetweenWords = res);
-   this.storageService.get('repeat_each_word').then((res) => this.repeatEachWord = res);
-   this.storageService.get('display_mode').then((res) => this.displayMode = res);
+    this.storageService.get('time_between_words').then((res) => this.timeBetweenWords = res);
+    this.storageService.get('repeat_each_word').then((res) => this.repeatEachWord = res);
+    this.storageService.get('display_mode').then((res) => {
+      if (res.indexOf(',') >= 0) this.displayMode = res.split(',');
+      else this.displayMode = res;
+    });
   }
 
   setTimeBetweenWords() {

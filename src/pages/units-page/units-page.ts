@@ -21,6 +21,7 @@ export class UnitsPage {
   }
 
   ionViewWillEnter() {
+    this.loader.hide();
     this.loadUnitPage();
   }
 
@@ -46,7 +47,7 @@ export class UnitsPage {
             text: this.translate.instant('OK'),
             handler: () => {
               this.loader.show();
-              this.dbService.getWordsByUnitId(unit.id).then((words) => {
+              this.dbService.getWordsByUnitId(this.currentUnit.id).then((words) => {
               this.navCtrl.push(getRandomQuiz(), {
                 words,
                 onFail: () => {},

@@ -50,7 +50,7 @@ export class PlaylistsPage {
         },
         {
           text: this.translate.instant('Save'),
-          handler: data => {
+          handler: (data) => {
             let searchIndex = this.playlists.findIndex(item => item.name == data.title);
             if (searchIndex >= 0)
               Toast.showShortCenter(this.translate.instant('Duplicate_playlist_message'))

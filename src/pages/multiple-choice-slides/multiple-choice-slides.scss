@@ -149,7 +149,7 @@
 }
 
 
-.multiple-choice-success {
+.multiple-choice-success, .multiple-choice-fail {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -166,7 +166,7 @@
     font-size: 60px;
     color: white;
     text-align: center;
-    font-family: 'Lobster', Fallback, sans-serif;
+    font-family: "Roboto", "Helvetica Neue", sans-serif;
     margin-bottom: 20px;
   }
 
@@ -174,7 +174,7 @@
     font-size: 20px;
     color: white;
     text-align: center;
-    font-family: 'Lobster', Fallback, sans-serif;
+    font-family: "Roboto", "Helvetica Neue", sans-serif;
     margin: 0 20px;
   }
 
@@ -200,38 +200,13 @@
   .btn-exit {
     margin-top: 100px;
   }
-}
-
-
-.multiple-choice-fail {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background: color($colors, secondary);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  .title {
-    font-size: 60px;
-    color: white;
-    text-align: center;
-    font-family: 'Lobster', Fallback, sans-serif;
-  }
-
-  .quiz-infor {
-    font-size: 20px;
-    color: white;
-    text-align: center;
-    font-family: 'Lobster', Fallback, sans-serif;
-    margin: 0 10px;
-  }
 
   .group-btn {
     margin-top: 100px;
   }
+}
+
+
+.multiple-choice-fail {
+  background: color($colors, secondary);
 }

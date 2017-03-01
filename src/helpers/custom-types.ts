@@ -4,6 +4,9 @@ export enum QuestionType {
   HiraganaToKanji_Text,
   KanjiToHiragana_Voice,
   HiraganaToKanji_Voice,
+  MeaningToKanji_Text,
+  KanjiToMeaning_Text,
+  KanjiToMeaning_Voice
 };
 
 export enum SettingStatus {

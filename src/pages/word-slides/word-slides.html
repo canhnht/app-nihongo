@@ -4,7 +4,7 @@
   </ion-icon>
   <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
   </ion-icon>
-  <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide()" icon-only>
+  <button ion-button clear color="primary" round large class="btn-close" (click)="closeSlide($event)" icon-only>
     <ion-icon name="close"></ion-icon>
   </button>
   <ion-slides #vocabSlider [options]="sliderOptions" (ionDidChange)="onSlideChanged($event)">
@@ -12,22 +12,27 @@
       <div class="word-slide slide-content-{{i}}">
         <div class="kanji">{{words[slide.nr].kanji}}</div>
         <div class="row">
-          <ion-badge>{{'Pronunciation' | translate}}:</ion-badge>
-          <span *ngFor="let phonetic of words[slide.nr].phonetic">{{phonetic}},</span>
+          <ion-badge>{{'Pronunciation' | translate}}</ion-badge>
+          <span>{{words[slide.nr].phonetic | commaConcat}}</span>
         </div>
         <div class="row">
           <ion-badge>{{'Meaning' | translate}}</ion-badge>
-          <span *ngFor="let meaning of words[slide.nr].meaning">{{meaning.mean}},</span>
+          <span>{{words[slide.nr].meaningList | commaConcat}}</span>
         </div>
-        <div class="row">
+        <div class="row example">
           <ion-badge>{{'Example' | translate}}</ion-badge><br/>
-          <strong>{{words[slide.nr].mainExample.content}}</strong><br/>
-          {{words[slide.nr].mainExample.meaning}}
+          <strong color="primary">{{words[slide.nr].mainExample.content}}</strong><br/>
+          <em>{{words[slide.nr].mainExample.meaning}}</em>
         </div>
         <div class="separator-other">{{'Others' | translate}}</div>
         <div class="example" *ngFor="let example of words[slide.nr].otherExamples">
-          <strong>{{example.content}}</strong><br/>
-          {{example.meaning}}
+          <strong color="primary">
+            {{example.content}}
+          </strong><br/>
+          <span class="example-phonetic">
+            {{example.phonetic}}
+          </span><br/>
+          <em>{{example.meaning}}</em>
         </div>
       </div>
     </ion-slide>
@@ -37,7 +42,8 @@
       (click)="repeatCurrentVocabulary($event)" icon-only>
       <ion-icon name="volume-up"></ion-icon>
     </button>
-    <button ion-button *ngIf="!hideBookmark" color="danger" round   class="btn-bookmark" (click)="addToPlaylist($event)" icon-only>
+    <button ion-button *ngIf="!hideBookmark" color="danger" round
+      class="btn-bookmark" (click)="addToPlaylist($event)" icon-only>
       <ion-icon name="add"></ion-icon>
     </button>
   </div>

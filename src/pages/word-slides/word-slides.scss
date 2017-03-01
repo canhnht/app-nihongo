@@ -16,7 +16,7 @@
   right: 10px;
 }
 
-&:hover, &:focus {
+:hover, :focus {
   .btn-prev, .btn-next {
     display: block;
   }
@@ -42,7 +42,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  z-index: 5;
+  z-index: 10;
 }
 
 ion-slide {
@@ -70,6 +70,7 @@ ion-slide {
     .row {
       margin-top: 20px;
       margin-left: 15px;
+      font-size: 18px;
     }
 
     .separator-other {
@@ -81,10 +82,20 @@ ion-slide {
     }
 
     .example {
+      font-size: 18px;
+
+      .example-phonetic {
+        display: inline-block;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+    }
+
+    .example {
       margin-left: 15px;
 
       + .example {
-        margin-top: 20px;
+        margin-top: 25px;
       }
     }
   }

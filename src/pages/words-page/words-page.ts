@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController } from 'ionic-angular';
+import { MediaPlugin } from 'ionic-native';
 import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { AudioService, SliderService, DbService, SettingService, LoaderService, LocalStorageService } from '../../services';
 import { WordSlides } from '../word-slides/word-slides';
 import { PlaylistOptions, SettingWord } from '../../components';
+
+declare var cordova: any;
 
 @Component({
   templateUrl: 'words-page.html',
@@ -20,6 +23,8 @@ export class WordsPage {
   value: string = '';
   displayHiragana: boolean;
   displayMeaning: boolean;
+  track: MediaPlugin = null;
+  playingWordId: string = null;
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
     private audioService: AudioService, private sliderService: SliderService,
@@ -56,6 +61,10 @@ export class WordsPage {
   }
 
   ionViewWillLeave() {
+    if (this.track) {
+      this.track.release();
+      this.track = null;
+    }
     this.currentCourseSubscription.unsubscribe();
     this.settingSubscription.unsubscribe();
   }
@@ -86,6 +95,19 @@ export class WordsPage {
       this.dbService.updateWordPlaylist(word.id, diffPlaylists);
     });
     modal.present();
+  }
+
+  playWord($event, word) {
+    $event.stopPropagation();
+    if (this.playingWordId === word.id) {
+      if (this.track) this.track.stop();
+      else this.track = new MediaPlugin(`${cordova.file.dataDirectory}${word.audioFile}`);
+    } else {
+      this.playingWordId = word.id;
+      if (this.track) this.track.release();
+      this.track = new MediaPlugin(`${cordova.file.dataDirectory}${word.audioFile}`);
+    }
+    this.track.play();
   }
 
   openSettings() {

@@ -1,16 +1,26 @@
-page-modal-download-page {
-    .downloadInfor{
-        margin-top: 20%;
-    }
-    
-    .appInfor {
-        margin-top: 50%;
-        .title {
-            font-size: 40px;
-        }
-        .version{
-            color: #f55831;
-            font-weight: bold;
-        }
-    }
+
+.downloadInfor {
+  position: relative;
+  margin-top: 20%;
+
+  .tip {
+    font-family: "Roboto", "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    margin-top: 60px;
+    font-style: italic;
+    color: #777;
+  }
+}
+
+.appInfor {
+  margin-top: 40%;
+
+  .title {
+    font-size: 40px;
+  }
+
+  .version {
+    color: #f55831;
+    font-weight: bold;
+  }
 }

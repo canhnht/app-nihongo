@@ -13,7 +13,7 @@ let firebase = require('firebase');
 @Injectable()
 export class AuthService {
   isLoggedIn: boolean = false;
-  currentUser: any = null;
+  currentUser: any = {};
   authSubject: Subject<any> = new Subject<any>();
 
   constructor(private storageService: LocalStorageService, private translate: TranslateService,
@@ -25,7 +25,7 @@ export class AuthService {
     firebase.auth().onAuthStateChanged((user) => {
       this.isLoggedIn = !!user;
       if (this.isLoggedIn) {
-        this.analytics.setUserId(user.uid);
+        // this.analytics.setUserId(user.uid);
         let promiseStorageUser = this.storageService.get('user');
         let promiseFirebaseUser = firebase.database().ref(`users/${user.uid}`).once('value').then((snapshot) => snapshot.val());
         Promise.all([ promiseStorageUser, promiseFirebaseUser ]).then((data) => {
@@ -38,10 +38,7 @@ export class AuthService {
                 displayName: user.displayName,
                 email: user.email,
                 avatarUrl: user.photoURL,
-                level: 'N3',
                 numberWordsLearned: 0,
-                exp: 0,
-                currentCourse: null,
                 courses: []
               };
               this.initUserInFirebase(user)
@@ -71,9 +68,9 @@ export class AuthService {
           }
         });
       } else {
-        this.analytics.setUserId(null);
+        // this.analytics.setUserId(null);
         this.storageService.remove('user');
-        this.currentUser = null;
+        this.currentUser = {};
         this.pushState();
       }
     });
@@ -99,10 +96,7 @@ export class AuthService {
       displayName: user.displayName,
       email: user.email,
       avatarUrl: user.photoURL,
-      level: 'N3',
       numberWordsLearned: 0,
-      exp: 0,
-      currentCourse: null,
       courses: []
     };
     return firebase.database().ref(`users/${user.uid}`).set(userInfo);
@@ -144,5 +138,22 @@ export class AuthService {
 
   logoutFacebook() {
     return firebase.auth().signOut().catch(utils.errorHandler(this.translate.instant('Error_logout_facebook')));
+  }
+
+  saveHistory(course) {
+    if (this.isLoggedIn) {
+      let updates = {};
+      updates[`users/${this.currentUser.uid}/courses/${course.id}`] = Date.now();
+      return firebase.database().ref().update(updates);
+    }
+  }
+
+  increaseNumberWordsLearned() {
+    if (this.isLoggedIn) {
+      let updates = {};
+      this.currentUser.numberWordsLearned += 1;
+      updates[`users/${this.currentUser.uid}/numberWordsLearned`] = this.currentUser.numberWordsLearned;
+      return firebase.database().ref().update(updates);
+    }
   }
 }

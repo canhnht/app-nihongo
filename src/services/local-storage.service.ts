@@ -20,7 +20,8 @@ export class LocalStorageService {
         return this.set('init', true)
           .then(this.set.bind(this, 'language', 'vi'))
           .then(this.set.bind(this, 'time_between_words', 0))
-          .then(this.set.bind(this, 'repeat_each_word', 1));
+          .then(this.set.bind(this, 'repeat_each_word', 1))
+          .then(this.set.bind(this, 'display_mode', 'hiragana,meaning'));
       }
     });
   }

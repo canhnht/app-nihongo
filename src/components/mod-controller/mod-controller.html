@@ -1,8 +1,8 @@
 <div class="mod-controller">
-  <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
+  <!-- <ion-icon name="arrow-dropleft" class="btn-prev" (click)="prev()">
   </ion-icon>
   <ion-icon name="arrow-dropright" class="btn-next" (click)="next()">
-  </ion-icon>
+  </ion-icon> -->
   <ion-slides #modControl pager [options]="modControlOptions">
     <ion-slide>
       <button ion-button icon-only outline [class.disabled]="!audioService.isShuffle" (click)="toggleShuffle($event)">
@@ -17,12 +17,12 @@
       </button>
     </ion-slide>
 
-    <ion-slide>
+    <!-- <ion-slide>
       <button ion-button round icon-right margin (click)="startLearn()"
         [disabled]="isDisable">
         Learn
         <ion-icon name="book"></ion-icon>
       </button>
-    </ion-slide>
+    </ion-slide> -->
   </ion-slides>
 </div>

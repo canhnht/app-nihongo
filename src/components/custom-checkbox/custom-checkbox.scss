@@ -18,8 +18,8 @@
   }
 
   &:checked + label:before {
-    background: #32db64;
-    border: 2px solid #32db64;
+    background: color($colors, primary);
+    border: 2px solid color($colors, primary);
   }
 
   // Checkmark. Could be replaced with an image

@@ -21,34 +21,39 @@
 
 <ion-content class="words-page">
   <ion-list>
-    <ion-item text-wrap *ngFor="let word of searchedWords"
-      (click)="selectWord($event, word)">
-      <ion-label class="word-item">
-        <button ion-button clear large class="word-bookmark" [class.hidden]="!word.bookmarked" (click)="addToPlaylist($event, word)" icon-only>
+    <ion-item-sliding *ngFor="let word of searchedWords">
+      <ion-item text-wrap (click)="selectWord($event, word)">
+        <ion-label class="word-item">
+          <button ion-button clear large class="btn-listen"
+            (click)="playWord($event, word)" icon-only>
+            <ion-icon name="volume-up" large></ion-icon>
+          </button>
+          <div class="word-content">
+            <h1 color="primary">{{word.kanji}}</h1>
+            <h2>
+              <span *ngIf="displayHiragana && word.phonetic.length > 0">{{word.phonetic[0]}}</span>
+              <span *ngIf="displayHiragana && word.phonetic.length > 0 && displayMeaning && word.meaning.length > 0">-</span>
+              <span *ngIf="displayMeaning && word.meaning.length > 0">{{word.meaning[0].mean}}</span>
+            </h2>
+            <span class="times-played" *ngIf="word.timesPlayed > 0">
+              <ion-icon name="headset"></ion-icon> {{word.timesPlayed}}
+            </span>
+            <span class="last-played" *ngIf="word.timesPlayed > 0">
+              <ion-icon name="calendar"></ion-icon> {{word.lastPlayed | customDate}}
+            </span>
+          </div>
+        </ion-label>
+        <custom-checkbox item-right (onClick)="checkWord($event, word)"
+          [checked]="selectedWords.indexOf(word.id) >= 0">
+        </custom-checkbox>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button large class="word-bookmark"
+          (click)="addToPlaylist($event, word)" icon-only>
           <i class="fa fa-bookmark icon-bookmark"></i>
         </button>
-        <button ion-button clear large class="word-bookmark" [class.hidden]="word.bookmarked" (click)="addToPlaylist($event, word)" icon-only>
-          <i class="fa fa-bookmark-o icon-bookmark"></i>
-        </button>
-        <div class="word-content">
-          <h1>{{word.kanji}}</h1>
-          <h2>
-            <span *ngIf="displayHiragana && word.phonetic.length > 0">{{word.phonetic[0]}}</span>
-            <span *ngIf="displayHiragana && word.phonetic.length > 0 && displayMeaning && word.meaning.length > 0">-</span>
-            <span *ngIf="displayMeaning && word.meaning.length > 0">{{word.meaning[0].mean}}</span>
-          </h2>
-          <span class="times-played" *ngIf="word.timesPlayed > 0">
-            <ion-icon name="headset"></ion-icon> {{word.timesPlayed}}
-          </span>
-          <span class="last-played" *ngIf="word.timesPlayed > 0">
-            <ion-icon name="calendar"></ion-icon> {{word.lastPlayed | customDate}}
-          </span>
-        </div>
-      </ion-label>
-      <custom-checkbox item-right (onClick)="checkWord($event, word)"
-        [checked]="selectedWords.indexOf(word.id) >= 0">
-      </custom-checkbox>
-    </ion-item>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 </ion-content>
 <ion-footer>
