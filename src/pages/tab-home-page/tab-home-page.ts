@@ -144,7 +144,7 @@ export class TabHomePage {
         alert.present();
         return;
       }
-      let alert = this.alertCtrl.create({
+      let promptDownload = this.alertCtrl.create({
         title: this.translate.instant('Download_course'),
         subTitle: this.translate.instant('Download_course_confirmation'),
         buttons: [
@@ -156,20 +156,25 @@ export class TabHomePage {
             handler: () => {
               this.openModalDownload(course);
               this.downloadService.downloadCourse(course).then(() => {
-                this.analytics.logEvent(Events.DOWNLOAD_COURSE, {
-                  [Params.COURSE_ID]: course.id,
-                  [Params.COURSE_NAME]: course.name,
-                  [Params.COURSE_LEVEL]: course.level
-                });
-                this.dbService.getCourses();
-                this.modalDownloadCourse.dismiss();
-                this.goToCourse(course);
+                if (course.notUnits > 0) {
+                  this.analytics.logEvent(Events.DOWNLOAD_COURSE, {
+                    [Params.COURSE_ID]: course.id,
+                    [Params.COURSE_NAME]: course.name,
+                    [Params.COURSE_LEVEL]: course.level
+                  });
+                  this.dbService.getCourses();
+                  this.modalDownloadCourse.dismiss();
+                  this.goToCourse(course);
+                } else {
+                  this.dbService.getCourses();
+                  this.modalDownloadCourse.dismiss();
+                }
               });
             }
           }
         ]
       });
-      alert.present();
+      promptDownload.present();
     }
   }
 

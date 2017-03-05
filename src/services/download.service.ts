@@ -74,9 +74,11 @@ export class DownloadService {
     })
     .catch((err) => {
       Toast.showLongBottom(this.translate.instant('Error_download_course')).subscribe(() => {});
-      course.noUnits = 0;
-      course.noWords = 0;
-      return this.dbService.resetErrorCourse(course);
+      //course.noUnits = 0;
+      //course.noWords = 0;
+      //return this.dbService.resetErrorCourse(course);
+      course.downloaded = true;
+      return this.dbService.updateDownloadedCourse(course);
     });
   }
 
