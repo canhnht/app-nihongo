@@ -19,7 +19,7 @@
 
   &:checked + label:before {
     background: color($colors, primary);
-    border: 2px solid color($colors, primary);
+    border: 2px solid white;
   }
 
   // Checkmark. Could be replaced with an image

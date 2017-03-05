@@ -20,7 +20,7 @@
   </div>
   <ion-list *ngIf="words.length > 0">
     <ion-item-sliding *ngFor="let word of words">
-      <button ion-item text-wrap (click)="selectWord($event, word)">
+      <ion-item text-wrap (click)="selectWord($event, word)">
         <ion-label class="word-item">
           <button ion-button clear large class="btn-listen"
             (click)="playWord($event, word)" icon-only>
@@ -44,7 +44,7 @@
         <custom-checkbox item-right (onClick)="checkWord($event, word)"
           [checked]="selectedWords.indexOf(word.id) >= 0">
         </custom-checkbox>
-      </button>
+      </ion-item>
       <ion-item-options>
         <button ion-button color="danger" (click)="deleteWord(word)">
           <ion-icon name="trash" large></ion-icon><br />

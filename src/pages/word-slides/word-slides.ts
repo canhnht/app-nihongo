@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { PlaylistOptions } from '../../components';
 import { AudioService, SliderService, DbService, LoaderService } from '../../services';
+import * as utils from '../../helpers/utils';
 
 declare var cordova: any;
 
@@ -155,8 +156,12 @@ export class WordSlides {
       if (this.singleTrack) {
         this.singleTrack.release();
       }
-      this.singleTrack = new MediaPlugin(`${cordova.file.dataDirectory}${this.words[this.currentIndex].audioFile}`);
-      this.singleTrack.play();
+      utils.resolveIntervalUrl(`${cordova.file.dataDirectory}${this.words[this.currentIndex].audioFolder}`, this.words[this.currentIndex].audioFile)
+        .then((url) => {
+          alert(`url ${url}`);
+          this.singleTrack = new MediaPlugin(url);
+          this.singleTrack.play();
+        });
       this.dbService.updateAnalytic(this.words[this.currentIndex]);
     } else {
       this.sliderService.currentSlide = this.currentIndex;

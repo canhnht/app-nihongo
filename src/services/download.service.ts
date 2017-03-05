@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Toast, Transfer } from 'ionic-native';
+import { Toast, Transfer, File } from 'ionic-native';
 import { AlertController } from 'ionic-angular';
+import _ from 'lodash';
 import { DbService } from '../services';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import * as utils from '../helpers/utils';
@@ -14,11 +15,28 @@ export class DownloadService {
   percentPerWord: number;
   downloadedPercent: number = 0;
   percDownloadedSubject: Subject<any> = new Subject<any>();
+  isConnected: boolean = true;
 
-  constructor(private alertCtrl: AlertController, private dbService: DbService, private translate: TranslateService) {
+  constructor(private alertCtrl: AlertController, private dbService: DbService,
+    private translate: TranslateService) {
+  }
+
+  private trackFirebaseConnection() {
+    firebase.database().ref('.info/connected').on('value', (snap) => {
+      if (snap.val() === true) {
+        this.isConnected = true;
+      } else {
+        this.isConnected = false;
+      }
+    });
+  }
+
+  private stopTrackFirebaseConnection() {
+    firebase.database().ref('.info/connected').off('value');
   }
 
   downloadCourse(course) {
+    this.trackFirebaseConnection();
     let remainingPercent = 100;
     return this.downloadCourseInfo(course.id).then((course) => {
       this.percDownloadedSubject.next({
@@ -59,31 +77,40 @@ export class DownloadService {
           percDownloaded: 3
         });
         remainingPercent -= 1;
-
         this.percentPerWord = remainingPercent / listWord.length;
         this.downloadedPercent = 3;
-        let wordsPromise = listWord.map((word) => this.downloadWord(word));
-        return Promise.all(wordsPromise);
+
+        let listWordSegments = this.splitListWord(listWord);
+        let segmentsPromise = listWordSegments.map((segment) => this.downloadWordSegmentPromise(segment));
+        return segmentsPromise.reduce((p, e) => p.then(e), Promise.resolve());
       });
     }).then((res) => {
-      Toast.showLongCenter(this.translate.instant('Download_course_successfully', {
-        courseName: course.name
-      })).subscribe(() => {});
-      course.downloaded = true;
+      this.stopTrackFirebaseConnection();
+      course.downloaded = 1;
       return this.dbService.updateDownloadedCourse(course);
     })
     .catch((err) => {
-      Toast.showLongBottom(this.translate.instant('Error_download_course')).subscribe(() => {});
-      //course.noUnits = 0;
-      //course.noWords = 0;
-      //return this.dbService.resetErrorCourse(course);
-      course.downloaded = true;
-      return this.dbService.updateDownloadedCourse(course);
+      this.stopTrackFirebaseConnection();
+      course.noUnits = 0;
+      course.noWords = 0;
+      return this.dbService.resetErrorCourse(course)
+        .then(() => File.removeRecursively(cordova.file.dataDirectory, course.id))
+        .then(() => {
+          throw(err);
+        });
     });
+  }
+
+  private splitListWord(words) {
+    const chunkSize = 20;
+    return _.chain(words)
+      .groupBy((e, idx) => Math.floor(idx / chunkSize))
+      .toArray().value();
   }
 
   private downloadCourseInfo(courseId) {
     let courseRef = firebase.database().ref(`/courses/${courseId}`);
+    if (!this.isConnected) return Promise.reject(new Error('internet'));
     return courseRef.once('value').then((res) => res.val())
       .then((course) => Object.assign({ id: courseId }, course));
   }
@@ -98,45 +125,53 @@ export class DownloadService {
         });
       }).then((unit) => Object.assign({ id: unitId }, unit));
     });
+    if (!this.isConnected) return Promise.reject(null);
     return Promise.all(unitsPromise);
+  }
+
+  private downloadWordSegmentPromise(listWord) {
+    return () => {
+      const wordsPromise = listWord.map((word) => this.downloadWord(word));
+      return Promise.all(wordsPromise);
+    };
   }
 
   private downloadWord({ id, unitId, courseId }) {
     let wordRef = firebase.database().ref(`/words/${id}`);
+    if (!this.isConnected) return Promise.reject(null);
     let wordPromise = wordRef.once('value').then((res) => res.val());
     return wordPromise.then((word) => {
+      if (!this.isConnected) return Promise.reject(null);
       return this.downloadAudio(courseId, unitId, word).then(() => {
         return this.dbService.addWord({
           id, unitId,
           kanji: word.kanji,
-          audioFile: (word.audioFile ? `${courseId}/${unitId}/${word.audioFile}.mp3` : ''),
+          audioFolder: `${courseId}/${unitId}/`,
+          audioFile: `${word.audioFile}.mp3`,
           audioDuration: word.audioDuration,
           mainExample: JSON.stringify(word.mainExample),
           meaning: JSON.stringify(word.meaning),
           otherExamples: JSON.stringify(word.otherExamples),
           phonetic: JSON.stringify(word.phonetic),
         })
-      }).then(() => {
-        this.downloadedPercent += this.percentPerWord;
-        this.percDownloadedSubject.next({
-          percDownloaded: this.downloadedPercent
-        });
+      });
+    }).then(() => {
+      this.downloadedPercent += this.percentPerWord;
+      this.percDownloadedSubject.next({
+        percDownloaded: this.downloadedPercent
       });
     });
   }
 
   private downloadAudio(courseId, unitId, word) {
     let storage = firebase.storage();
-    if (!word.audioFile) return Promise.resolve();
-    else {
-      let pathReference = storage.ref(`${courseId}/${unitId}/${word.audioFile}.mp3`);
-      return pathReference.getDownloadURL().then((url) => {
-        let folderPath = `${cordova.file.dataDirectory}${courseId}/${unitId}`;
-        const fileTransfer = new Transfer();
-        return fileTransfer.download(url,
-          `${folderPath}/${word.audioFile}.mp3`);
-      });
-    }
+    let pathReference = storage.ref(`${courseId}/${unitId}/${word.audioFile}.mp3`);
+    return pathReference.getDownloadURL().then((url) => {
+      let folderPath = `${cordova.file.dataDirectory}${courseId}/${unitId}`;
+      const fileTransfer = new Transfer();
+      return fileTransfer.download(url,
+        `${folderPath}/${word.audioFile}.mp3`);
+    });
   }
 }
 

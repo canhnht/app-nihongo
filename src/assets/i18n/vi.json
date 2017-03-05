@@ -131,5 +131,6 @@
   "Turn_on_internet": "Hãy bật kết nối internet để bắt đầu tải khóa học!",
   "Source": "Nguồn",
   "Empty_list": "Danh sách đang rỗng!",
-  "Instruction_add_word": "Hãy vào danh sách từ của khóa học để thêm từ như hướng dẫn bên dưới."
+  "Instruction_add_word": "Hãy vào danh sách từ của khóa học để thêm từ như hướng dẫn bên dưới.",
+  "Internet_failed": "Kết nối internet bị lỗi"
 }

@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS `word` (
   `meaning` TEXT DEFAULT '[]',
   `otherExamples` TEXT DEFAULT '[]',
   `phonetic` TEXT DEFAULT '[]',
+  `audioFolder` VARCHAR(255),
   `audioFile` VARCHAR(255),
   `audioDuration` DOUBLE DEFAULT 0,
   `unitId` VARCHAR(50) NOT NULL,
@@ -120,14 +121,6 @@ CREATE TABLE IF NOT EXISTS `news` (
 
 
 -- Create triggers
-DROP TRIGGER IF EXISTS `decrease_noWords_unit`;
-----
-CREATE TRIGGER IF NOT EXISTS `decrease_noWords_unit` AFTER DELETE ON `word`
-  BEGIN
-    UPDATE `unit` SET `noWords` = `noWords` - 1 WHERE `id` = old.unitId;
-  END;
-----
-
 DROP TRIGGER IF EXISTS `increase_noWords_unit`;
 ----
 CREATE TRIGGER IF NOT EXISTS `increase_noWords_unit` AFTER INSERT ON `word`
@@ -152,14 +145,6 @@ CREATE TRIGGER IF NOT EXISTS `increase_noUnits_course` AFTER INSERT ON `unit`
   END;
 ----
 
-DROP TRIGGER IF EXISTS `delete_course`;
-----
-CREATE TRIGGER IF NOT EXISTS `delete_course` AFTER UPDATE OF `noWords` ON `course`
-  BEGIN
-    DELETE FROM `unit` WHERE `courseId` = (CASE new.noWords WHEN 0 THEN new.id ELSE '' END);
-  END;
-----
-
 DROP TRIGGER IF EXISTS `decrease_noWords_playlist`;
 ----
 CREATE TRIGGER IF NOT EXISTS `decrease_noWords_playlist` AFTER DELETE ON `word_playlist`
@@ -173,22 +158,6 @@ DROP TRIGGER IF EXISTS `increase_noWords_playlist`;
 CREATE TRIGGER IF NOT EXISTS `increase_noWords_playlist` AFTER INSERT ON `word_playlist`
   BEGIN
     UPDATE `playlist` SET `noWords` = `noWords` + 1 WHERE `id` = new.playlistId;
-  END;
-----
-
-DROP TRIGGER IF EXISTS `delete_playlist`;
-----
-CREATE TRIGGER IF NOT EXISTS `delete_playlist` AFTER DELETE ON `playlist`
-  BEGIN
-    DELETE FROM `word_playlist` WHERE `playlistId` = old.id;
-  END;
-----
-
-DROP TRIGGER IF EXISTS `delete_unit`;
-----
-CREATE TRIGGER IF NOT EXISTS `delete_unit` AFTER DELETE ON `unit`
-  BEGIN
-    DELETE FROM `word` WHERE `unitId` = old.id;
   END;
 ----
 

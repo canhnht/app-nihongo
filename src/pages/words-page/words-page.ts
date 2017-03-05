@@ -6,6 +6,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { AudioService, SliderService, DbService, SettingService, LoaderService, LocalStorageService } from '../../services';
 import { WordSlides } from '../word-slides/word-slides';
 import { PlaylistOptions, SettingWord } from '../../components';
+import * as utils from '../../helpers/utils';
 
 declare var cordova: any;
 
@@ -101,13 +102,22 @@ export class WordsPage {
     $event.stopPropagation();
     if (this.playingWordId === word.id) {
       if (this.track) this.track.stop();
-      else this.track = new MediaPlugin(`${cordova.file.dataDirectory}${word.audioFile}`);
+      else {
+        utils.resolveIntervalUrl(`${cordova.file.dataDirectory}${word.audioFolder}`, word.audioFile)
+          .then((url) => {
+            this.track = new MediaPlugin(url);
+            this.track.play();
+          });
+      }
     } else {
       this.playingWordId = word.id;
       if (this.track) this.track.release();
-      this.track = new MediaPlugin(`${cordova.file.dataDirectory}${word.audioFile}`);
+      utils.resolveIntervalUrl(`${cordova.file.dataDirectory}${word.audioFolder}`, word.audioFile)
+        .then((url) => {
+          this.track = new MediaPlugin(url);
+          this.track.play();
+        });
     }
-    this.track.play();
   }
 
   openSettings() {

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { MediaPlugin, Toast} from 'ionic-native';
+import { MediaPlugin, Toast, File } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import _ from 'lodash';
 import { DbService } from './db.service';
 import { SettingService } from './setting.service';
 import { LocalStorageService } from './local-storage.service';
 import { formatSecondsAsHHMMSS } from '../helpers/main-helper';
+import * as utils from '../helpers/utils';
 
 declare var cordova: any;
 
@@ -42,7 +43,7 @@ export class AudioService {
       Toast.showShortCenter(this.translate.instant('Repeat_off')).subscribe(() => {});
     }
   }
-  
+
   resetLoop(){
     this.isLoop = false;
   }
@@ -85,7 +86,8 @@ export class AudioService {
       this.listWord.forEach(word => word.repeatCount = 0);
       this.getListWordOrder();
       this.stopListTrack();
-      this.generateListTrack();
+      return this.generateListTrack();
+    }).then(() => {
       this.currentTrack.index = 0;
       this.dbService.updateAnalytic(this.listWord[this.listWordOrder[0]]);
       this.playCurrentTrack();
@@ -93,10 +95,15 @@ export class AudioService {
   }
 
   private generateListTrack() {
-    this.listTrack = [];
-    this.listWordOrder.forEach((wordIndex, index) => {
+    let audioUrlsPromise = this.listWordOrder.map((wordIndex) => {
       let word = this.listWord[wordIndex];
-      this.listTrack.push(new MediaPlugin(`${cordova.file.dataDirectory}${word.audioFile}`));
+      return utils.resolveIntervalUrl(`${cordova.file.dataDirectory}${word.audioFolder}`, word.audioFile);
+    });
+    return Promise.all(audioUrlsPromise).then((audioUrls) => {
+      this.listTrack = [];
+      audioUrls.forEach((url) => {
+        this.listTrack.push(new MediaPlugin(url));
+      });
     });
   }
 

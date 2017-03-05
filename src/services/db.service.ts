@@ -84,8 +84,12 @@ export class DbService {
   }
 
   resetErrorCourse(course) {
-    let sql = 'UPDATE `course` SET `noWords` = ?, `noUnits` = ? WHERE `id` = ?';
-    return this.db.executeSql(sql, [ 0, 0, course.id ])
+    let deleteWordsSql = 'DELETE FROM `word` WHERE `unitId` IN (SELECT `id` FROM `unit` WHERE `courseId` = ?)';
+    let deleteUnitsSql = 'DELETE FROM `unit` WHERE `courseId` = ?';
+    let courseSql = 'UPDATE `course` SET `noWords` = ?, `noUnits` = ? WHERE `id` = ?';
+    return this.db.executeSql(deleteWordsSql, [ course.id ])
+      .then(() => this.db.executeSql(deleteUnitsSql, [ course.id ]))
+      .then(() => this.db.executeSql(courseSql, [ 0, 0, course.id ]))
       .catch(utils.errorHandler('Error_database'));
   }
 
@@ -118,14 +122,8 @@ export class DbService {
   }
 
   addWord(word) {
-    let sql = 'INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`, `audioFile`, `audioDuration`) VALUES (?,?,?,?,?,?,?,?,?)';
-    return this.db.executeSql(sql, [ word.id, word.kanji, word.mainExample, word.meaning, word.otherExamples, word.phonetic, word.unitId, word.audioFile, word.audioDuration ])
-      .catch(utils.errorHandler(this.translate.instant('Error_database')));
-  }
-
-  updateAudioFile(wordId, audioFile) {
-    let sql = 'UPDATE `word` SET `audioFile` = ? WHERE `id` = ?';
-    return this.db.executeSql(sql, [ audioFile, wordId ])
+    let sql = 'INSERT INTO `word` (`id`, `kanji`, `mainExample`, `meaning`, `otherExamples`, `phonetic`, `unitId`, `audioFolder`, `audioFile`, `audioDuration`) VALUES (?,?,?,?,?,?,?,?,?,?)';
+    return this.db.executeSql(sql, [ word.id, word.kanji, word.mainExample, word.meaning, word.otherExamples, word.phonetic, word.unitId, word.audioFolder, word.audioFile, word.audioDuration ])
       .catch(utils.errorHandler(this.translate.instant('Error_database')));
   }
 
@@ -158,14 +156,16 @@ export class DbService {
     return this.db.executeSql(sql, [ playlist.id, playlist.name, playlist.noWords ]).then(() => {
       this.playlistsByWordId.push(Object.assign({ checked: false }, playlist));
       this.playlistsByWordIdSubject.next(this.playlistsByWordId);
-      this.getAllPlaylists
-    }).then(this.getAllPlaylists.bind(this))
-      .catch(utils.errorHandler('Error_database'));
+      return this.getAllPlaylists();
+    }).catch(utils.errorHandler('Error_database'));
   }
 
   deletePlaylist(playlist) {
-    let sql = 'DELETE FROM `playlist` WHERE `id` = ?';
-    return this.db.executeSql(sql, [ playlist.id ]).then(this.getAllPlaylists.bind(this))
+    let deleteWordPlaylistSql = 'DELETE FROM `word_playlist` WHERE `playlistId` = ?';
+    let deletePlaylistSql = 'DELETE FROM `playlist` WHERE `id` = ?';
+    return this.db.executeSql(deleteWordPlaylistSql, [ playlist.id ])
+      .then(() => this.db.executeSql(deletePlaylistSql, [ playlist.id ]))
+      .then(() => this.getAllPlaylists())
       .catch(utils.errorHandler('Error_database'));
   }
 

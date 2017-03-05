@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Http, URLSearchParams } from '@angular/http';
 import { Subscription } from 'rxjs';
-import { Toast, Network, OneSignal } from 'ionic-native';
+import { Toast, Network, OneSignal, File } from 'ionic-native';
 import { Platform, App, NavController, AlertController, ModalController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import { NewsPage } from '../news-page/news-page';
@@ -111,7 +111,9 @@ export class TabHomePage {
           if (!item.downloaded && item.noUnits > 0) {
             item.noUnits = 0;
             item.noWords = 0;
-            this.dbService.resetErrorCourse(item);
+            this.dbService.resetErrorCourse(item)
+              .then(() => File.removeRecursively(cordova.file.dataDirectory, item.id))
+              .catch((err) => {});
           }
         });
       }
@@ -156,19 +158,23 @@ export class TabHomePage {
             handler: () => {
               this.openModalDownload(course);
               this.downloadService.downloadCourse(course).then(() => {
-                if (course.notUnits > 0) {
-                  this.analytics.logEvent(Events.DOWNLOAD_COURSE, {
-                    [Params.COURSE_ID]: course.id,
-                    [Params.COURSE_NAME]: course.name,
-                    [Params.COURSE_LEVEL]: course.level
-                  });
-                  this.dbService.getCourses();
-                  this.modalDownloadCourse.dismiss();
-                  this.goToCourse(course);
-                } else {
-                  this.dbService.getCourses();
-                  this.modalDownloadCourse.dismiss();
-                }
+                Toast.showLongCenter(this.translate.instant('Download_course_successfully', {
+                  courseName: course.name
+                })).subscribe(() => {});
+                this.analytics.logEvent(Events.DOWNLOAD_COURSE, {
+                  [Params.COURSE_ID]: course.id,
+                  [Params.COURSE_NAME]: course.name,
+                  [Params.COURSE_LEVEL]: course.level
+                });
+                this.modalDownloadCourse.dismiss();
+                this.downloadService.downloadedPercent = 0;
+                this.dbService.getCourses();
+                this.goToCourse(course);
+              }).catch((err) => {
+                Toast.showLongBottom(this.translate.instant('Error_download_course')).subscribe(() => {});
+                this.modalDownloadCourse.dismiss();
+                this.downloadService.downloadedPercent = 0;
+                this.dbService.getCourses();
               });
             }
           }

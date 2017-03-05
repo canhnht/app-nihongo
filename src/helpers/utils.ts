@@ -1,4 +1,4 @@
-import { Toast } from 'ionic-native';
+import { Toast, File } from 'ionic-native';
 import { QuestionType } from './custom-types';
 
 const arrayBufferToBase64 = (buffer) => {
@@ -33,4 +33,12 @@ export const downloadImageData = (imageUrl: string) => {
     });
     request.send();
   });
-}
+};
+
+export const resolveIntervalUrl = (folderPath, fileName) => {
+  return File.resolveDirectoryUrl(folderPath).then((folderEntry) => {
+    return File.getFile(folderEntry, fileName, {});
+  }).then((fileEntry) => {
+    return fileEntry.toInternalURL();
+  });
+};
