@@ -103,8 +103,9 @@ export class DownloadService {
 
   private splitListWord(words) {
     const chunkSize = 20;
+    let idx = 0;
     return _.chain(words)
-      .groupBy((e, idx) => Math.floor(idx / chunkSize))
+      .groupBy((e) => Math.floor((idx++) / chunkSize))
       .toArray().value();
   }
 

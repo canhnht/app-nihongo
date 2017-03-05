@@ -158,7 +158,6 @@ export class WordSlides {
       }
       utils.resolveIntervalUrl(`${cordova.file.dataDirectory}${this.words[this.currentIndex].audioFolder}`, this.words[this.currentIndex].audioFile)
         .then((url) => {
-          alert(`url ${url}`);
           this.singleTrack = new MediaPlugin(url);
           this.singleTrack.play();
         });

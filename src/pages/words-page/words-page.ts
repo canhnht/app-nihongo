@@ -105,6 +105,7 @@ export class WordsPage {
       else {
         utils.resolveIntervalUrl(`${cordova.file.dataDirectory}${word.audioFolder}`, word.audioFile)
           .then((url) => {
+            alert(`url ${url}`);
             this.track = new MediaPlugin(url);
             this.track.play();
           });

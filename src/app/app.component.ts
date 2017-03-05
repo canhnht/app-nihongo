@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
 import { StatusBar, Splashscreen, NativeAudio, LocalNotifications, AdMob, Network } from 'ionic-native';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage, AboutUsPage, SentencePage, WordSlides } from '../pages';
+import { HomePage, PlaylistsPage, FeedbackPage, SettingPage, PlaygroundPage, AboutUsPage, SentencePage } from '../pages';
 import { LocalStorageService, DbService } from '../services';
 import { ASSETS_BASE_URL } from '../helpers/constants';
 import { firebaseConfig, oneSignalConfig, admobConfig } from './config-local';
@@ -16,7 +16,7 @@ firebase.initializeApp(firebaseConfig);
 })
 export class MyApp {
   @ViewChild('content') nav: NavController;
-  rootPage = WordSlides;
+  rootPage = HomePage;
   homePage = HomePage;
   playlistsPage = PlaylistsPage;
   feedbackPage = FeedbackPage;
@@ -50,7 +50,7 @@ export class MyApp {
       NativeAudio.preloadSimple('success', `${ASSETS_BASE_URL}/sounds/success.wav`);
       NativeAudio.preloadSimple('count_down_5', `${ASSETS_BASE_URL}/sounds/count_down_5.mp3`);
 
-      // this.initializeAdMod();
+      this.initializeAdMod();
     });
   }
 

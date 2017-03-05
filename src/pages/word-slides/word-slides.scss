@@ -45,10 +45,11 @@
 
 .btn-close {
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 5px;
+  top: 15px;
   z-index: 10;
   color: white;
+  font-weight: bold;
 }
 
 ion-slide {
@@ -74,6 +75,8 @@ ion-slide {
       background: #f55831;
       color: white;
       padding: 7%;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
     }
 
     .row {
@@ -88,8 +91,12 @@ ion-slide {
         margin-bottom: 10px;
       }
       .word-infor-content{
-        font-size:medium;
+        font-size: medium;
         margin-top: 5px;
+
+        + .word-infor-content {
+          margin-top: 15px;
+        }
       }
     }
 
