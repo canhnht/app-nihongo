@@ -20,7 +20,7 @@ export class WordsPage {
   searchedWords: any[] = [];
   selectedWords: any[] = [];
   settingSubscription: Subscription;
-  currentCourseSubscription: Subscription;
+  
   value: string = '';
   displayHiragana: boolean;
   displayMeaning: boolean;
@@ -32,6 +32,7 @@ export class WordsPage {
     private dbService: DbService, private settingService: SettingService,
     private translate: TranslateService, private modalCtrl: ModalController,
     private loader: LoaderService, private storageService: LocalStorageService) {
+    alert(cordova.file.dataDirectory);
   }
 
   ionViewWillEnter() {
@@ -66,7 +67,6 @@ export class WordsPage {
       this.track.release();
       this.track = null;
     }
-    this.currentCourseSubscription.unsubscribe();
     this.settingSubscription.unsubscribe();
   }
 
@@ -100,16 +100,10 @@ export class WordsPage {
 
   playWord($event, word) {
     $event.stopPropagation();
+    alert(word.audioFile);
     if (this.playingWordId === word.id) {
-      if (this.track) this.track.stop();
-      else {
-        utils.resolveIntervalUrl(`${cordova.file.dataDirectory}${word.audioFolder}`, word.audioFile)
-          .then((url) => {
-            alert(`url ${url}`);
-            this.track = new MediaPlugin(url);
-            this.track.play();
-          });
-      }
+      this.track.stop();
+      this.track.play();
     } else {
       this.playingWordId = word.id;
       if (this.track) this.track.release();
