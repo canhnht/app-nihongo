@@ -13,23 +13,15 @@
       refreshingText="{{'Downloading...' | translate}}">
     </ion-refresher-content>
   </ion-refresher>
+
   <ion-card *ngFor="let news of listNews">
-    <div class="card-news">
-      <img src="assets/images/bg_newstitle.gif" class="img-news" />
-      <div class="title">
-        <span [innerHTML]="news.titleWithRuby"></span>
-        <div class="date" [innerHTML]="news.dateText">
-        </div>
-      </div>
-    </div>
-    <ion-row>
-      <ion-col text-center>
-        <button ion-button color="primary" clear small full (click)="newsDetail(news)">
-          {{'Detail' | translate}}
-        </button>
-      </ion-col>
-    </ion-row>
+    <button ion-item text-wrap (click)="newsDetail(news)">
+      <img src="assets/images/bg_newstitle.gif" class="img-news" item-left />
+      <h2 [innerHTML]="news.titleWithRuby"></h2>
+      <p [innerHTML]="news.dateText"></p>
+    </button>
   </ion-card>
+
   <ion-infinite-scroll (ionInfinite)="loadNews($event)">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"

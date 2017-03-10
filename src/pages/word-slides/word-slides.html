@@ -44,24 +44,24 @@
             <em>{{words[slide.nr].mainExample.meaning}}</em>
           </div>
         </div>
-      
+
         <div class="row example">
           <ion-icon name="bulb" color="primary"></ion-icon>
-          <span class="word-info-title"><ion-badge>{{'Others' | translate}}</ion-badge></span>
+          <span class="word-info-title"><ion-badge>{{'Other_examples' | translate}}</ion-badge></span>
           <br/>
-          
+
           <div class="word-infor-content" *ngFor="let example of words[slide.nr].otherExamples">
             <strong color="primary">
               {{example.content}}
             </strong>
-            
+
             <br/>
             <span class="example-phonetic">
               {{example.phonetic}}
             </span>
             <br/>
             <em>
-              {{example.meaning}} 
+              {{example.meaning}}
             </em>
             <br>
           </div>
@@ -70,7 +70,7 @@
       </div>
     </ion-slide>
   </ion-slides>
-  
+
 </ion-content>
 <ion-footer *ngIf="!hideAudioBar">
   <audio-player></audio-player>

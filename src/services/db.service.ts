@@ -38,7 +38,7 @@ export class DbService {
           }
         }).then((sqlText) => {
           let listSQL = sqlText.toString().split('----').slice(0, -1);
-          return this.db.sqlBatch(listSQL);
+          return this.runSqlInSequence(listSQL);
         })
         .then(() => {
           this.initSubject.next(true);
@@ -49,6 +49,15 @@ export class DbService {
             Toast.showShortBottom(`Error init database ${JSON.stringify(err)}`).subscribe(() => {});
         });
     })
+  }
+
+  private runSqlInSequence(listSql) {
+    let sqlPromise = listSql.map((sql) => {
+      return () => {
+        return this.db.executeSql(sql, []);
+      };
+    }).reduce((p, e) => p.then(e), Promise.resolve());
+    return sqlPromise;
   }
 
   private filterLatestNews() {

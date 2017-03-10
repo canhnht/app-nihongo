@@ -7,25 +7,6 @@
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
 
-  <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#f55831">
-
-  <!-- cordova.js required for cordova apps -->
-  <script src="cordova.js"></script>
-
-  <!-- un-comment this code to enable service worker
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('service worker installed'))
-        .catch(err => console.log('Error', err));
-    }
-  </script>-->
-
-  <link href="assets/css/font-awesome.min.css" rel="stylesheet">
-  <link href="build/main.css" rel="stylesheet">
-
   <style>
     #splashscreen {
       position: fixed;
@@ -65,10 +46,32 @@
     #loading-tip {
       position: absolute;
       bottom: 25%;
+      left: 0;
+      right: 0;
       font-size: 18px;
       color: #888;
+      text-align: center;
     }
   </style>
+
+  <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f55831">
+
+  <!-- cordova.js required for cordova apps -->
+  <script src="cordova.js"></script>
+
+  <!-- un-comment this code to enable service worker
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('service worker installed'))
+        .catch(err => console.log('Error', err));
+    }
+  </script>-->
+
+  <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+  <link href="build/main.css" rel="stylesheet">
 </head>
 <body>
   <div id="splashscreen">

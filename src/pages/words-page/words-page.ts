@@ -20,7 +20,7 @@ export class WordsPage {
   searchedWords: any[] = [];
   selectedWords: any[] = [];
   settingSubscription: Subscription;
-  
+
   value: string = '';
   displayHiragana: boolean;
   displayMeaning: boolean;
@@ -32,7 +32,6 @@ export class WordsPage {
     private dbService: DbService, private settingService: SettingService,
     private translate: TranslateService, private modalCtrl: ModalController,
     private loader: LoaderService, private storageService: LocalStorageService) {
-    alert(cordova.file.dataDirectory);
   }
 
   ionViewWillEnter() {

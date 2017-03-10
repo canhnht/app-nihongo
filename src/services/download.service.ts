@@ -148,7 +148,7 @@ export class DownloadService {
           id, unitId,
           kanji: word.kanji,
           audioFolder: `${courseId}/${unitId}/`,
-          audioFile: `${word.audioFile}.mp3`,
+          audioFile: `${word.audioFile}`,
           audioDuration: word.audioDuration,
           mainExample: JSON.stringify(word.mainExample),
           meaning: JSON.stringify(word.meaning),
@@ -166,12 +166,12 @@ export class DownloadService {
 
   private downloadAudio(courseId, unitId, word) {
     let storage = firebase.storage();
-    let pathReference = storage.ref(`${courseId}/${unitId}/${word.audioFile}.mp3`);
+    let pathReference = storage.ref(`${courseId}/${unitId}/${word.audioFile}`);
     return pathReference.getDownloadURL().then((url) => {
       let folderPath = `${cordova.file.dataDirectory}${courseId}/${unitId}`;
       const fileTransfer = new Transfer();
       return fileTransfer.download(url,
-        `${folderPath}/${word.audioFile}.mp3`);
+        `${folderPath}/${word.audioFile}`);
     });
   }
 }
