@@ -1,72 +1,74 @@
 
 <ion-content>
-  <button ion-button clear round large class="btn-close" (click)="closeSlide($event)" icon-only>
-    <ion-icon name="close"></ion-icon>
-  </button>
   <ion-slides #vocabSlider [options]="sliderOptions" (ionDidChange)="onSlideChanged($event)">
     <ion-slide *ngFor="let slide of slides; let i = index">
-      <div class="word-slide slide-content-{{i}}">
-        <div class="kanji">{{words[slide.nr].kanji}}</div>
-
+      <div class="word-slide">
+        <button ion-button clear round large class="btn-close"
+          (click)="closeSlide($event)" icon-only [style.top.px]="0"
+          [style.right.px]="0">
+          <ion-icon name="close"></ion-icon>
+        </button>
         <div class="btn-group">
-          <button ion-button round class="btn-repeat"
-            (click)="repeatCurrentVocabulary($event)" icon-only>
+          <button ion-fab mini color="secondary"
+            (click)="repeatCurrentVocabulary($event)">
             <ion-icon name="volume-up"></ion-icon>
           </button>
-          <button ion-button *ngIf="!hideBookmark" round
-            class="btn-bookmark" (click)="addToPlaylist($event)" icon-only>
+          <button ion-fab mini *ngIf="true"
+            color="secondary" (click)="addToPlaylist($event)">
             <ion-icon name="add"></ion-icon>
           </button>
         </div>
+        <div class="slide-content-{{i}}">
+          <div class="kanji">{{words[slide.nr].kanji}}</div>
 
-        <div class="row">
-          <ion-icon name="bulb" color="primary"></ion-icon>
-          <span class="word-info-title"><ion-badge>{{'Pronunciation' | translate}}</ion-badge></span>
-          <div class="word-infor-content">
-            <span>{{words[slide.nr].phonetic | commaConcat}}</span>
+          <div class="row">
+            <ion-icon name="bulb" color="primary"></ion-icon>
+            <span class="word-info-title"><ion-badge>{{'Pronunciation' | translate}}</ion-badge></span>
+            <div class="word-infor-content">
+              {{words[slide.nr].phonetic | commaConcat}}
+            </div>
           </div>
-        </div>
 
-        <div class="row">
-          <ion-icon name="bulb" color="primary"></ion-icon>
-          <span class="word-info-title"><ion-badge>{{'Meaning' | translate}}</ion-badge></span>
-          <div class="word-infor-content">
-            <span>{{words[slide.nr].meaningList | commaConcat}}</span>
+          <div class="row">
+            <ion-icon name="bulb" color="primary"></ion-icon>
+            <span class="word-info-title"><ion-badge>{{'Meaning' | translate}}</ion-badge></span>
+            <div class="word-infor-content">
+              {{words[slide.nr].meaningList | commaConcat}}
+            </div>
           </div>
-        </div>
 
-         <div class="row example">
-          <ion-icon name="bulb" color="primary"></ion-icon>
-          <span class="word-info-title"><ion-badge>{{'Example' | translate}}</ion-badge></span>
-          <br/>
-          <div class="word-infor-content">
-            <strong color="primary">{{words[slide.nr].mainExample.content}}</strong><br/>
-            <em>{{words[slide.nr].mainExample.meaning}}</em>
-          </div>
-        </div>
-
-        <div class="row example">
-          <ion-icon name="bulb" color="primary"></ion-icon>
-          <span class="word-info-title"><ion-badge>{{'Other_examples' | translate}}</ion-badge></span>
-          <br/>
-
-          <div class="word-infor-content" *ngFor="let example of words[slide.nr].otherExamples">
-            <strong color="primary">
-              {{example.content}}
-            </strong>
-
+          <div class="row example">
+            <ion-icon name="bulb" color="primary"></ion-icon>
+            <span class="word-info-title"><ion-badge>{{'Example' | translate}}</ion-badge></span>
             <br/>
-            <span class="example-phonetic">
-              {{example.phonetic}}
-            </span>
+            <div class="word-infor-content">
+              <strong color="primary">{{words[slide.nr].mainExample.content}}</strong><br/>
+              <em>{{words[slide.nr].mainExample.meaning}}</em>
+            </div>
+          </div>
+
+          <div class="row example">
+            <ion-icon name="bulb" color="primary"></ion-icon>
+            <span class="word-info-title"><ion-badge>{{'Other_examples' | translate}}</ion-badge></span>
             <br/>
-            <em>
-              {{example.meaning}}
-            </em>
-            <br>
+
+            <div class="word-infor-content"
+              *ngFor="let example of words[slide.nr].otherExamples">
+              <strong color="primary">
+                {{example.content}}
+              </strong>
+              <br/>
+              <span class="example-phonetic">
+                {{example.phonetic}}
+              </span>
+              <br/>
+              <em>
+                {{example.meaning}}
+              </em>
+              <br>
+            </div>
           </div>
         </div>
-
       </div>
     </ion-slide>
   </ion-slides>

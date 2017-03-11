@@ -1,16 +1,31 @@
 import { Component } from '@angular/core';
-import { AlertController, ModalController } from 'ionic-angular';
+import { AlertController, ModalController, ViewController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 @Component({
   template: `
+    <ion-header>
+      <ion-navbar color="primary">
+        <ion-title>{{'Intro_team' | translate}}</ion-title>
+        <ion-buttons end>
+          <button ion-button (click)="close()">
+            {{'Close' | translate}}
+          </button>
+        </ion-buttons>
+      </ion-navbar>
+    </ion-header>
+
     <ion-content>
-      Author Info
+      TechyBrain
     </ion-content>
   `
 })
 export class AuthorInfo {
-  constructor() {
+  constructor(private viewCtrl: ViewController) {
+  }
+
+  close() {
+    this.viewCtrl.dismiss();
   }
 }
 

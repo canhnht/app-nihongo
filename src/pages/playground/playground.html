@@ -1,3 +1,77 @@
 <ion-content>
-  Author Info
+  <ion-slides #vocabSlider [options]="sliderOptions" (ionDidChange)="onSlideChanged($event)">
+    <ion-slide>
+      <div class="word-slide">
+        <button ion-button clear round large class="btn-close"
+          (click)="closeSlide($event)" icon-only [style.top.px]="0"
+          [style.right.px]="0">
+          <ion-icon name="close"></ion-icon>
+        </button>
+        <div class="btn-group">
+          <button ion-fab mini color="secondary"
+            (click)="repeatCurrentVocabulary($event)">
+            <ion-icon name="volume-up"></ion-icon>
+          </button>
+          <button ion-fab mini *ngIf="true"
+            color="secondary" (click)="addToPlaylist($event)">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </div>
+        <div class="slide-content-0">
+          <div class="kanji">words[slide.nr].kanji words[slide.nr].kanji</div>
+
+          <div class="row">
+            <ion-icon name="bulb" color="primary"></ion-icon>
+            <span class="word-info-title"><ion-badge>{{'Pronunciation' | translate}}</ion-badge></span>
+            <div class="word-infor-content">
+              words[slide.nr].phonetic
+            </div>
+          </div>
+
+          <div class="row">
+            <ion-icon name="bulb" color="primary"></ion-icon>
+            <span class="word-info-title"><ion-badge>{{'Meaning' | translate}}</ion-badge></span>
+            <div class="word-infor-content">
+              words[slide.nr].meaningList words[slide.nr].meaningList
+            </div>
+          </div>
+
+           <div class="row example">
+            <ion-icon name="bulb" color="primary"></ion-icon>
+            <span class="word-info-title"><ion-badge>{{'Example' | translate}}</ion-badge></span>
+            <br/>
+            <div class="word-infor-content">
+              <strong color="primary">words[slide.nr].mainExample.content</strong><br/>
+              <em>words[slide.nr].mainExample.meaning</em>
+            </div>
+          </div>
+
+          <div class="row example">
+            <ion-icon name="bulb" color="primary"></ion-icon>
+            <span class="word-info-title"><ion-badge>{{'Other_examples' | translate}}</ion-badge></span>
+            <br/>
+
+            <div class="word-infor-content">
+              <strong color="primary">
+                example.content
+              </strong>
+              <br/>
+              <span class="example-phonetic">
+                example.phonetic
+              </span>
+              <br/>
+              <em>
+                example.meaning
+              </em>
+              <br>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+
 </ion-content>
+<ion-footer *ngIf="true">
+  <audio-player></audio-player>
+</ion-footer>

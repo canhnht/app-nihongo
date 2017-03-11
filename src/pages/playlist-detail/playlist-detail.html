@@ -4,21 +4,21 @@
       {{playlist.name}}
     </ion-title>
     <ion-buttons end>
-      <custom-checkbox [checked]="selectedWords.length === words.length" (onClick)="toggleSelectAll()" *ngIf="words.length > 0">
+      <custom-checkbox [checked]="words !== null && selectedWords.length === words.length" (onClick)="toggleSelectAll()" *ngIf="words !== null && words.length > 0">
       </custom-checkbox>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="playlist-detail">
-  <div class="no-words-message" *ngIf="words.length === 0">
+  <div class="no-words-message" *ngIf="words !== null && words.length === 0">
     {{'Empty_list' | translate}}
     <p>
     {{'Instruction_add_word' | translate}}
     </p>
     <img class="bookmark" src="assets/images/bookmark.gif" />
   </div>
-  <ion-list *ngIf="words.length > 0">
+  <ion-list *ngIf="words !== null && words.length > 0">
     <ion-item-sliding *ngFor="let word of words">
       <ion-item text-wrap (click)="selectWord($event, word)">
         <ion-label class="word-item">
@@ -54,6 +54,6 @@
     </ion-item-sliding>
   </ion-list>
 </ion-content>
-<ion-footer *ngIf="words.length > 0">
+<ion-footer *ngIf="words !== null && words.length > 0">
   <mod-controller></mod-controller>
 </ion-footer>

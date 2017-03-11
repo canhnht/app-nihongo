@@ -15,7 +15,10 @@
     </ion-buttons>
   </ion-navbar>
   <ion-toolbar>
-    <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
+    <ion-searchbar (ionInput)="search($event)" autocomplete="on"
+      placeholder="{{'Search_word' | translate}}" animated="true"
+      (ionClear)="clearSearch()">
+    </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 

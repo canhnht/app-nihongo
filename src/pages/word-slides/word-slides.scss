@@ -8,53 +8,25 @@
   z-index: 5;
 }
 
-.btn-prev {
-  left: 10px;
-}
-
-.btn-next {
-  right: 10px;
-}
-
-:hover, :focus {
-  .btn-prev, .btn-next {
-    display: block;
-  }
-}
-
-.btn-group {
-  position: absolute;
-  width: 100%;
-  top: 86px;
-  text-align: right;
-  z-index: 5;
-
-  .btn-repeat, .btn-bookmark {
-    margin: 0 10px;
-  }
-
-  .disabled {
-    opacity: 0.5;
-  }
-
-  button {
-    background: white;
-    color: #f55831;
-  }
-}
-
-.btn-close {
-  position: absolute;
-  right: 5px;
-  top: 15px;
-  z-index: 10;
-  color: white;
-  font-weight: bold;
-}
-
 ion-slide {
   position: relative;
   background: #f4f4f4;
+
+  .btn-close {
+    position: absolute;
+    z-index: 10;
+    color: white;
+    font-weight: bold;
+  }
+
+  .btn-group {
+    position: absolute;
+    top: 170px;
+    right: 0;
+    z-index: 10;
+    display: flex;
+    height: 60px;
+  }
 
   .word-slide {
     position: absolute;
@@ -65,56 +37,58 @@ ion-slide {
     right: 10px;
     border-radius: 10px;
     text-align: left;
-    // padding: 15px 0;
     overflow-y: auto;
+    padding-bottom: 20px;
 
     .kanji {
       font-size: 40px;
       font-weight: bold;
-      // margin-left: 15px;
       background: #f55831;
       color: white;
-      padding: 7%;
+      padding-top: 50px;
+      height: 200px;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
+      word-wrap: break-word;
+      overflow-y: auto;
     }
 
     .row {
       margin-top: 20px;
       margin-left: 15px;
-      // font-size: 18px;
+      margin-right: 15px;
+
       .word-info-title{
         color: #f55831;
-        font-size:larger;
+        font-size: xlarge;
         font-weight: bold;
         margin-left: 5px;
         margin-bottom: 10px;
       }
+
       .word-infor-content{
         font-size: medium;
         margin-top: 5px;
 
         + .word-infor-content {
-          margin-top: 15px;
+          margin-top: 20px;
         }
       }
     }
-
-    // .example {
-    //   font-size: 18px;
-
-    //   .example-phonetic {
-    //     display: inline-block;
-    //     font-size: 16px;
-    //     margin-bottom: 10px;
-    //   }
-    // }
-
-    // .example {
-    //   // margin-left: 15px;
-    //   + .example {
-    //     margin-top: 25px;
-    //   }
-    // }
   }
+}
+
+
+.slide-navbar {
+  height: 200px;
+}
+
+.kanji {
+  font-size: 40px;
+  font-weight: bold;
+  background: #f55831;
+  color: white;
+  padding: 7%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }

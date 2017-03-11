@@ -14,7 +14,7 @@ declare var cordova: any;
 })
 export class PlaylistDetail {
   playlist: any = {};
-  words: any[] = [];
+  words: any[] = null;
   selectedWords: any[] = [];
   settingSubscription: Subscription;
   track: MediaPlugin = null;

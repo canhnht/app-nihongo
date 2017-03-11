@@ -1,9 +1,11 @@
 import { Component, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Toast } from 'ionic-native';
+import { Toast, Network } from 'ionic-native';
+import { App, AlertController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-import { AuthService, LocalStorageService, DbService } from '../../services';
+import { AuthService, LocalStorageService, DbService, SettingService } from '../../services';
 import { AnalyticsService, Events, Params } from '../../services';
+import { UnitsPage } from '../units-page/units-page';
 
 declare var require: any;
 let firebase = require('firebase');
@@ -18,7 +20,9 @@ export class TabUserPage {
 
   constructor(private authService: AuthService, private translate: TranslateService,
     private zone: NgZone, private storageService: LocalStorageService,
-    private analytics: AnalyticsService, private dbService: DbService) {
+    private analytics: AnalyticsService, private dbService: DbService,
+    private alertCtrl: AlertController, private settingService: SettingService,
+    private app: App) {
   }
 
   ionViewWillEnter() {
@@ -57,6 +61,30 @@ export class TabUserPage {
         learned: courses[course.id]
       }, course));
     });
+  }
+
+  checkBeforeDownload(course) {
+    if (course.downloaded) {
+      this.goToCourse(course);
+    } else {
+      let alert = this.alertCtrl.create({
+        title: this.translate.instant('Error_open_course'),
+        subTitle: this.translate.instant('Course_not_downloaded'),
+        buttons: [this.translate.instant('OK')]
+      });
+      alert.present();
+    }
+  }
+
+  private goToCourse(course) {
+    this.analytics.logEvent(Events.VIEW_COURSE, {
+      [Params.COURSE_ID]: course.id,
+      [Params.COURSE_NAME]: course.name,
+      [Params.COURSE_LEVEL]: course.level
+    });
+    this.authService.saveHistory(course);
+    this.settingService.reset(true);
+    this.app.getRootNav().push(UnitsPage, {selectedCourse: course});
   }
 
   startTrackUserInfo(uid) {

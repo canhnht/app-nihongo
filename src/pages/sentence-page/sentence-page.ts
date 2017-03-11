@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { MediaPlugin } from 'ionic-native';
+import * as utils from '../../helpers/utils';
 
 declare var cordova: any;
 
@@ -33,8 +34,14 @@ export class SentencePage {
   }
 
   playWord() {
-    if (this.track) this.track.stop();
-    else this.track = new MediaPlugin(`${cordova.file.dataDirectory}${this.word.audioFile}`);
-    this.track.play();
+    if (this.track) {
+      this.track.stop();
+      this.track.play();
+    } else
+      utils.resolveIntervalUrl(`${cordova.file.dataDirectory}${this.word.audioFolder}`, this.word.audioFile)
+        .then((url) => {
+          this.track = new MediaPlugin(url);
+          this.track.play();
+        });
   }
 }

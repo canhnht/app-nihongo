@@ -43,7 +43,8 @@
         {{'No_history' | translate}}
       </div>
       <ion-list *ngIf="currentUser.courses && currentUser.courses.length > 0">
-        <button ion-item *ngFor="let course of currentUser.courses">
+        <button ion-item *ngFor="let course of currentUser.courses"
+          (click)="checkBeforeDownload(course)">
           <ion-avatar item-left>
             <img [src]="course.imageUrl">
           </ion-avatar>

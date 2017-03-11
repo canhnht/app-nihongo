@@ -99,7 +99,6 @@ export class WordsPage {
 
   playWord($event, word) {
     $event.stopPropagation();
-    alert(word.audioFile);
     if (this.playingWordId === word.id) {
       this.track.stop();
       this.track.play();
@@ -135,6 +134,11 @@ export class WordsPage {
 
   search($event) {
     this.value = $event.target.value;
+    this.searchedWords = this.filterWords(this.words, this.value);
+  }
+
+  clearSearch() {
+    this.value = '';
     this.searchedWords = this.filterWords(this.words, this.value);
   }
 

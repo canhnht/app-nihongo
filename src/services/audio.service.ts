@@ -80,10 +80,11 @@ export class AudioService {
       this.storageService.get('repeat_each_word'),
       this.storageService.get('time_between_words')
     ];
-    return Promise.all(localPromise).then(result => {
+    return Promise.all(localPromise).then((result) => {
+      alert(`result ${JSON.stringify(result)}`);
       this.repeatEachWord = result[0];
       this.timeBetweenWords = result[1];
-      this.listWord.forEach(word => word.repeatCount = 0);
+      this.listWord.forEach((word) => word.repeatCount = 0);
       this.getListWordOrder();
       this.stopListTrack();
       return this.generateListTrack();
@@ -121,7 +122,7 @@ export class AudioService {
     this.listWord[wordIndex].repeatCount += 1;
     if (this.listWord[wordIndex].repeatCount < this.repeatEachWord) {
       let track: MediaPlugin = this.listTrack[this.currentTrack.index];
-      track.seekTo(0);
+      track.stop();
       this.playCurrentTrack();
       return;
     }
@@ -222,8 +223,10 @@ export class AudioService {
   }
 
   stopCountDown() {
-    clearInterval(this.intervalBetweenWords);
-    this.intervalBetweenWords = null;
+    if (this.intervalBetweenWords !== null) {
+      clearInterval(this.intervalBetweenWords);
+      this.intervalBetweenWords = null;
+    }
   }
 
   pauseCurrentTrack() {
@@ -247,6 +250,7 @@ export class AudioService {
   }
 
   seekPercent(percent) {
+    this.stopCountDown();
     this.currentTrack.playedPercent = percent;
     let seconds = Math.max(this.getTotalDuration(), 0);
     seconds = seconds * percent / 100;
@@ -283,6 +287,7 @@ export class AudioService {
   }
 
   seekToWord(index) {
+    this.stopCountDown();
     let nextIndex = index;
     let duration = this.getTotalDuration();
     let position = this.getPlayedDurationUntil(nextIndex);
@@ -303,8 +308,7 @@ export class AudioService {
   }
 
   repeatCurrentTrack() {
-    Toast.hide();
-    Toast.showShortTop('Repeat current word').subscribe(() => {});
+    this.stopCountDown();
     this.pauseCurrentTrack();
     this.listTrack[this.currentTrack.index].seekTo(0);
     this.playCurrentTrack();

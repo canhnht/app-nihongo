@@ -89,7 +89,7 @@
   "Test_again": "Làm lại",
   "Complete_time": "Thời gian hoàn thành",
   "Matching_words": "Ghép từ",
-  "Please_choose_word": "Bạn chưa chọn từ!",
+  "Please_choose_word": "Bạn chưa chọn từ",
   "Message_updating": "Chức năng đang được nâng cấp!",
   "Other_examples": "Ví dụ khác",
   "Guide": "Hướng dẫn",
@@ -132,5 +132,10 @@
   "Source": "Nguồn",
   "Empty_list": "Danh sách đang rỗng!",
   "Instruction_add_word": "Hãy vào danh sách từ của khóa học để thêm từ như hướng dẫn bên dưới.",
-  "Internet_failed": "Kết nối internet bị lỗi"
+  "Internet_failed": "Kết nối internet bị lỗi",
+  "Intro_team": "Giới thiệu TechyBrain",
+  "Error_open_course": "Không thể mở khóa học",
+  "Course_not_downloaded": "Khóa học chưa được tải về. Xin hãy tải khóa học.",
+  "Others": "Khác",
+  "Search_word": "Tìm từ theo Kanji hoặc Hiragana"
 }

@@ -1,19 +1,3 @@
--- Init database for MINAGOI
-
--- Drop tables
-DROP TABLE IF EXISTS `news`;
-----
-DROP TABLE IF EXISTS `word_playlist`;
-----
-DROP TABLE IF EXISTS `word`;
-----
-DROP TABLE IF EXISTS `playlist`;
-----
-DROP TABLE IF EXISTS `unit`;
-----
-DROP TABLE IF EXISTS `course`;
-----
-
 -- Create table `course`
 CREATE TABLE IF NOT EXISTS `course` (
   `id` VARCHAR(50) NOT NULL,
