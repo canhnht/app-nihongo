@@ -1,6 +1,7 @@
 
 .multiple-choice-slides {
   position: relative;
+  overflow: hidden;
 
   .question {
     position: absolute;
@@ -26,20 +27,19 @@
   .option {
     position: relative;
     width: 90%;
-    height: 50px;
+    min-height: 50px;
     font-size: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 10px auto;
     border-radius: 25px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 
     -webkit-box-shadow: 0 0 2px 3px color($colors, favorite);
     -moz-box-shadow: 0 0 2px 3px color($colors, favorite);
     box-shadow: 0 0 2px 3px color($colors, favorite);
+
+    padding-left: 50px;
 
     .bullet {
       position: absolute;

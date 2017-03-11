@@ -156,8 +156,10 @@ export class TabHomePage {
           {
             text: this.translate.instant('OK'),
             handler: () => {
-              this.openModalDownload(course);
-              this.downloadService.downloadCourse(course).then(() => {
+              this.dbService.resetErrorCourse(course).then(() => {
+                this.openModalDownload(course);
+                return this.downloadService.downloadCourse(course);
+              }).then(() => {
                 Toast.showLongCenter(this.translate.instant('Download_course_successfully', {
                   courseName: course.name
                 })).subscribe(() => {});

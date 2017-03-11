@@ -80,9 +80,9 @@ keytool -genkey -v -keystore minagoi.keystore -alias minagoi -keyalg RSA -keysiz
 ```
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore HelloWorld-release-unsigned.apk alias_name
 ```
-- Ionic commands to build release APK
+- Ionic commands to run release APK
 ```
-ionic build android --release -- --keystore="../minagoi.keystore" --storePassword=techybrain --alias=minagoi --password=techybrain
+ionic run android --release -- --keystore="../minagoi.keystore" --storePassword=techybrain --alias=minagoi --password=techybrain
 ```
 
 ## Helpful references
@@ -92,3 +92,9 @@ http://ionicframework.com/docs/v2/resources/third-party-libs/
 
 ## Notes
 - To display app icon in local notification. Copy icon.png from `mipmap` folder to `drawable` folder
+
+
+## Guidelines for building app in DEVELOPMENT vs PRODUCTION
+- GoogleService-Info.plist
+- google-services.json
+- config-local.js
