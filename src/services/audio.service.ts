@@ -81,7 +81,6 @@ export class AudioService {
       this.storageService.get('time_between_words')
     ];
     return Promise.all(localPromise).then((result) => {
-      alert(`result ${JSON.stringify(result)}`);
       this.repeatEachWord = result[0];
       this.timeBetweenWords = result[1];
       this.listWord.forEach((word) => word.repeatCount = 0);

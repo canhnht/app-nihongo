@@ -29,12 +29,12 @@ export class MyApp {
   }
 
   initializeApp() {
-    let initDbSubscription = this.dbService.initSubject.subscribe((init) => {
-      initDbSubscription.unsubscribe();
-      if (init) {
-        this.initializeLocalNotifications();
-      }
-    });
+    // let initDbSubscription = this.dbService.initSubject.subscribe((init) => {
+    //   initDbSubscription.unsubscribe();
+    //   if (init) {
+    //     this.initializeLocalNotifications();
+    //   }
+    // });
     this.initializeI18n();
     this.platform.ready().then(() => {
       return this.storageService.init();
