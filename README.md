@@ -71,6 +71,20 @@ Run `./access_database.sh`
 - Run `env | grep -i proxy` to get all proxy settings
 - Remove all *proxy* variables. `unset http_proxy ftp_proxy all_proxy ALL_PROXY socks_proxy https_proxy`
 
+### Create release apk
+- Generate private key
+```
+keytool -genkey -v -keystore minagoi.keystore -alias minagoi -keyalg RSA -keysize 2048 -validity 10000
+```
+- Sign unsigned APK
+```
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore HelloWorld-release-unsigned.apk alias_name
+```
+- Ionic commands to build release APK
+```
+ionic build android --release -- --keystore="../minagoi.keystore" --storePassword=techybrain --alias=minagoi --password=techybrain
+```
+
 ## Helpful references
 
 ### Install npm library

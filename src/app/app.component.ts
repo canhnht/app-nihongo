@@ -103,7 +103,7 @@ export class MyApp {
   private initializeAdMod() {
     AdMob.createBanner({
       adId: admobConfig.banner,
-      isTesting: true,
+      isTesting: false,
       overlap: false,
       position: AdMob.AD_POSITION.BOTTOM_CENTER
     }).then(() => {
