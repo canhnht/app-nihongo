@@ -137,5 +137,6 @@
   "Error_open_course": "Không thể mở khóa học",
   "Course_not_downloaded": "Khóa học chưa được tải về. Xin hãy tải khóa học.",
   "Others": "Khác",
-  "Search_word": "Tìm từ theo Kanji hoặc Hiragana"
+  "Search_word": "Tìm từ theo Kanji hoặc Hiragana",
+  "Init_data_success": "Khởi tạo dữ liệu thành công"
 }

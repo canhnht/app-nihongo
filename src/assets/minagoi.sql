@@ -1,9 +1,9 @@
 -- Create table `course`
-CREATE TABLE IF NOT EXISTS `course` (
+CREATE TABLE `course` (
   `id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
   `level` VARCHAR(50) NOT NULL,
-  `imageUrl` TEXT DEFAULT NULL,
+  `imageUrl` VARCHAR(255) DEFAULT NULL,
   `free` BOOLEAN NOT NULL DEFAULT 1,
   `downloaded` BOOLEAN NOT NULL DEFAULT 0,
   `noWords` INTEGER NOT NULL DEFAULT 0,
@@ -14,13 +14,13 @@ CREATE TABLE IF NOT EXISTS `course` (
 
 -- Data for table `course`
 INSERT INTO `course` (`id`, `imageUrl`, `level`, `name`, `free`, `downloaded`, `noWords`, `noUnits`) VALUES
-  ('course1', 'http://tiengnhat2s.com/sites/default/files/styles/large/public/11928720_1651785261745232_2291909341170067735_n.jpg?itok=vD5cnryV', 'N3', 'Mimi Kara Oboeru N3', 1, 0, 0, 0);
+  ('course1', 'assets/images/sample-course.jpg', 'N3', 'Mimi Kara Oboeru N3', 1, 0, 0, 0);
 ----
 
 
 
 -- Create table `unit`
-CREATE TABLE IF NOT EXISTS `unit` (
+CREATE TABLE `unit` (
   `id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `imageUrl` TEXT DEFAULT NULL,
@@ -28,15 +28,14 @@ CREATE TABLE IF NOT EXISTS `unit` (
   `state` BOOLEAN NOT NULL DEFAULT 0,
   `noWords` INTEGER NOT NULL DEFAULT 0,
   `courseId` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`courseId`) REFERENCES `course`(`id`)
+  PRIMARY KEY (`id`)
 );
 ----
 
 
 
 -- Create table `playlist`
-CREATE TABLE IF NOT EXISTS `playlist` (
+CREATE TABLE `playlist` (
   `id` VARCHAR(50) NOT NULL,
   `name` NVARCHAR(255) NOT NULL,
   `noWords` INTEGER NOT NULL DEFAULT 0,
@@ -53,7 +52,7 @@ INSERT INTO `playlist` (`id`, `name`) VALUES
 
 
 -- Create table `word`
-CREATE TABLE IF NOT EXISTS `word` (
+CREATE TABLE `word` (
   `id` VARCHAR(50) NOT NULL,
   `kanji` NVARCHAR(100) NOT NULL,
   `mainExample` TEXT NOT NULL DEFAULT 'null',
@@ -66,27 +65,24 @@ CREATE TABLE IF NOT EXISTS `word` (
   `unitId` VARCHAR(50) NOT NULL,
   `lastPlayed` INTEGER(11) DEFAULT NULL,
   `timesPlayed` INTEGER DEFAULT 0,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`unitId`) REFERENCES `unit` (`id`)
+  PRIMARY KEY (`id`)
 );
 ----
 
 
 
 -- Create table `word_playlist`
-CREATE TABLE IF NOT EXISTS `word_playlist` (
+CREATE TABLE `word_playlist` (
   `wordId` VARCHAR(50) NOT NULL,
   `playlistId` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`wordId`, `playlistId`),
-  FOREIGN KEY (`wordId`) REFERENCES `word` (`id`),
-  FOREIGN KEY (`playlistId`) REFERENCES `playlist` (`id`)
+  PRIMARY KEY (`wordId`, `playlistId`)
 );
 ----
 
 
 
 -- Create table `news`
-CREATE TABLE IF NOT EXISTS `news` (
+CREATE TABLE `news` (
   `id` VARCHAR(50) NOT NULL,
   `title` TEXT NOT NULL,
   `titleWithRuby` TEXT NOT NULL,

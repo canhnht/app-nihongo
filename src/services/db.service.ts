@@ -41,6 +41,7 @@ export class DbService {
           return this.runSqlInSequence(listSQL);
         })
         .then(() => {
+          Toast.showShortBottom(this.translate.instant('Init_data_success')).subscribe(() => {});
           this.initSubject.next(true);
           return this.storageService.set('init_db', true);
         })
